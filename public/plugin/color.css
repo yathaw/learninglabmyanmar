@@ -1,0 +1,27 @@
+.custom_primary_bgColor{
+	background-color: #f09819;
+}
+
+.custom_primary_borderColor{
+	border-color: #f09819;
+}
+
+.custom_primary_btnColor{
+	background-color: #f09819 !important;
+	color: white !important;
+}
+
+.custom_primary_btnColor:hover{
+	background-color: #f4b65e !important;
+}
+
+
+.custom_primary_btnoutlineColor{
+	border-color: #f09819;
+	background-color: white;
+}
+
+.custom_primary_btnoutlineColor{
+	border-color: #f09819;
+	background-color: #f09819;
+}
