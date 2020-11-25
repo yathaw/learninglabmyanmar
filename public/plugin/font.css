@@ -1,0 +1,34 @@
+@font-face{
+	font-family: 'quicksand_regular';
+	src:url(../fonts/Quicksand-Regular.ttf);
+}
+
+@font-face{
+	font-family: 'quicksand_varialbeFont_wght';
+	src:url(../fonts/Quicksand-VariableFont_wght.ttf);
+}
+
+@font-face{
+	font-family: 'quicksand_bold';
+	src:url(../fonts/Quicksand-Bold.ttf);
+}
+
+@font-face{
+	font-family: 'quicksand_medium';
+	src:url(../fonts/Quicksand-Medium.ttf);
+}
+
+@font-face{
+	font-family: 'quicksand_semibold';
+	src:url(../fonts/Quicksand-SemiBold.ttf);
+}
+
+@font-face{
+	font-family: 'quicksand_light';
+	src:url(../fonts/Quicksand-Light.ttf);
+}
+
+@font-face{
+	font-family: 'loaded';
+	src:url(../fonts/loaded.ttf);
+}
