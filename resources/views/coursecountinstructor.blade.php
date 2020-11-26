@@ -68,7 +68,9 @@
                 <div class="col-md-12">
                   <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="home-tab">
-                      <p class="mt-5 mb-5 pb-5">No data to display</p>
+                      <div class="chart-pie mt-5 mb-5 pb-5 pt-5">
+                        <canvas id="myAreaChart"></canvas>
+                    </div>
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="profile-tab">  <p class="mt-5 mb-5 pb-5">No data to display1</p>
                     </div>
@@ -82,7 +84,7 @@
             <div class="card-footer cardfooter">
               <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="pills-home1" role="tabpanel" aria-labelledby="home-tab">
-                  <a href="#">Revenue Report <i class="bx bx-chevron-right"></i></a>
+                  <a href="{{route('revenuereport')}}">Revenue Report <i class="bx bx-chevron-right"></i></a>
                  
                 </div>
 
@@ -102,6 +104,8 @@
     </div>
   </section>
   @section('script_content')
+  <script src="{{ asset('plugin/Chart.min.js') }}"></script>
+    <script src="{{ asset('plugin/chart-area-demo.js') }}"></script>
   <script type="text/javascript">
     $(document).ready(function(){
       $('a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
@@ -125,6 +129,8 @@
         $('#pills-rating_else').addClass('active');
       }
     })
+
+
     })
   </script>
   @stop

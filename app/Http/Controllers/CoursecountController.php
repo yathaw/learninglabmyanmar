@@ -11,4 +11,9 @@ class CoursecountController extends Controller
   {
     return view('coursecountinstructor');
   }
+
+  function revenuereport()
+  {
+    return view('revenuereportinstructor');
+  }
 }

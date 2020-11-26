@@ -31,3 +31,4 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 //ALS
 Route::get('coursecount','CoursecountController@coursecount')->name('coursecount');
+Route::get('revenuereport','CoursecountController@revenuereport')->name('revenuereport');
