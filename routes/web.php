@@ -28,3 +28,6 @@ Route::get('backside', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+//ALS
+Route::get('coursecount','CoursecountController@coursecount')->name('coursecount');
