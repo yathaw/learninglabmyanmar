@@ -91,11 +91,11 @@
 			            </a>
 						<ul id="users" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
 							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Business </a>
+								<a class="sidebar-link" href="{{route('companies.index')}}"> Business </a>
 							</li>
 
 							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Insturctors </a>
+								<a class="sidebar-link" href="{{route('instructors.index')}}"> Insturctors </a>
 							</li>
 
 							<li class="sidebar-item">
@@ -131,7 +131,7 @@
 			            </a>
 						<ul id="components" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
 							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Job Titles </a>
+								<a class="sidebar-link" href="{{route('jobtitles.index')}}"> Job Titles </a>
 							</li>
 
 							<li class="sidebar-item">

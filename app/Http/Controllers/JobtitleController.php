@@ -14,7 +14,8 @@ class JobtitleController extends Controller
      */
     public function index()
     {
-        //
+        $jobtitles = Jobtitle::all();
+        return view('jobs.index',compact('jobtitles'));
     }
 
     /**
@@ -24,7 +25,8 @@ class JobtitleController extends Controller
      */
     public function create()
     {
-        //
+        return view('jobs.create');
+        
     }
 
     /**
@@ -35,7 +37,16 @@ class JobtitleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required'
+
+        ]);
+
+        $jobtitle = new Jobtitle();
+        $jobtitle->name = request('name');
+        $jobtitle->save();
+        return redirect()->route('jobtitles.index');
+
     }
 
     /**
@@ -57,7 +68,7 @@ class JobtitleController extends Controller
      */
     public function edit(Jobtitle $jobtitle)
     {
-        //
+        return view('jobs.edit',compact('jobtitle'));
     }
 
     /**
@@ -69,7 +80,15 @@ class JobtitleController extends Controller
      */
     public function update(Request $request, Jobtitle $jobtitle)
     {
-        //
+        $request->validate([
+            'name' => 'required'
+
+        ]);
+
+      
+        $jobtitle->name = request('name');
+        $jobtitle->save();
+        return redirect()->route('jobtitles.index');
     }
 
     /**
@@ -80,6 +99,9 @@ class JobtitleController extends Controller
      */
     public function destroy(Jobtitle $jobtitle)
     {
-        //
+        $jobtitle->delete();
+        return redirect()->route('jobtitles.index');
+        
+
     }
 }

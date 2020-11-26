@@ -1,6 +1,6 @@
 <x-backend>
 
-	<h1 class="h3 mb-3"> JobTitles </h1>
+	<h1 class="h3 mb-3"> Business </h1>
 
 	<div class="row">
 		<div class="col-12">
@@ -8,7 +8,7 @@
 				<div class="card-header">
 					<h5 class="card-title mb-0"> All Lists 
 
-					<a href="{{route('jobtitles.create')}}" class="btn custom_primary_btnColor float-right" >
+					<a href="{{route('companies.create')}}" class="btn custom_primary_btnColor float-right" >
 		            	<i class="align-middle fas fa-plus"></i>
 		            </a>
 
@@ -38,24 +38,6 @@
                                     <th> Action </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                            	<?php $i=1; ?>
-                            	@foreach($jobtitles as $jobtitle)
-                            	<tr>
-                            		<td>{{$i++}}</td>
-                            		<td>{{$jobtitle->name}}</td>
-                            		<td>
-                            			<a href="{{route('jobtitles.edit',$jobtitle->id)}}" class="btn btn-warning"><i class="far fa-edit"></i></a>
-                            			<form action="{{route('jobtitles.destroy',$jobtitle->id)}}" method="POST" class="d-inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-danger" type="submit"><i class="fas fa-trash-restore"></i></button>
-                                            
-                                        </form>
-                            		</td>
-                            	</tr>
-                            	@endforeach
-                            </tbody>
                             <tfoot>
                                 <tr>
                                     <th> No </th>

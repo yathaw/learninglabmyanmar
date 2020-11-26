@@ -39,6 +39,11 @@ Route::get('instructor',function () {
 	return view('instructor_info');
 });
 
+Route::resource('companies','CompanyController');
+
+Route::resource('instructors','InstructorController');
+
+Route::resource('jobtitles','JobtitleController');
 
 //ALS
 Route::get('coursecount','CoursecountController@coursecount')->name('coursecount');
