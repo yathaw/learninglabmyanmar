@@ -14,7 +14,8 @@ class AttachmentController extends Controller
      */
     public function index()
     {
-        //
+        $attachments=Attachment::all();
+        return view('attachment.index',compact('attachments'));
     }
 
     /**
@@ -24,7 +25,7 @@ class AttachmentController extends Controller
      */
     public function create()
     {
-        //
+        return view('attachment.create');
     }
 
     /**
@@ -57,7 +58,8 @@ class AttachmentController extends Controller
      */
     public function edit(Attachment $attachment)
     {
-        //
+                return view('attachment.create',compact('attachment'));
+
     }
 
     /**

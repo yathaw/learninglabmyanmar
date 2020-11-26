@@ -14,7 +14,8 @@ class ContentController extends Controller
      */
     public function index()
     {
-        //
+        $contents=Content::all();
+        return view('content.index',compact('contents'));
     }
 
     /**
@@ -24,7 +25,7 @@ class ContentController extends Controller
      */
     public function create()
     {
-        //
+        return view('content.create');
     }
 
     /**
@@ -57,7 +58,7 @@ class ContentController extends Controller
      */
     public function edit(Content $content)
     {
-        //
+        return view('content.edit',compact('content'));
     }
 
     /**
