@@ -1543,3 +1543,34 @@ section {
   background: #ffce3a;
   text-decoration: none;
 }
+
+.over{
+  font-weight: bold;
+}
+
+.cardhead,.cardfooter{
+  background-color: white !important;
+}
+
+.cardbody{
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+.cardfooter{
+  color: #1998F0;
+}
+
+.navheader .nab.active, .navheader .show>.nab {
+  color: black;
+  background-color: white;
+  border-bottom: 6px solid #ffce3a;
+}
+
+.navheader .nab:hover {
+  color: #505763;
+  background-color: #ddd;
+}
+
+.navheader .nab{
+  color: #505763;
+}

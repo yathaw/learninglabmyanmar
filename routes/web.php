@@ -29,6 +29,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
+
+//Honey
 Route::get('business',function () {
 	return view('business_info');
 });
@@ -36,3 +38,7 @@ Route::get('business',function () {
 Route::get('instructor',function () {
 	return view('instructor_info');
 });
+
+
+//ALS
+Route::get('coursecount','CoursecountController@coursecount')->name('coursecount');
