@@ -14,7 +14,7 @@ class InstructorController extends Controller
      */
     public function index()
     {
-        //
+        return view('instructors.index');
     }
 
     /**
@@ -24,7 +24,8 @@ class InstructorController extends Controller
      */
     public function create()
     {
-        //
+        return view('instructors.create');
+        
     }
 
     /**

@@ -209,7 +209,10 @@
 
     <!-- Template Main JS File -->
     <script src="{{ asset('frontend/js/main.js') }}"></script>
-    @yield("script_content")
+
+     @yield("script_content")
+
+
 </body>
 
 </html>

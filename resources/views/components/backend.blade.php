@@ -73,16 +73,54 @@
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="tables-bootstrap.html">
-              				<i class="align-middle" data-feather="tag"></i> <span class="align-middle"> Courses </span>
+						<a class="sidebar-link" href="{{route('category.index')}}">
+              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Category </span>
             			</a>
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="tables-bootstrap.html">
-              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Creatae Course </span>
+						<a class="sidebar-link" href="{{route('subcategory.index')}}">
+              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Subcategory </span>
             			</a>
 					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{route('course.index')}}">
+              				<i class="align-middle" data-feather="tag"></i> <span class="align-middle"> Courses </span>
+            			</a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{route('section.index')}}">
+              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Section </span>
+            			</a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{route('content.index')}}">
+              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Content </span>
+            			</a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{route('lesson.index')}}">
+              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Lesson </span>
+            			</a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{route('assignment.index')}}">
+              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Assignment </span>
+            			</a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{route('attachment.index')}}">
+              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Attachment </span>
+            			</a>
+					</li>
+
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{route('sale.index')}}">
+              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Sale </span>
+            			</a>
+					</li>
+					
 
 
 					<li class="sidebar-item">
@@ -91,11 +129,11 @@
 			            </a>
 						<ul id="users" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
 							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Business </a>
+								<a class="sidebar-link" href="{{route('companies.index')}}"> Business </a>
 							</li>
 
 							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Insturctors </a>
+								<a class="sidebar-link" href="{{route('instructors.index')}}"> Insturctors </a>
 							</li>
 
 							<li class="sidebar-item">
@@ -131,7 +169,7 @@
 			            </a>
 						<ul id="components" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
 							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Job Titles </a>
+								<a class="sidebar-link" href="{{route('jobtitles.index')}}"> Job Titles </a>
 							</li>
 
 							<li class="sidebar-item">
