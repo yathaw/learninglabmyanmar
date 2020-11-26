@@ -28,3 +28,11 @@ Route::get('backside', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::get('business',function () {
+	return view('business_info');
+});
+
+Route::get('instructor',function () {
+	return view('instructor_info');
+});
