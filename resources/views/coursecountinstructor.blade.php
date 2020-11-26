@@ -41,7 +41,7 @@
 
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link nab" id="pills-rating-tab" data-toggle="pill" href="#pills-rating" role="tab" aria-controls="pills-rating" aria-selected="true">
+                  <a class="nav-link nab" id="pills-rating-tab" data-toggle="pill" href="#pills-rating" role="tab" aria-controls="pills-rating" aria-selected="true" data-target="#pills-rating, #pills-rating_else">
                     <p>Instructor rating</p>
                     <h2>0.00</h2>
                     <span>0 ratings this month</span>
@@ -85,8 +85,14 @@
                   <a href="#">Revenue Report <i class="bx bx-chevron-right"></i></a>
                  
                 </div>
-                <div class="tab-pane fade show" id="pills-profile_else" role="tabpanel" aria-labelledby="profile-tab">   <a href="#">Revenue  <i class="bx bx-chevron-right"></i></a>
-                    </div>
+
+                <div class="tab-pane fade show" id="pills-profile_else" role="tabpanel" aria-labelledby="profile-tab">   
+                  <a href="#">Enrollment  <i class="bx bx-chevron-right"></i></a>
+                </div>
+
+                <div class="tab-pane fade show" id="pills-rating_else" role="tabpanel" aria-labelledby="profile-tab">   
+                  <a href="#">Rating  <i class="bx bx-chevron-right"></i></a>
+                </div>
               </div>
               
             </div>
@@ -106,19 +112,17 @@
       if(activated_tab.id === 'pills-home-tab') {
         $('#pills-home1').addClass('active');
         $('#pills-profile_else').removeClass('active');
-        $('#messages_else').css('display', 'none');
+        $('#pills-rating_else').removeClass('active');
       };
       if(activated_tab.id === 'pills-profile-tab') {
         $('#pills-home1').removeClass('active');
         $('#pills-profile_else').addClass('active');
-        $('#messages_else').css('display', 'none');
-        $('#settings_else').css('display', 'none');
+        $('#pills-rating_else').removeClass('active');
       }
-      if(activated_tab.id === 'messages_tab') {
-        $('#home_else').css('display', 'none');
-        $('#profile_else').css('display', 'none');
-        $('#messages_else').css('display', 'block');
-        $('#settings_else').css('display', 'none');
+      if(activated_tab.id === 'pills-rating-tab') {
+        $('#pills-home1').removeClass('active');
+        $('#pills-profile_else').removeClass('active');
+        $('#pills-rating_else').addClass('active');
       }
     })
     })
