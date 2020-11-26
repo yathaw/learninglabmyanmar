@@ -14,7 +14,8 @@ class SectionController extends Controller
      */
     public function index()
     {
-        //
+        $sections=Section::all();
+        return view('section.index',compact('sections'));
     }
 
     /**
@@ -24,7 +25,7 @@ class SectionController extends Controller
      */
     public function create()
     {
-        //
+        return view('section.create');
     }
 
     /**
@@ -57,7 +58,7 @@ class SectionController extends Controller
      */
     public function edit(Section $section)
     {
-        //
+        return view('section.edit',compact('section'));
     }
 
     /**

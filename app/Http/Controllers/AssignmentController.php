@@ -14,7 +14,8 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        //
+        $assignments=Assignment::all();
+        return view('assignment.index',compact('assignments'));
     }
 
     /**
@@ -24,7 +25,7 @@ class AssignmentController extends Controller
      */
     public function create()
     {
-        //
+        return view('assignment.create');
     }
 
     /**
@@ -57,7 +58,7 @@ class AssignmentController extends Controller
      */
     public function edit(Assignment $assignment)
     {
-        //
+        return view('assignment.edit',compact('assignment'));
     }
 
     /**

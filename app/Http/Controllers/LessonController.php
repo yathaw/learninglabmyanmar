@@ -14,7 +14,8 @@ class LessonController extends Controller
      */
     public function index()
     {
-        //
+        $lessons=Lesson::all();
+        return view('lesson.index',compact('lessons'));
     }
 
     /**
@@ -24,7 +25,7 @@ class LessonController extends Controller
      */
     public function create()
     {
-        //
+        return view('lesson.create');
     }
 
     /**
@@ -57,7 +58,7 @@ class LessonController extends Controller
      */
     public function edit(Lesson $lesson)
     {
-        //
+        return view('lesson.edit',compact('lesson'));
     }
 
     /**

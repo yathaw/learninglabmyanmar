@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class SubcategoryController extends Controller
 {
@@ -14,7 +15,8 @@ class SubcategoryController extends Controller
      */
     public function index()
     {
-        //
+        $subcategories=Subcategory::all();
+        return view('subcategory.index',compact('subcategories'));
     }
 
     /**
@@ -24,7 +26,8 @@ class SubcategoryController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('subcategory.create',compact('categories'));
     }
 
     /**
@@ -35,7 +38,19 @@ class SubcategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "sname"=>"required|min:5",
+            "category"=>"required"
+        ]);
+
+        
+
+            $subcategory =new Subcategory;
+            $subcategory->name = $request->sname;
+            $subcategory->category_id = $request->category;
+            $subcategory->save();
+
+            return redirect()->route('subcategory.index');
     }
 
     /**
@@ -46,7 +61,7 @@ class SubcategoryController extends Controller
      */
     public function show(Subcategory $subcategory)
     {
-        //
+        return view('subcategory.show',compact('subcategory'));
     }
 
     /**
@@ -57,7 +72,8 @@ class SubcategoryController extends Controller
      */
     public function edit(Subcategory $subcategory)
     {
-        //
+        $categories = Category::all();
+        return view('subcategory.edit',compact('subcategory','categories'));
     }
 
     /**
@@ -69,7 +85,20 @@ class SubcategoryController extends Controller
      */
     public function update(Request $request, Subcategory $subcategory)
     {
-        //
+        $request-> validate([
+            "sname" => "required|min:5",
+            "category" => "required"
+        ]);
+
+        
+
+        
+        $subcategory->name = $request->sname;
+        $subcategory->category_id = $request->category;
+        $subcategory->save();
+
+        // redirect
+        return redirect()->route('subcategory.index');
     }
 
     /**
@@ -80,6 +109,7 @@ class SubcategoryController extends Controller
      */
     public function destroy(Subcategory $subcategory)
     {
-        //
+        $subcategory->delete();
+         return redirect()->route('subcategory.index');
     }
 }
