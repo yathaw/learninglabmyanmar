@@ -48,3 +48,44 @@ Route::resource('/content', ContentController::class);
 Route::resource('/lesson', LessonController::class);
 Route::resource('/assignment', AssignmentController::class);
 Route::resource('/attachment', AttachmentController::class);
+
+
+
+// nyiyelin
+Route::get('wishlist', function () {
+    return view('frontend.wishlist');
+})->name('wishlist');
+
+Route::get('collection', function () {
+    return view('frontend.collection');
+})->name('collection');
+
+Route::get('course', function () {
+    return view('frontend.course');
+})->name('course');
+
+Route::get('coursedetail', function () {
+    return view('frontend.coursedetail');
+})->name('coursedetail');
+
+
+Route::get('addtocart', function () {
+    return view('frontend.addtocart');
+})->name('addtocart');
+
+
+
+
+//Honey
+Route::get('business',function () {
+	return view('business_info');
+});
+
+Route::get('instructor',function () {
+	return view('instructor_info');
+});
+
+
+//ALS
+Route::get('coursecount','CoursecountController@coursecount')->name('coursecount');
+
