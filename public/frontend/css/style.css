@@ -1574,3 +1574,96 @@ section {
 .navheader .nab{
   color: #505763;
 }
+
+
+/*nyiyelin*/
+
+.nylcardshadow:hover{
+  box-shadow: 3px 3px 5px 5px rgba(74, 73, 72 , 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.nylcardshadow{
+  transition: 0.2s ease-in-out;
+}
+
+.nyinavactive{
+  border: 1px solid rgba(55, 64, 85, 0.9);
+  border-radius: 10px;
+  box-shadow:3px 3px 5px 5px rgba(74, 73, 72 , 0.1);
+}
+
+.nyinav:hover{
+  background-color: rgba(55, 64, 85, 0.9);
+  border-radius: 10px;
+}
+
+.nyinav{
+  border-radius: 10px;
+}
+
+.nyiimghover:hover{
+   -webkit-transition: .2s all;
+}
+
+.nyiimghover:hover{
+   -webkit-filter: brightness(87%);
+}
+
+.nyi-btn-outline{
+  border : 1px solid #f09819;
+  color:  #f09819;
+  border-radius: 10px;
+}
+
+
+.nyi-btn-outline:hover{
+  border : 1px solid #f09819;
+  color:  white;
+  background-color: #f09819;
+  border-radius: 10px;
+  box-shadow:3px 3px 5px 5px rgba(74, 73, 72 , 0.1);
+}
+
+.nyicarouselarrow{
+  border : 1px solid black;
+  background-color: black;
+  padding: 15px 10px 10px 10px;
+  margin :5px;
+  border-radius: 50%;
+}
+
+.iconborder{
+  border: 2px solid pink;
+  padding: 10px 10px 6px 10px;
+  border-radius: 50%;
+}
+
+.iconborder:hover{
+  border: 2px solid pink;
+  background-color: pink;
+  padding: 10px 10px 6px 10px;
+  border-radius: 50%;
+}
+
+
+.nyivideoheader {
+    overflow: hidden;
+
+}
+.nyivideoheader video {
+    position: inherit;
+    
+    overflow: hidden;
+    z-index: -1;
+    border-radius: 5px;
+}
+
+.nyivideoheader p {
+    
+    background-color: rgba(55, 64, 85, 0.9);
+    font-size: 1em;
+    color: white;
+    border-radius: 5px;
+    
+}
