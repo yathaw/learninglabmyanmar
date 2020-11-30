@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <div class="tile">
           <h2>Course Edit Form</h2>
-          <form method="post" action="{{route('content.update')}}" enctype="multipart/form-data">
+          <form method="post" action="{{route('backside.content.update')}}" enctype="multipart/form-data">
             @csrf
 
 
