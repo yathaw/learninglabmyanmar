@@ -15,6 +15,7 @@ class CreateIssuesTable extends Migration
     {
         Schema::create('issues', function (Blueprint $table) {
             $table->id();
+            $table->string('type');
             $table->text('description');
             $table->foreignId('user_id')
                     ->references('id')

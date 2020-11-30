@@ -16,6 +16,7 @@ class CreateAssignmentsTable extends Migration
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
             $table->text('file');
+            $table->string('type');
             $table->foreignId('content_id')
                     ->references('id')
                     ->on('contents')

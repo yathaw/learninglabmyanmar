@@ -14,10 +14,14 @@ class ContenttypeSeeder extends Seeder
     public function run()
     {
         Contenttype::create([
-        	'name'=> 'Video'
+        	'name'=> 'lecture'
         ]);
         Contenttype::create([
-        	'name'=> 'File/Slide'
+        	'name'=> 'quiz'
+        ]);
+
+        Contenttype::create([
+            'name'=> 'assignment'
         ]);
     }
 }

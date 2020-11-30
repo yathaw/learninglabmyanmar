@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <div class="tile">
           <h2 class="text-center">Course Create Form</h2>
-          <form method="post" action="{{route('section.store')}}" enctype="multipart/form-data">
+          <form method="post" action="{{route('backside.section.store')}}" enctype="multipart/form-data">
             @csrf
 
             
