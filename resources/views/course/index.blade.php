@@ -24,7 +24,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item text-success fw-bolder" href="#"> 
+                                <a class="dropdown-item text-success fw-bolder" href="{{ route('backside.sectionlist','1') }}"> 
                                     <i class="align-middle mr-2" data-feather="file-plus"></i> 
                                     Add Course Content 
                                 </a>
@@ -101,7 +101,7 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item text-success fw-bolder" href="#"> 
+                                <a class="dropdown-item text-success fw-bolder" href="{{ route('backside.sectionlist','2') }}"> 
                                     <i class="align-middle mr-2" data-feather="file-plus"></i> 
                                     Add Course Content 
                                 </a>

@@ -25,6 +25,5 @@ class Course extends Model
 						'price',
 						'level_id',
 						'subcategory_id',
-						'instructor_id'
 						];
 }

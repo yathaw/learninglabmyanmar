@@ -42,7 +42,7 @@
                                 <div class="accordion-body">
 
                                     <ul id="playlist" class="lh-lg list-group list-group-flush">
-                                        <li videoUrl="https://www.youtube.com/embed/rk9bBpsLy3M" videoId="1 " class="list-group-item px-0">
+                                        <li videoUrl="https://www.youtube.com/embed/rk9bBpsLy3M" videoId="1" class="list-group-item px-0">
                                             <i class='bx bxs-checkbox-checked fs-4 text-success'></i>
                                             <p class="mb-0 chapter1 text-primary d-inline-block">  
 

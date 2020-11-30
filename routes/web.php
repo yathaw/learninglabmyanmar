@@ -59,10 +59,15 @@ Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->
 //KKS
 Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/course', CourseController::class);
+
+
     Route::resource('/category',CategoryController::class);
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
+
     Route::resource('/section', SectionController::class);
+    Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
+
     Route::resource('/content', ContentController::class);
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);

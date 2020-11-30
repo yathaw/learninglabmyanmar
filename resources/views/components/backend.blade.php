@@ -37,6 +37,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('plugin/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugin/select2_bootstrap4/dist/select2-bootstrap4.min.css') }}">
 
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugin/sortable/jquery-ui.css') }}">
 
 </head>
 
@@ -425,6 +426,11 @@
     <script src="{{ asset('plugin/quill/quill.js') }}"></script>
     <!-- Select 2 -->
     <script src="{{asset('plugin/select2/dist/js/select2.min.js')}}"></script> 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable-min.js"></script>
+
+    <script src="{{ asset('plugin/sortable/jquery-ui.min.js') }}"></script>
+
     <script type="text/javascript">
     	$.ajaxSetup({
             headers: {
