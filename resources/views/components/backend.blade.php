@@ -100,31 +100,6 @@
             			</a>
 					</li>
 
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('backside.section.index')}}">
-              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Section </span>
-            			</a>
-					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('backside.content.index')}}">
-              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Content </span>
-            			</a>
-					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('backside.lesson.index')}}">
-              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Lesson </span>
-            			</a>
-					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('backside.assignment.index')}}">
-              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Assignment </span>
-            			</a>
-					</li>
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('backside.attachment.index')}}">
-              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Attachment </span>
-            			</a>
-					</li>
 
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{route('backside.sale.index')}}">
