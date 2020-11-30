@@ -12,7 +12,9 @@ body {
   /*font-family: "Open Sans", sans-serif;*/
   color: #444444;
 }
-
+.button:focus {
+outline: 0;
+}
 a {
   color: #f09819;
 }
@@ -869,8 +871,8 @@ section {
 .portfolio .portfolio-item .portfolio-info {
   opacity: 0;
   position: absolute;
-  left: 15px;
-  right: 15px;
+  left: 12px;
+  right: 12px;
   bottom: -50px;
   z-index: 3;
   transition: all ease-in-out 0.3s;
@@ -1224,12 +1226,14 @@ section {
   margin-bottom: 0;
 }
 
-.contact .php-email-form {
+.contact .php-email-form, 
+.contact .registerForm {
   box-shadow: 0 0 20px rgba(65, 76, 100, 0.05);
   padding: 30px;
 }
 
-.contact .php-email-form .validate {
+.contact .php-email-form .validate,
+.contact .registerForm .validate{
   display: none;
   color: red;
   margin: 0 0 15px 0;
@@ -1237,7 +1241,8 @@ section {
   font-size: 13px;
 }
 
-.contact .php-email-form .error-message {
+.contact .php-email-form .error-message,
+.contact .registerForm .error-message {
   display: none;
   color: #fff;
   background: #ed3c0d;
@@ -1246,11 +1251,13 @@ section {
   font-weight: 600;
 }
 
-.contact .php-email-form .error-message br + br {
+.contact .php-email-form .error-message br + br,
+.contact .registerForm .error-message br + br {
   margin-top: 25px;
 }
 
-.contact .php-email-form .sent-message {
+.contact .php-email-form .sent-message,
+.contact .registerForm .sent-message {
   display: none;
   color: #fff;
   background: #18d26e;
@@ -1259,14 +1266,16 @@ section {
   font-weight: 600;
 }
 
-.contact .php-email-form .loading {
+.contact .php-email-form .loading,
+.contact .registerForm .loading {
   display: none;
   background: #fff;
   text-align: center;
   padding: 15px;
 }
 
-.contact .php-email-form .loading:before {
+.contact .php-email-form .loading:before, 
+.contact .registerForm .loading:before {
   content: "";
   display: inline-block;
   border-radius: 50%;
@@ -1279,25 +1288,34 @@ section {
   animation: animate-loading 1s linear infinite;
 }
 
-.contact .php-email-form input, .contact .php-email-form textarea {
+.contact .php-email-form input, 
+.contact .php-email-form textarea, 
+.contact .registerForm input, 
+.contact .registerForm textarea {
   border-radius: 4px;
   box-shadow: none;
   font-size: 14px;
 }
 
-.contact .php-email-form input:focus, .contact .php-email-form textarea:focus {
+.contact .php-email-form input:focus,
+.contact .php-email-form textarea:focus, 
+.contact .registerForm input:focus,
+.contact .registerForm textarea:focus{
   border-color: #f09819;
 }
 
-.contact .php-email-form input {
+.contact .php-email-form input,
+.contact .registerForm input{
   padding: 20px 15px;
 }
 
-.contact .php-email-form textarea {
+.contact .php-email-form textarea,
+.contact .registerForm textarea{
   padding: 12px 15px;
 }
 
-.contact .php-email-form button[type="submit"] {
+.contact .php-email-form button[type="submit"], .customBtn,
+.contact .registerForm button[type="submit"]{
   background: #f09819;
   border: 0;
   padding: 10px 30px;
@@ -1306,7 +1324,8 @@ section {
   border-radius: 50px;
 }
 
-.contact .php-email-form button[type="submit"]:hover {
+.contact .php-email-form button[type="submit"]:hover,
+.contact .registerForm button[type="submit"]{
   background: #ffce3a;
 }
 

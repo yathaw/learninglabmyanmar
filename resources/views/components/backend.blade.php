@@ -28,6 +28,16 @@
 
     <!-- Sweet Alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+	<!-- Quill -->
+
+    <link href="{{ asset('plugin/quill/quill.snow.css') }}" rel="stylesheet">
+
+    <!-- Select 2 -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugin/select2/dist/css/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugin/select2_bootstrap4/dist/select2-bootstrap4.min.css') }}">
+
+
 </head>
 
 <body>
@@ -48,16 +58,20 @@
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="">
+						<a class="sidebar-link" href="{{ route('frontend.index') }}">
               				<i class="align-middle mr-2" data-feather="repeat"></i> <span class="align-middle"> Switch to Student </span>
             			</a>
 					</li>
 
-					<li class="sidebar-item active">
-						<a class="sidebar-link" href="">
+					{{-- Admin, Company, Instructor --}}
+					<li class="sidebar-item {{ Request::segment(1) === 'panel' ? 'active' : '' }}">
+						<a class="sidebar-link" href="{{ route('panel') }}">
               				<i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
             			</a>
 					</li>
+
+
+					{{-- Admin --}}
 
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="">
@@ -65,6 +79,7 @@
             			</a>
 					</li>
 
+					{{-- Admin, Company --}}
 
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="tables-bootstrap.html">
@@ -73,50 +88,45 @@
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('category.index')}}">
-              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Category </span>
+						<a class="sidebar-link" href="{{route('backside.course.index')}}">
+              				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Students </span>
             			</a>
 					</li>
 
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('subcategory.index')}}">
-              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Subcategory </span>
-            			</a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('course.index')}}">
+					<li class="sidebar-item {{ Request::segment(2) === 'course' ? 'active' : '' }}">
+						<a class="sidebar-link" href="{{route('backside.course.index')}}">
               				<i class="align-middle" data-feather="tag"></i> <span class="align-middle"> Courses </span>
             			</a>
 					</li>
+
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('section.index')}}">
+						<a class="sidebar-link" href="{{route('backside.section.index')}}">
               				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Section </span>
             			</a>
 					</li>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('content.index')}}">
+						<a class="sidebar-link" href="{{route('backside.content.index')}}">
               				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Content </span>
             			</a>
 					</li>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('lesson.index')}}">
+						<a class="sidebar-link" href="{{route('backside.lesson.index')}}">
               				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Lesson </span>
             			</a>
 					</li>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('assignment.index')}}">
+						<a class="sidebar-link" href="{{route('backside.assignment.index')}}">
               				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Assignment </span>
             			</a>
 					</li>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('attachment.index')}}">
+						<a class="sidebar-link" href="{{route('backside.attachment.index')}}">
               				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Attachment </span>
             			</a>
 					</li>
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('sale.index')}}">
+						<a class="sidebar-link" href="{{route('backside.sale.index')}}">
               				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Sale </span>
             			</a>
 					</li>
@@ -129,11 +139,11 @@
 			            </a>
 						<ul id="users" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
 							<li class="sidebar-item">
-								<a class="sidebar-link" href="{{route('companies.index')}}"> Business </a>
+								<a class="sidebar-link" href="{{route('backside.companies.index')}}"> Business </a>
 							</li>
 
 							<li class="sidebar-item">
-								<a class="sidebar-link" href="{{route('instructors.index')}}"> Insturctors </a>
+								<a class="sidebar-link" href="{{route('backside.instructors.index')}}"> Insturctors </a>
 							</li>
 
 							<li class="sidebar-item">
@@ -157,7 +167,7 @@
             			</a>
 					</li>
 
-					
+					{{-- Admin --}}
 
 					<li class="sidebar-header">
 						Addons
@@ -169,15 +179,15 @@
 			            </a>
 						<ul id="components" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
 							<li class="sidebar-item">
-								<a class="sidebar-link" href="{{route('jobtitles.index')}}"> Job Titles </a>
+								<a class="sidebar-link" href="{{route('backside.jobtitles.index')}}"> Job Titles </a>
 							</li>
 
 							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Category </a>
+								<a class="sidebar-link" href="{{route('backside.category.index')}}"> Category </a>
 							</li>
 
 							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Sub-category </a>
+								<a class="sidebar-link" href="{{route('backside.subcategory.index')}}"> Sub-category </a>
 							</li>
 
 							<li class="sidebar-item">
@@ -411,13 +421,20 @@
     <script src="{{ asset('plugin/datatable/vfs_fonts.js') }}"></script>
     <script src="{{ asset('plugin/datatable/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('plugin/datatable/buttons.print.min.js') }}"></script>
-
+    <script src="{{ asset('plugin/jquery.steps.min.js') }}"></script>
+    <script src="{{ asset('plugin/quill/quill.js') }}"></script>
+    <!-- Select 2 -->
+    <script src="{{asset('plugin/select2/dist/js/select2.min.js')}}"></script> 
     <script type="text/javascript">
     	$.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+            $('[data-toggle="tooltip"]').tooltip();
+    	
+
     </script>
 
 

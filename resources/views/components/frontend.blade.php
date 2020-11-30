@@ -37,11 +37,11 @@
 <body>
 
     <!-- ======= Header ======= -->
-    <header id="header" class="fixed-top header-transparent">
+    <header id="header" class="fixed-top {{ Request::segment(1) === NULL ? 'header-transparent' : '' }} ">
         <div class="container d-flex align-items-center">
 
             <!-- Uncomment below if you prefer to use an image logo -->
-            <a href="index.html" class="logo mr-auto text-decoration-none">
+            <a href="{{ route('frontend.index') }}" class="logo mr-auto text-decoration-none">
                 <img src="{{ asset('logo/logo_transparent_500x500.png') }}" alt="" class="img-fluid">
 
                 <img src="{{ asset('logo/logotext_color.png') }}" alt="" class="img-fluid">
@@ -52,45 +52,78 @@
 
             <nav class="nav-menu d-none d-lg-block">
                 <ul>
-                    <li class="active">
-                        <a href="">Home</a>
+                    <li class="{{ Request::segment(1) === NULL ? 'active' : '' }}">
+                        <a href="{{ route('frontend.index') }}">Home</a>
                     </li>
 
-                    <li>
-                        <a href=""> About </a>
+                    <li class="drop-down {{ Request::segment(1) === 'courses' ? 'active' : '' }}"><a href="{{ route('courses') }}"> Category </a>
+                        <ul>
+                            <li><a href="#"> Category 1</a></li>
+                            <li class="drop-down"><a href="#">Category  2</a>
+                                <ul>
+                                    <li><a href="#">Sub-category 1</a></li>
+                                    <li><a href="#">Sub-category 2</a></li>
+                                    <li><a href="#">Sub-category 3</a></li>
+                                    <li><a href="#">Sub-category 4</a></li>
+                                    <li><a href="#">Sub-category 5</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Category 3</a></li>
+                            <li><a href="#">Category 4</a></li>
+                            <li><a href="#">Category 5</a></li>
+                        </ul>
                     </li>
 
-                    <li>
+                    <li class="{{ Request::segment(1) === 'instructors' ? 'active' : '' }}">
+                        <a href="{{ route('instructors') }}"> Find Instrutors </a>
+                    </li>
+
+                    <li class="{{ Request::segment(1) === 'steps' ? 'active' : '' }}">
                         <a href=""> How It Works </a>
                     </li>
                     
-                    <li>
+                    <li class="{{ Request::segment(1) === 'pricing' ? 'active' : '' }}">
                         <a href="">Pricing</a>
                     </li>
                    
-                    <li class="pt-2">
-                        <a href="" class="cartIcon">  <i class='bx bx-cart bx-lg'></i> </a>
+                    <li class="pt-2 {{ Request::segment(1) === 'cart' ? 'active' : '' }}">
+                        <a href="{{ route('cart') }}" class="cartIcon">  
+                            <i class='bx bx-cart bx-lg'></i> 
+                            <span class="cartNoti count"> 2 </span>
+                        </a>
                     </li>
 
-                    <li>
-                        <a href="" class="btn btn-outline-light"> Login  </a>
+                    <li class="{{ Request::segment(1) === 'login' ? 'active' : '' }}">
+                        <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm"> Login  </a>
                     </li>
 
-                    <li>
-                        <a href="" class="btn custom_primary_btnColor"> Signup  </a>
+                    <li class="{{ Request::segment(1) === 'register' ? 'active' : '' }}">
+                        <a href="{{ route('register') }}" class="btn custom_primary_btnColor btn-sm"> Signup  </a>
                     </li>
 
-                   {{--  <li class="drop-down"><a href=""> Account </a>
+                    <li class="drop-down mr-5"><a href=""> Account </a>
                         <ul>
-                            <li><a href="#">Drop Down 1</a></li>
-                            
-                            <li><a href="#">Drop Down 2</a></li>
-                            <li><a href="#">Drop Down 3</a></li>
+                            <li><a href="#"> My Profile </a></li>
+                            <li><a href="{{ route('mystudyings') }}"> My Studying </a></li>
+                            <li><a href="{{ route('wishlist') }}"> Wishlist </a></li>
+                            <li><a href="{{ route('collection') }}"> Collection </a></li>
 
-                            <div></div>
+                        
+                            <li><a href="{{ route('panel') }}"> Instructor Dashboard </a></li>
+                            <li><a href="#"> Teaching Mode On </a></li>
+
+
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            <li><a href="#"> Cart History </a></li>
+
+                            <li><a href="#"> Change Password</a></li>
+                            
+
+                            <li><hr class="dropdown-divider"></li>
                             <li><a href="#"> Logout </a></li>
                         </ul>
-                    </li> --}}
+                    </li>
 
                 </ul>
             </nav><!-- .nav-menu -->
@@ -98,16 +131,18 @@
         </div>
     </header>
     <!-- End Header -->
+    @if(Request::segment(1) === NULL)
 
     <!-- ======= Hero Section ======= -->
     <section id="hero" class="d-flex align-items-center justify-content-center">
         <div class="container position-relative">
             <h1 class="logoFont"> Learning Lab Myanmar </h1>
             <h2> Find the best Courses and Upgrade your skills. Learn Anytime, Anywhere, Accelerate your future </h2>
-            <a href="#about" class="btn-get-started scrollto">Get Started</a>
+            <a href="{{ route('courses') }}" class="btn-get-started scrollto">Get Started</a>
         </div>
     </section>
     <!-- End Hero -->
+    @endif
 
 
     <main id="main">
@@ -135,13 +170,13 @@
                         <h4>Useful Links</h4>
                         <ul>
                             <li>
-                                <i class="bx bx-chevron-right"></i> <a href="#">Home</a>
+                                <i class="bx bx-chevron-right"></i> <a href="{{ route('frontend.index') }}">Home</a>
                             </li>
                             <li>
                                 <i class="bx bx-chevron-right"></i> <a href="#">How It works </a>
                             </li>
                             <li>
-                                <i class="bx bx-chevron-right"></i> <a href="#"> Find Instructors </a>
+                                <i class="bx bx-chevron-right"></i> <a href="{{ route('instructors') }}"> Find Instructors </a>
                             </li>
                             <li>
                                 <i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a>
@@ -169,9 +204,9 @@
                   <div class="col-lg-4 col-md-6 footer-newsletter">
                     <h4> Apps </h4>
                     
-                    <img src="frontend/img/android.png" class="img-fluid" style="height: 50px;">
+                    <img src="{{ asset('frontend/img/android.png') }}" class="img-fluid" style="height: 50px;">
 
-                    <img src="frontend/img/appstore.png" class="img-fluid" style="height: 50px;">
+                    <img src="{{ asset('frontend/img/appstore.png') }}" class="img-fluid" style="height: 50px;">
 
                   </div>
 
@@ -207,8 +242,12 @@
     <script src="{{ asset('frontend/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
     <script src="{{ asset('frontend/vendor/venobox/venobox.min.js') }}"></script>
 
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
     <!-- Template Main JS File -->
     <script src="{{ asset('frontend/js/main.js') }}"></script>
+    <script src="{{ asset('plugin/custom.js') }}"></script>
+
 
      @yield("script_content")
 

@@ -9,7 +9,7 @@
 					<h5 class="card-title mb-0"> All Lists 
 
 					
-						<a href="{{ route('course.create') }}" class="btn custom_primary_btnColor float-right" ><i class="align-middle fas fa-plus"></i></a>
+						<a href="{{ route('backside.course.create') }}" class="btn custom_primary_btnColor float-right" ><i class="align-middle fas fa-plus"></i></a>
 		            	
 		            </button>
 
@@ -54,7 +54,7 @@
                                     <th> Description </th>
                                     <th> Image </th>
                                     <th> Outline</th>
-                                    <th> <a href="{{route('course.edit',1)}}" class="btn btn-success">Edit</a> <a href="" class="btn btn-success">Delete</a></th>
+                                    <th> <a href="{{route('backside.course.edit',1)}}" class="btn btn-success">Edit</a> <a href="" class="btn btn-success">Delete</a></th>
                                 </tr>
                             </tbody>
                         </table>

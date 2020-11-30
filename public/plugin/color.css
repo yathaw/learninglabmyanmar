@@ -25,3 +25,23 @@
 	border-color: #f09819;
 	background-color: #f09819;
 }
+
+.heartColor{
+	color: #FF4081;
+}
+
+.custom_primary_Color{
+	color: #f09819;
+}
+
+.custom_primarydark_Color{
+	color: #784C0D;
+}
+
+input:focus,
+textarea:focus,
+.select2-container--bootstrap4.select2-container--focus .select2-selection{
+  	border-color: #f09819 !important;
+  	outline: none !important;
+  	box-shadow: none !important;
+}
