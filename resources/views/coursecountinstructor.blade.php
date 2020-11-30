@@ -70,12 +70,12 @@
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="home-tab">
                       <div class="chart-pie mt-5 mb-5 pb-5 pt-5">
                         <canvas id="myAreaChart"></canvas>
-                    </div>
+                      </div>
                     </div>
                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="profile-tab">  <p class="mt-5 mb-5 pb-5">No data to display1</p>
                     </div>
                     <div class="tab-pane fade" id="pills-rating" role="tabpanel" aria-labelledby="rating-tab">
-                      <p class="mt-5 mb-5 pb-5">No data to display2</p>
+                       <p class="mt-5 mb-5 pb-5">No data to display2</p>
                     </div>
                   </div>
                 </div>
@@ -132,6 +132,8 @@
 
 
     })
+
+    
   </script>
   @stop
 </x-frontend>
