@@ -101,7 +101,8 @@ Route::get('panel',[AccountController::class, 'panel'])->name('panel');
 */
 Route::get('mystudyings',[AccountController::class, 'mystudyings'])->name('mystudyings');
 Route::get('/lecture/{id}',[AccountController::class, 'lecture'])->name('lecture');
-
+Route::post('/questionstore',[AccountController::class, 'questionstore'])->name('questionstore');
+Route::get('/questionnoti',[AccountController::class,'questionnoti'])->name('questionnoti');
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');
