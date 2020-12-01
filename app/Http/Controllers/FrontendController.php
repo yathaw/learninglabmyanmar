@@ -29,4 +29,14 @@ class FrontendController extends Controller
     public function instructordetail($id){
     	return view('frontend.instructordetail');
     }
+
+    //honey
+    public function business_info(){
+        return view('business_info');
+
+    }
+
+    public function instructor_info(){
+        return view('instructor_info');
+    }
 }

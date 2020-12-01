@@ -47,6 +47,9 @@ Route::get('cart',[FrontendController::class, 'addtocart'])->name('cart');
 Route::get('instructors',[FrontendController::class, 'instructors'])->name('instructors');
 Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->name('instructor');
 
+//Honey
+Route::get('business_info',[FrontendController::class,'business_info'])->name('business_info');
+Route::get('instructor_info',[FrontendController::class,'instructor_info'])->name('instructor_info');
 
 // ------------------------------------------------------------------------
 
@@ -131,21 +134,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 // nyiyelin
 
-
-
-
-
-
-
-
-//Honey
-Route::get('business',function () {
-	return view('business_info');
-});
-
-Route::get('instructor',function () {
-	return view('instructor_info');
-});
 
 
 
