@@ -108,6 +108,8 @@
                             <li><a href="{{ route('wishlist') }}"> Wishlist </a></li>
                             <li><a href="{{ route('collection') }}"> Collection </a></li>
 
+                            <li><a href="">  Notification <span class="badge rounded-pill bg-danger float-right"> +3 </span> </a></li>
+
                         
                             <li><a href="{{ route('panel') }}"> Instructor Dashboard </a></li>
                             <li><a href="#"> Teaching Mode On </a></li>
