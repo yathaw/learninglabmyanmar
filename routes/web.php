@@ -41,6 +41,7 @@ Route::get('/',[FrontendController::class, 'index'])->name('frontend.index');
 
 // NYL
 Route::get('courses',[FrontendController::class, 'courses'])->name('courses');
+Route::post('courses_search',[FrontendController::class, 'courses_search'])->name('courses_search');
 Route::get('/course/{id}',[FrontendController::class, 'coursedetail'])->name('course');
 Route::get('cart',[FrontendController::class, 'addtocart'])->name('cart');
 

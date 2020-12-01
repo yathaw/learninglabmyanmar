@@ -27,4 +27,9 @@ class Course extends Model
 						'subcategory_id',
 						'instructor_id'
 						];
+
+	public function instructor($value='')
+	{
+		return $this->belongsTo('App\Models\Instructor');
+	}
 }
