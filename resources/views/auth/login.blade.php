@@ -1,83 +1,48 @@
-<x-frontend>
+<x-guest-layout>
+    <x-jet-authentication-card>
+        <x-slot name="logo">
+            <x-jet-authentication-card-logo />
+        </x-slot>
 
+        <x-jet-validation-errors class="mb-4" />
 
-    <!-- ======= Breadcrumbs ======= -->
-    <section class="breadcrumbs">
-        <div class="container">
+        @if (session('status'))
+            <div class="mb-4 font-medium text-sm text-green-600">
+                {{ session('status') }}
+            </div>
+        @endif
 
-            <div class="d-flex justify-content-between align-items-center">
-                <h2> Sign In </h2>
-                <ol>
-                    <li><a href="{{ route('frontend.index') }}">Home</a></li>
-                    <li> Login </li>
-                </ol>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+
+            <div>
+                <x-jet-label for="email" value="{{ __('Email') }}" />
+                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
             </div>
 
-        </div>
-    </section><!-- End Breadcrumbs -->
-
-    <section class="inner-page contact">
-        <div class="container">
-            <div class="section-title">
-                  <h2> Login In to your account! </h2>
-                  <p> Welcome Back </p>
+            <div class="mt-4">
+                <x-jet-label for="password" value="{{ __('Password') }}" />
+                <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
             </div>
 
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-
-                    @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <x-jet-validation-errors class="mb-4" />
-                        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    @endif
-
-                    
-                    <form action="{{ route('login') }}" method="post" role="form" class="registerForm">
-                        @csrf
-
-
-                        <div class="form-floating mb-3 col-md-12">
-                            <input type="email" class="form-control form-control-sm" id="email" placeholder="Name" value="{{ old('email') }}" name="email" autofocus>
-                            <label for="email"> Your Email </label>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="form-floating mb-3 col-md-12">
-                                <input type="password" class="form-control form-control-sm" id="password" placeholder="Passowrd" name="password" required autocomplete="new-password">
-                                <label for="password" class="px-4"> Password </label>
-
-                            </div>
-                        </div>
-
-                        <div class="block mb-4">
-                            <label for="remember_me" class="flex items-center">
-                                <input id="remember_me" type="checkbox" class="form-checkbox" name="remember">
-                                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                            </label>
-                        </div>
-
-                        
-                        <a href="" class="text-muted"> Forgot your Passowrd ? </a>
-                        
-                      
-                        <div class="text-center my-4">
-                            <button type="submit"> Login </button>
-
-                            <a href="{{ route('register') }}" class="d-block mt-3"> Don't have an account? Sign Up </a>
-                        </div>
-                    </form>
-
-                </div>
+            <div class="block mt-4">
+                <label for="remember_me" class="flex items-center">
+                    <input id="remember_me" type="checkbox" class="form-checkbox" name="remember">
+                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                </label>
             </div>
-            
-        </div>
-    </section>
 
+            <div class="flex items-center justify-end mt-4">
+                @if (Route::has('password.request'))
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                        {{ __('Forgot your password?') }}
+                    </a>
+                @endif
 
-
-
-
-
-</x-frontend>
+                <x-jet-button class="ml-4">
+                    {{ __('Login') }}
+                </x-jet-button>
+            </div>
+        </form>
+    </x-jet-authentication-card>
+</x-guest-layout>

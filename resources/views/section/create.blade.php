@@ -6,10 +6,6 @@
           <h2 class="text-center">Course Create Form</h2>
           <form method="post" action="{{route('backside.section.store')}}" enctype="multipart/form-data">
             @csrf
-
-            
-
-
             <div class="form-group my-3">
               <label>Title:</label>
               <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" placeholder="Course Title..." value="{{old('title')}}">

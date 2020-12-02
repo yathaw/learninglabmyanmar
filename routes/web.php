@@ -18,9 +18,6 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
 
 
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,15 +38,25 @@ Route::get('/',[FrontendController::class, 'index'])->name('frontend.index');
 
 // NYL
 Route::get('courses',[FrontendController::class, 'courses'])->name('courses');
+Route::post('courses_search',[FrontendController::class, 'courses_search'])->name('courses_search');
+Route::post('wishlist_search',[FrontendController::class, 'wishlist_search'])->name('wishlist_search');
+Route::post('wishlist',[FrontendController::class, 'wishlist'])->name('wishlist');
+Route::post('removewishlist',[FrontendController::class, 'removewishlist'])->name('removewishlist');
+
 Route::get('/course/{id}',[FrontendController::class, 'coursedetail'])->name('course');
 Route::get('cart',[FrontendController::class, 'addtocart'])->name('cart');
+Route::post('course_sale',[FrontendController::class, 'course_sale'])->name('course_sale');
+
 
 Route::get('instructors',[FrontendController::class, 'instructors'])->name('instructors');
 Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->name('instructor');
 
 //Honey
 Route::get('business_info',[FrontendController::class,'business_info'])->name('business_info');
+Route::post('business_store',[FrontendController::class,'business_store'])->name('business.store');
+
 Route::get('instructor_info',[FrontendController::class,'instructor_info'])->name('instructor_info');
+Route::post('instructor_store',[FrontendController::class,'instructor_store'])->name('instructor.store');
 
 // ------------------------------------------------------------------------
 
@@ -69,8 +76,12 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/sale', SaleController::class);
 
     Route::resource('/section', SectionController::class);
-    Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
+    //------------------kyw---------------------//
+    Route::post('/section/getid',[SectionController::class,'getid'])->name('getid');
+    Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
 
+    Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
+    
     Route::resource('/content', ContentController::class);
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);
