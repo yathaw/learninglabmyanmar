@@ -263,7 +263,7 @@
 									</a> -->
 								</div>
 								<div class="dropdown-menu-footer">
-									<a href="#" class="text-muted">Show all notifications</a>
+									<a href="{{route('questionshownoti')}}" class="text-muted">Show all notifications</a>
 								</div>
 							</div>
 						</li>
@@ -405,7 +405,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable-min.js"></script>
 
     <script src="{{ asset('plugin/sortable/jquery-ui.min.js') }}"></script>
-    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script src="{{ asset('plugin/pusher.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('backend/js/noti.js')}}"></script>
     <script type="text/javascript">
     	$.ajaxSetup({
