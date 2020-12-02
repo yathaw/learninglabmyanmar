@@ -26,4 +26,13 @@ class Course extends Model
 						'level_id',
 						'subcategory_id',
 						];
+public function subcategory()
+  {
+      return $this->belongsTo('App\Subcategory');
+  }
+
+     public function instructor()
+  {
+      return $this->belongsTo('App\Brand');
+  }
 }

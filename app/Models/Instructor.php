@@ -22,4 +22,9 @@ class Instructor extends Model
                'status',
                'user_id'				 
 							];
+
+  public function courses($value='')
+    {
+      return $this->hasMany('App\Item');
+    }
 }
