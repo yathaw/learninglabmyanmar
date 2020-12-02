@@ -82,11 +82,20 @@
 x  
 
                     <li class="drop-down {{ Request::segment(1) === 'courses' ? 'active' : '' }}"><a href="{{ route('courses') }}"> Category </a>
-                        {{--  --}}  <ul>
-                          @foreach($categories as $category)
-
-                            <li><a href="#"> {{$category->name}}</a></li>    
-                           @endforeach
+                        <ul>
+                            @foreach($categories as $category)
+                                @if($category->subcategories)
+                                <li class="drop-down"><a href="#"> {{$category->name}}</a> 
+                                    <ul>
+                                        @foreach($category->subcategories as $subcategory)
+                                            <li><a href="#"> {{ $subcategory->name }} </a></li> 
+                                        @endforeach
+                                    </ul>
+                                </li> 
+                                @else
+                                <li><a href="#"> {{$category->name}}</a> </li>
+                                @endif 
+                            @endforeach
                         </ul>
                     </li>
 

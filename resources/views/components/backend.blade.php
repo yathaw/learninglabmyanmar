@@ -169,14 +169,6 @@
 							<li class="sidebar-item">
 								<a class="sidebar-link" href=""> Level </a>
 							</li>
-
-							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Section Type </a>
-							</li>
-
-							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Content Type </a>
-							</li>
 							
 						</ul>
 					</li>
