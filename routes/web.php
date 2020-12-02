@@ -117,6 +117,9 @@ Route::get('mystudyings',[AccountController::class, 'mystudyings'])->name('mystu
 Route::get('/lecture/{id}',[AccountController::class, 'lecture'])->name('lecture');
 Route::post('/questionstore',[AccountController::class, 'questionstore'])->name('questionstore');
 Route::get('/questionnoti',[AccountController::class,'questionnoti'])->name('questionnoti');
+Route::get('/questionshownoti',[AccountController::class,'questionshownoti'])->name('questionshownoti');
+Route::post('/answerquestion',[AccountController::class,'answerquestion'])->name('answerquestion');
+Route::get('/answernoti',[AccountController::class,'answernoti'])->name('answernoti');
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');

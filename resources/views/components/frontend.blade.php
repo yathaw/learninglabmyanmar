@@ -136,7 +136,7 @@ x
                             <li><a href="{{ route('wishlist') }}"> Wishlist </a></li>
                             <li><a href="{{ route('collection') }}"> Collection </a></li>
 
-                            <li><a href="">  Notification <span class="badge rounded-pill bg-danger float-right"> +3 </span> </a></li>
+                            <li class="nav-icon"><a href="#" >  Notification <span class="badge rounded-pill bg-danger float-right"> 0 </span> </a></li>
 
                         
                             <li><a href="{{ route('panel') }}"> Instructor Dashboard </a></li>
@@ -277,9 +277,13 @@ x
     <!-- Template Main JS File -->
     <script src="{{ asset('frontend/js/main.js') }}"></script>
     <script src="{{ asset('plugin/custom.js') }}"></script>
+
+    <script src="{{ asset('plugin/pusher.min.js')}}"></script>
+   <!--  <script src="https://js.pusher.com/7.0/pusher.min.js"></script> -->
+    <script type="text/javascript" src="{{asset('frontend/js/notification.js')}}"></script>
+
     {{-- localstorage --}}
     <script src="{{ asset('plugin/localstorage.js') }}"></script>
-
 
      @yield("script_content")
 
