@@ -8,7 +8,7 @@
 				<div class="card-header">
 					<h5 class="card-title mb-0"> All Lists 
 
-					<a href="{{route('companies.create')}}" class="btn custom_primary_btnColor float-right" >
+					<a href="{{route('backside.companies.create')}}" class="btn custom_primary_btnColor float-right" >
 		            	<i class="align-middle fas fa-plus"></i>
 		            </a>
 
@@ -34,14 +34,42 @@
                             <thead class="custom_primary_bgColor text-white">
                                 <tr>
                                     <th> No </th>
-                                    <th> Name </th>
+                                    <th> User Name </th>
+                                    <th>Email</th>
+                                    <th>Company Name</th>
+                                    <th>Logo</th>
+                                    <th>Address</th>
+                                    <th>Description</th>
                                     <th> Action </th>
                                 </tr>
                             </thead>
+                            <tbody>
+                            	<?php $i =1; ?>
+                            	@foreach($companies as $company)
+                            	<tr>
+                            		<td>{{$i++}}</td>
+                            		<td>{{$company->user}}</td>
+                            		<td></td>
+                            		<td>{{$company->name}}</td>
+                            		<td><img src="{{$company->logo}}" class="img-fluid"></td>
+                            		<td>{{$company->address}}</td>
+                            		<td>{{$company->description}}</td>
+                            		<td>
+                            			<a href="" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                            			<a href="" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                            		</td>
+                            	</tr>
+                            	@endforeach
+                            </tbody>
                             <tfoot>
                                 <tr>
                                     <th> No </th>
-                                    <th> Name </th>
+                                    <th> User Name </th>
+                                    <th>Email</th>
+                                    <th>Company Name</th>
+                                    <th>Logo</th>
+                                    <th>Address</th>
+                                    <th>Description</th>
                                     <th> Action </th>
                                 </tr>
                             </tfoot>
