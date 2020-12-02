@@ -39,6 +39,8 @@ class FrontendController extends Controller
     	return view('frontend.instructordetail');
     }
 
+
+    // nyl
     public function courses_search(Request $request)
     {
        $data = $request->data;
@@ -162,6 +164,15 @@ class FrontendController extends Controller
        }
 
        return response(json_decode($user_id));
+   }
        
+    //honey
+    public function business_info(){
+        return view('business_info');
+
+    }
+
+    public function instructor_info(){
+        return view('instructor_info');
     }
 }
