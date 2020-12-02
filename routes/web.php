@@ -47,6 +47,12 @@ Route::get('cart',[FrontendController::class, 'addtocart'])->name('cart');
 Route::get('instructors',[FrontendController::class, 'instructors'])->name('instructors');
 Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->name('instructor');
 
+//Honey
+Route::get('business_info',[FrontendController::class,'business_info'])->name('business_info');
+Route::post('business_store',[FrontendController::class,'business_store'])->name('business.store');
+
+Route::get('instructor_info',[FrontendController::class,'instructor_info'])->name('instructor_info');
+Route::post('instructor_store',[FrontendController::class,'instructor_store'])->name('instructor.store');
 
 // ------------------------------------------------------------------------
 
@@ -101,7 +107,8 @@ Route::get('panel',[AccountController::class, 'panel'])->name('panel');
 */
 Route::get('mystudyings',[AccountController::class, 'mystudyings'])->name('mystudyings');
 Route::get('/lecture/{id}',[AccountController::class, 'lecture'])->name('lecture');
-
+Route::post('/questionstore',[AccountController::class, 'questionstore'])->name('questionstore');
+Route::get('/questionnoti',[AccountController::class,'questionnoti'])->name('questionnoti');
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');
@@ -130,21 +137,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 // nyiyelin
 
-
-
-
-
-
-
-
-//Honey
-Route::get('business',function () {
-	return view('business_info');
-});
-
-Route::get('instructor',function () {
-	return view('instructor_info');
-});
 
 
 

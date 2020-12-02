@@ -262,24 +262,26 @@
                                     </div>
 
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor" data-toggle="modal" data-target="#askquestionModal"> Ask Question </a>
+                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor" id="askquestion"> Ask Question </a>
                                         
                                     </div>
                                     <hr class="mt-3">
                                 </div>
 
                                 <div class="row testimonials">
+            
+                                    @foreach($questions as $comm)
                                     <div class="col-12 questionLists">
                                         <div class="testimonial-item" style="min-height: 0">
                                             <a href="" class="text-dark">
                                                 <p class="fw-bolder fst-normal fontbold pb-0">
-                                                    Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
+                                                    {{$comm->description}}
                                                 </p>
                                             </a>
 
                                             <p class="fst-normal"> 
                                                 <small> 
-                                                    <i class='bx bx-user' ></i> Aye Lwin Soe 
+                                                    <i class='bx bx-user' ></i> {{$comm->user->name}} 
                                                 </small>
                                                 <small class="ml-4"> 
                                                     <i class='bx bx-time'></i>
@@ -292,12 +294,13 @@
 
                                             </p>
                                             <div class="float-left">
-                                                <img src="{{ asset('frontend/img/testimonials/testimonials-1.jpg') }}" class="testimonial-img" alt="">
+                                                <img src="{{ asset($comm->user->profile_photo_path) }}" class="testimonial-img" alt="">
                                             </div>
                                           </div>
                                     </div>
+                                    @endforeach
 
-                                    <div class="col-12 questionLists">
+                                   <!--  <div class="col-12 questionLists">
                                         <div class="testimonial-item" style="min-height: 0">
                                             <a href="" class="text-dark">
                                                 <p class="fw-bolder fst-normal fontbold pb-0">
@@ -407,7 +410,7 @@
                                                 <img src="{{ asset('frontend/img/testimonials/testimonials-5.jpg') }}" class="testimonial-img" alt="">
                                             </div>
                                           </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="row mt-5">
@@ -623,18 +626,20 @@
                     <h5 class="modal-title" id="exampleModalLabel"> Ask Any Question? </h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form>
+                <form action="{{route('questionstore')}}" method="post">
+                    @csrf
+                    <input type="hidden" name="contentid" value="" id="contentid">
                     <div class="modal-body">
 
                         <div class="form-floating mb-3 col-md-12">
-                            <input type="text" class="form-control" id="subject" placeholder="Title or summary">
+                            <input type="text" class="form-control" id="subject" placeholder="Title or summary" name="summary">
                             <label for="subject"> Title or Summary </label>
                             <div class="validate"></div>
 
                         </div>
 
                         <div class="form-floating my-2">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name="comment"></textarea>
                             <label for="floatingTextarea2"> Comments </label>
                         </div>
 
@@ -642,7 +647,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Send</button>
+                        <button type="submit" class="btn btn-primary">Send</button>
                     </div>
                 </form>
 
@@ -741,8 +746,12 @@
             var starttime = 2;
             $(function() {
                 $("#playlist li").on("click", function() {
+
                     var videolink = $(this).attr("videoUrl");
                     var videoId = $(this).attr("videoId");
+
+                    var askid = $("#askquestion").attr("data-id",videoId);
+
                     $("#videoarea").attr({
                         "src": $(this).attr("videoUrl"),
                         "poster": "",
@@ -766,6 +775,19 @@
             document.getElementById("videoarea").addEventListener("loadedmetadata", function() {
                  this.currentTime = starttime;
             }, false);
+
+            $('#askquestion').click(function(){
+                var vid = $(this).data('id');
+                if(vid){
+                    $('#contentid').val(vid);
+                    $('#askquestionModal').modal();
+                }else{
+
+                    var vid = $('#playlist li').attr('videoId');
+                    $('#contentid').val(vid);
+                    $('#askquestionModal').modal();
+                }
+            })
 
 
 

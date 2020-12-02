@@ -206,15 +206,15 @@
 							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-toggle="dropdown">
 								<div class="position-relative">
 									<i class="align-middle" data-feather="bell"></i>
-									<span class="indicator">4</span>
+									<span class="indicator">0</span>
 								</div>
 							</a>
 							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right py-0" aria-labelledby="alertsDropdown">
-								<div class="dropdown-menu-header">
-									4 New Notifications
+								<div class="dropdown-menu-header panelnoti">
+									
 								</div>
-								<div class="list-group">
-									<a href="#" class="list-group-item">
+								<div class="list-group" id="noti_data">
+									<!-- <a href="#" class="list-group-item">
 										<div class="row g-0 align-items-center">
 											<div class="col-2">
 												<i class="text-danger" data-feather="alert-circle"></i>
@@ -225,8 +225,8 @@
 												<div class="text-muted small mt-1">30m ago</div>
 											</div>
 										</div>
-									</a>
-									<a href="#" class="list-group-item">
+									</a> -->
+									<!-- <a href="#" class="list-group-item">
 										<div class="row g-0 align-items-center">
 											<div class="col-2">
 												<i class="text-warning" data-feather="bell"></i>
@@ -260,7 +260,7 @@
 												<div class="text-muted small mt-1">14h ago</div>
 											</div>
 										</div>
-									</a>
+									</a> -->
 								</div>
 								<div class="dropdown-menu-footer">
 									<a href="#" class="text-muted">Show all notifications</a>
@@ -405,7 +405,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable-min.js"></script>
 
     <script src="{{ asset('plugin/sortable/jquery-ui.min.js') }}"></script>
-
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script type="text/javascript" src="{{asset('backend/js/noti.js')}}"></script>
     <script type="text/javascript">
     	$.ajaxSetup({
             headers: {

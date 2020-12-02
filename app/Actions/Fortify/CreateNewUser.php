@@ -23,12 +23,62 @@ class CreateNewUser implements CreatesNewUsers
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
+            'role' => 'required',
+            'phone' => 'required',
         ])->validate();
 
-        return User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => Hash::make($input['password']),
-        ]);
+       
+        $imageName = time().'.'.$input['photo']->extension();
+            
+        $path = '/profiles/'.$imageName;
+       
+        $input['photo']->move(public_path('profiles'), $imageName);
+
+
+        if($input['role'] == 'Student'){
+
+            $user =User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+                'phone' => $input['phone'],
+                'profile_photo_path' => $path,
+            ]);
+
+            $user->assignRole('Student');
+            return $user;
+            //return redirect()->route('frontend.index');
+
+        }elseif($input['role'] == 'Instructor'){
+
+            $user =User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+                'phone' => $input['phone'],
+                'profile_photo_path' => $path,
+
+            ]);
+            $user->assignRole('Instructor');
+            return $user;
+
+
+        }else{
+
+            $user =User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+                'phone' => $input['phone'],
+                'profile_photo_path' => $path,
+                
+            ]);
+            $user->assignRole('Business');
+            return $user;
+            // return redirect()->route('business_info');
+
+        }
+
+        
     }
 }
