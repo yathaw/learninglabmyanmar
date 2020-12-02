@@ -18,9 +18,6 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
 
 
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -79,8 +76,12 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/sale', SaleController::class);
 
     Route::resource('/section', SectionController::class);
-    Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
+    //------------------kyw---------------------//
+    Route::post('/section/getid',[SectionController::class,'getid'])->name('getid');
+    Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
 
+    Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
+    
     Route::resource('/content', ContentController::class);
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);
