@@ -13,14 +13,26 @@ class CreateQuizzesTable extends Migration
      */
     public function up()
     {
+        Schema::create('tests', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->text('description');
+            $table->foreignId('content_id')
+                    ->references('id')
+                    ->on('contents')
+                    ->onDelete('cascade');
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
         Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
             $table->text('question');
             $table->string('type');
             $table->string('timer');
-            $table->foreignId('content_id')
+            $table->foreignId('test_id')
                     ->references('id')
-                    ->on('contents')
+                    ->on('tests')
                     ->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();

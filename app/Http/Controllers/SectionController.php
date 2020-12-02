@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Section;
+use App\Models\Course;
+
 use Illuminate\Http\Request;
 
 class SectionController extends Controller
@@ -12,10 +14,9 @@ class SectionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        $sections=Section::all();
-        return view('section.index',compact('sections'));
+        return view('course.section_new');
     }
 
     /**

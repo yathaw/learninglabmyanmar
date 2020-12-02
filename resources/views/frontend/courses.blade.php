@@ -36,7 +36,7 @@
 
       							<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
       								<div class="searchInputWrapper float-right mr-4">
-									    <input class="searchInput" type="text" placeholder='focus here to search'>
+									    <input class="searchInput" type="text" placeholder='focus here to search' data-user_id = "{{Auth::id()}}">
 									    	<i class='searchInputIcon bx bx-search-alt-2' ></i>
 									</div>
       							</div>
@@ -72,8 +72,20 @@
 						      			<a href="{{route('course','1')}}" class="text-decoration-none text-muted">
 							      			<h4 class="fontbold text-dark"> {{$course->title}}</h4>
 							      		</a>
+							      		
 
-						      			<a class="favouriteBtn one active mobile button--secondary float-right">
+
+							      		
+
+						      			<a class="favouriteBtn one
+						      			@foreach($wishlists as $wishlist)
+						      			@if($wishlist->course_id == $course->id && Auth::id() == $wishlist->user_id)
+
+						      				active
+
+										@endif 
+										@endforeach
+										mobile button--secondary float-right wishlist" data-course_id = "{{$course->id}}">
 										    <div class="btn__effect">
 										      	<svg width="515.99" height="480.73" class="heart-stroke icon-svg icon-svg--size-4 icon-svg--color-silver" viewBox="20 18 29 28" aria-hidden="true" focusable="false"><path d="M28.3 21.1a4.3 4.3 0 0 1 4.1 2.6 2.5 2.5 0 0 0 2.3 1.7c1 0 1.7-.6 2.2-1.7a3.7 3.7 0 0 1 3.7-2.6c2.7 0 5.2 2.7 5.3 5.8.2 4-5.4 11.2-9.3 15a2.8 2.8 0 0 1-2 1 3.4 3.4 0 0 1-2.2-1c-9.6-10-9.4-13.2-9.3-15 0-1 .6-5.8 5.2-5.8m0-3c-5.3 0-7.9 4.3-8.2 8.5-.2 3.2.4 7.2 10.2 17.4a6.3 6.3 0 0 0 4.3 1.9 5.7 5.7 0 0 0 4.1-1.9c1.1-1 10.6-10.7 10.3-17.3-.2-4.6-4-8.6-8.4-8.6a7.6 7.6 0 0 0-6 2.7 8.1 8.1 0 0 0-6.2-2.7z"></path></svg>
 										      	<svg class="heart-full icon-svg icon-svg--size-4 icon-svg--color-blue" viewBox="0 0 19.2 18.5" aria-hidden="true" focusable="false"><path d="M9.66 18.48a4.23 4.23 0 0 1-2.89-1.22C.29 10.44-.12 7.79.02 5.67.21 2.87 1.95.03 5.42.01c1.61-.07 3.16.57 4.25 1.76A5.07 5.07 0 0 1 13.6 0c2.88 0 5.43 2.66 5.59 5.74.2 4.37-6.09 10.79-6.8 11.5-.71.77-1.7 1.21-2.74 1.23z"></path></svg>
@@ -91,7 +103,18 @@
 										      	</div>
 										    </div>
 										</a>
-						        		<p class="card-text fst-italic text-muted"> {{$course->instructor->user->name}} </p>
+
+
+
+						        		<p class="card-text fst-italic text-muted">
+						        			
+						        			@foreach($course->instructors as $instructor)
+						        				{{$instructor->user->name}}
+						        				@php
+						        					$instructor = $instructor->user->name;
+						        				@endphp
+						        			@endforeach
+						        		</p>
 
 						        		<div class="rating">
 						        			<i class='bx bxs-star custom_primary_Color'></i>
@@ -115,11 +138,19 @@
 
 						        	<div class="card-content">
 							            <small class="card-text text-muted" >
-							            	{!! $course->description !!}
+
+							            	{!! $course->subtitle !!}
 							            </small>
 							            <div class="d-grid gap-2 col-6 mx-auto">
-								            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3">
-								            	Add to Cart
+								            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart" data-id="{{$course->id}}" data-course_title="{{$course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$course->price}}" data-image = "{{$course->image}}" 
+										      		@foreach($wishlists as $wishlist)
+									      			@if($wishlist->course_id == $course->id && Auth::id() == $wishlist->user_id)
+
+									      			data-wishlist = "save"
+
+													@endif 
+													@endforeach>
+								            	Add To Cart
 								            </a>
 
 
@@ -176,27 +207,35 @@
 
 		$('.searchInput').keyup(function(){
 			var search_data = $(this).val();
-			console.log(search_data);
+			var user_id = $(this).data('user_id');
+			var style = "";
 			var html = "";
 			$.post("{{route('courses_search')}}",{data:search_data},function(data){
 				if(data){
 					$.each(data,function(i,v){
-						console.log(v);
+						
 						html+=`<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
 			        		<div class="card courseCard h-100 border-0">
 			        			<div class="card-img-wrapper">
-			        				<a href="{{route('course','1')}}">
+			        				<a href="{{route('course',':id')}}">
 							      		<img src="${v.image}" class="card-img-top" alt="...">
 							      	</a>
 						      	</div>
 						      	<div class="card-body">
 						      		<div class="card-title">
-						      			<a href="{{route('course','1')}}" class="text-decoration-none text-muted">
+						      			<a href="{{route('course',':course_id')}}" class="text-decoration-none text-muted">
 							      			<h4 class="fontbold text-dark"> ${v.title} </h4>
 							      		</a>
 
-						      			<a class="favouriteBtn one active mobile button--secondary float-right">
-										    <div class="btn__effect">
+						      			<a class="favouriteBtn one `;  
+						      			$.each(v.wishlists,function(w,l){
+											if(l.user_id == user_id && l.course_id == v.id){
+												
+												html += `active`;
+											}
+										})
+						      			html+=` mobile button--secondary float-right wishlists" data-course_id = "${v.id}">
+										    <div class="btn__effect" >
 										      	<svg width="515.99" height="480.73" class="heart-stroke icon-svg icon-svg--size-4 icon-svg--color-silver" viewBox="20 18 29 28" aria-hidden="true" focusable="false"><path d="M28.3 21.1a4.3 4.3 0 0 1 4.1 2.6 2.5 2.5 0 0 0 2.3 1.7c1 0 1.7-.6 2.2-1.7a3.7 3.7 0 0 1 3.7-2.6c2.7 0 5.2 2.7 5.3 5.8.2 4-5.4 11.2-9.3 15a2.8 2.8 0 0 1-2 1 3.4 3.4 0 0 1-2.2-1c-9.6-10-9.4-13.2-9.3-15 0-1 .6-5.8 5.2-5.8m0-3c-5.3 0-7.9 4.3-8.2 8.5-.2 3.2.4 7.2 10.2 17.4a6.3 6.3 0 0 0 4.3 1.9 5.7 5.7 0 0 0 4.1-1.9c1.1-1 10.6-10.7 10.3-17.3-.2-4.6-4-8.6-8.4-8.6a7.6 7.6 0 0 0-6 2.7 8.1 8.1 0 0 0-6.2-2.7z"></path></svg>
 										      	<svg class="heart-full icon-svg icon-svg--size-4 icon-svg--color-blue" viewBox="0 0 19.2 18.5" aria-hidden="true" focusable="false"><path d="M9.66 18.48a4.23 4.23 0 0 1-2.89-1.22C.29 10.44-.12 7.79.02 5.67.21 2.87 1.95.03 5.42.01c1.61-.07 3.16.57 4.25 1.76A5.07 5.07 0 0 1 13.6 0c2.88 0 5.43 2.66 5.59 5.74.2 4.37-6.09 10.79-6.8 11.5-.71.77-1.7 1.21-2.74 1.23z"></path></svg>
 										      	<svg class="broken-heart" xmlns="http://www.w3.org/2000/svg" width="48" height="16" viewBox="5.707 17 48 16"><g fill="#F48FB1">
@@ -213,7 +252,12 @@
 										      	</div>
 										    </div>
 										</a>
-						        		<p class="card-text fst-italic text-muted"> ${v.instructor.user.name} </p>
+						        		<p class="card-text fst-italic text-muted">`;
+						        		$.each(v.instructor,function(a,b){
+						        			html+= $(b.user.name);
+						        		});
+
+						        		html+=`</p>
 
 						        		<div class="rating">
 						        			<i class='bx bxs-star custom_primary_Color'></i>
@@ -237,7 +281,7 @@
 
 						        	<div class="card-content">
 							            <small class="card-text text-muted">
-							            	${v.description}
+							            	${v.subtitle}
 							            </small>
 							            <div class="d-grid gap-2 col-6 mx-auto">
 								            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3">
@@ -250,13 +294,39 @@
 						      	</div>
 						    </div>
 			        	</div>`;
+			        	html = html.replace(':id',v.id);
+			        	html = html.replace(':course_id',v.id);
+
 					});
-				
+					
 					$('.searchcourseshow').html(html);
 				}
 			})
 			
 			
+		})
+
+		// html
+		$('.wishlist').click(function(){
+			var id = $(this).data('course_id');
+			$.post('wishlist',{id:id},function(res){
+				console.log(res);
+			})
+		})
+
+
+		// jquery
+		$('.searchcourseshow').on('click','.wishlists',function(event){
+			var id = $(this).data('course_id');
+			$.post('wishlist',{id:id},function(res){
+				if(res == "delete"){
+					$(this).removeClass('active');
+				}else{
+					// $('.searchcourseshow .wishlist').removeClass('active');
+					$(this).addClass('active');
+
+				}
+			})
 		})
 	})
 </script>

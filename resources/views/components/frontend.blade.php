@@ -91,8 +91,9 @@
                    
                     <li class="pt-2 {{ Request::segment(1) === 'cart' ? 'active' : '' }}">
                         <a href="{{ route('cart') }}" class="cartIcon">  
-                            <i class='bx bx-cart bx-lg'></i> 
-                            <span class="cartNoti count"> 2 </span>
+                            <i class='bx bx-cart bx-lg'></i>
+                            <input type="hidden" name="user_id" class="user_id" data-user_id = "{{Auth::id()}}">
+                            <span class="cartNoti count"> 0 </span>
                         </a>
                     </li>
 
@@ -110,6 +111,8 @@
                             <li><a href="{{ route('mystudyings') }}"> My Studying </a></li>
                             <li><a href="{{ route('wishlist') }}"> Wishlist </a></li>
                             <li><a href="{{ route('collection') }}"> Collection </a></li>
+
+                            <li><a href="">  Notification <span class="badge rounded-pill bg-danger float-right"> +3 </span> </a></li>
 
                         
                             <li><a href="{{ route('panel') }}"> Instructor Dashboard </a></li>
@@ -250,6 +253,8 @@
     <!-- Template Main JS File -->
     <script src="{{ asset('frontend/js/main.js') }}"></script>
     <script src="{{ asset('plugin/custom.js') }}"></script>
+    {{-- localstorage --}}
+    <script src="{{ asset('plugin/localstorage.js') }}"></script>
 
 
      @yield("script_content")

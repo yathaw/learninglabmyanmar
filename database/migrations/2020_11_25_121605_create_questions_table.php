@@ -17,9 +17,9 @@ class CreateQuestionsTable extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->foreignId('content_id')
+            $table->foreignId('course_id')
                     ->references('id')
-                    ->on('contents')
+                    ->on('courses')
                     ->onDelete('cascade');
              $table->foreignId('user_id')
                     ->references('id')

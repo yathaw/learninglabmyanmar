@@ -35,10 +35,24 @@ class CreateCoursesTable extends Migration
                     ->references('id')
                     ->on('subcategories')
                     ->onDelete('cascade');
+            
+            $table->softDeletes();
+            $table->timestamps();
+        });
+
+        Schema::create('course_instructor', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('course_id')
+                    ->references('id')
+                    ->on('courses')
+                    ->onDelete('cascade');
+
             $table->foreignId('instructor_id')
                     ->references('id')
                     ->on('instructors')
                     ->onDelete('cascade');
+
             $table->softDeletes();
             $table->timestamps();
         });

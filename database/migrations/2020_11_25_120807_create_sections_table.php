@@ -18,13 +18,13 @@ class CreateSectionsTable extends Migration
             $table->string('title');
             $table->string('objective');
             $table->string('sorting');
-            $table->foreignId('sectiontype_id')
-                    ->references('id')
-                    ->on('sectiontypes')
-                    ->onDelete('cascade');
             $table->foreignId('course_id')
                     ->references('id')
                     ->on('courses')
+                    ->onDelete('cascade');
+            $table->foreignId('instructor_id')
+                    ->references('id')
+                    ->on('instructors')
                     ->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();

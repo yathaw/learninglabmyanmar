@@ -12,4 +12,9 @@ class Sale extends Model
     use SoftDeletes;
 
     protected $fillable=['invoiceno','total','user_id'];
+
+    public function courses($value='')
+    {
+    	return $this->belongsToMany('App\Models\Course')->withTimestamps();
+    }
 }

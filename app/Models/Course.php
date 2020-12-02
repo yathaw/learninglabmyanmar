@@ -25,11 +25,15 @@ class Course extends Model
 						'price',
 						'level_id',
 						'subcategory_id',
-						'instructor_id'
 						];
 
-	public function instructor($value='')
+	public function instructors($value='')
 	{
-		return $this->belongsTo('App\Models\Instructor');
+		return $this->belongsToMany('App\Models\Instructor')->withTimestamps();
+	}
+
+	public function wishlists($value='')
+	{
+		return $this->hasMany('App\Models\Wishlist');
 	}
 }

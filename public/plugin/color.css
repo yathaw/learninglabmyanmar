@@ -1,5 +1,5 @@
 .custom_primary_bgColor{
-	background-color: #f09819;
+	background-color: #f09819 !important;
 }
 
 .custom_primary_borderColor{
@@ -31,7 +31,7 @@
 }
 
 .custom_primary_Color{
-	color: #f09819;
+	color: #f09819 !important;
 }
 
 .custom_primarydark_Color{
