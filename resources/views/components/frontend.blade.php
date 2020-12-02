@@ -59,8 +59,9 @@
                         <a href="{{ route('frontend.index') }}">Home</a>
                     </li>
 
-                    <li class="drop-down {{ Request::segment(1) === 'courses' ? 'active' : '' }}"><a href="{{ route('courses') }}"> Category </a>
+                   {{--  <li class="drop-down {{ Request::segment(1) === 'courses' ? 'active' : '' }}"><a href="{{ route('courses') }}"> Category </a>
                         <ul>
+
                             <li><a href="#"> Category 1</a></li>
                             <li class="drop-down"><a href="#">Category  2</a>
                                 <ul>
@@ -75,7 +76,21 @@
                             <li><a href="#">Category 4</a></li>
                             <li><a href="#">Category 5</a></li>
                         </ul>
+                    </li> --}}
+
+
+x  
+
+                    <li class="drop-down {{ Request::segment(1) === 'courses' ? 'active' : '' }}"><a href="{{ route('courses') }}"> Category </a>
+                        {{--  --}}  <ul>
+                          @foreach($categories as $category)
+
+                            <li><a href="#"> {{$category->name}}</a></li>    
+                           @endforeach
+                        </ul>
                     </li>
+
+
 
                     <li class="{{ Request::segment(1) === 'instructors' ? 'active' : '' }}">
                         <a href="{{ route('instructors') }}"> Find Instrutors </a>

@@ -56,7 +56,10 @@ Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->
 
 //Honey
 Route::get('business_info',[FrontendController::class,'business_info'])->name('business_info');
+Route::post('business_store',[FrontendController::class,'business_store'])->name('business.store');
+
 Route::get('instructor_info',[FrontendController::class,'instructor_info'])->name('instructor_info');
+Route::post('instructor_store',[FrontendController::class,'instructor_store'])->name('instructor.store');
 
 // ------------------------------------------------------------------------
 

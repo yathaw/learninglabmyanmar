@@ -22,7 +22,7 @@
                 <div class="card-body">
 
                     <div class="wizard-content">
-                        <form id="example-form" action="{{ route('backside.course.store') }}" class="tab-wizard wizard-circle wizard clearfix g-3" method="POST">
+                        <form id="example-form" action="{{ route('backside.course.store') }}" class="tab-wizard wizard-circle wizard clearfix g-3" method="POST" enctype="multipart/form-data">
                         @csrf
 
                             <h6>Course  Landing </h6>
@@ -42,7 +42,20 @@
                                     </div>
                                 </div>
 
-                                <div class="row form-group my-4">
+                                {{-- <div class="row form-group my-4">
+                                    <div class="col-md-6">
+                                        <label for="titleId" class="form-label"> Choose Category </label>
+
+                                        
+                                        <select class="form-select select2" name="category">
+                                            @foreach($categories->subcategory as $subcategory)
+                                            <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
+                                            @endforeach
+                                            
+                                        </select>
+                                    </div>
+ --}}
+                                    <div class="row form-group my-4">
                                     <div class="col-md-6">
                                         <label for="titleId" class="form-label"> Choose Category </label>
                                         <select class="form-select select2" name="category">
@@ -55,12 +68,15 @@
                                     <div class="col-md-6">
                                         <label for="titleId" class="form-label"> Choose Level </label>
                                         <select class="form-select select2" name="level">
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @foreach($levels as $level)
+                                            <option value="{{$level->id}}">{{$level->name}}</option>
+                                            @endforeach
+                                            
                                         </select>
                                     </div>
                                 </div>
+
+
 
                                 <div class="row form-group my-4">
 
@@ -76,6 +92,22 @@
                                         </select> 
                                     </div>
                                 </div>
+
+                                {{-- <div class="row form-group my-4">
+
+                                    <div class="col-md-12">
+                                        <label for="instructorId" class="form-label"> Select Instructors </label>
+
+                                        <select name="teachers[]" class="form-select select2 teacher" id="inputTeacher" multiple="multiple">
+                                            @foreach($instructors as $instructor)
+                                            <option value="{{$instructor->id}}">{{$instructor->name}}</option>
+                                            @endforeach
+                                            
+
+                                        </select> 
+                                    </div>
+                                </div> --}}
+
 
                                 <div class="row form-group my-4 vh-50">
 
@@ -104,6 +136,12 @@
                                         </button>
                                     </div>
                                 </div>
+                                
+                                
+                               
+                            </section>
+
+                         
                                 
                                 
                                
@@ -143,7 +181,27 @@
 
                             <h6> Photo / Video </h6>
                             <section>
-                         
+                                <div class="my-5"> 
+                                <label>Photo(<small class="text-danger">jpeg|bmp|png</small>)</label>
+                                <input type="file" name="photo" class="form-control-file @error('photo') is-invalid @enderror" >
+                                @error('photo')
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{$message}}</strong>
+                                </span>
+                                @enderror
+                                </div>
+
+                                <div class="my-5"> 
+                                <label>Video(<small class="text-danger">mp4</small>)</label>
+                                <input type="file" name="video" class="form-control-file @error('video') is-invalid @enderror" >
+                                @error('video')
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{$message}}</strong>
+                                </span>
+                                @enderror
+                                </div>
+
+
                                 <input id="acceptTerms-2" name="acceptTerms" type="checkbox" class=""> <label for="acceptTerms-2">I agree with the Terms and Conditions.</label>
                             </section>
                         </form>

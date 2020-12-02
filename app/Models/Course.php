@@ -27,6 +27,7 @@ class Course extends Model
 						'subcategory_id',
 						];
 
+
 	public function instructors($value='')
 	{
 		return $this->belongsToMany('App\Models\Instructor')->withTimestamps();
@@ -36,4 +37,10 @@ class Course extends Model
 	{
 		return $this->hasMany('App\Models\Wishlist');
 	}
+	public function subcategory()
+	  {
+	      return $this->belongsTo('App\Subcategory');
+	  }
+
+
 }
