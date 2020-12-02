@@ -19,7 +19,6 @@ class Course extends Model
 						'situation',
 						'status',
 						'requirements',
-						'outline',
 						'certificate',
 						'share',
 						'price',
@@ -30,7 +29,7 @@ class Course extends Model
 
 	public function instructors($value='')
 	{
-		return $this->belongsToMany('App\Models\Instructor')->withTimestamps();
+		return $this->hasMany('App\Models\Instructor')->withTimestamps();
 	}
 
 	public function wishlists($value='')

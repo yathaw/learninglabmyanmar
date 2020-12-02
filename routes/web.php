@@ -91,7 +91,7 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/jobtitles', JobtitleController::class);
 
 });
-
+Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
 // ------------------------------------------------------------------------
 
 
