@@ -18,9 +18,9 @@ class CreateSectionsTable extends Migration
             $table->string('title');
             $table->string('objective');
             $table->string('sorting');
-            $table->foreignId('sectiontype_id')
+            $table->foreignId('contenttype_id')
                     ->references('id')
-                    ->on('sectiontypes')
+                    ->on('contenttypes')
                     ->onDelete('cascade');
             $table->foreignId('course_id')
                     ->references('id')
