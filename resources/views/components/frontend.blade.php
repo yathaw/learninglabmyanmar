@@ -92,14 +92,9 @@
                             <span class="cartNoti count"> 2 </span>
                         </a>
                     </li>
-
-                    <li class="{{ Request::segment(1) === 'login' ? 'active' : '' }}">
-                        <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm"> Login  </a>
-                    </li>
-
-                    <li class="{{ Request::segment(1) === 'register' ? 'active' : '' }}">
-                        <a href="{{ route('register') }}" class="btn custom_primary_btnColor btn-sm"> Signup  </a>
-                    </li>
+                    @if (Route::has('login'))
+                    
+                    @auth
 
                     <li class="drop-down mr-5"><a href=""> Account </a>
                         <ul>
@@ -123,9 +118,28 @@
                             
 
                             <li><hr class="dropdown-divider"></li>
-                            <li><a href="#"> Logout </a></li>
+                           <!--  <li><a href="{{route('logout')}}"> Logout </a></li> -->
+                             <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <x-jet-dropdown-link href="{{ route('logout') }}"
+                                                onclick="event.preventDefault();
+                                                            this.closest('form').submit();">
+                                {{ __('Logout') }}
+                            </x-jet-dropdown-link>
+                        </form>
                         </ul>
                     </li>
+                    @else
+                    <li class="{{ Request::segment(1) === 'login' ? 'active' : '' }}">
+                        <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm"> Login  </a>
+                    </li>
+
+                    <li class="{{ Request::segment(1) === 'register' ? 'active' : '' }}">
+                        <a href="{{ route('register') }}" class="btn custom_primary_btnColor btn-sm"> Signup  </a>
+                    </li>
+                    @endauth
+                    @endif
 
                 </ul>
             </nav><!-- .nav-menu -->
