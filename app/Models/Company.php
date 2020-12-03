@@ -13,4 +13,9 @@ class Company extends Model
 
     protected $fillable=['name','logo','address','description'];
 
+    public function user($value='')
+    {
+    	return $this->hasOne('App\Models\User');
+    }
+
 }

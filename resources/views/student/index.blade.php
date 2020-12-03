@@ -8,7 +8,7 @@
 				<div class="card-header">
 					<h5 class="card-title mb-0"> All Lists 
 
-					<a href="{{route('backside.companies.create')}}" class="btn custom_primary_btnColor float-right" >
+					<a href="{{route('backside.students.create')}}" class="btn custom_primary_btnColor float-right" >
 		            	<i class="align-middle fas fa-plus"></i>
 		            </a>
 
@@ -45,20 +45,20 @@
                             </thead>
                             <tbody>
                             	<?php $i =1; ?>
-                            	@foreach($companies as $company)
+                            	@foreach($users as $user)
+                                
+                                
                             	<tr>
                             		<td>{{$i++}}</td>
-                                    <td>{{$company->user->name}}</td>
-                                    <td>{{$company->user->email}}</td>
-                            		<td>{{$company->name}}</td>
-                            		<td><img src="{{$company->logo}}" class="img-fluid"></td>
-                            		<td>{{$company->address}}</td>
-                            		<td>{{$company->description}}</td>
+                                   
+                            		<td>{{$user->name}}</td>
+                            		
                             		<td>
                             			<a href="" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                             			<a href="" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                             		</td>
                             	</tr>
+                               
                             	@endforeach
                             </tbody>
                             <tfoot>

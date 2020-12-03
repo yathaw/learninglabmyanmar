@@ -123,7 +123,7 @@
 							</li>
 
 							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Students </a>
+								<a class="sidebar-link" href="{{route('backside.students.index')}}"> Students </a>
 							</li>
 							
 						</ul>
