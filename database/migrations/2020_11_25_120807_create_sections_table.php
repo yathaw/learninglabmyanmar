@@ -18,6 +18,10 @@ class CreateSectionsTable extends Migration
             $table->string('title');
             $table->string('objective');
             $table->string('sorting');
+            $table->foreignId('contenttype_id')
+                    ->references('id')
+                    ->on('contenttypes')
+                    ->onDelete('cascade');
             $table->foreignId('course_id')
                     ->references('id')
                     ->on('courses')

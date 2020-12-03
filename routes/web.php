@@ -18,9 +18,6 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
 
 
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,8 +38,15 @@ Route::get('/',[FrontendController::class, 'index'])->name('frontend.index');
 
 // NYL
 Route::get('courses',[FrontendController::class, 'courses'])->name('courses');
+Route::post('courses_search',[FrontendController::class, 'courses_search'])->name('courses_search');
+Route::post('wishlist_search',[FrontendController::class, 'wishlist_search'])->name('wishlist_search');
+Route::post('wishlist',[FrontendController::class, 'wishlist'])->name('wishlist');
+Route::post('removewishlist',[FrontendController::class, 'removewishlist'])->name('removewishlist');
+
 Route::get('/course/{id}',[FrontendController::class, 'coursedetail'])->name('course');
 Route::get('cart',[FrontendController::class, 'addtocart'])->name('cart');
+Route::post('course_sale',[FrontendController::class, 'course_sale'])->name('course_sale');
+
 
 Route::get('instructors',[FrontendController::class, 'instructors'])->name('instructors');
 Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->name('instructor');
@@ -72,8 +76,12 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/sale', SaleController::class);
 
     Route::resource('/section', SectionController::class);
-    Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
+    //------------------kyw---------------------//
+    Route::post('/section/getid',[SectionController::class,'getid'])->name('getid');
+    Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
 
+    Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
+    
     Route::resource('/content', ContentController::class);
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);
@@ -83,7 +91,7 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/jobtitles', JobtitleController::class);
 
 });
-
+Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
 // ------------------------------------------------------------------------
 
 
@@ -109,6 +117,9 @@ Route::get('mystudyings',[AccountController::class, 'mystudyings'])->name('mystu
 Route::get('/lecture/{id}',[AccountController::class, 'lecture'])->name('lecture');
 Route::post('/questionstore',[AccountController::class, 'questionstore'])->name('questionstore');
 Route::get('/questionnoti',[AccountController::class,'questionnoti'])->name('questionnoti');
+Route::get('/questionshownoti',[AccountController::class,'questionshownoti'])->name('questionshownoti');
+Route::post('/answerquestion',[AccountController::class,'answerquestion'])->name('answerquestion');
+Route::get('/answernoti',[AccountController::class,'answernoti'])->name('answernoti');
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');
