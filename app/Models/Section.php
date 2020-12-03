@@ -11,5 +11,5 @@ class Section extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['title','objective','sorting','sectiontype_id','course_id'];
+    protected $fillable=['title','objective','sorting','course_id'];
 }

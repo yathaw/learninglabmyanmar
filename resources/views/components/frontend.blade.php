@@ -6,10 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Learning Lab Myanmar - Open Source Academy">
     <meta name="author" content="Myanmar IT Consulting">
     <meta name="keywords" content="Learning Lab, Learning Lab Myanmar, Myanmar IT Consulting, Open Source Academy">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <link rel="shortcut icon" href="{{ asset('logo/favicon.ico') }}" />
 
@@ -56,8 +59,9 @@
                         <a href="{{ route('frontend.index') }}">Home</a>
                     </li>
 
-                    <li class="drop-down {{ Request::segment(1) === 'courses' ? 'active' : '' }}"><a href="{{ route('courses') }}"> Category </a>
+                   {{--  <li class="drop-down {{ Request::segment(1) === 'courses' ? 'active' : '' }}"><a href="{{ route('courses') }}"> Category </a>
                         <ul>
+
                             <li><a href="#"> Category 1</a></li>
                             <li class="drop-down"><a href="#">Category  2</a>
                                 <ul>
@@ -72,7 +76,21 @@
                             <li><a href="#">Category 4</a></li>
                             <li><a href="#">Category 5</a></li>
                         </ul>
+                    </li> --}}
+
+
+x  
+
+                    <li class="drop-down {{ Request::segment(1) === 'courses' ? 'active' : '' }}"><a href="{{ route('courses') }}"> Category </a>
+                        {{--  --}}  <ul>
+                          @foreach($categories as $category)
+
+                            <li><a href="#"> {{$category->name}}</a></li>    
+                           @endforeach
+                        </ul>
                     </li>
+
+
 
                     <li class="{{ Request::segment(1) === 'instructors' ? 'active' : '' }}">
                         <a href="{{ route('instructors') }}"> Find Instrutors </a>
@@ -88,8 +106,9 @@
                    
                     <li class="pt-2 {{ Request::segment(1) === 'cart' ? 'active' : '' }}">
                         <a href="{{ route('cart') }}" class="cartIcon">  
-                            <i class='bx bx-cart bx-lg'></i> 
-                            <span class="cartNoti count"> 2 </span>
+                            <i class='bx bx-cart bx-lg'></i>
+                            <input type="hidden" name="user_id" class="user_id" data-user_id = "{{Auth::id()}}">
+                            <span class="cartNoti count"> 0 </span>
                         </a>
                     </li>
 
@@ -249,6 +268,8 @@
     <!-- Template Main JS File -->
     <script src="{{ asset('frontend/js/main.js') }}"></script>
     <script src="{{ asset('plugin/custom.js') }}"></script>
+    {{-- localstorage --}}
+    <script src="{{ asset('plugin/localstorage.js') }}"></script>
 
 
      @yield("script_content")
