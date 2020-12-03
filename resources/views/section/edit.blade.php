@@ -4,13 +4,13 @@
       <div class="col-md-12">
         <div class="tile">
           <h2>Course Edit Form</h2>
-          <form method="post" action="{{route('section.update')}}" enctype="multipart/form-data">
+          <form method="post" action="{{route('backside.section.update')}}" enctype="multipart/form-data">
             @csrf
 
 
             <div class="form-group">
               <label>Title:</label>
-              <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" placeholder="Course Title..." value="{{old('title')}}">
+              <input type="text" name="title" class="form-control @error('title') is-invalid @enderror" placeholder="Course Title..." value="{{old('title')}}" value="{{$section->title">
               @error('title')
                 <span class="invalid-feedback" role="alert">
                   <strong>{{ $message }}</strong>

@@ -18,6 +18,12 @@ class DatabaseSeeder extends Seeder
         $this->call(LevelSeeder::class);
         $this->call(ContenttypeSeeder::class);
         $this->call(RoleSeeder::class);
+        $this->call(UsersTableSeeder::class);
+        $this->call(CategoriesTableSeeder::class);
+        $this->call(SubcategoriesTableSeeder::class);
+        
+        $this->call(JobtitlesTableSeeder::class);
+        $this->call(InstructorSeeder::class);
         
     }
 }

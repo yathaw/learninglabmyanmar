@@ -6,10 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Learning Lab Myanmar - Open Source Academy">
     <meta name="author" content="Myanmar IT Consulting">
     <meta name="keywords" content="Learning Lab, Learning Lab Myanmar, Myanmar IT Consulting, Open Source Academy">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <link rel="shortcut icon" href="{{ asset('logo/favicon.ico') }}" />
 
@@ -79,11 +82,20 @@
 x  
 
                     <li class="drop-down {{ Request::segment(1) === 'courses' ? 'active' : '' }}"><a href="{{ route('courses') }}"> Category </a>
-                        {{--  --}}  <ul>
-                          @foreach($categories as $category)
-
-                            <li><a href="#"> {{$category->name}}</a></li>    
-                           @endforeach
+                        <ul>
+                            @foreach($categories as $category)
+                                @if($category->subcategories)
+                                <li class="drop-down"><a href="#"> {{$category->name}}</a> 
+                                    <ul>
+                                        @foreach($category->subcategories as $subcategory)
+                                            <li><a href="#"> {{ $subcategory->name }} </a></li> 
+                                        @endforeach
+                                    </ul>
+                                </li> 
+                                @else
+                                <li><a href="#"> {{$category->name}}</a> </li>
+                                @endif 
+                            @endforeach
                         </ul>
                     </li>
 
@@ -103,18 +115,14 @@ x
                    
                     <li class="pt-2 {{ Request::segment(1) === 'cart' ? 'active' : '' }}">
                         <a href="{{ route('cart') }}" class="cartIcon">  
-                            <i class='bx bx-cart bx-lg'></i> 
-                            <span class="cartNoti count"> 2 </span>
+                            <i class='bx bx-cart bx-lg'></i>
+                            <input type="hidden" name="user_id" class="user_id" data-user_id = "{{Auth::id()}}">
+                            <span class="cartNoti count"> 0 </span>
                         </a>
                     </li>
-
-                    <li class="{{ Request::segment(1) === 'login' ? 'active' : '' }}">
-                        <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm"> Login  </a>
-                    </li>
-
-                    <li class="{{ Request::segment(1) === 'register' ? 'active' : '' }}">
-                        <a href="{{ route('register') }}" class="btn custom_primary_btnColor btn-sm"> Signup  </a>
-                    </li>
+                    @if (Route::has('login'))
+                    
+                    @auth
 
                     <li class="drop-down mr-5"><a href=""> Account </a>
                         <ul>
@@ -123,7 +131,7 @@ x
                             <li><a href="{{ route('wishlist') }}"> Wishlist </a></li>
                             <li><a href="{{ route('collection') }}"> Collection </a></li>
 
-                            <li><a href="">  Notification <span class="badge rounded-pill bg-danger float-right"> +3 </span> </a></li>
+                            <li class="nav-icon"><a href="#" >  Notification <span class="badge rounded-pill bg-danger float-right"> 0 </span> </a></li>
 
                         
                             <li><a href="{{ route('panel') }}"> Instructor Dashboard </a></li>
@@ -138,9 +146,28 @@ x
                             
 
                             <li><hr class="dropdown-divider"></li>
-                            <li><a href="#"> Logout </a></li>
+                           <!--  <li><a href="{{route('logout')}}"> Logout </a></li> -->
+                             <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <x-jet-dropdown-link href="{{ route('logout') }}"
+                                                onclick="event.preventDefault();
+                                                            this.closest('form').submit();">
+                                {{ __('Logout') }}
+                            </x-jet-dropdown-link>
+                        </form>
                         </ul>
                     </li>
+                    @else
+                    <li class="{{ Request::segment(1) === 'login' ? 'active' : '' }}">
+                        <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm"> Login  </a>
+                    </li>
+
+                    <li class="{{ Request::segment(1) === 'register' ? 'active' : '' }}">
+                        <a href="{{ route('register') }}" class="btn custom_primary_btnColor btn-sm"> Signup  </a>
+                    </li>
+                    @endauth
+                    @endif
 
                 </ul>
             </nav><!-- .nav-menu -->
@@ -265,6 +292,12 @@ x
     <script src="{{ asset('frontend/js/main.js') }}"></script>
     <script src="{{ asset('plugin/custom.js') }}"></script>
 
+    <script src="{{ asset('plugin/pusher.min.js')}}"></script>
+   <!--  <script src="https://js.pusher.com/7.0/pusher.min.js"></script> -->
+    <script type="text/javascript" src="{{asset('frontend/js/notification.js')}}"></script>
+
+    {{-- localstorage --}}
+    <script src="{{ asset('plugin/localstorage.js') }}"></script>
 
      @yield("script_content")
 

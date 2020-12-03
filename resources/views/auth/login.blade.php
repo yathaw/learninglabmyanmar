@@ -19,7 +19,7 @@
     <section class="inner-page contact">
         <div class="container">
             <div class="section-title">
-                  <h2> Login In to your account! </h2>
+                  <h2> Login IN to your account!</h2>
                   <p> Welcome Back </p>
             </div>
 
@@ -36,12 +36,14 @@
                     
                     <form action="{{ route('login') }}" method="post" role="form" class="registerForm">
                         @csrf
+                        
 
-
+                       
                         <div class="form-floating mb-3 col-md-12">
-                            <input type="email" class="form-control form-control-sm" id="email" placeholder="Name" value="{{ old('email') }}" name="email" autofocus>
+                            <input type="email" class="form-control form-control-sm" id="email" placeholder="Name" value="{{ old('email') }}" name="email">
                             <label for="email"> Your Email </label>
                         </div>
+
 
                         <div class="row form-group">
                             <div class="form-floating mb-3 col-md-12">
@@ -54,18 +56,17 @@
                         <div class="block mb-4">
                             <label for="remember_me" class="flex items-center">
                                 <input id="remember_me" type="checkbox" class="form-checkbox" name="remember">
-                                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                                <span class="ml-2 text-sm text-gray-600"> {{ __('Remember me')}} </span>
                             </label>
                         </div>
 
-                        
-                        <a href="" class="text-muted"> Forgot your Passowrd ? </a>
+                        <a href="" class="text-muted"> Forget your Password ?</a>
                         
                       
                         <div class="text-center my-4">
                             <button type="submit"> Login </button>
 
-                            <a href="{{ route('register') }}" class="d-block mt-3"> Don't have an account? Sign Up </a>
+                            <a href="{{ route('register') }}" class="d-block mt-3"> Don't have account? Sign up </a>
                         </div>
                     </form>
 

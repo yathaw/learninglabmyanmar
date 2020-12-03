@@ -42,28 +42,23 @@
                                     </div>
                                 </div>
 
-                                {{-- <div class="row form-group my-4">
+                                <div class="row form-group my-4">
                                     <div class="col-md-6">
                                         <label for="titleId" class="form-label"> Choose Category </label>
 
                                         
-                                        <select class="form-select select2" name="category">
-                                            @foreach($categories->subcategory as $subcategory)
-                                            <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
+                                        <select class="form-select select2" name="subcategoryid">
+                                            @foreach($categories as $category)
+                                            <optgroup class="bg-dark" label="{{ $category->name }}">
+                                                @foreach($category->subcategories as $subcategory)
+                                                    <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
+                                                @endforeach
+                                            </optgroup>
                                             @endforeach
-                                            
+
                                         </select>
                                     </div>
- --}}
-                                    <div class="row form-group my-4">
-                                    <div class="col-md-6">
-                                        <label for="titleId" class="form-label"> Choose Category </label>
-                                        <select class="form-select select2" name="category">
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
+
 
                                     <div class="col-md-6">
                                         <label for="titleId" class="form-label"> Choose Level </label>

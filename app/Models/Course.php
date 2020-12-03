@@ -19,20 +19,27 @@ class Course extends Model
 						'situation',
 						'status',
 						'requirements',
-						'outline',
 						'certificate',
 						'share',
 						'price',
 						'level_id',
 						'subcategory_id',
 						];
-public function subcategory()
-  {
-      return $this->belongsTo('App\Subcategory');
-  }
 
-     public function instructor()
-  {
-      return $this->belongsTo('App\Brand');
-  }
+
+	public function instructors($value='')
+	{
+		return $this->hasMany('App\Models\Instructor')->withTimestamps();
+	}
+
+	public function wishlists($value='')
+	{
+		return $this->hasMany('App\Models\Wishlist');
+	}
+	public function subcategory()
+	  {
+	      return $this->belongsTo('App\Subcategory');
+	  }
+
+
 }

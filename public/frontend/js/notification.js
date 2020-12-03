@@ -36,36 +36,11 @@ $(document).ready(function(){
   showNoti();
 
   function showNoti(){
-    $.get("/questionnoti",function(response){
+    $.get("/answernoti",function(response){
       var count = response.length;
-      if(count > 0)
-      {
-        var html='';
-        $('.panelnoti').text(count+' New Notifications');
-        $.each(response,function(i,v){
-          if(i<4){
-            html+=`<a href="#" class="list-group-item">
-                    <div class="row g-0 align-items-center">
-                      <div class="col-2">
-                        <i class="text-danger" data-feather="alert-circle"></i>
-                      </div>
-                      <div class="col-10">
-                        <div class="text-dark">Update completed</div>
-                        <div class="text-muted small mt-1">${v.data.description}</div>
-                        <div class="text-muted small mt-1">${timeSince(v.created_at)} ago</div>
-                      </div>
-                    </div>
-                  </a>`;
-                }else{
 
-                }
-        });
-        $('#noti_data').html(html);
-        notificationsToggle.find('span').html(count);
-      }else 
-      {
-        notificationsToggle.find('span').text(0);
-      }
+        notificationsToggle.find('span').html('+'+count);
+      
     });
   }
     
@@ -76,9 +51,9 @@ $(document).ready(function(){
   });
 
       
-  var channel = pusher.subscribe('my-channel');
+  var channel = pusher.subscribe('my-channel1');
 
-  channel.bind('my-event', function(data) {
+  channel.bind('my-event1', function(data) {
           
     showNoti();
     notificationsToggle.show();
