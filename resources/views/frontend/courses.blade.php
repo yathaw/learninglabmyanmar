@@ -210,9 +210,11 @@
 			var user_id = $(this).data('user_id');
 			var style = "";
 			var html = "";
+			var instructor = "";
 			$.post("{{route('courses_search')}}",{data:search_data},function(data){
 				if(data){
 					$.each(data,function(i,v){
+						console.log(v);
 						
 						html+=`<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
 			        		<div class="card courseCard h-100 border-0">
@@ -253,8 +255,9 @@
 										    </div>
 										</a>
 						        		<p class="card-text fst-italic text-muted">`;
-						        		$.each(v.instructor,function(a,b){
-						        			html+= $(b.user.name);
+						        		$.each(v.instructors,function(a,b){
+						        			instructor = b.user.name;
+						        			html+= `${b.user.name}`;
 						        		});
 
 						        		html+=`</p>
@@ -284,7 +287,17 @@
 							            	${v.subtitle}
 							            </small>
 							            <div class="d-grid gap-2 col-6 mx-auto">
-								            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3">
+								            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 cart" data-id="${v.id}" data-course_title="${v.title}" data-instructor = "${instructor}" data-user_id = "{{Auth::id()}}" data-price = "${v.price}" data-image = "${v.image}" `;
+
+
+								            	$.each(v.wishlists,function(w,l){
+													if(l.user_id == user_id && l.course_id == v.id){
+														
+														html += `data-wishlist = "save"`;
+														}
+													})	 
+										      		
+									      			html+= `>
 								            	Add to Cart
 								            </a>
 

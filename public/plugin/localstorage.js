@@ -8,6 +8,7 @@ $(document).ready(function(){
 	    }
 	});
 
+	// add to cart from html
 	$('.addtocart').click(function() {
 		var id = $(this).data('id');
 		var course_title = $(this).data('course_title');
@@ -19,6 +20,19 @@ $(document).ready(function(){
 
 		data_add(id,course_title,instructor,image,price,wishlist,user_id);
 	});
+
+	// add to cart from jq
+	$('.searchcourseshow').on('click','.cart',function(){
+		var id = $(this).data('id');
+		var course_title = $(this).data('course_title');
+		var instructor = $(this).data('instructor');
+		var image = $(this).data('image');
+		var price = $(this).data('price');
+		var wishlist = $(this).data('wishlist');
+		var user_id = $(this).data('user_id');
+
+		data_add(id,course_title,instructor,image,price,wishlist,user_id);
+	})
 
 
 	function data_add(id,course_title,instructor,image,price,wishlist,user_id) {
@@ -51,10 +65,12 @@ $(document).ready(function(){
 		})
 		if(!hasid){
 			localstorage_arr.push(courses);
+			alert("Thank you for your buying!");
 		}
 
 		var localstorage_str = JSON.stringify(localstorage_arr);
 		localStorage.setItem('course_buy',localstorage_str);
+
 		cartnoti();
 	
 	}

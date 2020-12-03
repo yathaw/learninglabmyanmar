@@ -13,7 +13,6 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\Instructor;
 use App\Models\User;
-use Auth;
 
 
 class FrontendController extends Controller
@@ -161,7 +160,7 @@ class FrontendController extends Controller
         $sale->invoiceno = "Stu-".$invoice;
         $sale->total = $total;
         $sale->user_id = $user_id;
-        // $sale->save();
+        $sale->save();
         
 
        }
@@ -169,7 +168,7 @@ class FrontendController extends Controller
        foreach ($data as $value) {
 
            if($user_id == $value['user_id']){
-            // $sale->courses()->attach($value['id']);
+            $sale->courses()->attach($value['id']);
            }
        }
 

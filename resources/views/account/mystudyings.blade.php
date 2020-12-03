@@ -1028,6 +1028,9 @@
 								        		<p class="card-text fst-italic text-muted">
 								        			@foreach($wishlist->course->instructors as $instructor)
 								        				{{$instructor->user->name}}
+								        				@php
+								        					$instructor = $instructor->user->name;
+								        				@endphp
 								        			@endforeach
 								        		</p>
 
