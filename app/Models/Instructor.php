@@ -30,6 +30,6 @@ class Instructor extends Model
     }
     public function courses($value='')
     {
-      return $this->hasMany('App\Item');
+      return $this->belongsToMany('App\Models\Course');
     }
 }

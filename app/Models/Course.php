@@ -29,7 +29,7 @@ class Course extends Model
 
 	public function instructors($value='')
 	{
-		return $this->hasMany('App\Models\Instructor')->withTimestamps();
+		return $this->belongsToMany('App\Models\Instructor');
 	}
 
 	public function wishlists($value='')

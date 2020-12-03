@@ -326,24 +326,50 @@
 								</div>
 							</div>
 						</li>
+						@if (Auth::check()) 
+
+						@php
+							if (Auth::user()->profile_photo_path != NULL) {
+								$profile = Auth::user()->profile_photo_path;
+							}
+							else{
+								if(Auth::user()->getRoleNames()[0]=="Developer"){
+									$profile = "profiles/developer.png";
+								}
+								else if(Auth::user()->getRoleNames()[0]=="Admin"){
+									$profile = "profiles/admin.png";
+								}
+								else{
+									$profile = "profiles/user.png";
+								}
+							}
+							
+						@endphp
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-toggle="dropdown">
-                <i class="align-middle" data-feather="settings"></i>
-              </a>
+                				<i class="align-middle" data-feather="settings"></i>
+              				</a>
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
-                <img src="{{ asset('backend/img/avatars/avatar.jpg') }}" class="avatar img-fluid rounded mr-1" alt="Charles Hall" /> <span class="text-dark">Charles Hall</span>
-              </a>
+                				<img src="{{ asset($profile) }}" class="avatar img-fluid rounded mr-1" alt="Charles Hall" style="object-fit: cover" /> <span class="text-dark"> {{Auth::user()->name}} </span>
+            				</a>
 							<div class="dropdown-menu dropdown-menu-right">
-								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile</a>
-								<a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="pie-chart"></i> Analytics</a>
+								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile </a>
+								<a class="dropdown-item" href="#">
+									<i class="align-middle mr-1" data-feather="lock"></i> Change Password 
+								</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="pages-settings.html"><i class="align-middle mr-1" data-feather="settings"></i> Settings & Privacy</a>
-								<a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="help-circle"></i> Help Center</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">Log out</a>
+								
+								<form method="POST" action="{{ route('logout') }}">
+		                            @csrf
+
+		                            <x-jet-dropdown-link href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="dropdown-item">
+		                                {{ __('Logout') }}
+		                            </x-jet-dropdown-link>
+		                        </form>
 							</div>
 						</li>
+						@endif
 					</ul>
 				</div>
 			</nav>
