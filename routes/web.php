@@ -120,6 +120,7 @@ Route::get('/questionnoti',[AccountController::class,'questionnoti'])->name('que
 Route::get('/questionshownoti',[AccountController::class,'questionshownoti'])->name('questionshownoti');
 Route::post('/answerquestion',[AccountController::class,'answerquestion'])->name('answerquestion');
 Route::get('/answernoti',[AccountController::class,'answernoti'])->name('answernoti');
+Route::post('/questionreply',[AccountController::class,'questionreply'])->name('questionreply');
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');

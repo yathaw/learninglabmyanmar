@@ -258,7 +258,7 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <p> 41131 questions in this course </p>
+                                        <p> {{count($questions)}} questions in this course </p>
                                     </div>
 
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -268,12 +268,12 @@
                                     <hr class="mt-3">
                                 </div>
 
-                                <div class="row testimonials">
+                                <div class="row testimonials allquestions">
             
                                     @foreach($questions as $comm)
                                     <div class="col-12 questionLists">
                                         <div class="testimonial-item" style="min-height: 0">
-                                            <a href="" class="text-dark">
+                                            <a href="#" class="text-dark commentdescription" data-id="{{$comm->id}}">
                                                 <p class="fw-bolder fst-normal fontbold pb-0">
                                                     {{$comm->description}}
                                                 </p>
@@ -298,9 +298,9 @@
                                             </div>
                                           </div>
                                     </div>
-                                    @foreach($answers as $ans)
+                                    <!-- @foreach($answers as $ans)
                                     @if($ans->question_id == $comm->id)
-                                    <div class="offset-2 col-10 questionLists">
+                                    <div class="offset-1 col-11 questionLists">
                                         <div class="testimonial-item" style="min-height: 0">
                                             <a href="" class="text-dark">
                                                 <p class="fw-bolder fst-normal fontbold pb-0">
@@ -328,7 +328,7 @@
                                           </div>
                                     </div>
                                     @endif
-                                    @endforeach
+                                    @endforeach -->
                                     @endforeach
 
                                    <!--  <div class="col-12 questionLists">
@@ -442,6 +442,15 @@
                                             </div>
                                           </div>
                                     </div> -->
+                                </div>
+
+                                <div class="row testimonials replyquestions">
+                                    <div class="col-md-12">
+                                        <a href="#" class="btn btn-outline-primary block allques">B
+                                    ack to All Questions</a>
+                                    </div>
+                                    <div class="col-md-12 answerreply">
+                                    </div>
                                 </div>
 
                                 <div class="row mt-5">
@@ -690,6 +699,43 @@
 @section('script_content')
     <script type="text/javascript">
         $(document).ready(function(){
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            var DURATION_IN_SECONDS = {
+                epochs: ['year', 'month', 'day', 'hour', 'minute'],
+                year: 31536000,
+                month: 2592000,
+                day: 86400,
+                hour: 3600,
+                minute: 60
+              };
+
+              function getDuration(seconds) {
+                var epoch, interval;
+
+                for (var i = 0; i < DURATION_IN_SECONDS.epochs.length; i++) {
+                  epoch = DURATION_IN_SECONDS.epochs[i];
+                  interval = Math.floor(seconds / DURATION_IN_SECONDS[epoch]);
+                  if (interval >= 1) {
+                    return {
+                      interval: interval,
+                      epoch: epoch
+                    };
+                  }
+                }
+
+              };
+
+              function timeSince(date) {
+                var seconds = Math.floor((new Date() - new Date(date)) / 1000);
+                var duration = getDuration(seconds);
+                var suffix = (duration.interval > 1 || duration.interval === 0) ? 's' : '';
+                return duration.interval + ' ' + duration.epoch + suffix;
+              };
 
             var x;
             var size_li;
@@ -818,6 +864,68 @@
                     $('#contentid').val(vid);
                     $('#askquestionModal').modal();
                 }
+            })
+
+            $('.replyquestions').hide();
+
+            $('.commentdescription').click(function(){
+                var quesid = $(this).data('id');
+                $.post('/questionreply',{quesid:quesid},function(response){
+                 
+                    var html='';
+                    html+=` <div class="row">
+                                <div class="offset-md-1 col-md-1 pt-5">
+                                    <img src="../${response.question[0].user.profile_photo_path}" class="rounded-circle" width="90px">
+                                </div>
+                                <div class="col-md-8 pt-5">
+                                    <p>${response.question[0].user.name}</p>
+                                    <p>${timeSince(response.question[0].created_at)} ago</p>
+                                    <p>${response.question[0].description}</p>
+                                </div>
+                            </div>
+                            <p class="pt-5">
+                                ${response.answer.length} reply
+                            </p>
+                            <hr>`;
+                    $.each(response.answer,function(i,v){
+                        html+=` <div class="row">
+                                    <div class="offset-1 col-md-1">
+                                        <img src="../${v.user.profile_photo_path}" class="rounded-circle" width="90px">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p>${v.user.name}</p>
+                                        <p>${timeSince(v.created_at)} ago</p>
+                                        <p>${v.description}</p>
+                                            </div>
+                                    </div>
+                                    <hr> `;
+                    })
+                    html+=`<div class="row">
+                                    <div class="col-md-1">
+                                        <img src="{{ asset('frontend/img/testimonials/testimonials-5.jpg') }}" class="rounded-circle" width="70px">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <textarea placeholder="Add reply" class="form-control" rows="2">
+                                        </textarea>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button class="btn btn-primary mt-2">
+                                            Reply
+                                        </button>
+                                    </div>
+                                </div>
+                                    `;
+                    $('.replyquestions').show();
+                    $('.answerreply').html(html);
+                    $('.allquestions').hide();
+                })
+                
+
+            })
+
+            $('.allques').click(function(){
+                $('.replyquestions').hide();
+                $('.allquestions').show();
             })
 
 

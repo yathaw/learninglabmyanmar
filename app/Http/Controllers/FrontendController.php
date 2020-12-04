@@ -13,7 +13,6 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\Instructor;
 use App\Models\User;
-use Auth;
 
 
 class FrontendController extends Controller
