@@ -148,7 +148,7 @@
 					<li class="sidebar-header">
 						Addons
 					</li>
-
+					@if(Auth::user()->getRoleNames()[0]=="Admin" || "Developer")
 					<li class="sidebar-item">
 						<a data-target="#components" data-toggle="collapse" class="sidebar-link collapsed">
 			              	<i class="align-middle" data-feather="briefcase"></i> <span class="align-middle"> Components </span>
@@ -172,6 +172,7 @@
 							
 						</ul>
 					</li>
+					@endif
 
 				</ul>
 			</div>
@@ -363,7 +364,9 @@
 								<form method="POST" action="{{ route('logout') }}">
 		                            @csrf
 
-		                            <x-jet-dropdown-link href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();" class="dropdown-item">
+		                            <x-jet-dropdown-link href="{{ route('logout') }}"
+		                                                onclick="event.preventDefault();
+		                                                            this.closest('form').submit();">
 		                                {{ __('Logout') }}
 		                            </x-jet-dropdown-link>
 		                        </form>
@@ -420,7 +423,7 @@
     <!-- Select 2 -->
     <script src="{{asset('plugin/select2/dist/js/select2.min.js')}}"></script> 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable-min.js"></script>
+    
 
     <script src="{{ asset('plugin/sortable/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('plugin/pusher.min.js')}}"></script>
