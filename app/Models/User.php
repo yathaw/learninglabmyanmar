@@ -81,6 +81,7 @@ class User extends Authenticatable
     public function jobtitle($value='')
     {
         return $this->belongsTo('App\Models\Jobtitle');
+    }
 
     public function company($value='')
     {
