@@ -29,7 +29,9 @@ class Course extends Model
 	// NYL
 	public function instructors($value='')
 	{
+
 		return $this->belongsToMany('App\Models\Instructor')->withTimestamps();
+
 	}
 
 	public function wishlists($value='')

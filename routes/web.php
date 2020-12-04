@@ -16,8 +16,10 @@ use App\Http\Controllers\CoursecountController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
+
 // NYL
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\StudentController;
 
 
 /*
@@ -87,13 +89,16 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/sale', SaleController::class);
 
     Route::resource('/section', SectionController::class);
-    //------------------kyw---------------------//
+//KYW
     Route::post('/section/getid',[SectionController::class,'getid'])->name('getid');
     Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
 
     Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
     
     Route::resource('/content', ContentController::class);
+    Route::post('/section/getsectionid',[ContentController::class,'getsectionid'])->name('getsectionid');
+    Route::post('/content/getcontentid',[ContentController::class,'getcontentid'])->name('getcontentid');
+
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);
     Route::resource('/attachment', AttachmentController::class);
@@ -101,11 +106,12 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/instructors', InstructorController::class);
     Route::resource('/jobtitles', JobtitleController::class);
 
+    //HH
+    Route::resource('students',StudentController::class);
+
 });
 Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
 // ------------------------------------------------------------------------
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -131,6 +137,7 @@ Route::get('/questionnoti',[AccountController::class,'questionnoti'])->name('que
 Route::get('/questionshownoti',[AccountController::class,'questionshownoti'])->name('questionshownoti');
 Route::post('/answerquestion',[AccountController::class,'answerquestion'])->name('answerquestion');
 Route::get('/answernoti',[AccountController::class,'answernoti'])->name('answernoti');
+Route::post('/questionreply',[AccountController::class,'questionreply'])->name('questionreply');
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');

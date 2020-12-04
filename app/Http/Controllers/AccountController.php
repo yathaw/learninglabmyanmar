@@ -89,20 +89,16 @@ class AccountController extends Controller
         $bb = array();
         /*if(Auth::check()){*/
 
-            /*$user  = Auth::user();*/
-    
-            $questions = Question::all();
+        $questions =  Question::all();
+           
             foreach($questions as $quest){
-                foreach($quest->notifications as $notification)
-                    {
-                       
-                        array_push($noti_data, $notification);
-                        
-                    }
 
-            
-       /* }*/
-            }
+                foreach($quest->unreadNotifications as $notification)
+                    {
+                        array_push($noti_data, $notification);
+                    }
+            }    /*$user  = Auth::user();*/
+    
             /*dd($bb);
             foreach($bb as $bc){
                 $dd = $bc->where('read_at',NULL)->orderBy('created_at','desc')->orderBy('read_at','desc')->get();
@@ -155,6 +151,8 @@ class AccountController extends Controller
             event(new AnswerEvent($answer));
 
         }
+        $question = Question::find(request('question'));
+        $question->unreadNotifications()->update(['read_at' => now()]);
         return redirect()->back();
     }
 
@@ -187,5 +185,14 @@ class AccountController extends Controller
        }
       
        return $noti_data1;
+    }
+
+
+    public function questionreply(Request $request)
+    {
+        $questionid = $request->quesid;
+        $answer = Answer::where('question_id',$questionid)->with('user')->get();
+        $question = Question::where('id',$questionid)->with('user')->get();
+        return response()->json(['answer'=>$answer,'question'=>$question]);
     }
 }

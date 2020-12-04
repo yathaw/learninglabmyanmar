@@ -12,4 +12,9 @@ class Lesson extends Model
     use SoftDeletes;
 
     protected $fillable=['file','type','content_id'];
+
+    public function content()
+  {
+      return $this->belongsTo('App\Models\Content');
+  }
 }

@@ -8,7 +8,7 @@
 				<div class="card-header">
 					<h5 class="card-title mb-0"> All Lists 
 
-					<a href="{{route('instructors.create')}}" class="btn custom_primary_btnColor float-right" >
+					<a href="{{route('backside.instructors.create')}}" class="btn custom_primary_btnColor float-right" >
 		            	<i class="align-middle fas fa-plus"></i>
 		            </a>
 
@@ -34,14 +34,47 @@
                             <thead class="custom_primary_bgColor text-white">
                                 <tr>
                                     <th> No </th>
-                                    <th> Name </th>
+                                    <th> User Name </th>
+                                    <th> Email</th>
+                                    <th>Headline</th>
+                                    <th>Website</th>
+                                    <th>Twitter</th>
+                                    <th>Facebook</th>
+                                    <th>Linkedin</th>
+                                    <th>Youtube</th>
+                                    <th>Instagram</th>
                                     <th> Action </th>
                                 </tr>
                             </thead>
+                            <tbody>
+                            	<?php $i=1; ?>
+                            	@foreach($instructors as $instructor)
+                            	<tr>
+                            		<td>{{$i++}}</td>
+                            		<td>{{$instructor->user->name}}</td>
+                            		<td>{{$instructor->user->email}}</td>
+                            		<td>{{$instructor->headline}}</td>
+                            		<td>{{$instructor->website}}</td>
+                            		<td>{{$instructor->twitter}}</td>
+                            		<td>{{$instructor->facebook}}</td>
+                            		<td>{{$instructor->linkedin}}</td>
+                            		<td>{{$instructor->youtube}}</td>
+                            		<td>{{$instructor->instagram}}</td>
+                            	</tr>
+                            	@endforeach
+                            </tbody>
                             <tfoot>
                                 <tr>
                                     <th> No </th>
-                                    <th> Name </th>
+                                    <th> User Name </th>
+                                    <th> Email</th>
+                                    <th>Headline</th>
+                                    <th>Website</th>
+                                    <th>Twitter</th>
+                                    <th>Facebook</th>
+                                    <th>Linkedin</th>
+                                    <th>Youtube</th>
+                                    <th>Instagram</th>
                                     <th> Action </th>
                                 </tr>
                             </tfoot>

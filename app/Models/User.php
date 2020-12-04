@@ -77,8 +77,14 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Wishlist');
     }
 
+
     public function jobtitle($value='')
     {
         return $this->belongsTo('App\Models\Jobtitle');
+
+    public function company($value='')
+    {
+        return $this->belongsTo('App\Models\Company');
     }
+
 }
