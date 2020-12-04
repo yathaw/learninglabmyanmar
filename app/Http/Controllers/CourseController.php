@@ -8,6 +8,7 @@ use App\Models\Subcategory;
 use App\Models\Category;
 use App\Models\Level;
 use App\Models\Instructor;
+use Auth;
 
 class CourseController extends Controller
 {
@@ -86,13 +87,13 @@ class CourseController extends Controller
             $course =new Course;
             $course->title = $request->title;
             $course->subtitle=$request->subtitle;
-            $course->subcategory_id=1;
+            $course->subcategory_id=$request->subcategoryid;
             $course->level_id=$request->level;
-            $course->instructor_id=1;
-            $course->outline=$request->description;
+            $course->description = $request->description;
             $course->requirements=json_encode($data);
             $course->situation=json_encode($data1);
-
+            $course->certificate = $request->acceptTerms;
+            $course->share = 0;
             $course->status =0;
             $course->price=$request->pricing;
             $course->image=$path;
@@ -100,6 +101,20 @@ class CourseController extends Controller
 
            
             $course->save();
+
+
+            $auth_id = Auth::id();
+
+            $user = Auth::user();
+            $role = $user->getRoleNames();
+
+            if ($role[0] == 'Instructor') {
+                $instructor = Instructor::where('user_id',$user->id)->first();
+
+                dd($instructor->id);
+            }
+
+            $course->instructors()->attach($subject_id);
 
             return redirect()->route('backside.course.index');
     }

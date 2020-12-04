@@ -5,11 +5,11 @@
         <div class="container">
 
             <div class="d-flex justify-content-between align-items-center">
-                <h2> PHP Web Developer Courses </h2>
+                <h2> {{$course->title}} </h2>
                 <ol>
                     <li><a href="{{ route('frontend.index') }}">Home</a></li>
-                    <li><a href="{{ route('courses') }}"> Category Name </a></li>
-                    <li><a href="{{ route('courses') }}"> Subcategory Name </a></li>
+                    <li><a href="{{ route('courses') }}"> {{$course->subcategory->category->name}} </a></li>
+                    <li><a href="{{ route('courses') }}"> {{$course->subcategory->name}} </a></li>
                 </ol>
             </div>
 
@@ -25,9 +25,9 @@
                     {{-- <div class="container px-5"> --}}
                         <div class="row">
                             <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 order-xl-1 order-lg-1 order-md-2 order-sm-2 order-2">
-                                <h3> PHP Developer Course </h3>
+                                <h3> {{$course->title}} </h3>
                                 {{-- Subtitle --}}
-                                <p class="fw-lighter"> Use XD to get a job in UI Design, User Interface, User Experience design, UX design & Web Design </p>
+                                <p class="fw-lighter"> {{$course->subtitle}} </p>
 
                                 <div class="rating">
                                     <i class='bx bxs-star custom_primary_Color'></i>
@@ -43,11 +43,42 @@
 
                                 </div>
 
-                                <p> Created By <a href="javascript:void(0)" data-toggle="modal" data-target="#instructordetailModal"> Nyi Ye Lin </a> <small> ( Job title ) </small> </p>
+                                <p> Created By 
+                                    @foreach($course->instructors as $instructor)
+                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#instructordetailModal"> 
+                                    
+                                        {{$instructor->user->name}} 
+                                    
+                                        </a> <small> (@if($instructor->user->jobtitle)
+                                                        {{$instructor->user->jobtitle->name}} 
+                                                      @else
+                                                        Jobtitle
+                                                      @endif ) 
+                                             </small>
+                                    @endforeach
+                                </p>
+                                
+                                @if(Auth::user())
+                                @foreach($course->instructors as $instructor)
+                                @if(Auth::user()->instructor)
 
-                                <a href="" class="btn btn-outline-light"> Wishlist 
+
+                                @if($instructor->pivot->instructor_id != Auth::user()->instructor->id)
+                                <a href="javascript:void(0)" class="btn btn-outline-light 
+                                        @foreach($wishlists as $wishlist)
+                                        @if($wishlist->course_id == $course->id && Auth::id() == $wishlist->user_id)
+
+                                            active
+
+                                        @endif 
+                                        @endforeach btn_wishlist" data-course_id = "{{$course->id}}"> Wishlist 
                                     <i class='bx bx-heart bx-lg ml-2'></i>
                                 </a>
+
+                                @endif
+                                @endif
+                                @endforeach
+                                
 
                                 <a href="" class="btn btn-outline-light"> Share on Facebook 
                                     <i class='bx bxl-facebook bx-lg ml-2' ></i>
@@ -56,6 +87,19 @@
                                 <a href="javascript:void(0)" class="btn btn-outline-light" data-toggle="modal" data-target="#reportModal"> Report
                                     <i class='bx bx-error-alt bx-lg ml-2'></i>
                                 </a>
+                                @else
+                                <button href="" class="btn btn-outline-light unauth"> Wishlist 
+                                    <i class='bx bx-heart bx-lg ml-2'></i>
+                                </button>
+
+                                <button href="" class="btn btn-outline-light unauth" > Share on Facebook 
+                                    <i class='bx bxl-facebook bx-lg ml-2' ></i>
+                                </button>
+
+                                <button class="btn btn-outline-light unauth" data-toggle="modal" > Report
+                                    <i class='bx bx-error-alt bx-lg ml-2'></i>
+                                </button>
+                                @endif
                             </div>
 
                             <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 order-xl-2 order-lg-2 order-md-1 order-sm-1 order-1 ">
@@ -67,14 +111,59 @@
                                     </div>
                                     <div class="card-body text-muted">
                                         <p>
-                                            <span class="text-danger fs-3"> 20,000 Ks  </span> 
+                                            <span class="text-danger fs-3"> {{$course->price}} Ks  </span> 
 
                                             <span class="text-decoration-line-through text-muted"> 50,000 Ks </span>
 
                                         </p>
 
                                         <div class="d-grid gap-2">
-                                            <button class="btn btn-warning" type="button"> Add to Cart </button>
+                                           @if(Auth::user())
+                                            @foreach($course->instructors as $instructor)
+                                                @if(Auth::user()->instructor)
+
+
+                                                    @if($instructor->pivot->instructor_id != Auth::user()->instructor->id)
+
+
+                                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
+                                                        data-id="{{$course->id}}" data-course_title="{{$course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$course->price}}" data-image = "{{$course->image}}"
+                                                            {{-- for wishlist --}}
+                                                            @foreach($wishlists as $wishlist)
+                                                            @if($wishlist->course_id == $course->id && Auth::id() == $wishlist->user_id)
+
+                                                            data-wishlist = "save"
+
+                                                            @endif 
+                                                            @endforeach
+                                                            
+                                                            >
+                                                        Add To Cart
+                                                        </a>
+                                                   
+                                                    @endif
+                                                    @else
+                                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
+                                                        data-id="{{$course->id}}" data-course_title="{{$course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$course->price}}" data-image = "{{$course->image}}"
+                                                            {{-- for wishlist --}}
+                                                            @foreach($wishlists as $wishlist)
+                                                            @if($wishlist->course_id == $course->id && Auth::id() == $wishlist->user_id)
+
+                                                            data-wishlist = "save"
+
+                                                            @endif 
+                                                            @endforeach
+                                                            
+                                                            >
+                                                        Add To Cart
+                                                        </a>
+                                                    
+
+                                                @endif
+                                            @endforeach
+                                            @else
+                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Add To Cart</button>
+                                            @endif
                                         </div>
 
                                         <div class="d-xl-block d-lg-block d-md-none d-sm-none d-none pt-2">
@@ -101,8 +190,10 @@
                                             </p>
 
                                             <p> 
+                                                @if($course->certificate)
                                                 <i class="icofont-certificate-alt-1"></i>
                                                 <small class="pl-3"> Certificate of completion </small>
+                                                @endif
                                             </p>
 
                                         </div>
@@ -147,12 +238,7 @@
                                 <div class="card-body">
                                     <h4 class="fontbold"> Requirements </h4>
 
-                                    <ul class="lh-lg">
-                                        <li> Beginner level introduction to Docker</li>
-                                        <li> Build Docker images using Dockerfiles with Hands-On Exercises</li>
-                                        <li> Build Application stack using Docker Compose Files with Hands-On Exercises</li>
-                                        <li> Basic Docker Commands with Hands-On Exercises</li>
-                                    </ul>
+                                    {!! $course->requirements !!}
                                 </div>
                             </div>
                         </div>
@@ -226,55 +312,7 @@
                             <div class="expander">
                               <!-- start of expanding area -->
                             <div class="inner-bit">
-                                <p> COMPLETELY REDONE ON OCTOBER 12th 2020, WITH OVER 500 BRAND NEW VIDEOS! </p>
-
-                                <p>Hi! Welcome to the brand new version of The Web Developer Bootcamp, Udemy's most popular web development course.  This course was just completely overhauled to prepare students for the 2021 job market, with over 60 hours of brand new content. This is the only course you need to learn web development. There are a lot of options for online developer training, but this course is without a doubt the most comprehensive and effective on the market.  Here's why: </p>
-
-                                <ul>
-                                    <li> This is the only Udemy course taught by a professional bootcamp instructor with a track record of success. </li>
-                                    <li> 94% of my in-person bootcamp students go on to get full-time developer jobs. Most of them are complete beginners when I start working with them. </li>
-                                    <li> The previous 2 bootcamp programs that I taught cost $14,000 and $21,000.  This course is just as comprehensive but with brand new content for a fraction of the price </li>
-                                    <li> Everything I cover is up-to-date and relevant to 2021's developer job market. This course does not cut any corners. I just spent 8 months redoing this behemoth of a course! </li>
-                                    <li> We build 13+ projects, including a gigantic production application called YelpCamp. No other course walks you through the creation of such a substantial application. </li>
-                                    <li> The course is constantly updated with new content, projects, and modules.  Think of it as a subscription to a never-ending supply of developer training. </li>
-                                    <li> You get to meet my cats and chickens! </li>
-                                </ul>
-
-                                <p> When you're learning to program you often have to sacrifice learning the exciting and current technologies in favor of the "beginner friendly" classes.  With this course, you get the best of both worlds.  This is a course designed for the complete beginner, yet it covers some of the most exciting and relevant topics in the industry. <br> Throughout the brand new version of the course we cover tons of tools and technologies including: </p>
-
-                                <ul>
-                                    <li> HTML5 </li>
-                                    <li> CSS3 </li>
-                                    <li> Flexbox </li>
-                                    <li> Responsive Design </li>
-                                    <li> JavaScript (all 2020 modern syntax, ES6, ES2018, etc.) </li>
-                                    <li> Asynchronous JavaScript - Promises, async/await, etc. </li>
-                                    <li> AJAX and single page apps </li>
-                                    <li> Bootstrap 4 and 5 (alpha) </li>
-                                    <li> SemanticUI </li>
-                                    <li> Bulma CSS Framework </li>
-                                    <li> DOM Manipulation </li>
-                                    <li> Unix(Command Line) Commands </li>
-                                    <li> NodeJS </li>
-                                    <li> NPM </li>
-                                    <li> ExpressJS </li>
-                                    <li> Templating </li>
-                                    <li> REST </li>
-                                    <li> SQL vs. NoSQL databases </li>
-                                    <li> MongoDB </li>
-                                    <li> Database Associations </li>
-                                    <li> Schema Design </li>
-                                    <li> Mongoose </li>
-                                    <li> Authentication From Scratch </li>
-                                    <li> Cookies & Sessions </li>
-                                    <li>  Authorization </li>
-                                    <li> Common Security Issues - SQL Injection, XSS, etc. </li>
-                                    <li> Developer Best Practices </li>
-                                    <li> Deploying Apps </li>
-                                    <li> Cloud Databases </li>
-                                    <li> Image Upload and Storage </li>
-                                    <li> Maps and Geocoding </li>
-                                </ul>
+                                {!! $course->description !!}
                             </div>
                             </div>
 
@@ -412,14 +450,24 @@
                         <div class="col-12 mt-5 reviews">
                             <h4 class="fontbold mb-3"> Reviews </h4>
 
+                            @foreach($course->reviews as $review)
+                            @php
+                                $date= Carbon\Carbon::now();
+                                $created_at = $review->created_at;
+                                $time_date = Carbon\Carbon::parse($date);
+                                $time_created_at = Carbon\Carbon::parse($created_at);
+                                
+                                $diff_date = $time_date->diffForHumans($time_created_at);
+
+                            @endphp
 
                             <div class="row py-3 reviewList">
                                 <div class="col-2">
-                                    <img src="{{ asset('frontend/img/team/team-1.jpg') }}" class=" img-fluid rounded-circle"> 
+                                    <img src="{{ asset($review->user->profile_photo_path) }}" class=" img-fluid rounded-circle"> 
                                 </div>
                                 <div class="col-10">
                                   
-                                    <h4 class="text-dark fw-bolder pl-3">Aye Lwin Soe</h4>
+                                    <h4 class="text-dark fw-bolder pl-3">{{$review->user->name}}</h4>
 
                                     <div class="rating pl-3">
                                         <i class='bx bxs-star custom_primary_Color'></i>
@@ -429,26 +477,14 @@
 
                                         <i class='bx bx-star' ></i>
 
-                                        <small class="text-muted"> a moment ago </small>
+                                        <small class="text-muted"> {{$diff_date}} </small>
 
                                     </div>
 
 
                                     <div class="overflow-auto mt-3" style="height: 200px">  
                                         <p class="fw-lighter pl-3 mt-1">
-                                           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                           cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                             quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                             proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                                          {{$review->description}}
                                         </p>
                                     </div>
                                 </div>
@@ -456,306 +492,9 @@
                                 <hr width="90%" class="mt-3">
                             </div>
 
-                            <div class="row py-3 reviewList">
-                                <div class="col-2">
-                                    <img src="{{ asset('frontend/img/team/team-1.jpg') }}" class=" img-fluid rounded-circle"> 
-                                </div>
-                                <div class="col-10">
-                                  
-                                    <h4 class="text-dark fw-bolder pl-3">Aye Lwin Soe</h4>
+                            @endforeach
 
-                                    <div class="rating pl-3">
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color' ></i>
-                                        <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-                                        <i class='bx bx-star' ></i>
-
-                                        <small class="text-muted"> a moment ago </small>
-
-                                    </div>
-
-
-                                    <div class="overflow-auto mt-3" style="height: 200px">  
-                                        <p class="fw-lighter pl-3 mt-1">
-                                           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                           cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                             quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                             proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <hr width="90%" class="mt-3">
-                            </div>
-
-                            <div class="row py-3 reviewList">
-                                <div class="col-2">
-                                    <img src="{{ asset('frontend/img/team/team-1.jpg') }}" class=" img-fluid rounded-circle"> 
-                                </div>
-                                <div class="col-10">
-                                  
-                                    <h4 class="text-dark fw-bolder pl-3">Aye Lwin Soe</h4>
-
-                                    <div class="rating pl-3">
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color' ></i>
-                                        <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-                                        <i class='bx bx-star' ></i>
-
-                                        <small class="text-muted"> a moment ago </small>
-
-                                    </div>
-
-
-                                    <div class="overflow-auto mt-3" style="height: 200px">  
-                                        <p class="fw-lighter pl-3 mt-1">
-                                           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                           cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                             quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                             proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <hr width="90%" class="mt-3">
-                            </div>
-
-                            <div class="row py-3 reviewList">
-                                <div class="col-2">
-                                    <img src="{{ asset('frontend/img/team/team-1.jpg') }}" class=" img-fluid rounded-circle"> 
-                                </div>
-                                <div class="col-10">
-                                  
-                                    <h4 class="text-dark fw-bolder pl-3">Aye Lwin Soe</h4>
-
-                                    <div class="rating pl-3">
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color' ></i>
-                                        <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-                                        <i class='bx bx-star' ></i>
-
-                                        <small class="text-muted"> a moment ago </small>
-
-                                    </div>
-
-
-                                    <div class="overflow-auto mt-3" style="height: 200px">  
-                                        <p class="fw-lighter pl-3 mt-1">
-                                           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                           cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                             quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                             proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <hr width="90%" class="mt-3">
-                            </div>
-
-                            <div class="row py-3 reviewList">
-                                <div class="col-2">
-                                    <img src="{{ asset('frontend/img/team/team-1.jpg') }}" class=" img-fluid rounded-circle"> 
-                                </div>
-                                <div class="col-10">
-                                  
-                                    <h4 class="text-dark fw-bolder pl-3">Aye Lwin Soe</h4>
-
-                                    <div class="rating pl-3">
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color' ></i>
-                                        <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-                                        <i class='bx bx-star' ></i>
-
-                                        <small class="text-muted"> a moment ago </small>
-
-                                    </div>
-
-
-                                    <div class="overflow-auto mt-3" style="height: 200px">  
-                                        <p class="fw-lighter pl-3 mt-1">
-                                           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                           cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                             quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                             proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <hr width="90%" class="mt-3">
-                            </div>
-
-                            <div class="row py-3 reviewList">
-                                <div class="col-2">
-                                    <img src="{{ asset('frontend/img/team/team-1.jpg') }}" class=" img-fluid rounded-circle"> 
-                                </div>
-                                <div class="col-10">
-                                  
-                                    <h4 class="text-dark fw-bolder pl-3">Aye Lwin Soe</h4>
-
-                                    <div class="rating pl-3">
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color' ></i>
-                                        <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-                                        <i class='bx bx-star' ></i>
-
-                                        <small class="text-muted"> a moment ago </small>
-
-                                    </div>
-
-
-                                    <div class="overflow-auto mt-3" style="height: 200px">  
-                                        <p class="fw-lighter pl-3 mt-1">
-                                           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                           cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                             quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                             proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <hr width="90%" class="mt-3">
-                            </div>
-
-                            <div class="row py-3 reviewList">
-                                <div class="col-2">
-                                    <img src="{{ asset('frontend/img/team/team-1.jpg') }}" class=" img-fluid rounded-circle"> 
-                                </div>
-                                <div class="col-10">
-                                  
-                                    <h4 class="text-dark fw-bolder pl-3">Aye Lwin Soe</h4>
-
-                                    <div class="rating pl-3">
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color' ></i>
-                                        <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-                                        <i class='bx bx-star' ></i>
-
-                                        <small class="text-muted"> a moment ago </small>
-
-                                    </div>
-
-
-                                    <div class="overflow-auto mt-3" style="height: 200px">  
-                                        <p class="fw-lighter pl-3 mt-1">
-                                           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                           cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                             quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                             proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <hr width="90%" class="mt-3">
-                            </div>
-
-                            <div class="row py-3 reviewList">
-                                <div class="col-2">
-                                    <img src="{{ asset('frontend/img/team/team-1.jpg') }}" class=" img-fluid rounded-circle"> 
-                                </div>
-                                <div class="col-10">
-                                  
-                                    <h4 class="text-dark fw-bolder pl-3">Aye Lwin Soe</h4>
-
-                                    <div class="rating pl-3">
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color'></i>
-                                        <i class='bx bxs-star custom_primary_Color' ></i>
-                                        <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-                                        <i class='bx bx-star' ></i>
-
-                                        <small class="text-muted"> a moment ago </small>
-
-                                    </div>
-
-
-                                    <div class="overflow-auto mt-3" style="height: 200px">  
-                                        <p class="fw-lighter pl-3 mt-1">
-                                           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                           quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                           cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                           proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                             quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                             proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <hr width="90%" class="mt-3">
-                            </div>
+                            
 
                             <div class="d-grid gap-2 col-6 mx-auto loadmore_wrapper">
                                 <button class="btn btn-outline-warning loadmoreBtn" type="button"> See More Reviews </button>
@@ -910,6 +649,21 @@
 
         $(document).ready(function() {
 
+
+            // wishlist save
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+              
+
+
+
+
+            
+
             // Video Preview
             var $videoSrc;
             $(".videopreivewLink").click(function() {
@@ -1041,6 +795,7 @@
                 });
               }
               loadMore();
+
 
         });
 

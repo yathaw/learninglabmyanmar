@@ -8,7 +8,6 @@
 				<div class="card-header">
 					<h5 class="card-title mb-0"> All Lists 
 
-					
 						<a href="{{ route('backside.section.create') }}" class="btn custom_primary_btnColor float-right" ><i class="align-middle fas fa-plus"></i></a>
 		            	
 		            </button>

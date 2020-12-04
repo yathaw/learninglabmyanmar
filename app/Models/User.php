@@ -67,9 +67,18 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function instructor($value='')
+    {
+        return $this->hasOne('App\Models\Instructor');
+    }
 
     public function wishlists($value='')
     {
         return $this->hasMany('App\Models\Wishlist');
+    }
+
+    public function jobtitle($value='')
+    {
+        return $this->belongsTo('App\Models\Jobtitle');
     }
 }

@@ -60,7 +60,7 @@
 
 				      							<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
 				      								<div class="searchInputWrapper float-right mr-4">
-													    <input class="searchInput" type="text" placeholder='focus here to search'>
+													    <input class="searchInput searchmystudying" type="text" placeholder='focus here to search' data-user_id = "{{Auth::id()}}">
 													    	<i class='searchInputIcon bx bx-search-alt-2' ></i>
 													</div>
 				      							</div>
@@ -72,22 +72,31 @@
 				      			</div>
 				      		</div>
 
-				      		<div class="row g-4">
+				      		<div class="row g-4 mystudying">
+
+
+				      			@foreach($sales as $sale)
+				      			@foreach($sale->courses as $course)
+
 								<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
 								    <div class="card h-100">
 								    	<a href="{{ route('lecture','1') }}">
-								      		<img src="{{ asset('frontend/img/portfolio/portfolio-1.jpg') }}" class="card-img-top" alt="...">
+								      		<img src="{{asset($course->image)}}" class="card-img-top" alt="...">
 								      	</a>
 
 
 								      	<div class="card-body">
 								      		<a href="{{ route('lecture','1') }}">
-									        	<h4 class="fontbold text-dark"> PHP Developer Course </h4>
+									        	<h4 class="fontbold text-dark"> {{$course->title}} </h4>
 									        </a>
 									        <a href="{{ route('instructor','1') }}">
-								        		<p class="card-text fst-italic text-muted"> Nyi Ye Lin </p>
+								        		<p class="card-text fst-italic text-muted"> 
+								        			@foreach($course->instructors as $instructor)
+								        				{{$instructor->user->name}}
+								        			@endforeach
+								        		</p>
 								        	</a>
-								        		<small class="card-text text-muted"> Senior Web Developer </small>
+								        		<small class="card-text text-muted"> </small>
 								      	</div>
 								      	<div class="card-footer bg-transparent border-top-0">
 								      		<div class="row">
@@ -122,334 +131,10 @@
 								    </div>
 								</div>
 
-								<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-								    <div class="card h-100">
-								    	<a href="{{ route('lecture','1') }}">
-								      		<img src="{{ asset('frontend/img/portfolio/portfolio-2.jpg') }}" class="card-img-top" alt="...">
-								      	</a>
-								      	<div class="card-body">
-								      		<a href="{{ route('lecture','1') }}">
-								        		<h4 class="fontbold text-dark"> PHP Developer Course </h4>
-								        	</a>
-								        	<a href="{{ route('instructor','1') }}">
-								        		<p class="card-text fst-italic text-muted"> Nyi Ye Lin </p>
-								        	</a>
-								        	<small class="card-text text-muted"> Senior Web Developer </small>
-								      	</div>
-								      	<div class="card-footer bg-transparent border-top-0">
-								      		<div class="row">
-								      			<div class="col-12">
-								      				<div class="progress" style="height: 5px;">
-				                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-				                                    </div>
-								      			</div>
-								      		</div>
-								        	<div class="row mt-3">
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			
-				                                    <small class="text-muted"> 0% complete </small>
-								        		</div>
+								@endforeach
+								@endforeach
 
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			<a href="javascript:void(0)" data-toggle="modal" data-target="#ratingModal">
-									        			<div class="rating float-right">
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color' ></i>
-							                                <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-							                                <i class='bx bx-star' ></i>
-
-							                                <small class="text-muted d-block"> Your Ratings  </small>
-							                            </div>
-							                        </a>
-								        		</div>
-								        	</div>
-								      	</div>
-								    </div>
-								</div>
-
-								<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-								    <div class="card h-100">
-								    	<a href="{{ route('lecture','1') }}">
-								      		<img src="{{ asset('frontend/img/portfolio/portfolio-3.jpg') }}" class="card-img-top" alt="...">
-								      	</a>
-								      	<div class="card-body">
-								      		<a href="{{ route('lecture','1') }}">
-								        		<h4 class="fontbold text-dark"> PHP Developer Course </h4>
-								        	</a>
-								        	<a href="{{ route('instructor','1') }}">
-								        		<p class="card-text fst-italic text-muted"> Nyi Ye Lin </p>
-								        	</a>
-								        	<small class="card-text text-muted"> Senior Web Developer </small>
-								      	</div>
-								      	<div class="card-footer bg-transparent border-top-0">
-								      		<div class="row">
-								      			<div class="col-12">
-								      				<div class="progress" style="height: 5px;">
-				                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 80%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-				                                    </div>
-								      			</div>
-								      		</div>
-								        	<div class="row mt-3">
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			
-				                                    <small class="text-muted"> 80% complete </small>
-								        		</div>
-
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			<a href="javascript:void(0)" data-toggle="modal" data-target="#ratingModal">
-									        			<div class="rating float-right">
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color' ></i>
-							                                <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-							                                <i class='bx bx-star' ></i>
-
-							                                <small class="text-muted d-block"> Your Ratings  </small>
-							                            </div>
-							                        </a>
-								        		</div>
-								        	</div>
-								      	</div>
-								    </div>
-								</div>
-
-								<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-								    <div class="card h-100">
-								    	<a href="{{ route('lecture','1') }}">
-								      		<img src="{{ asset('frontend/img/portfolio/portfolio-1.jpg') }}" class="card-img-top" alt="...">
-								      	</a>
-								      	<div class="card-body">
-								      		<a href="{{ route('lecture','1') }}">
-								        		<h4 class="fontbold text-dark"> PHP Developer Course </h4>
-								        	</a>
-								        	<a href="{{ route('instructor','1') }}">
-								        		<p class="card-text fst-italic text-muted"> Nyi Ye Lin </p>
-								        	</a>
-								        	<small class="card-text text-muted"> Senior Web Developer </small>
-								      	</div>
-								      	<div class="card-footer bg-transparent border-top-0">
-								      		<div class="row">
-								      			<div class="col-12">
-								      				<div class="progress" style="height: 5px;">
-				                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 80%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-				                                    </div>
-								      			</div>
-								      		</div>
-								        	<div class="row mt-3">
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			
-				                                    <small class="text-muted"> 80% complete </small>
-								        		</div>
-
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			<a href="javascript:void(0)" data-toggle="modal" data-target="#ratingModal">
-									        			<div class="rating float-right">
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color' ></i>
-							                                <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-							                                <i class='bx bx-star' ></i>
-
-							                                <small class="text-muted d-block"> Your Ratings  </small>
-							                            </div>
-							                        </a>
-								        		</div>
-								        	</div>
-								      	</div>
-								    </div>
-								</div>
-
-								<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-								    <div class="card h-100">
-								    	<a href="{{ route('lecture','1') }}">
-								      		<img src="{{ asset('frontend/img/portfolio/portfolio-2.jpg') }}" class="card-img-top" alt="...">
-								      	</a>
-								      	<div class="card-body">
-								      		<a href="{{ route('lecture','1') }}">
-								        		<h4 class="fontbold text-dark"> PHP Developer Course </h4>
-								        	</a>
-								        	<a href="{{ route('instructor','1') }}">
-								        		<p class="card-text fst-italic text-muted"> Nyi Ye Lin </p>
-								        	</a>
-								        	<small class="card-text text-muted"> Senior Web Developer </small>
-								      	</div>
-								      	<div class="card-footer bg-transparent border-top-0">
-								      		<div class="row">
-								      			<div class="col-12">
-								      				<div class="progress" style="height: 5px;">
-				                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-				                                    </div>
-								      			</div>
-								      		</div>
-								        	<div class="row mt-3">
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			
-				                                    <small class="text-muted"> 0% complete </small>
-								        		</div>
-
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			<a href="javascript:void(0)" data-toggle="modal" data-target="#ratingModal">
-									        			<div class="rating float-right">
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color' ></i>
-							                                <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-							                                <i class='bx bx-star' ></i>
-
-							                                <small class="text-muted d-block"> Your Ratings  </small>
-							                            </div>
-							                        </a>
-								        		</div>
-								        	</div>
-								      	</div>
-								    </div>
-								</div>
-
-								<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-								    <div class="card h-100">
-								    	<a href="{{ route('lecture','1') }}">
-								      		<img src="{{ asset('frontend/img/portfolio/portfolio-3.jpg') }}" class="card-img-top" alt="...">
-								      	</a>
-								      	<div class="card-body">
-								      		<a href="{{ route('lecture','1') }}">
-								        		<h4 class="fontbold text-dark"> PHP Developer Course </h4>
-								        	</a>
-								        	<a href="{{ route('instructor','1') }}">
-								        		<p class="card-text fst-italic text-muted"> Nyi Ye Lin </p>
-								        	</a>
-								        	<small class="card-text text-muted"> Senior Web Developer </small>
-								      	</div>
-								      	<div class="card-footer bg-transparent border-top-0">
-								      		<div class="row">
-								      			<div class="col-12">
-								      				<div class="progress" style="height: 5px;">
-				                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 80%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-				                                    </div>
-								      			</div>
-								      		</div>
-								        	<div class="row mt-3">
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			
-				                                    <small class="text-muted"> 80% complete </small>
-								        		</div>
-
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			<a href="javascript:void(0)" data-toggle="modal" data-target="#ratingModal">
-									        			<div class="rating float-right">
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color' ></i>
-							                                <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-							                                <i class='bx bx-star' ></i>
-
-							                                <small class="text-muted d-block"> Your Ratings  </small>
-							                            </div>
-							                        </a>
-								        		</div>
-								        	</div>
-								      	</div>
-								    </div>
-								</div>
-
-								<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-								    <div class="card h-100">
-								    	<a href="{{ route('lecture','1') }}">
-								      		<img src="{{ asset('frontend/img/portfolio/portfolio-1.jpg') }}" class="card-img-top" alt="...">
-								      	</a>
-								      	<div class="card-body">
-								      		<a href="{{ route('lecture','1') }}">
-								        		<h4 class="fontbold text-dark"> PHP Developer Course </h4>
-								        	</a>
-								        	<a href="{{ route('instructor','1') }}">
-								        		<p class="card-text fst-italic text-muted"> Nyi Ye Lin </p>
-								        	</a>
-								        	<small class="card-text text-muted"> Senior Web Developer </small>
-								      	</div>
-								      	<div class="card-footer bg-transparent border-top-0">
-								      		<div class="row">
-								      			<div class="col-12">
-								      				<div class="progress" style="height: 5px;">
-				                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 80%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-				                                    </div>
-								      			</div>
-								      		</div>
-								        	<div class="row mt-3">
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			
-				                                    <small class="text-muted"> 80% complete </small>
-								        		</div>
-
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			<a href="javascript:void(0)" data-toggle="modal" data-target="#ratingModal">
-									        			<div class="rating float-right">
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color' ></i>
-							                                <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-							                                <i class='bx bx-star' ></i>
-
-							                                <small class="text-muted d-block"> Your Ratings  </small>
-							                            </div>
-							                        </a>
-								        		</div>
-								        	</div>
-								      	</div>
-								    </div>
-								</div>
-
-								<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-								    <div class="card h-100">
-								    	<a href="{{ route('lecture','1') }}">
-								      		<img src="{{ asset('frontend/img/portfolio/portfolio-2.jpg') }}" class="card-img-top" alt="...">
-								      	</a>
-								      	<div class="card-body">
-								      		<a href="{{ route('lecture','1') }}">
-								        		<h4 class="fontbold text-dark"> PHP Developer Course </h4>
-								        	</a>
-								        	<a href="{{ route('instructor','1') }}">
-								        		<p class="card-text fst-italic text-muted"> Nyi Ye Lin </p>
-								        	</a>
-								        	<small class="card-text text-muted"> Senior Web Developer </small>
-								      	</div>
-								      	<div class="card-footer bg-transparent border-top-0">
-								      		<div class="row">
-								      			<div class="col-12">
-								      				<div class="progress" style="height: 5px;">
-				                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-				                                    </div>
-								      			</div>
-								      		</div>
-								        	<div class="row mt-3">
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			
-				                                    <small class="text-muted"> 0% complete </small>
-								        		</div>
-
-								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-								        			<a href="javascript:void(0)" data-toggle="modal" data-target="#ratingModal">
-									        			<div class="rating float-right">
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color'></i>
-							                                <i class='bx bxs-star custom_primary_Color' ></i>
-							                                <i class='bx bxs-star-half custom_primary_Color' ></i>
-
-							                                <i class='bx bx-star' ></i>
-
-							                                <small class="text-muted d-block"> Your Ratings  </small>
-							                            </div>
-							                        </a>
-								        		</div>
-								        	</div>
-								      	</div>
-								    </div>
-								</div>
+								
 							  
 							</div>
 
@@ -980,7 +665,7 @@
 
 				      							<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
 				      								<div class="searchInputWrapper float-right mr-4">
-													    <input class="searchInput" type="text" placeholder='focus here to search' data-id="{{Auth::id()}}">
+													    <input class="searchInput searchwhishlist" type="text" placeholder='focus here to search' data-id="{{Auth::id()}}">
 													    	<i class='searchInputIcon bx bx-search-alt-2' ></i>
 													</div>
 				      							</div>
@@ -1259,10 +944,12 @@
 				console.log('New star rating: ' + this.value);
 			});
 
-			// search
+			// start search in wishlist
 
-			$('.searchInput').keyup(function(){
+			$('.searchwhishlist').keyup(function(){
+
 			var search_data = $(this).val();
+			
 			var user_id = $(this).data('id');
 				var html = "";
 
@@ -1360,12 +1047,6 @@
 			
 			})
 
-
-			function showdata(v) {
-
-				;
-			}
-
 			$('.removewishlist').click(function(){
 				var course_id = $(this).data('course_id');
 				removesave(course_id);
@@ -1384,6 +1065,99 @@
 					
 				})
 			}
+			// end search in wishlist
+
+
+			// start search in mystudying
+
+			$('.searchmystudying').keyup(function(){
+				var data = $(this).val();
+				var user_id = $(this).data('user_id');
+				var html = "";
+				var instructor = "";
+				var heart = false;
+				$.post('searchmystudying',{data:data},function(res){
+					// console.log(typeof(res));
+					if(res){
+						var response = JSON.parse(res);
+						$.each(response,function(g,h){
+							$.each(h,function(i,v){
+								
+
+							$.each(v.sales,function(c,d){
+								
+								if(d.user_id == user_id && d.pivot.course_id == v.id){
+									heart = true;
+								};
+							})
+							if(heart == true){
+							
+							html+=`<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+								    <div class="card h-100">
+								    	<a href="{{ route('lecture','1') }}">
+								      		<img src="${v.image}" class="card-img-top" alt="...">
+								      	</a>
+
+
+								      	<div class="card-body">
+								      		<a href="{{ route('lecture','1') }}">
+									        	<h4 class="fontbold text-dark"> ${v.title} </h4>
+									        </a>
+									        <a href="{{ route('instructor','1') }}">
+								        		<p class="card-text fst-italic text-muted">`;
+								        	$.each(v.instructors,function(a,b) {
+								        		html += b.user.name;
+								        		
+								        	})
+								        			
+								        	html+=`</p>
+								        	</a>
+								        		<small class="card-text text-muted"> </small>
+								      	</div>
+								      	<div class="card-footer bg-transparent border-top-0">
+								      		<div class="row">
+								      			<div class="col-12">
+								      				<div class="progress" style="height: 5px;">
+				                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 80%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+				                                    </div>
+								      			</div>
+								      		</div>
+								        	<div class="row mt-3">
+								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+								        			
+				                                    <small class="text-muted"> 80% complete </small>
+								        		</div>
+
+								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+								        			<a href="javascript:void(0)" data-toggle="modal" data-target="#ratingModal">
+									        			<div class="rating float-right">
+							                                <i class='bx bxs-star custom_primary_Color'></i>
+							                                <i class='bx bxs-star custom_primary_Color'></i>
+							                                <i class='bx bxs-star custom_primary_Color' ></i>
+							                                <i class='bx bxs-star-half custom_primary_Color' ></i>
+
+							                                <i class='bx bx-star' ></i>
+
+							                                <small class="text-muted d-block"> Your Ratings  </small>
+							                            </div>
+							                        </a>
+								        		</div>
+								        	</div>
+								      	</div>
+								    </div>
+								</div>`;
+								}
+								
+						})
+					})
+
+						$('.mystudying').html(html);
+					}
+				})
+				
+			})
+
+			// end search in my studying
 
 
 			

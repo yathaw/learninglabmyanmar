@@ -12,9 +12,10 @@ class Subcategory extends Model
     use SoftDeletes;
 
     protected $fillable=['name','category_id'];
+
      public function category()
   {
-      return $this->belongsTo('App\Category');
+      return $this->belongsTo('App\Models\Category');
   }
 
    public function courses()

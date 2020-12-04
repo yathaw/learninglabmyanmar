@@ -285,11 +285,11 @@
                                                 </small>
                                                 <small class="ml-4"> 
                                                     <i class='bx bx-time'></i>
-                                                    7 minutes ago 
+                                                    {{$comm->created_at->diffForHumans()}} 
                                                 </small>
 
                                                 <small class="ml-4">  
-                                                    <i class='bx bx-comment-detail' ></i> 0 Comment 
+                                                    <i class='bx bx-comment-detail' ></i> {{count($comm->answers)}} Comment 
                                                 </small>
 
                                             </p>
@@ -298,6 +298,37 @@
                                             </div>
                                           </div>
                                     </div>
+                                    @foreach($answers as $ans)
+                                    @if($ans->question_id == $comm->id)
+                                    <div class="offset-2 col-10 questionLists">
+                                        <div class="testimonial-item" style="min-height: 0">
+                                            <a href="" class="text-dark">
+                                                <p class="fw-bolder fst-normal fontbold pb-0">
+                                                    {{$ans->description}}
+                                                </p>
+                                            </a>
+
+                                            <p class="fst-normal"> 
+                                                <small> 
+                                                    <i class='bx bx-user' ></i> {{$ans->user->name}} 
+                                                </small>
+                                                <small class="ml-4"> 
+                                                    <i class='bx bx-time'></i>
+                                                    {{$ans->created_at->diffForHumans()}} 
+                                                </small>
+
+                                                <small class="ml-4">  
+                                                    <i class='bx bx-comment-detail' ></i> 0 Comment 
+                                                </small>
+
+                                            </p>
+                                            <div class="float-left">
+                                                <img src="{{ asset($ans->user->profile_photo_path) }}" class="testimonial-img" alt="">
+                                            </div>
+                                          </div>
+                                    </div>
+                                    @endif
+                                    @endforeach
                                     @endforeach
 
                                    <!--  <div class="col-12 questionLists">
