@@ -18,11 +18,13 @@ class SectionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {   
-        $sections=Section::all();
+    public function index($id)
+    {      
+        $course = Course::find($id);
+        $sections=Section::orderBy('sorting')->get();
+
         $contenttypes=Contenttype::all();
-        return view('course.section_new',compact('sections','contenttypes'));
+        return view('course.section_new',compact('sections','contenttypes', 'course'));
     }
 
     /**
@@ -56,31 +58,29 @@ class SectionController extends Controller
         $section->objective=$request->objective;
         
         $section->contenttype_id=$request->contenttype;
-        $section->course_id=6;
+        $section->course_id=$request->courseid;
         //$section->sorting=1;
 
-        $testcourse=Section::whereNull('course_id')->get();
-        //dd($testcourse);
+        $hasCourses_inSection = Section::where('course_id', $request->courseid)->get();
 
-        if($testcourse){
-            $section->sorting=1;
+        foreach($hasCourses_inSection as $hasCourse_inSection){
+            $sorting = $hasCourse_inSection->sorting;
+            $sorting_data = ++$sorting;
+        }
+
+        /*insert sorting*/
+        if($hasCourses_inSection->isEmpty()){
+        $section->sorting = 1;
         }else{
-          $last_row=DB::table('sections')->orderBy('id', 'DESC')->first();
-          //dd($last_row);
-          $last_sorting=$last_row->sorting;
-        //dd($last_sorting);
-          $sortingnum=$last_sorting+1;
-        //dd($sortingnum);
-          $section->sorting=$sortingnum;
-      }
-
-       // $lastdata=Section::orderBy('created_at', 'desc')->first();
+            $section->sorting = $sorting_data;
+        }
+        /*insert sorting*/
 
       $section->instructor_id=1;
 
       $section->save();
 
-      return redirect()->route('backside.section.index');
+      return redirect()->route('backside.sectionlist',$request->courseid);
 
 
   }
@@ -130,7 +130,7 @@ class SectionController extends Controller
         $section->contenttype_id=$request->contenttype;
         $section->course_id=6;
 
-        $section->sorting=1;
+        $section->sorting=$section->sorting;
         $courseid=Section::whereNotNull('course_id')->get();
         //dd($courseid);
 
@@ -178,5 +178,13 @@ class SectionController extends Controller
         //dd($id);
         $content_array=Contenttype::all();
         return $content_array;
+    }
+
+    public function sectionsorting_modernize(Request $request){
+        $id = $request->id;
+        $sorting = $request->sorting;
+
+        Section::where('id', $id)->update(array('sorting' => $sorting));
+
     }
 }

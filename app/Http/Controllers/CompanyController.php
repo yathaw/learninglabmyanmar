@@ -43,12 +43,13 @@ class CompanyController extends Controller
         $request->validate([
             'user_name' => 'required',
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-           
+            'password' => 'required',
+            'confirm_password' => 'required',
             'company_name' => 'required',
             'address' => 'required',
             'description' => 'required',
             'logo' => 'required',
-            'phone' => 'required'
+            
         ]);
 
         if($request->hasfile('logo')){
@@ -61,7 +62,7 @@ class CompanyController extends Controller
             $path = '';
         }
 
-         if($request->hasfile('profile')){
+        if($request->hasfile('profile')){
               $profile = $request->file('profile');
               $upload_dir = public_path().'/profiles/';
               $profile_name = time().'.'.$profile->getClientOriginalExtension();

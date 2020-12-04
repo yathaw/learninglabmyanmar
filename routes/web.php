@@ -16,6 +16,7 @@ use App\Http\Controllers\CoursecountController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
+use App\Http\Controllers\StudentController;
 
 
 /*
@@ -90,8 +91,11 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/instructors', InstructorController::class);
     Route::resource('/jobtitles', JobtitleController::class);
 
-});
+    //HH
+    Route::resource('students',StudentController::class);
 
+});
+Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
 // ------------------------------------------------------------------------
 
 

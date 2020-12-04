@@ -123,7 +123,7 @@
 							</li>
 
 							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Students </a>
+								<a class="sidebar-link" href="{{route('backside.students.index')}}"> Students </a>
 							</li>
 							
 						</ul>
@@ -168,14 +168,6 @@
 
 							<li class="sidebar-item">
 								<a class="sidebar-link" href=""> Level </a>
-							</li>
-
-							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Section Type </a>
-							</li>
-
-							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Content Type </a>
 							</li>
 							
 						</ul>
