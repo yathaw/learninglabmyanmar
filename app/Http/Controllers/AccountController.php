@@ -13,25 +13,34 @@ use App\Notifications\QuestionNotification;
 use App\Notifications\AnswerNotification;
 use App\Models\Answer;
 use App\Events\AnswerEvent;
+use App\Models\Sale;
 
 
 class AccountController extends Controller
 {
 	public function mystudyings(){
 		$tabs = 0;
-    	return view('account.mystudyings',compact('tabs'));
+        $wishlists = Wishlist::paginate(8);
+        $user_id = Auth::id();
+        $sales = Sale::where('user_id',$user_id)->paginate(8);
+    	return view('account.mystudyings',compact('tabs','wishlists','sales'));
     }
 
     public function wishlist(){
 		$tabs = 2;
         $wishlists = Wishlist::paginate(8);
-    	return view('account.mystudyings',compact('tabs','wishlists'));
+        $user_id = Auth::id();
+        $sales = Sale::where('user_id',$user_id)->paginate(8);
+    	return view('account.mystudyings',compact('tabs','wishlists','sales'));
 
     }
 
     public function collection(){
 		$tabs = 1;
-    	return view('account.mystudyings',compact('tabs'));
+        $wishlists = Wishlist::paginate(8);
+        $user_id = Auth::id();
+        $sales = Sale::where('user_id',$user_id)->paginate(8);
+    	return view('account.mystudyings',compact('tabs','wishlists','sales'));
     }
 
     public function lecture($id){
@@ -80,20 +89,16 @@ class AccountController extends Controller
         $bb = array();
         /*if(Auth::check()){*/
 
-            /*$user  = Auth::user();*/
-    
-            $questions = Question::all();
+        $questions =  Question::all();
+           
             foreach($questions as $quest){
-                foreach($quest->notifications as $notification)
-                    {
-                       
-                        array_push($noti_data, $notification);
-                        
-                    }
 
-            
-       /* }*/
-            }
+                foreach($quest->unreadNotifications as $notification)
+                    {
+                        array_push($noti_data, $notification);
+                    }
+            }    /*$user  = Auth::user();*/
+    
             /*dd($bb);
             foreach($bb as $bc){
                 $dd = $bc->where('read_at',NULL)->orderBy('created_at','desc')->orderBy('read_at','desc')->get();
@@ -146,6 +151,8 @@ class AccountController extends Controller
             event(new AnswerEvent($answer));
 
         }
+        $question = Question::find(request('question'));
+        $question->unreadNotifications()->update(['read_at' => now()]);
         return redirect()->back();
     }
 
@@ -178,5 +185,14 @@ class AccountController extends Controller
        }
       
        return $noti_data1;
+    }
+
+
+    public function questionreply(Request $request)
+    {
+        $questionid = $request->quesid;
+        $answer = Answer::where('question_id',$questionid)->with('user')->get();
+        $question = Question::where('id',$questionid)->with('user')->get();
+        return response()->json(['answer'=>$answer,'question'=>$question]);
     }
 }

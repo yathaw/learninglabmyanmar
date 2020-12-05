@@ -2,12 +2,17 @@ $(document).ready(function(){
 	cartnoti();
 	showdata();
 
+	$('.unauth').click(function(){
+	    alert("Please login to success this process!");
+	  })
+
 	$.ajaxSetup({
 	    headers: {
 	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	    }
 	});
 
+	// add to cart from html
 	$('.addtocart').click(function() {
 		var id = $(this).data('id');
 		var course_title = $(this).data('course_title');
@@ -19,6 +24,19 @@ $(document).ready(function(){
 
 		data_add(id,course_title,instructor,image,price,wishlist,user_id);
 	});
+
+	// add to cart from jq
+	$('.searchcourseshow').on('click','.cart',function(){
+		var id = $(this).data('id');
+		var course_title = $(this).data('course_title');
+		var instructor = $(this).data('instructor');
+		var image = $(this).data('image');
+		var price = $(this).data('price');
+		var wishlist = $(this).data('wishlist');
+		var user_id = $(this).data('user_id');
+
+		data_add(id,course_title,instructor,image,price,wishlist,user_id);
+	})
 
 
 	function data_add(id,course_title,instructor,image,price,wishlist,user_id) {
@@ -51,10 +69,12 @@ $(document).ready(function(){
 		})
 		if(!hasid){
 			localstorage_arr.push(courses);
+			alert("Thank you for your buying!");
 		}
 
 		var localstorage_str = JSON.stringify(localstorage_arr);
 		localStorage.setItem('course_buy',localstorage_str);
+
 		cartnoti();
 	
 	}
@@ -186,7 +206,7 @@ $(document).ready(function(){
 
 
 	function removesavelist(id){
-		$.post('wishlist',{id:id},function(res){
+		$.post('wishlist_save',{id:id},function(res){
 			if(res == "delete"){
 				var localstorage = localStorage.getItem('course_buy');
 				if(localstorage){
@@ -230,20 +250,31 @@ $(document).ready(function(){
 	// save from show cart end
 
 	$('.showcart').on('click','.removeBtn',function(){
+
 		var id = $(this).data('id');
 		var user_id = $(this).data('user_id');
 		var localstorage = localStorage.getItem('course_buy');
+		var array = new Array();
+
 		if(localstorage){
 			var localstorage_arr = JSON.parse(localstorage);
+			
+
 			$.each(localstorage_arr,function(i,v){
-				console.log(v.id , id);
+
 				if(v.id == id && v.user_id == user_id){
 					var ans = confirm("Are you sure to remove this course from your cart?");
-					if(ans){
-						localstorage_arr.splice(i,1);
-					}
+					
+						
+						array.push(i);
+					
+					
 				}
 			})
+
+					$.each(array,function(a,b){
+						localstorage_arr.splice(b,1);
+					})
 
 			var localstorage_str = JSON.stringify(localstorage_arr);
 			localStorage.setItem('course_buy',localstorage_str);
@@ -260,6 +291,7 @@ $(document).ready(function(){
 		var array = new Array();
 		if(localstorage){
 			var localstorage_arr = JSON.parse(localstorage);
+			alert('Your buying is success');
 			$.post('course_sale',{data:localstorage_arr},function(res){
 				
 				if(res){
@@ -283,6 +315,10 @@ $(document).ready(function(){
 			})
 		}
 	})
+
+
+
+	
 
 
 

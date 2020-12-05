@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lesson;
 use Illuminate\Http\Request;
 
-class LessonController extends Controller
+class CollectionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +13,7 @@ class LessonController extends Controller
      */
     public function index()
     {
-        $lessons=Lesson::all();
-        return view('lesson.index',compact('lessons'));
+        //
     }
 
     /**
@@ -25,7 +23,7 @@ class LessonController extends Controller
      */
     public function create()
     {
-        return view('lesson.create');
+        //
     }
 
     /**
@@ -42,10 +40,10 @@ class LessonController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Lesson  $lesson
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Lesson $lesson)
+    public function show($id)
     {
         //
     }
@@ -53,22 +51,22 @@ class LessonController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Lesson  $lesson
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Lesson $lesson)
+    public function edit($id)
     {
-        return view('lesson.edit',compact('lesson'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Lesson  $lesson
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Lesson $lesson)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -76,11 +74,11 @@ class LessonController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Lesson  $lesson
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Lesson $lesson)
+    public function destroy($id)
     {
-        
+        //
     }
 }

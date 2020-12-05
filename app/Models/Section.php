@@ -12,4 +12,9 @@ class Section extends Model
     use SoftDeletes;
 
     protected $fillable=['title','objective','sorting','course_id'];
+
+    public function contents()
+  {
+      return $this->hasMany('App\Models\Contents');
+  }
 }

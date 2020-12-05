@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Instructor;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 
-class InstructorController extends Controller
+class StudentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +16,9 @@ class InstructorController extends Controller
      */
     public function index()
     {
-        $instructors = Instructor::all();
-        return view('instructors.index',compact('instructors'));
+        $users = User::role('Student')->get();
+
+        return view('student.index',compact('users'));
     }
 
     /**
@@ -28,7 +28,7 @@ class InstructorController extends Controller
      */
     public function create()
     {
-        return view('instructors.create');
+        return view('student.create');
         
     }
 
@@ -40,19 +40,12 @@ class InstructorController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+         $request->validate([
             'user_name' => 'required',
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => 'required',
             'confirm_password' => 'required',
-            'headline' => 'required',
-            'biography' => 'required',
-            'website' => 'required',
-            'twitter' => 'required',
-            'facebook' => 'required',
-            'linkedin' => 'required',
-            'youtube' => 'required',
-            'instagram' => 'required',
+           
         ]);
 
         if($request->hasfile('profile')){
@@ -73,31 +66,19 @@ class InstructorController extends Controller
         $user->profile_photo_path = $profile_path;
         $user->save();
 
-        $user->assignRole('Instructor');
+        $user->assignRole('Student');
 
-        $instructor = new Instructor();
-        $instructor->headline = request('headline');
-        $instructor->bio = request('biography');
-        $instructor->website = request('website');
-        $instructor->twitter = request('twitter');
-        $instructor->facebook = request('facebook');
-        $instructor->linkedin = request('linkedin');
-        $instructor->youtube = request('youtube');
-        $instructor->instagram = request('instagram');
-        $instructor->status = 1;
-        $instructor->user_id = $user->id;
-        $instructor->save();
+        return redirect()->route('backside.students.index');
 
-        return redirect()->route('backside.instructors.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Instructor  $instructor
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Instructor $instructor)
+    public function show($id)
     {
         //
     }
@@ -105,10 +86,10 @@ class InstructorController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Instructor  $instructor
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Instructor $instructor)
+    public function edit($id)
     {
         //
     }
@@ -117,10 +98,10 @@ class InstructorController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Instructor  $instructor
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Instructor $instructor)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -128,10 +109,10 @@ class InstructorController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Instructor  $instructor
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Instructor $instructor)
+    public function destroy($id)
     {
         //
     }

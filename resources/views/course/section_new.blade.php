@@ -34,7 +34,7 @@
 										</div>
 										<div class="col-3 d-flex align-items-center justify-content-center">
 											<span  data-toggle="tooltip" data-placement="top" title="Create New Lecture Lesson in that section">
-												<a href="javascript:void(0)" class="btn btn-light btn-sm text-success" data-toggle="modal" data-target="#newcontentModal">
+												<a href="#" class="btn btn-light btn-sm text-success contentbtn" data-toggle="modal" data-id={{$section->id}}>
 													<i class="align-middle fas fa-plus"></i> Content 
 												</a>
 											</span>
@@ -62,35 +62,49 @@
 							</div>
 
 							<div id="row{{$i}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-									<div class="card-body">
-										<div class="row">
-											<ul class="list-unstyled lecture_sortable" data-sid="{{$section->id}}">
+								<div class="card-body">
+									<div class="row">
+										<ul class="list-unstyled lecture_sortable" data-sid="{{$section->id}}">   
 
-												<li class="lecture_sort" data-sid="{{$section->id}}" data-id="1">
-													<div class="col-12 my-2">
-														<div class="card bg-light border">
-															<div class="card-body">
-																<div class="row">
-																	<div class="col-1 d-flex align-items-center justify-content-center">
-																		<i class="fas fa-bars handle"></i>
-																	</div>
-																	<div class="col-11">
+											@foreach($contents as $content)
+											@if($content->section_id  == $section->id)
+											@if($content->contenttype_id == 1)
 
-																		<h5 class="d-inline-block"> 
-																			<b class="fontbold"> Lecture <span class="lectureNo1"> 1 </span> : </b>
-																			What Is HTML 
+											<li class="lecture_sort" data-sid="{{$section->id}}" data-id="{{$lesson->id}}">
+												<div class="col-12 my-2">
+													<div class="card bg-light border">
+														<div class="card-body">
+															<div class="row">
+																<div class="col-1 d-flex align-items-center justify-content-center">
+																	<i class="fas fa-bars handle"></i>
+																</div>
+																<div class="col-11">
+
+																	<h5 class="d-inline-block"> 
+																		<b class="fontbold">{{$content->title}}<span class="lectureNo1"> </span> : 
+																			{{$content->description}}</b>
+																			
 																		</h5>
 																		<a href="" class="btn btn-light text-info">  
 																			<i class="align-middle mr-2" data-feather="info"></i> Detail 
 																		</a>
 
-																		<a href="" class="btn btn-light custom_primary_Color">  
+																		<a href="" class="btn btn-light custom_primary_Color lessoneditbtn" data-toggle="modal" data-id={{$content->id}}>  
 																			<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
 																		</a>
 
-																		<a href="" class="btn btn-light text-danger">  
+																		<form method="post" action="{{ route('backside.content.destroy',$content->id) }}" class="d-inline-block" onsubmit="return confirm('Are you Sure want to Delete?')">
+																			@csrf
+																			@method('DELETE')
+
+																			<button class="btn btn-light text-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Remove this section" type="submit"> 
+																				<i class="align-middle mr-2" data-feather="x"></i>  Remove 
+																			</button>
+																		</form>
+
+																		{{-- <a href="" class="btn btn-light text-danger">  
 																			<i class="align-middle mr-2" data-feather="x"></i>  Remove 
-																		</a>
+																		</a> --}}
 																	</div>
 
 																</div>
@@ -98,284 +112,64 @@
 														</div>
 													</div>
 												</li>
-											{{-- <li class="lecture_sort" data-sid="1" data-id="2">
-												<div class="col-12 my-2">
-													<div class="card bg-light border">
-														<div class="card-body">
-															<div class="row">
-																<div class="col-1 d-flex align-items-center justify-content-center">
-																	<i class="fas fa-bars handle"></i>
-																</div>
-																<div class="col-11">
+												@endif
+												@endif
+												@endforeach
+											</ul>
+										</div>
 
-																	<h5 class="d-inline-block"> 
-																		<b class="fontbold"> Lecture <span class="lectureNo1"> 2 </span> : </b>
-																		Structure
-																	</h5>
-																	<a href="" class="btn btn-light text-info">  
-																		<i class="align-middle mr-2" data-feather="info"></i>Detail 
-																	</a>
-
-																	<a href="" class="btn btn-light custom_primary_Color">  
-																		<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
-																	</a>
-
-																	<a href="" class="btn btn-light text-danger">  
-																		<i class="align-middle mr-2" data-feather="x"></i>  Remove 
-																	</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-
-											<li class="lecture_sort" data-sid="1" data-id="3">
-												<div class="col-12 my-2">
-													<div class="card bg-light border">
-														<div class="card-body">
-															<div class="row">
-																<div class="col-1 d-flex align-items-center justify-content-center">
-																	<i class="fas fa-bars handle"></i>
-																</div>
-																<div class="col-11">
-
-																	<h5 class="d-inline-block"> 
-																		<b class="fontbold"> Lecture <span class="lectureNo1"> 3 </span> : </b>
-																		List
-																	</h5>
-																	<a href="" class="btn btn-light text-info">  
-																		<i class="align-middle mr-2" data-feather="info"></i>Detail 
-																	</a>
-
-																	<a href="" class="btn btn-light custom_primary_Color">  
-																		<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
-																	</a>
-
-																	<a href="" class="btn btn-light text-danger">  
-																		<i class="align-middle mr-2" data-feather="x"></i>  Remove 
-																	</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-
-											<li class="lecture_sort" data-sid="1" data-id="4">
-												<div class="col-12 my-2">
-													<div class="card bg-light border">
-														<div class="card-body">
-															<div class="row">
-																<div class="col-1 d-flex align-items-center justify-content-center">
-																	<i class="fas fa-bars handle"></i>
-																</div>
-																<div class="col-11">
-
-																	<h5 class="d-inline-block"> 
-																		<b class="fontbold"> Lecture <span class="lectureNo1"> 4 </span> : </b>
-																		Links
-																	</h5>
-																	<a href="" class="btn btn-light text-info">  
-																		<i class="align-middle mr-2" data-feather="info"></i> Detail 
-																	</a>
-
-																	<a href="" class="btn btn-light custom_primary_Color">  
-																		<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
-																	</a>
-
-																	<a href="" class="btn btn-light text-danger">  
-																		<i class="align-middle mr-2" data-feather="x"></i>  Remove 
-																	</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-
-											<li class="lecture_sort" data-sid="1" data-id="5">
-												<div class="col-12 my-2">
-													<div class="card bg-light border">
-														<div class="card-body">
-															<div class="row">
-																<div class="col-1 d-flex align-items-center justify-content-center">
-																	<i class="fas fa-bars handle"></i>
-																</div>
-																<div class="col-11">
-
-																	<h5 class="d-inline-block"> 
-																		<b class="fontbold"> Lecture <span class="lectureNo1"> 5 </span> : </b>
-																		Tables
-																	</h5>
-																	<a href="" class="btn btn-light text-info">  
-																		<i class="align-middle mr-2" data-feather="info"></i> Detail 
-																	</a>
-
-																	<a href="" class="btn btn-light custom_primary_Color">  
-																		<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
-																	</a>
-
-																	<a href="" class="btn btn-light text-danger">  
-																		<i class="align-middle mr-2" data-feather="x"></i>  Remove 
-																	</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-
-											<li class="lecture_sort" data-sid="1" data-id="6">
-												<div class="col-12 my-2">
-													<div class="card bg-light border">
-														<div class="card-body">
-															<div class="row">
-																<div class="col-1 d-flex align-items-center justify-content-center">
-																	<i class="fas fa-bars handle"></i>
-																</div>
-																<div class="col-11">
-
-																	<h5 class="d-inline-block"> 
-																		<b class="fontbold"> Lecture <span class="lectureNo1"> 6 </span> : </b>
-																		Images
-																	</h5>
-																	<a href="" class="btn btn-light text-info">  
-																		<i class="align-middle mr-2" data-feather="info"></i></i> Detail 
-																	</a>
-
-																	<a href="" class="btn btn-light custom_primary_Color">  
-																		<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
-																	</a>
-
-																	<a href="" class="btn btn-light text-danger">  
-																		<i class="align-middle mr-2" data-feather="x"></i>  Remove 
-																	</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-
-											<li class="lecture_sort" data-sid="1" data-id="7">
-												<div class="col-12 my-2">
-													<div class="card bg-light border">
-														<div class="card-body">
-															<div class="row">
-																<div class="col-1 d-flex align-items-center justify-content-center">
-																	<i class="fas fa-bars handle"></i>
-																</div>
-																<div class="col-11">
-
-																	<h5 class="d-inline-block"> 
-																		<b class="fontbold"> Lecture <span class="lectureNo1"> 7 </span> : </b>
-																		Forms
-																	</h5>
-																	<a href="" class="btn btn-light text-info">  
-																		<i class="align-middle mr-2" data-feather="info"></i></i> Detail 
-																	</a>
-
-																	<a href="" class="btn btn-light custom_primary_Color">  
-																		<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
-																	</a>
-
-																	<a href="" class="btn btn-light text-danger">  
-																		<i class="align-middle mr-2" data-feather="x"></i>  Remove 
-																	</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li>
-
-											<li class="lecture_sort" data-sid="1" data-id="8">
-												<div class="col-12 my-2">
-													<div class="card bg-light border">
-														<div class="card-body">
-															<div class="row">
-																<div class="col-1 d-flex align-items-center justify-content-center">
-																	<i class="fas fa-bars handle"></i>
-																</div>
-																<div class="col-11">
-
-																	<h5 class="d-inline-block"> 
-																		<b class="fontbold"> Lecture <span class="lectureNo1"> 8 </span> : </b>
-																		Divs
-																	</h5>
-																	<a href="" class="btn btn-light text-info">  
-																		<i class="align-middle mr-2" data-feather="info"></i> Detail 
-																	</a>
-
-																	<a href="" class="btn btn-light custom_primary_Color">  
-																		<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
-																	</a>
-
-																	<a href="" class="btn btn-light text-danger">  
-																		<i class="align-middle mr-2" data-feather="x"></i>  Remove 
-																	</a>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</li> --}}
-										</ul>
 									</div>
-
 								</div>
+
 							</div>
+						</li>
+						@php $i++; @endphp
+						@endforeach
 
-						</div>
-					</li>
-					@php $i++; @endphp
-					@endforeach
+					</ul>
+				</div>
 
-				</ul>
 			</div>
 
 		</div>
 
-	</div>
-
-	<!-- New Section Modal -->
-	<div class="modal fade" id="newsectionModal" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
-			<div class="modal-content ">
-				<div class="modal-header">
-					<h5 class="modal-title"> New Section </h5>
-					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<form method="post" action="{{route('backside.section.store')}}" enctype="multipart/form-data">
-					<input type="hidden" name="courseid" value="{{ $course->id }}">
-					@csrf
-					<div class="modal-body m-3">
-						<div class="row mb-3">
-							<label for="titleId" class="col-sm-2 col-form-label"> Title </label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="titleId" placeholder="Enter Title" name="title">
+		<!-- New Section Modal -->
+		<div class="modal fade" id="newsectionModal" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+				<div class="modal-content ">
+					<div class="modal-header">
+						<h5 class="modal-title"> New Section </h5>
+						<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<form method="post" action="{{route('backside.section.store')}}" enctype="multipart/form-data">
+						<input type="hidden" name="courseid" value="{{ $course->id }}">
+						@csrf
+						<div class="modal-body m-3">
+							<div class="row mb-3">
+								<label for="titleId" class="col-sm-2 col-form-label"> Title </label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="titleId" placeholder="Enter Title" name="title">
+								</div>
 							</div>
-						</div>
 
-						<div class="row mb-3">
-							<label for="objectiveId" class="col-sm-2 col-form-label"> Objective </label>
-							<div class="col-sm-10">
-								<textarea class="form-control" id="objectiveId" name="objective"></textarea>
-								<small> What will students be able to do at the end of this section? </small>
+							<div class="row mb-3">
+								<label for="objectiveId" class="col-sm-2 col-form-label"> Objective </label>
+								<div class="col-sm-10">
+									<textarea class="form-control" id="objectiveId" name="objective"></textarea>
+									<small> What will students be able to do at the end of this section? </small>
+								</div>
 							</div>
-						</div>
 
-						<div class="row mb-3">
-							<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
-							<div class="col-sm-10">
-								<select class="form-control select2" name="contenttype">
-									@foreach($contenttypes as $contenttype)
-									<option value="{{$contenttype->id}}">{{$contenttype->name}}</option>
-									@endforeach
-								</select>
+							<div class="row mb-3">
+								<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
+								<div class="col-sm-10">
+									<select class="form-control select2" name="contenttype">
+										@foreach($contenttypes as $contenttype)
+										<option value="{{$contenttype->id}}">{{$contenttype->name}}</option>
+										@endforeach
+									</select>
+								</div>
 							</div>
-						</div>
 
 						{{-- <div class="row mb-3">
 						    <label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
@@ -405,19 +199,21 @@
 					<h5 class="modal-title"> New Content </h5>
 					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 				</div>
-				<form>
+				<form method="post" action="{{route('backside.content.store')}}" enctype="multipart/form-data">
+					<input type="hidden" name="sectionid" id="sectionid">
+					@csrf
 					<div class="modal-body m-3">
 						<div class="row mb-3">
 							<label for="titleId" class="col-sm-2 col-form-label"> Title </label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control" id="titleId" placeholder="Enter Title">
+								<input type="text" class="form-control" id="titleId" placeholder="Enter Title" name="content_title">
 							</div>
 						</div>
 
 						<div class="row mb-3">
 							<label for="objectiveId" class="col-sm-2 col-form-label"> Description </label>
 							<div class="col-sm-10">
-								<textarea class="form-control" id="objectiveId"></textarea>
+								<textarea class="form-control" id="objectiveId" name="content_description"></textarea>
 								<small> What will students be able to do at the end of this section? </small>
 							</div>
 						</div>
@@ -425,10 +221,10 @@
 						<div class="row mb-3">
 							<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
 							<div class="col-sm-10">
-								<select class="form-control select2">
-									<option>1</option>
-									<option>2</option>
-									<option>3</option>
+								<select class="form-control select2" name="contenttypeid">
+									@foreach($contenttypes as $contenttype)
+									<option value="{{$contenttype->id}}">{{$contenttype->name}}</option>
+									@endforeach
 								</select>
 							</div>
 						</div>
@@ -498,6 +294,86 @@
 		</div>
 	</div>
 
+
+	<div class="modal fade" id="editcontentModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+			<div class="modal-content ">
+				<div class="modal-header">
+					<h5 class="modal-title">Edit Content </h5>
+					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form method="post" action="" enctype="multipart/form-data">
+					@csrf
+					@method('PUT')
+					<div class="modal-body m-3">
+						<div class="row mb-3">
+							<label for="content_title" class="col-sm-2 col-form-label"> Title </label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="content_title" placeholder="Enter Title" name="content_title">
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<label for="content_description" class="col-sm-2 col-form-label"> Description </label>
+							<div class="col-sm-10">
+								<textarea class="form-control" name="content_description" id="content_description"></textarea>
+								<small> What will students be able to do at the end of this section? </small>
+							</div>
+						</div>
+
+						{{-- <div class="row mb-3">
+							<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
+							<div class="col-sm-10">
+								<select class="form-control select2" name="contenttypeid" id="content_contenttype">
+									@foreach($contenttypes as $contenttype)
+									<option value="{{$contenttype->id}}">{{$contenttype->name}}</option>
+									@endforeach
+								</select>
+							</div>
+						</div> --}}
+
+						{{-- <div class="row mb-3">
+							<label for="objectiveId" class="col-sm-2 col-form-label"> Upload File </label>
+							<div class="col-sm-10">
+								<input type="file" name="file">
+							</div>
+						</div> --}}
+
+						<div class="form-group row">
+                                <label for="photo_id" class="col-sm-2 col-form-label">File</label>
+                                <div class="col-sm-10">
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link active" id="oldPhoto-tab" data-toggle="tab" href="#oldPhotoTab" role="tab" aria-controls="oldPhotoTab" aria-selected="true"> Old Video </a>
+                                        </li>
+                                      
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" id="newPhoto-tab" data-toggle="tab" href="#newPhotoTab" role="tab" aria-controls="newPhotoTab" aria-selected="false"> New Video</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content mt-3" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="oldPhotoTab" role="tabpanel" aria-labelledby="oldPhoto-tab">
+                                            <img src="" class="img-fluid w-25" id="content_file">
+                                        </div>
+                                        
+                                        <div class="tab-pane fade" id="newPhotoTab" role="tabpanel" aria-labelledby="newPhoto-tab">
+                                            <input type="file" id="photo_id" name="photo">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Update changes</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
 	
 
 
@@ -530,11 +406,11 @@
 			           	$(this).attr('data-sorting', increaseId); // updates the attribute
 			           	$(this).find('.sectionNo').html(increaseId);
 
-			           $.post("/sectionsorting_modernize",{id:id, sorting:increaseId},function (res) {
-      
-					    });
+			           	$.post("/sectionsorting_modernize",{id:id, sorting:increaseId},function (res) {
 
-			       });
+			           	});
+
+			           });
 
 
 				},
@@ -624,6 +500,35 @@ $('.editbtn').click(function(){
           	})
 
 });
+
+	$('.contentbtn').click(function(){
+	//alert('hi');
+	var id=$(this).data('id');
+	//console.log(id);
+	$.post('/backside/section/getsectionid',{id:id},function(response){
+		//console.log(response.id);
+		$('#sectionid').val(response.id);
+	})
+	$('#newcontentModal').modal('show');
+
+});
+
+	$('.lessoneditbtn').click(function(){
+	//alert('hi');
+	var id=$(this).data('id');
+	console.log(id);
+	$.post('/backside/content/getcontentid',{id:id},function(response){
+	console.log(response);
+		$('#content_title').val(response.title);
+		$('#content_description').val(response.description);
+		//$('#content_file').val(response);
+		//var test=response
+
+	})
+	 $('#editcontentModal').modal('show');
+
+});
+
 
 
 </script>
