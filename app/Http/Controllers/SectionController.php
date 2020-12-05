@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Section;
 use App\Models\Course;
+use App\Models\Content;
+use App\Models\Lesson;
 use App\Models\Contenttype;
 
 use Illuminate\Http\Request;
@@ -22,9 +24,12 @@ class SectionController extends Controller
     {      
         $course = Course::find($id);
         $sections=Section::orderBy('sorting')->get();
+        
+        $contents=Content::all();
+        $lesson=Lesson::find($id);
 
         $contenttypes=Contenttype::all();
-        return view('course.section_new',compact('sections','contenttypes', 'course'));
+        return view('course.section_new',compact('sections','contenttypes', 'course','contents','lesson'));
     }
 
     /**

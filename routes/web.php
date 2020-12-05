@@ -76,13 +76,16 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/sale', SaleController::class);
 
     Route::resource('/section', SectionController::class);
-    //------------------kyw---------------------//
+//KYW
     Route::post('/section/getid',[SectionController::class,'getid'])->name('getid');
     Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
 
     Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
     
     Route::resource('/content', ContentController::class);
+    Route::post('/section/getsectionid',[ContentController::class,'getsectionid'])->name('getsectionid');
+    Route::post('/content/getcontentid',[ContentController::class,'getcontentid'])->name('getcontentid');
+
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);
     Route::resource('/attachment', AttachmentController::class);
@@ -93,8 +96,6 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
 });
 Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
 // ------------------------------------------------------------------------
-
-
 
 /*
 |--------------------------------------------------------------------------
