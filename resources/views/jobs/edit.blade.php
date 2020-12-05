@@ -1,7 +1,7 @@
 <x-backend>
 	<div class="container">
 			<h1 class="mt-5">Update Jobtitle</h1>
-			<form action="{{route('jobtitles.update',$jobtitle->id)}}" method="POST">
+			<form action="{{route('backside.jobtitles.update',$jobtitle->id)}}" method="POST">
 				@csrf
 				@method('PUT')
 				<div class="form-group my-4 col-md-6">

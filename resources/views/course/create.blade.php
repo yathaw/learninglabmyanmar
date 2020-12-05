@@ -178,7 +178,17 @@
                             <section>
                                 <div class="my-5"> 
                                 <label>Photo(<small class="text-danger">jpeg|bmp|png</small>)</label>
-                                <input type="file" name="photo" class="form-control-file @error('photo') is-invalid @enderror" >
+                                
+                                {{-- <input type="file" name="photo" class="form-control-file @error('photo') is-invalid @enderror" > --}}
+
+                                <div class="drop">
+                                    <div class="uploader">
+                                        <label class="drop-label">Drag and drop images here</label>
+                                        <input type="file" class="image-upload" id="photo" name="photo">
+                                    </div>
+                                    <div id="image-preview"></div>
+                                </div>
+
                                 @error('photo')
                                 <span class="invalid-feedback" role="alert">
                                 <strong>{{$message}}</strong>
@@ -195,9 +205,6 @@
                                 </span>
                                 @enderror
                                 </div>
-
-
-                                <input id="acceptTerms-2" name="acceptTerms" type="checkbox" class=""> <label for="acceptTerms-2">I agree with the Terms and Conditions.</label>
                             </section>
                         </form>
                     </div>
@@ -213,9 +220,21 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
-
-
             var form = $("#example-form");
+
+            $('#photo').imageReader({
+                renderType: 'canvas',
+                onload: function(canvas) {
+                var ctx = canvas.getContext('2d');
+                    ctx.fillStyle = "orange";
+                    ctx.font = "12px Verdana";
+                    ctx.fillText("Filename : "+ this.name, 10, 20, canvas.width - 10);
+                    $(canvas).css({
+                        width: '100%',
+                        marginBottom: '-10px'
+                    });
+                }
+            });
 
             form.steps({
                 headerTag: "h6",

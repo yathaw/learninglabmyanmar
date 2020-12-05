@@ -18,9 +18,9 @@ use App\Models\User;
 class FrontendController extends Controller
 {
     public function index(){
-        $categories = Category::all();
+        $limitcategories = Category::all();
         $subcategories = Subcategory::all();
-    	return view('frontend.index',compact('categories','subcategories'));
+    	return view('frontend.index',compact('limitcategories'));
     }
 
     public function courses(){
