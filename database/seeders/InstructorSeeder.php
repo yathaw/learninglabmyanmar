@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Instructor;
+use Faker;
 
 
 class InstructorSeeder extends Seeder
@@ -15,19 +16,34 @@ class InstructorSeeder extends Seeder
      */
     public function run()
     {
-        Instructor::create([
-        	'headline'			=> 'Founder of Codemy',
-        	'bio'			=> 'John Elder is a pioneer in Web Development who created one of the first Internet advertising networks back in 1997. He sold it to a publicly traded company at the height of the dot com boom and then went on to create the best-selling Submission-Spider search engine submission software that`s been used by over 3 million individuals and small businesses in over 45 countries.Today he teaches Web Development courses at Codemy the online code school he founded.John graduated with honors with a degree in Economics from Washington University in St. Louis where he was an ArtSci Scholar. ',
-        	'website'			=> 'http://google.com/',
-        	'twitter'			=> 'http://google.com/',
-        	'facebook'			=> 'http://google.com/',
-        	'linkedin'			=> 'http://google.com/',
-        	'youtube'			=> 'http://google.com/',
-        	'instagram'			=> 'http://google.com/',
-        	'status'			=> 1,
+        $faker = \Faker\Factory::create();
 
+        $instructorLists = [
+            array($faker->jobTitle, $faker->paragraphs(3,true), $faker->domainName(), 1, 3),
+            array($faker->jobTitle, $faker->paragraphs(3,true), $faker->domainName(), 1, 4),
+            array($faker->jobTitle, $faker->paragraphs(3,true), $faker->domainName(), 1, 5),
+            array($faker->jobTitle, $faker->paragraphs(3,true), $faker->domainName(), 1, 6),
+            array($faker->jobTitle, $faker->paragraphs(3,true), $faker->domainName(), 1, 7),
+            array($faker->jobTitle, $faker->paragraphs(3,true), $faker->domainName(), 1, 8),
+            array($faker->jobTitle, $faker->paragraphs(3,true), $faker->domainName(), 1, 9),
+        ];
 
-        	'user_id'	=>	3
-        ]);
+        foreach ($instructorLists as $instructorList) {
+            $instructor = new Instructor;
+            $instructor->headline = $instructorList[0];
+            $instructor->bio = $instructorList[1];
+            $instructor->website = $instructorList[2];
+            $instructor->twitter = $instructorList[2];
+            $instructor->facebook = $instructorList[2];
+            $instructor->linkedin = $instructorList[2];
+            $instructor->youtube = $instructorList[2];
+            $instructor->instagram = $instructorList[2];
+            $instructor->status = $instructorList[3];
+            $instructor->user_id = $instructorList[4];
+            $instructor->created_at = now();
+            $instructor->updated_at = now();
+            $instructor->save();
+
+        }
     }
 }

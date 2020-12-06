@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropOulineColumn extends Migration
+class ChangeObjectiveTypeInSectiontbl extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class DropOulineColumn extends Migration
      */
     public function up()
     {
-        Schema::table('courses', function (Blueprint $table) {
-            $table->dropColumn('outline');
+        Schema::table('sections', function (Blueprint $table) {
+                $table->text('objective')->change();
         });
     }
 
@@ -25,8 +25,6 @@ class DropOulineColumn extends Migration
      */
     public function down()
     {
-        Schema::table('courses', function (Blueprint $table) {
-            
-        });
+        
     }
 }

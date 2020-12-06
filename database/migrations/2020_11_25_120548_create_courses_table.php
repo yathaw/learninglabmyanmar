@@ -20,7 +20,6 @@ class CreateCoursesTable extends Migration
             $table->text('description');
             $table->text('image');
             $table->text('video');
-            $table->string('situation');
             $table->smallInteger('status');
             $table->text('requirements');
             $table->text('outline');
