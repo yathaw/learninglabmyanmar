@@ -30,6 +30,8 @@ class Instructor extends Model
     }
     public function courses($value='')
     {
-      return $this->belongsToMany('App\Models\Course');
+
+      return $this->belongsToMany('App\Models\Course')->withTimestamps();
+
     }
 }

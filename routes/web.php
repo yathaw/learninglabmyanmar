@@ -16,6 +16,9 @@ use App\Http\Controllers\CoursecountController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
+
+// NYL
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\StudentController;
 
 
@@ -39,17 +42,26 @@ Route::get('/',[FrontendController::class, 'index'])->name('frontend.index');
 
 // NYL
 Route::get('courses',[FrontendController::class, 'courses'])->name('courses');
+
 Route::post('courses_search',[FrontendController::class, 'courses_search'])->name('courses_search');
+
+Route::post('searchmystudying',[FrontendController::class, 'searchmystudying'])->name('searchmystudying');
+
 Route::post('wishlist_search',[FrontendController::class, 'wishlist_search'])->name('wishlist_search');
-Route::post('wishlist',[FrontendController::class, 'wishlist'])->name('wishlist');
+
+Route::post('wishlist_save',[FrontendController::class, 'wishlist_save'])->name('wishlist_save');
+
 Route::post('removewishlist',[FrontendController::class, 'removewishlist'])->name('removewishlist');
 
 Route::get('/course/{id}',[FrontendController::class, 'coursedetail'])->name('course');
+
 Route::get('cart',[FrontendController::class, 'addtocart'])->name('cart');
+
 Route::post('course_sale',[FrontendController::class, 'course_sale'])->name('course_sale');
 
 
 Route::get('instructors',[FrontendController::class, 'instructors'])->name('instructors');
+
 Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->name('instructor');
 
 //Honey

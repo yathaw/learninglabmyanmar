@@ -12,4 +12,15 @@ class Review extends Model
     use SoftDeletes;
 
     protected $fillable=['description','stars','user_id','course_id'];
+
+    // NYL
+    public function course($value='')
+	{
+		return $this->belongsTo('App\Models\Course');
+	}
+
+	public function user($value='')
+	{
+		return $this->belongsTo('App\Models\User');
+	}
 }

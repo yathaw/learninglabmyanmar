@@ -33,7 +33,9 @@ class FrontendController extends Controller
     }
 
     public function coursedetail($id){
-    	return view('frontend.coursedetail');
+        $course = Course::find($id);
+        $wishlists = Wishlist::where('user_id',Auth::id())->get();
+    	return view('frontend.coursedetail',compact('course','wishlists'));
     }
 
     public function addtocart(){
@@ -68,8 +70,9 @@ class FrontendController extends Controller
 
 
 
-    public function wishlist(Request $request)
+    public function wishlist_save(Request $request)
     {
+        dd(request('id'));
         $course_id = $request->id;
         $wishlists = Wishlist::withTrashed()->get();
         $user_id = Auth::id();
@@ -160,7 +163,7 @@ class FrontendController extends Controller
         $sale->invoiceno = "Stu-".$invoice;
         $sale->total = $total;
         $sale->user_id = $user_id;
-        // $sale->save();
+        $sale->save();
         
 
        }
@@ -168,12 +171,34 @@ class FrontendController extends Controller
        foreach ($data as $value) {
 
            if($user_id == $value['user_id']){
-            // $sale->courses()->attach($value['id']);
+            $sale->courses()->attach($value['id']);
            }
        }
 
        return response(json_decode($user_id));
    }
+
+   
+   public function searchmystudying(Request $request)
+   {
+       $data = $request->data;
+       $sales = Sale::where('user_id',Auth::id())->get();
+       $courses = Array();
+       foreach ($sales as $value) {
+            foreach ($value->courses as $course) {
+                    $search_course = Course::where('title','like','%'.$data.'%')->with(array('instructors' => function($query)
+                       {
+                        $query->where('user_id',Auth::id())->with('user');
+                       }))->with('sales')->where('id',$course->id)->get();
+                    array_push($courses, $search_course);
+                }    
+       }
+       
+       return response(json_encode($courses));
+   }
+
+
+
        
     //honey
     public function business_info(){

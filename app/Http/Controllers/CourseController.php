@@ -111,7 +111,7 @@ class CourseController extends Controller
             if ($role[0] == 'Instructor') {
                 $instructor = Instructor::where('user_id',$user->id)->first();
 
-                dd($instructor->id);
+                //dd($instructor->id);
             }
 
             $course->instructors()->attach($subject_id);
@@ -138,7 +138,12 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        return view('course.edit',compact('course'));
+        $categories=Category::all();
+        $subcategories=Subcategory::all();
+        $levels = Level::all();
+        $instructors=Instructor::all();
+      
+        return view('course.edit',compact('course','categories','subcategories','levels','instructors'));
     }
 
     /**
@@ -150,7 +155,76 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        //
+          //dd($request->oldphoto);
+
+          //dd($request->oldvideo);
+
+        $data[] = $request->situations;
+         $data1[]=$request->requirements;
+
+
+       
+
+        //if the file include, please upload (eg:input type="file")
+        if ($request->file()) {
+
+
+            //78748785858_bella.jpg
+            $fileName = time().'_'.$request->photo->getClientOriginalName();
+            //categoryimg/78748785858_bella.jpg
+            $filepath =$request->file('photo')->storeAs('courseimg',$fileName,'public');
+            $path ='/storage/'.$filepath;
+        }else{
+            $path=$request->oldphoto;
+        }
+        //dd($path);
+
+
+
+        if ($request->file()) {
+
+            //78748785858_bella.jpg
+            $fileName1 = time().'_'.$request->video->getClientOriginalName();
+            //categoryimg/78748785858_bella.jpg
+            $filepath1 =$request->file('video')->storeAs('coursevideo',$fileName1,'public');
+            $path1 ='/storage/'.$filepath1;
+        }else{
+            $path1=$request->oldvideo;
+        }
+
+         
+            $course->title = $request->title;
+            $course->subtitle=$request->subtitle;
+            $course->subcategory_id=$request->subcategoryid;
+            $course->level_id=$request->level;
+            $course->description = $request->description;
+            $course->requirements=json_encode($data);
+            $course->situation=json_encode($data1);
+            $course->certificate = $request->acceptTerms;
+            $course->share = 0;
+            $course->status =0;
+            $course->price=$request->pricing;
+            $course->image=$path;
+            $course->video=$path1;
+
+           
+            $course->save();
+
+
+            $auth_id = Auth::id();
+
+            $user = Auth::user();
+            $role = $user->getRoleNames();
+
+            if ($role[0] == 'Instructor') {
+                $instructor = Instructor::where('user_id',$user->id)->first();
+
+                //dd($instructor->id);
+            }
+
+            $course->instructors()->attach($subject_id);
+
+            return redirect()->route('backside.course.index');
     }
 
     /**
@@ -161,6 +235,7 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        //
+         $course->delete();
+         return redirect()->route('backside.course.index');
     }
 }

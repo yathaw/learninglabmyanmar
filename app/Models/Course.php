@@ -26,20 +26,35 @@ class Course extends Model
 						'subcategory_id',
 						];
 
-
+	// NYL
 	public function instructors($value='')
 	{
-		return $this->belongsToMany('App\Models\Instructor');
+
+		return $this->belongsToMany('App\Models\Instructor')->withTimestamps();
+
 	}
 
 	public function wishlists($value='')
 	{
 		return $this->hasMany('App\Models\Wishlist');
 	}
+
+	public function sales($value='')
+	{
+		return $this->belongsToMany('App\Models\Sale')->withTimestamps();
+	}
+
+	public function reviews($value='')
+	{
+		return $this->hasMany('App\Models\Review');
+	}
+
+
+
 	public function subcategory()
-	  {
-	      return $this->belongsTo('App\Subcategory');
-	  }
+	{
+	    return $this->belongsTo('App\Models\Subcategory');
+	}
 
 
 }

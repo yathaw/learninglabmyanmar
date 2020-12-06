@@ -13,25 +13,34 @@ use App\Notifications\QuestionNotification;
 use App\Notifications\AnswerNotification;
 use App\Models\Answer;
 use App\Events\AnswerEvent;
+use App\Models\Sale;
 
 
 class AccountController extends Controller
 {
 	public function mystudyings(){
 		$tabs = 0;
-    	return view('account.mystudyings',compact('tabs'));
+        $wishlists = Wishlist::paginate(8);
+        $user_id = Auth::id();
+        $sales = Sale::where('user_id',$user_id)->paginate(8);
+    	return view('account.mystudyings',compact('tabs','wishlists','sales'));
     }
 
     public function wishlist(){
 		$tabs = 2;
         $wishlists = Wishlist::paginate(8);
-    	return view('account.mystudyings',compact('tabs','wishlists'));
+        $user_id = Auth::id();
+        $sales = Sale::where('user_id',$user_id)->paginate(8);
+    	return view('account.mystudyings',compact('tabs','wishlists','sales'));
 
     }
 
     public function collection(){
 		$tabs = 1;
-    	return view('account.mystudyings',compact('tabs'));
+        $wishlists = Wishlist::paginate(8);
+        $user_id = Auth::id();
+        $sales = Sale::where('user_id',$user_id)->paginate(8);
+    	return view('account.mystudyings',compact('tabs','wishlists','sales'));
     }
 
     public function lecture($id){
