@@ -48,16 +48,15 @@ class AccountController extends Controller
     public function lecture($courseid){
         $course = Course::find($courseid);
 
-        $sections=Section::where('course_id', $courseid)
-                ->orderBy('sorting')->get();
-        dd($sections);
+        $unorderedsections=Section::where('course_id', $courseid)->get();
         
-        $contents=Content::all();
-        $lesson=Lesson::find($id);
+        $sections = $unorderedsections->sort();
+        // $contents=Content::all();
+        // $lesson=Lesson::find($id);
 
         $questions = Question::all();
         $answers = Answer::all();
-    	return view('account.lecturevideo',compact('questions','answers'));
+    	return view('account.lecturevideo',compact('questions','answers', 'course', 'sections'));
     }
 
     public function panel(){

@@ -19,6 +19,6 @@ class Section extends Model
 
     public function contents()
   {
-      return $this->hasMany('App\Models\Contents');
+      return $this->hasMany('App\Models\Content');
   }
 }

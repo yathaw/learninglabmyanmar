@@ -5,7 +5,7 @@
       	<div class="container">
 
             <div class="d-flex justify-content-between align-items-center">
-          		<h2> PHP Developer Course </h2>
+          		<h2> {{ $course->title }} </h2>
           		<ol>
             		<li><a href="{{ route('frontend.index') }}">Home</a></li>
                     <li><a href="{{ route('mystudyings') }}">My Studying </a></li>
@@ -30,167 +30,35 @@
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
 
                     <div class="accordion" id="accordionExample">
+
+                        @foreach($sections as $section_key => $section)
+
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    Accordion Item #1
+                            <h2 class="accordion-header" id="heading{{ $section->id }}">
+                                <button class="accordion-button {{ $section_key != 0 ? 'collapsed' : '' }}" type="button" data-toggle="collapse" data-target="#collapse{{ $section->id }}" aria-expanded="true" aria-controls="collapse{{ $section->id }}"> {{ $section->title }}
 
                                     <small class="fst-italic ml-4"> ( 10 Lectures • 31 min ) </small>
                                 </button>
                             </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                            <div id="collapse{{ $section->id }}" class="accordion-collapse collapse {{ $section_key == 0 ? 'show' : '' }}" aria-labelledby="heading{{ $section->id }}" data-parent="#accordionExample">
                                 <div class="accordion-body">
 
                                     <ul id="playlist" class="lh-lg list-group list-group-flush">
-                                        <li videoUrl="https://www.youtube.com/embed/rk9bBpsLy3M" videoId="1" class="list-group-item px-0">
+
+                                        @foreach($section->contents  as $content_key => $content)
+                                        <li videoUrl="https://www.youtube.com/embed/rk9bBpsLy3M" videoId="{{ $content->id }}" class="list-group-item px-0">
+
                                             <i class='bx bxs-checkbox-checked fs-4 text-success'></i>
-                                            <p class="mb-0 chapter1 text-primary d-inline-block">  
 
-                                                Lorem ipsum dolor sit amet
+                                            <p class="mb-0 chapter1 {{ $content_key == 0 ? 'text-primary' : '' }}  d-inline-block">  
+
+                                                {{ $content->title }}
                                                 
                                             </p>
                                             <span class="float-right"> 00:28 </span>
                                         </li>
 
-                                        <li videoUrl="https://www.youtube.com/embed/ceuBhmT8vIo?start=16" videoId="2" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4 '></i>
-                                            <p class="mb-0 chapter2 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/orb_bI5Vz_U" videoId="3" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter3 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/Mm91Mkn9BD0" videoId="4" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter4 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/H91tgdE7bOw?start=34" videoId="5" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter5 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/rk9bBpsLy3M" videoId="6" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter6 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/ceuBhmT8vIo?start=16" videoId="7" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter7 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/orb_bI5Vz_U" videoId="8" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter8 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/Mm91Mkn9BD0" videoId="9" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter9 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/H91tgdE7bOw?start=10" videoId="5" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter10 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/rk9bBpsLy3M" videoId="11" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter11 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/ceuBhmT8vIo?start=16" videoId="12" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter12 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/orb_bI5Vz_U" videoId="13" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter13 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/Mm91Mkn9BD0" videoId="14" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter14 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
-
-                                        <li videoUrl="https://www.youtube.com/embed/H91tgdE7bOw?start=34" videoId="15" class="list-group-item px-0"> 
-                                            <i class='bx bx-checkbox fs-4'></i>
-                                            <p class="mb-0 chapter15 text-primary d-inline-block">  
-
-                                                Lorem ipsum dolor sit amet
-                                                
-                                            </p>
-                                            <span class="float-right"> 00:28 </span>
-                                        </li>
+                                        @endforeach
 
                                     </ul>
                                     
@@ -199,42 +67,9 @@
                                 </div>
                             </div>
                         </div>
+
+                        @endforeach
                         
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingTwo">
-                              <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Accordion Item #2
-                              </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <p class="lh-lg">
-                                        <i class='bx bx-play-circle mr-2 bx-lg' ></i>
-                                        <a href="javascript:void(0)" class="text-primary text-decoration-underline videopreivewLink" data-toggle="modal" data-src="https://www.youtube-nocookie.com/embed/H91tgdE7bOw" data-target="#videopreviewModal"> Welcome to the course! </a>
-                                        <span class="float-right"> 00:28 </span>
-                                    </p>
-
-                                    <p class="lh-lg">
-                                        <i class='bx bx-play-circle mr-2 bx-lg' ></i>
-                                        <a href="" class="text-primary text-decoration-underline"> Welcome to the course! </a>
-                                        <span class="float-right"> 00:28 </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingThree">
-                                <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    Accordion Item #3
-                                </button>
-                            </h2>
-                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                                <div class="accordion-body">
-                                    <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     
                 </div>
