@@ -56,6 +56,7 @@ class LessonSeeder extends Seeder
         	$content->file = $lessonLists[$randomArrayno][0];
         	$content->type = $lessonLists[$randomArrayno][1];
         	$content->content_id = $a;
+            $content->duration='248.16';
         	$content->created_at  = now();
         	$content->updated_at  = now();
         	$content->save();
