@@ -80,13 +80,13 @@
 
 								<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
 								    <div class="card h-100">
-								    	<a href="{{ route('lecture','1') }}">
+								    	<a href="{{ route('lecture',$course->id) }}">
 								      		<img src="{{asset($course->image)}}" class="card-img-top" alt="...">
 								      	</a>
 
 
 								      	<div class="card-body">
-								      		<a href="{{ route('lecture','1') }}">
+								      		<a href="{{ route('lecture',$course->id) }}">
 									        	<h4 class="fontbold text-dark"> {{$course->title}} </h4>
 									        </a>
 									        <a href="{{ route('instructor','1') }}">

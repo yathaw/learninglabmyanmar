@@ -50,11 +50,13 @@ class SectionSeeder extends Seeder
 			$section->save();
 		}
 
-		$a = 2;
-		for ($a=2; $a <=7 ; $a++) { 
-            $course = Course::find($a);
-            $instructor = $course->instructors()->where('course_id',$a)->first();
+		$b = 2;
+		for ($a=2; $a <=9 ; $a++) { 
+            $course = Course::find($b);
+            $instructor = $course->instructors()->where('course_id',$b)->first();
             $instructorid = $instructor->pivot->instructor_id; 
+
+            $b++;
 
     		for ($i = 1; $i <= 10; $i++) {
                 
@@ -63,7 +65,7 @@ class SectionSeeder extends Seeder
                 $section->objective = $faker->text(100);
                 $section->sorting = $i;
                 $section->contenttype_id = 1;
-                $section->course_id = 2;
+                $section->course_id = $course->id;
                 $section->instructor_id = $instructorid;
     			$section->save();
     		}
