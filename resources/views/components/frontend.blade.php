@@ -132,10 +132,12 @@
 
                             <li class="nav-icon"><a href="#" >  Notification <span class="badge rounded-pill bg-danger float-right"> 0 </span> </a></li>
 
-                        
+                            @role('Instructor')
                             <li><a href="{{ route('panel') }}"> Instructor Dashboard </a></li>
+                            @endrole
+                            @role('Student')
                             <li><a href="#"> Teaching Mode On </a></li>
-
+                            @endrole
 
                             <li><hr class="dropdown-divider"></li>
                             

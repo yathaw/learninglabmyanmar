@@ -8,6 +8,8 @@ use App\Models\Section;
 use App\Models\Lesson;
 use App\Models\Assignment;
 
+use Owenoj\LaravelGetId3\GetId3;
+
 class ContentController extends Controller
 {
     /**
@@ -76,27 +78,50 @@ class ContentController extends Controller
 
         if($content->contenttype_id == 1){
             if($request->file()){
+
+        $track = new GetId3(request()->file('file'));
+        //get all info
+        $track->extractInfo();
+        //get title
+        $track->getTitle();
+        //get playtime
+        $duration_time=$track->getPlaytime();
+        $duration_sec=$track->getPlaytimeSeconds();
+        //dd($duration_sec);
+
             $fileName=time().'_'.$request->file->getClientOriginalName();
-            $path = $request->file('file')->storeAs('lessonimg', $fileName, 'public');
+            $path = $request->file('file')->storeAs('lesson', $fileName, 'public');
             $filepath='/storage/'.$path;
             }
 
             $lesson=new Lesson;
             $lesson->file=$filepath;
-            $lesson->type=1;
             $lesson->content_id=$content->id;
+
+            $file = $request->file;
+            $fileExtension =$file->extension();
+            //dd($fileExtension);
+            $lesson->type=$fileExtension;
+            $lesson->duration= $duration_sec;
             $lesson->save();
+
+
         }else if($content->contenttype_id == 3){
 
             if($request->file()){
             $fileName=time().'_'.$request->file->getClientOriginalName();
-            $path = $request->file('file')->storeAs('assignmentimg', $fileName, 'public');
+            $path = $request->file('file')->storeAs('assignment', $fileName, 'public');
             $filepath='/storage/'.$path;
             }
 
             $assignment=new Assignment;
             $assignment->file=$filepath;
-            $assignment->type=3;
+
+            $file = $request->file;
+            $fileExtension =$file->extension();
+            //dd($fileExtension);
+            $assignment->type=$fileExtension;
+
             $assignment->content_id=$content->id;
             $assignment->save();
 
