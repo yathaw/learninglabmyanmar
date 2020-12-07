@@ -8,7 +8,10 @@
       </div>
    </div>
    <div class="row row-cols-1 row-cols-md-3 g-4">
+
       @foreach($courses as $course)
+      @foreach($course->instructors as $row)
+      @if($row->pivot->instructor_id == $instructorid)
       <div class="col-12 col-md-6 col-lg-3">
          <div class="card h-100">
             <img class="card-img-top" src="{{asset($course->image)}}" alt="Unsplash">
@@ -84,6 +87,8 @@
             </ul>
          </div>
       </div>
+      @endif
+      @endforeach
       @endforeach
    </div>
    <div class="row">

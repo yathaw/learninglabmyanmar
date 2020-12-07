@@ -22,7 +22,14 @@ class CourseController extends Controller
         $categories = Category::all();
         $subcategories = Subcategory::all();
         $courses=Course::all();
-        return view('course.index',compact('courses','categories','subcategories'));
+
+        $authuser = Auth::user();
+        $instructor = $authuser->instructor;
+         $instructorid = $instructor->id;
+         //dd($authuser); user_id = 4 for Haleigh
+         //dd($instructorid);  //2 so, three courses appear
+        
+        return view('course.index',compact('courses','categories','subcategories','instructorid'));
     }
 
     /**
@@ -36,6 +43,8 @@ class CourseController extends Controller
         $subcategories=Subcategory::all();
         $levels = Level::all();
         $instructors=Instructor::all();
+
+
       
         return view('course.create',compact('categories','subcategories','levels','instructors'));
     }
