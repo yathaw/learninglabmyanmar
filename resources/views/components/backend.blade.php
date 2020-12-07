@@ -422,9 +422,8 @@
     <script src="{{ asset('plugin/quill/quill.js') }}"></script>
     <!-- Select 2 -->
     <script src="{{asset('plugin/select2/dist/js/select2.min.js')}}"></script> 
-
     
-
+    
     <script src="{{ asset('plugin/sortable/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('plugin/pusher.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('backend/js/noti.js')}}"></script>
