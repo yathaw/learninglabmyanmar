@@ -8,7 +8,10 @@
       </div>
    </div>
    <div class="row row-cols-1 row-cols-md-3 g-4">
+
       @foreach($courses as $course)
+      @foreach($course->instructors as $row)
+      @if($row->pivot->instructor_id == $instructorid)
       <div class="col-12 col-md-6 col-lg-3">
          <div class="card h-100">
             <img class="card-img-top" src="{{asset($course->image)}}" alt="Unsplash">
@@ -23,15 +26,13 @@
                         <i class="align-middle mr-2" data-feather="file-plus"></i> 
                         Add Course Content 
                         </a>
-                        <a class="dropdown-item text-info fw-bolder" href="#"> 
+                        <a class="dropdown-item text-info fw-bolder" href="{{ route('backside.course.show',$course->id) }}"> 
                         <i class="align-middle mr-2" data-feather="info"></i> Detail 
                         </a>
                         <a class="dropdown-item text-warning fw-bolder" href="{{ route('backside.course.edit',$course->id) }}"> 
                         <i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
                         </a>
-                        {{-- <a class="dropdown-item text-danger fw-bolder" href="{{ route('backside.course.destroy',$course->id) }}"> 
-                        <i class="align-middle mr-2" data-feather="x"></i> Remove 
-                        </a> --}}
+                      
                         <form method="post" action="{{ route('backside.course.destroy',$course->id) }}" class="d-inline-block ml-3" onsubmit="return confirm('Are you Sure want to Delete?')">
                                     @csrf
                                     @method('DELETE')
@@ -86,6 +87,8 @@
             </ul>
          </div>
       </div>
+      @endif
+      @endforeach
       @endforeach
    </div>
    <div class="row">

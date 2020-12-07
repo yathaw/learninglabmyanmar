@@ -15,6 +15,7 @@
 				<ul class="list-unstyled section_sortable">
 					@php $i=1; @endphp
 					@foreach($sections as $section)
+					@if($section->course_id == $course->id)
 					
 					<li class="section_sort" data-id="{{$section->id}}" data-sorting="{{ $section->sorting }}">
 						<div class="card my-2 border border-warning">
@@ -27,7 +28,7 @@
 										</div>
 										<div class="col-7">
 											<a href="#" data-toggle="collapse" data-target="#row{{$i}}" aria-expanded="false" aria-controls="row{{$i}}">
-												<b class="fontbold"> Section <span class="sectionNo">{{$i}}</span> : </b>{{$section->title}}
+												<b class="fontbold"> Section <span class="sectionNo">{{$section->sorting}}</span> : </b>{{$section->title}}
 
 												<small class="d-block mt-2">{{$section->objective}}</small>
 											</a>
@@ -123,6 +124,7 @@
 
 							</div>
 						</li>
+						@endif
 						@php $i++; @endphp
 						@endforeach
 
@@ -171,17 +173,35 @@
 								</div>
 							</div>
 
-						{{-- <div class="row mb-3">
+							{{-- @php 
+							var_dump($instructor->user);
+							die();
+							@endphp --}}
+                       @php
+                       $authuser=Auth::user();
+                       $instructor_companyid=$authuser->company_id;   //null
+                       //var_dump($instructor);
+                       //die();
+                       @endphp
+                       @if($instructor_companyid !=Null))
+						<div class="row mb-3">
 						    <label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
 						    <div class="col-sm-10">
-						    	<select class="form-control select2">
-						    		<option>1</option>
-						    		<option>2</option>
-						    		<option>3</option>
+						    	<select class="form-control select2" name=instructor>
+						    		@foreach($instructors as $instructor)
+						    		@foreach($instructor->courses as $instructor_course)
+						    		@if($instructor_course->pivot->course_id == $course->id)
+										<option value="{{$instructor->id}}">{{$instructor->user->name}}</option>
+									@endif
+									@endforeach
+									@endforeach
 						    	</select>
 						    </div>
-						</div> --}}
+						</div>
+						@endif
+
 					</div>
+
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 						<button type="submit" class="btn btn-primary">Save changes</button>
