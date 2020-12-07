@@ -23,15 +23,13 @@
                         <i class="align-middle mr-2" data-feather="file-plus"></i> 
                         Add Course Content 
                         </a>
-                        <a class="dropdown-item text-info fw-bolder" href="#"> 
+                        <a class="dropdown-item text-info fw-bolder" href="{{ route('backside.course.show',$course->id) }}"> 
                         <i class="align-middle mr-2" data-feather="info"></i> Detail 
                         </a>
                         <a class="dropdown-item text-warning fw-bolder" href="{{ route('backside.course.edit',$course->id) }}"> 
                         <i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
                         </a>
-                        {{-- <a class="dropdown-item text-danger fw-bolder" href="{{ route('backside.course.destroy',$course->id) }}"> 
-                        <i class="align-middle mr-2" data-feather="x"></i> Remove 
-                        </a> --}}
+                      
                         <form method="post" action="{{ route('backside.course.destroy',$course->id) }}" class="d-inline-block ml-3" onsubmit="return confirm('Are you Sure want to Delete?')">
                                     @csrf
                                     @method('DELETE')
