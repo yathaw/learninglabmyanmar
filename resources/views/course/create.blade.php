@@ -176,25 +176,18 @@
 
                             <h6> Photo / Video </h6>
                             <section>
-                                <div class="my-5"> 
                                 <label>Photo(<small class="text-danger">jpeg|bmp|png</small>)</label>
                                 
                                 {{-- <input type="file" name="photo" class="form-control-file @error('photo') is-invalid @enderror" > --}}
+                                <img id="blah" src="http://placehold.it/180" alt="your image" class="img-fluid d-block" />
 
-                                <div class="drop">
-                                    <div class="uploader">
-                                        <label class="drop-label">Drag and drop images here</label>
-                                        <input type="file" class="image-upload" id="photo" name="photo">
-                                    </div>
-                                    <div id="image-preview"></div>
-                                </div>
+                                <input type='file' onchange="readURL(this);" />
 
                                 @error('photo')
                                 <span class="invalid-feedback" role="alert">
                                 <strong>{{$message}}</strong>
                                 </span>
                                 @enderror
-                                </div>
 
                                 <div class="my-5"> 
                                 <label>Video(<small class="text-danger">mp4</small>)</label>
@@ -220,21 +213,22 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
-            var form = $("#example-form");
 
-            $('#photo').imageReader({
-                renderType: 'canvas',
-                onload: function(canvas) {
-                var ctx = canvas.getContext('2d');
-                    ctx.fillStyle = "orange";
-                    ctx.font = "12px Verdana";
-                    ctx.fillText("Filename : "+ this.name, 10, 20, canvas.width - 10);
-                    $(canvas).css({
-                        width: '100%',
-                        marginBottom: '-10px'
-                    });
+            readURL = function(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#blah')
+                            .attr('src', e.target.result);
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
                 }
-            });
+            }
+
+
+            var form = $("#example-form");
 
             form.steps({
                 headerTag: "h6",

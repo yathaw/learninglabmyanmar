@@ -14,6 +14,8 @@ use App\Notifications\AnswerNotification;
 use App\Models\Answer;
 use App\Events\AnswerEvent;
 use App\Models\Sale;
+use App\Models\Section;
+
 
 
 class AccountController extends Controller
@@ -43,10 +45,18 @@ class AccountController extends Controller
     	return view('account.mystudyings',compact('tabs','wishlists','sales'));
     }
 
-    public function lecture($id){
+    public function lecture($courseid){
+        $course = Course::find($courseid);
+
+        $unorderedsections=Section::where('course_id', $courseid)->get();
+        
+        $sections = $unorderedsections->sort();
+        // $contents=Content::all();
+        // $lesson=Lesson::find($id);
+
         $questions = Question::all();
         $answers = Answer::all();
-    	return view('account.lecturevideo',compact('questions','answers'));
+    	return view('account.lecturevideo',compact('questions','answers', 'course', 'sections'));
     }
 
     public function panel(){
