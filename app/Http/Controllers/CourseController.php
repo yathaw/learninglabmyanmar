@@ -8,6 +8,7 @@ use App\Models\Subcategory;
 use App\Models\Category;
 use App\Models\Level;
 use App\Models\Instructor;
+use App\Models\User;
 use Auth;
 
 class CourseController extends Controller
@@ -28,6 +29,7 @@ class CourseController extends Controller
          $instructorid = $instructor->id;
          //dd($authuser); user_id = 4 for Haleigh
          //dd($instructorid);  //2 so, three courses appear
+         
         
         return view('course.index',compact('courses','categories','subcategories','instructorid'));
     }
@@ -39,6 +41,12 @@ class CourseController extends Controller
      */
     public function create()
     {
+        $users = User::all();
+        $authuser = Auth::user();
+        $companyid = $authuser->company_id;
+        //dd($companyid);
+        //dd($authuser->name); 
+
         $categories=Category::all();
         $subcategories=Subcategory::all();
         $levels = Level::all();
@@ -46,7 +54,7 @@ class CourseController extends Controller
 
 
       
-        return view('course.create',compact('categories','subcategories','levels','instructors'));
+        return view('course.create',compact('categories','subcategories','levels','instructors','companyid','users','authuser'));
     }
 
     /**
