@@ -1,6 +1,6 @@
 <x-backend>
 
-	<h1 class="h3 mb-3"> Business </h1>
+	<h1 class="h3 mb-3"> Students Account </h1>
 
 	<div class="row">
 		<div class="col-12">
@@ -36,10 +36,6 @@
                                     <th> No </th>
                                     <th>User Name</th>
                                     <th>Email</th>
-                                    <th>Company Name</th>
-                                    <th>Logo</th>
-                                    <th>Address</th>
-                                    <th>Description</th>
                                     <th> Action </th>
                                 </tr>
                             </thead>
@@ -52,10 +48,11 @@
                             		<td>{{$i++}}</td>
                                    
                             		<td>{{$user->name}}</td>
+                                    <td>{{$user->email}}</td>
                             		
                             		<td>
-                            			<a href="" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                            			<a href="" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                            			<a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                            			<a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                             		</td>
                             	</tr>
                                
@@ -66,10 +63,6 @@
                                     <th> No </th>
                                     <th>User Name</th>
                                     <th>Email</th>
-                                    <th>Company Name</th>
-                                    <th>Logo</th>
-                                    <th>Address</th>
-                                    <th>Description</th>
                                     <th> Action </th>
                                 </tr>
                             </tfoot>
