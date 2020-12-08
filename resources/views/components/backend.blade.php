@@ -123,7 +123,7 @@
 							</li>
 
 							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Students </a>
+								<a class="sidebar-link" href="{{route('backside.students.index')}}"> Students </a>
 							</li>
 							
 						</ul>
@@ -148,7 +148,7 @@
 					<li class="sidebar-header">
 						Addons
 					</li>
-
+					@if(Auth::user()->getRoleNames()[0]=="Admin" || "Developer")
 					<li class="sidebar-item">
 						<a data-target="#components" data-toggle="collapse" class="sidebar-link collapsed">
 			              	<i class="align-middle" data-feather="briefcase"></i> <span class="align-middle"> Components </span>
@@ -169,17 +169,10 @@
 							<li class="sidebar-item">
 								<a class="sidebar-link" href=""> Level </a>
 							</li>
-
-							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Section Type </a>
-							</li>
-
-							<li class="sidebar-item">
-								<a class="sidebar-link" href=""> Content Type </a>
-							</li>
 							
 						</ul>
 					</li>
+					@endif
 
 				</ul>
 			</div>
@@ -202,8 +195,77 @@
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
+						@if(Auth::user()->getRoleNames()[0]=="Admin")
 						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-toggle="dropdown">
+							<a class="nav-icon dropdown-toggle checkoutnoti" href="#" id="alertsDropdown" data-toggle="dropdown">
+								<div class="position-relative">
+									<i class="align-middle" data-feather="bell"></i>
+									<span class="indicator">0</span>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right py-0" aria-labelledby="alertsDropdown">
+								
+								<div class="dropdown-menu-header checkoutpanelnoti">
+									
+								</div>
+								<div class="list-group" id="checkoutnoti_data">
+									<!-- <a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-danger" data-feather="alert-circle"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Update completed</div>
+												<div class="text-muted small mt-1">Restart server 12 to complete the update.</div>
+												<div class="text-muted small mt-1">30m ago</div>
+											</div>
+										</div>
+									</a> -->
+									<!-- <a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-warning" data-feather="bell"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Lorem ipsum</div>
+												<div class="text-muted small mt-1">Aliquam ex eros, imperdiet vulputate hendrerit et.</div>
+												<div class="text-muted small mt-1">2h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-primary" data-feather="home"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Login from 192.186.1.8</div>
+												<div class="text-muted small mt-1">5h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-success" data-feather="user-plus"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">New connection</div>
+												<div class="text-muted small mt-1">Christina accepted your request.</div>
+												<div class="text-muted small mt-1">14h ago</div>
+											</div>
+										</div>
+									</a> -->
+								</div>
+								<div class="dropdown-menu-footer">
+									<a href="#" class="text-muted">Show all notifications</a>
+								</div>
+								
+							</div>
+						</li>
+						@elseif(Auth::user()->getRoleNames()[0]=="Instructor")
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle questionsnoti" href="#" id="alertsDropdown" data-toggle="dropdown">
 								<div class="position-relative">
 									<i class="align-middle" data-feather="bell"></i>
 									<span class="indicator">0</span>
@@ -267,6 +329,7 @@
 								</div>
 							</div>
 						</li>
+								@endif
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-toggle="dropdown">
 								<div class="position-relative">
@@ -334,24 +397,52 @@
 								</div>
 							</div>
 						</li>
+						@if (Auth::check()) 
+
+						@php
+							if (Auth::user()->profile_photo_path != NULL) {
+								$profile = Auth::user()->profile_photo_path;
+							}
+							else{
+								if(Auth::user()->getRoleNames()[0]=="Developer"){
+									$profile = "profiles/developer.png";
+								}
+								else if(Auth::user()->getRoleNames()[0]=="Admin"){
+									$profile = "profiles/admin.png";
+								}
+								else{
+									$profile = "profiles/user.png";
+								}
+							}
+							
+						@endphp
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-toggle="dropdown">
-                <i class="align-middle" data-feather="settings"></i>
-              </a>
+                				<i class="align-middle" data-feather="settings"></i>
+              				</a>
 
 							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-toggle="dropdown">
-                <img src="{{ asset('backend/img/avatars/avatar.jpg') }}" class="avatar img-fluid rounded mr-1" alt="Charles Hall" /> <span class="text-dark">Charles Hall</span>
-              </a>
+                				<img src="{{ asset($profile) }}" class="avatar img-fluid rounded mr-1" alt="Charles Hall" style="object-fit: cover" /> <span class="text-dark"> {{Auth::user()->name}} </span>
+            				</a>
 							<div class="dropdown-menu dropdown-menu-right">
-								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile</a>
-								<a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="pie-chart"></i> Analytics</a>
+								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile </a>
+								<a class="dropdown-item" href="#">
+									<i class="align-middle mr-1" data-feather="lock"></i> Change Password 
+								</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="pages-settings.html"><i class="align-middle mr-1" data-feather="settings"></i> Settings & Privacy</a>
-								<a class="dropdown-item" href="#"><i class="align-middle mr-1" data-feather="help-circle"></i> Help Center</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">Log out</a>
+								
+								<form method="POST" action="{{ route('logout') }}">
+		                            @csrf
+
+		                            <x-jet-dropdown-link href="{{ route('logout') }}"
+		                                                onclick="event.preventDefault();
+		                                                            this.closest('form').submit();">
+		                                {{ __('Logout') }}
+		                            </x-jet-dropdown-link>
+		                        </form>
 							</div>
 						</li>
+						@endif
 					</ul>
 				</div>
 			</nav>
@@ -401,12 +492,12 @@
     <script src="{{ asset('plugin/quill/quill.js') }}"></script>
     <!-- Select 2 -->
     <script src="{{asset('plugin/select2/dist/js/select2.min.js')}}"></script> 
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sortable/0.9.13/jquery-sortable-min.js"></script>
-
+    
+    
     <script src="{{ asset('plugin/sortable/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('plugin/pusher.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('backend/js/noti.js')}}"></script>
+    <script src="{{ asset('plugin/admincheckoutnoti.js') }}"></script>
     <script type="text/javascript">
     	$.ajaxSetup({
             headers: {
