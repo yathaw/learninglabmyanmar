@@ -26,7 +26,7 @@ class LoginController extends Controller
             if (Auth::attempt($credentials)) {
                 // if success login
 
-                return redirect('courses');
+                return redirect('/');
             }
             // if failed login
             return redirect()->back()->with('status','Your phone and password is invalid our record !');
