@@ -14,7 +14,7 @@
         <div class="col-md-12">
           <div class="tile">
     <h2>Category Detail</h2>
-    <img src="{{asset($category->photo)}}" class="img-fluid" alt>
+    
     <p> {{$category->name}} </p>
     </div>
   </div>

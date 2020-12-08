@@ -8,6 +8,7 @@ use App\Models\Content;
 use App\Models\Lesson;
 use App\Models\Contenttype;
 use App\Models\Instructor;
+use Auth;
 
 use Illuminate\Http\Request;
 
