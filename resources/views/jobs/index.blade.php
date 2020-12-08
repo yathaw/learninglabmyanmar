@@ -56,15 +56,6 @@
                             	</tr>
                             	@endforeach
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th> No </th>
-                                    <th> Name </th>
-                                    <th> Action </th>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                            </tbody>
                         </table>
                     </div>
 				</div>

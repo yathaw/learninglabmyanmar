@@ -118,7 +118,7 @@
 												@endforeach
 											</ul>
 										</div>
-
+										{{-- {!! $contents->links() !!} --}}
 									</div>
 								</div>
 

@@ -39,23 +39,15 @@ class CategoryController extends Controller
         //dd($request);
 
         $request->validate([
-            "name"=>"required|min:5",
-            "photo"=>"required|mimes:jpeg,bmp,png"
+            "name"=>"required|min:5"
+            
         ]);
 
-        //if the file include, please upload (eg:input type="file")
-        if ($request->file()) {
-
-            //78748785858_bella.jpg
-            $fileName = time().'_'.$request->photo->getClientOriginalName();
-            //categoryimg/78748785858_bella.jpg
-            $filepath =$request->file('photo')->storeAs('categoryimg',$fileName,'public');
-            $path ='/storage/'.$filepath;
-        }
+        
 
             $category =new Category;
             $category->name = $request->name;
-            $category->photo = $path;
+            
             $category->save();
 
             return redirect()->route('category.index');
@@ -93,27 +85,10 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $request->validate([
-            "name"=>"required|min:5",
-            "photo"=>"sometimes|required|mimes:jpeg,bmp,png",
-            "oldphoto"=>"required"
+            "name"=>"required|min:5"
         ]);
-
-        //if the file include, please upload (eg:input type="file")
-        if ($request->file()) {
-
-            
-            //78748785858_bella.jpg
-            $fileName = time().'_'.$request->photo->getClientOriginalName();
-            //categoryimg/78748785858_bella.jpg
-            $filepath =$request->file('photo')->storeAs('categoryimg',$fileName,'public');
-            $path ='/storage/'.$filepath;
-        }else{
-            $path=$request->oldphoto;
-        }
-
             
             $category->name = $request->name;
-            $category->photo = $path;
             $category->save();
 
             return redirect()->route('category.index');

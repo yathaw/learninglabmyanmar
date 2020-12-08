@@ -8,7 +8,7 @@ use App\Models\Content;
 use App\Models\Lesson;
 use App\Models\Contenttype;
 use App\Models\Instructor;
-use Auth;
+
 
 use Illuminate\Http\Request;
 use Auth;
@@ -27,8 +27,11 @@ class SectionController extends Controller
     {      
         $course = Course::find($id);
         $sections=Section::orderBy('sorting')->get();
+
         
         $contents=Content::all();
+        // $contents=Content::paginate(8);
+
         $lesson=Lesson::find($id);
 
         $contenttypes=Contenttype::all();
