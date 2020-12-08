@@ -37,4 +37,8 @@ class LoginController extends Controller
 
 
     }
+
+    public function backendLogin(){
+        return view('auth.backendlogin');
+    }
 }

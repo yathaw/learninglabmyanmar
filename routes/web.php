@@ -114,6 +114,9 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
 
 });
 Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
+
+// Backend Login
+Route::get('/backside/login',[LoginController::class, 'backendLogin'])->name('backside.login');
 // ------------------------------------------------------------------------
 
 /*
