@@ -40,12 +40,18 @@
                             </thead>
                             
                             <tbody>
+                                @php
+                                    $i=1;
+                                @endphp
+
+                                 @foreach($categories as $row)
                                 <tr>
-                                    <th>1</th>
-                                    <th>IT</th>
-                                    <th><a href="{{route('backside.category.edit',1)}}" class="btn btn-success">Edit</a>
-                                    <a href="{{route('backside.category.show',1)}}" class="btn btn-info">Show</a></th>
+                                    <td>{{$i++}}</td>
+                                    <td>{{$row->name}}</td>
+                                    <th><a href="{{route('backside.category.edit',$row->id)}}" class="btn btn-success">Edit</a>
+                                    <a href="{{route('backside.category.show',$row->id)}}" class="btn btn-info">Show</a></th>
                                 </tr>
+                                @endforeach
                         
                             </tbody>
                         </table>
