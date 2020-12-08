@@ -18,9 +18,14 @@ use App\Models\User;
 class FrontendController extends Controller
 {
     public function index(){
-        $limitcategories = Category::all();
-        $subcategories = Subcategory::all();
-    	return view('frontend.index',compact('limitcategories'));
+        $limitcategories = Category::all()->random(3);
+        $newest_courses = Course::orderBy('created_at', 'DESC')->take(6)->get();
+        $top_courses = Course::all()->random(6); // rating ပေါ်မူတည်ပြီး တွက်မယ် လောလောဆယ် random ပဲ
+        $wishlists = Wishlist::all();
+
+
+        // dd($top_courses);
+    	return view('frontend.index',compact('limitcategories','newest_courses', 'top_courses', 'wishlists'));
     }
 
     public function courses(){
