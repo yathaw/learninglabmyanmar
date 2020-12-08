@@ -12,4 +12,9 @@ class Assignment extends Model
     use SoftDeletes;
 
     protected $fillable=['file','content_id'];
+
+    public function content()
+	{
+	   	return $this->belongsTo('App\Models\Content');
+	}
 }

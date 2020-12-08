@@ -14,14 +14,19 @@ class Content extends Model
     protected $fillable=['title','description','sorting','contenttype_id','section_id'];
 
     public function lessons()
-  {
-      return $this->hasMany('App\Models\Lesson');
-  }
+    {
+        return $this->hasMany('App\Models\Lesson');
+    }
 
-  public function section()
-  {
-      return $this->belongsTo('App\Models\Section');
-  }
+    public function assignments()
+    {
+        return $this->hasMany('App\Models\Assignment');
+    }
+
+    public function section()
+    {
+        return $this->belongsTo('App\Models\Section');
+    }
 
     
 }

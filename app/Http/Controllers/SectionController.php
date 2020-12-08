@@ -11,6 +11,7 @@ use App\Models\Instructor;
 use Auth;
 
 use Illuminate\Http\Request;
+use Auth;
 
 use Illuminate\Support\Facades\DB;
 
@@ -90,32 +91,19 @@ class SectionController extends Controller
         }
         /*insert sorting*/
 
-        // if(Auth::user->company_id == null){
-
-            $auth_id = Auth::id();
-
-            $user = Auth::user();
-            $role = $user->getRoleNames();
-
-            if ($role[0] == 'Instructor') {
-                $instructor = Instructor::where('user_id',$user->id)->first();
-
-                //dd($instructor->id);
-        }
-
-        //  $section->instructor_id=$instructor;
-        // }else{
-            
-        //     if($course->id == $instructor->course_id){
-        //         $instructors=Instructor::all();
-        //     }
-           
-        //     $section->instructor_id=$instructors;
-        // }
-
-       
+        $authuser = Auth::user();
+        $instructor = $authuser->instructor;
+        $instructorid= $instructor->id;
+            //dd($instructorid);
+            if($authuser->company_id == NULL){
+               
+                $section->instructor_id=$instructorid;
+            }else{
+                $section->instructor_id=$request->instructor;
+            }
 
       $section->save();
+
 
       return redirect()->route('backside.sectionlist',$request->courseid);
 
@@ -154,37 +142,47 @@ class SectionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Section $section)
-    {
+    {  //dd($section);
         $request->validate([
             "title"=>"required|min:5",
             "objective"=>"required",
-            "contenttype"=>"sometimes"
         ]);
 
         $section->title=$request->title;
         $section->objective=$request->objective;
         
         $section->contenttype_id=$request->contenttype;
-        $section->course_id=6;
+        $section->course_id=$request->courseid;
+        //$section->sorting=1;
 
-        $section->sorting=$section->sorting;
-        $courseid=Section::whereNotNull('course_id')->get();
-        //dd($courseid);
+        $hasCourses_inSection = Section::where('course_id', $request->courseid)->get();
 
-        if($courseid){
-            //$latestitems = Item::latest()->take(3)->get();
+        foreach($hasCourses_inSection as $hasCourse_inSection){
+            $sorting = $hasCourse_inSection->sorting;
+            $sorting_data = ++$sorting;
+        }
 
-            $sortingnum=Section::increment('sorting',1);
-            $section->sorting=$sortingnum;
+        /*insert sorting*/
+        if($hasCourses_inSection->isEmpty()){
+        $section->sorting = 1;
         }else{
-           $section->sorting=1;
-       }
+            $section->sorting = $sorting_data;
+        }
+        /*insert sorting*/
 
+        $authuser = Auth::user();
+        $instructor = $authuser->instructor;
+        $instructorid= $instructor->id;
+        $section->instructor_id=$instructorid;
+            //dd($instructorid);
+            // if($authuser->company_id == NULL){
+               
+            //     $section->instructor_id=$instructorid;
+            // }else{
+            //     $section->instructor_id=$request->instructor;
+            // }
 
-
-       $section->instructor_id=1;
-
-       $section->save();
+      $section->save();
 
        return redirect()->route('backside.section.index');
 
