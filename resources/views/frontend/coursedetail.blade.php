@@ -44,7 +44,40 @@
                                 </div>
 
                                 <p> Created By 
+                                    @php
+                                        $company_array = array();
+                                    @endphp
                                     @foreach($course->instructors as $instructor)
+                                    @php
+                                        // instructor info
+                                        $instructor_name = $instructor->user->name;
+                                        $instructor_jobtitle = $instructor->user->jobtitle->name;
+                                        $instructor_bio = $instructor->bio;
+                                        $instructor_headline = $instructor->headline;
+
+                                        
+                                        
+
+                                    @endphp
+
+                                    @if($instructor->user->company)
+
+
+                                    @php
+                                        // company info
+                                        $company_name = $instructor->user->company->name;
+                                        $company_logo = $instructor->user->company->logo;
+                                        $company_address = $instructor->user->company->address;
+                                        $company_description = $instructor->user->company->description;
+                                    @endphp
+
+
+                                        @php
+                                            array_push($company_array, "true");
+                                        @endphp
+
+                                        
+                                    @else
                                         <a href="javascript:void(0)" data-toggle="modal" data-target="#instructordetailModal"> 
                                     
                                         {{$instructor->user->name}} 
@@ -55,16 +88,49 @@
                                                         Jobtitle
                                                       @endif ) 
                                              </small>
+                                    @endif
                                     @endforeach
+
+                                    @if($company_array)
+                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#companyModal"> 
+                                    
+                                        {{$instructor->user->company->name}} 
+                                    
+                                        </a> 
+                                    @endif
                                 </p>
-                                
+
+
+                                @php 
+                                    $array = array();
+                                @endphp
+
+                                @if(count($course->instructors) == 0)
+
+                                    @php
+                                        array_push($array, "true");
+                                    @endphp
+                                @endif
+
+
                                 @if(Auth::user())
-                                @foreach($course->instructors as $instructor)
                                 @if(Auth::user()->instructor)
+
+                                @foreach($course->instructors as $instructor)
 
 
                                 @if($instructor->pivot->instructor_id != Auth::user()->instructor->id)
-                                <a href="javascript:void(0)" class="btn btn-outline-light 
+
+                                    @php
+                                        array_push($array, "true");
+                                    @endphp
+
+                                @endif
+                                @endforeach
+
+                                @else
+
+                                    <a href="javascript:void(0)" class="btn btn-outline-light 
                                         @foreach($wishlists as $wishlist)
                                         @if($wishlist->course_id == $course->id && Auth::id() == $wishlist->user_id)
 
@@ -72,12 +138,24 @@
 
                                         @endif 
                                         @endforeach btn_wishlist" data-course_id = "{{$course->id}}"> Wishlist 
-                                    <i class='bx bx-heart bx-lg ml-2'></i>
-                                </a>
+                                        <i class='bx bx-heart bx-lg ml-2'></i>
+                                    </a>
 
                                 @endif
+
+
+                                @if($array)
+                                    <a href="javascript:void(0)" class="btn btn-outline-light 
+                                        @foreach($wishlists as $wishlist)
+                                        @if($wishlist->course_id == $course->id && Auth::id() == $wishlist->user_id)
+
+                                            active
+
+                                        @endif 
+                                        @endforeach btn_wishlist" data-course_id = "{{$course->id}}"> Wishlist 
+                                        <i class='bx bx-heart bx-lg ml-2'></i>
+                                    </a>
                                 @endif
-                                @endforeach
                                 
 
                                 <a href="" class="btn btn-outline-light"> Share on Facebook 
@@ -87,7 +165,10 @@
                                 <a href="javascript:void(0)" class="btn btn-outline-light" data-toggle="modal" data-target="#reportModal"> Report
                                     <i class='bx bx-error-alt bx-lg ml-2'></i>
                                 </a>
+
                                 @else
+
+
                                 <button href="" class="btn btn-outline-light unauth"> Wishlist 
                                     <i class='bx bx-heart bx-lg ml-2'></i>
                                 </button>
@@ -107,7 +188,7 @@
                                     <div class="embed-responsive embed-responsive-4by3">
                                         
                                         
-                                        <iframe height="300" src="https://www.youtube-nocookie.com/embed/H91tgdE7bOw?start=34;autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"  class="card-img-top"></iframe>
+                                        <iframe height="300" src="{{asset($course->video)}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"  class="card-img-top"></iframe>
                                     </div>
                                     <div class="card-body text-muted">
                                         <p>
@@ -118,49 +199,72 @@
                                         </p>
 
                                         <div class="d-grid gap-2">
+
+                                        @php 
+                                            $array = array();
+                                        @endphp
+
+                                        @if(count($course->instructors) == 0)
+
+                                            @php
+                                                array_push($array, "true");
+                                            @endphp
+                                        @endif
+
+
                                            @if(Auth::user())
+                                            @if(Auth::user()->instructor)
+
                                             @foreach($course->instructors as $instructor)
-                                                @if(Auth::user()->instructor)
 
 
-                                                    @if($instructor->pivot->instructor_id != Auth::user()->instructor->id)
+                                                @if($instructor->pivot->instructor_id != Auth::user()->instructor->id)
 
-
-                                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
-                                                        data-id="{{$course->id}}" data-course_title="{{$course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$course->price}}" data-image = "{{$course->image}}"
-                                                            {{-- for wishlist --}}
-                                                            @foreach($wishlists as $wishlist)
-                                                            @if($wishlist->course_id == $course->id && Auth::id() == $wishlist->user_id)
-
-                                                            data-wishlist = "save"
-
-                                                            @endif 
-                                                            @endforeach
-                                                            
-                                                            >
-                                                        Add To Cart
-                                                        </a>
+                                                    @php
+                                                        array_push($array, "true")
+                                                    @endphp
                                                    
-                                                    @endif
-                                                    @else
-                                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
-                                                        data-id="{{$course->id}}" data-course_title="{{$course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$course->price}}" data-image = "{{$course->image}}"
-                                                            {{-- for wishlist --}}
-                                                            @foreach($wishlists as $wishlist)
-                                                            @if($wishlist->course_id == $course->id && Auth::id() == $wishlist->user_id)
-
-                                                            data-wishlist = "save"
-
-                                                            @endif 
-                                                            @endforeach
-                                                            
-                                                            >
-                                                        Add To Cart
-                                                        </a>
-                                                    
-
                                                 @endif
+                                                    
                                             @endforeach
+
+                                            @else
+                                                <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
+                                                data-id="{{$course->id}}" data-course_title="{{$course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$course->price}}" data-image = "{{$course->image}}"
+                                                    {{-- for wishlist --}}
+                                                    @foreach($wishlists as $wishlist)
+                                                    @if($wishlist->course_id == $course->id && Auth::id() == $wishlist->user_id)
+
+                                                    data-wishlist = "save"
+
+                                                    @endif 
+                                                    @endforeach
+                                                    
+                                                    >
+                                                Add To Cart
+                                                </a>
+                                            
+
+                                            @endif
+
+
+                                            @if($array)
+                                                <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
+                                                    data-id="{{$course->id}}" data-course_title="{{$course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$course->price}}" data-image = "{{$course->image}}"
+                                                        {{-- for wishlist --}}
+                                                        @foreach($wishlists as $wishlist)
+                                                        @if($wishlist->course_id == $course->id && Auth::id() == $wishlist->user_id)
+
+                                                        data-wishlist = "save"
+
+                                                        @endif 
+                                                        @endforeach
+                                                        
+                                                        >
+                                                    Add To Cart
+                                                </a>
+                                            @endif
+
                                             @else
                                                 <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Add To Cart</button>
                                             @endif
@@ -219,14 +323,20 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="fontbold"> What you'll Learn </h4>
+                                    @php
+                                        // $data = json_decode($course->outline,true);
+                                        $data = json_decode($course->outline,true);
+
+                                        
+                                    @endphp
 
                                     <ul type="none" class="lh-lg">
-                                        <li> <i class="icofont-check-alt"></i> Beginner level introduction to Docker</li>
-                                        <li> <i class="icofont-check-alt"></i> Build Docker images using Dockerfiles with Hands-On Exercises</li>
-                                        <li> <i class="icofont-check-alt"></i> Build Application stack using Docker Compose Files with Hands-On Exercises</li>
-                                        <li> <i class="icofont-check-alt"></i> Basic Docker Commands with Hands-On Exercises</li>
-                                        <li> <i class="icofont-check-alt"></i> Understand what Docker Compose is</li>
-                                        <li> <i class="icofont-check-alt"></i> Understand what Docker Swarm is</li>
+                                        @foreach($data as $result)
+                                            @foreach($result as $res)
+                                                <li> <i class="icofont-check-alt"></i> {{$res}} </li>
+                                            @endforeach
+                                        @endforeach
+                                        
                                     </ul>
                                 </div>
                             </div>
@@ -238,7 +348,19 @@
                                 <div class="card-body">
                                     <h4 class="fontbold"> Requirements </h4>
 
-                                    {!! $course->requirements !!}
+                                    @php
+                                        // $data = json_decode($course->requirements,true);
+                                        $data = json_decode( $course->requirements,true);
+                                    @endphp
+
+                                    <ul type="none" class="lh-lg">
+                                        @foreach($data as $result)
+                                            @foreach($result as $res)
+                                                <li> <i class="icofont-check-alt"></i> {{$res}} </li>
+                                            @endforeach
+                                        @endforeach
+                                        
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -246,62 +368,70 @@
                         {{-- Course content --}}
                         <div class="col-12 mt-5">
                             <h4 class="fontbold"> Course content </h4>
+                            @php
+                                $count_section = count($sections);
+                            @endphp
                             
-                            <p class="mt-3"> 60 Sections • 623 Lectures • 62h 58m total length </p>
+                            <p class="mt-3"> {{$count_section}} Sections • 623 Lectures • 62h 58m total length </p>
 
                             <div class="accordion" id="accordionExample">
+                               
+                                @foreach($sections as $key => $section)
+                                @php
+                                    $count_content = count($section->contents);
+                                @endphp
+
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
-                                        <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Accordion Item #1
+                                        <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse{{$key}}" aria-expanded="true" aria-controls="collapse{{$key}}">
+                                            {{$section->title}}
 
-                                            <small class="fst-italic ml-4"> ( 10 Lectures • 31 min ) </small>
+                                            <small class="fst-italic ml-4"> ( {{$count_content}} Lectures • 31 min ) </small>
                                         </button>
                                     </h2>
-                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div id="collapse{{$key}}" class="accordion-collapse collapse @if($key == 0) show @endif" aria-labelledby="headingOne" data-parent="#accordionExample">
                                         <div class="accordion-body">
-                                            
-                                            <p class="lh-lg">
+                                            {{-- <p class="lh-lg">
                                                 <i class='bx bx-play-circle mr-2 bx-lg' ></i>
                                                 <a href="javascript:void(0)" class="text-primary text-decoration-underline videopreivewLink" data-toggle="modal" data-src="https://www.youtube-nocookie.com/embed/H91tgdE7bOw" data-target="#videopreviewModal"> Welcome to the course! </a>
                                                 <span class="float-right"> 00:28 </span>
-                                            </p>
+                                            </p> --}}
+                                            
+                                        @php
+                                            $data = App\Models\Content::where('section_id',$section->id)->orderByRaw("CAST(sorting as Integer) ASC")->get()
+                                        @endphp
 
-                                            <p class="lh-lg">
-                                                <i class='bx bx-play-circle mr-2 bx-lg' ></i>
-                                                <a href="" class="text-primary text-decoration-underline"> Welcome to the course! </a>
-                                                <span class="float-right"> 00:28 </span>
-                                            </p>
+                                        @foreach($data as $content)
+                                            @foreach($content->lessons as $lesson)
+
+
+                                                <p class="lh-lg">
+                                                    <i class='bx bx-play-circle mr-2 bx-lg' ></i>
+                                                        <a href="javascript:void(0)" class="text-primary text-decoration-underline videopreivewLink" data-toggle="modal" data-src="{{$lesson->file}}" data-target="#videopreviewModal"> {{$content->title}} </a>
+                                                    <span class="float-right"> 
+                                                        @if($lesson->type == "MP4") 
+                                                            00;30
+                                                        @else
+                                                            {{$lesson->type}}
+                                                        @endif
+                                                    </span>
+                                                </p>
+                                                {{-- <p class="lh-lg">
+                                                    <i class='bx bx-play-circle mr-2 bx-lg' ></i>
+                                                    <a href="" class="text-primary text-decoration-underline"> hlelo </a>
+                                                    <span class="float-right"> 00:28 </span>
+                                                </p> --}}
+                                            @endforeach
+                                        @endforeach
 
                                         </div>
                                     </div>
                                 </div>
+
+                                @endforeach
+
                                 
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingTwo">
-                                      <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        Accordion Item #2
-                                      </button>
-                                    </h2>
-                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="headingThree">
-                                        <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                            Accordion Item #3
-                                        </button>
-                                    </h2>
-                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </div>
 
                         </div>
@@ -545,8 +675,8 @@
                                 <img src="{{ asset('frontend/img/team/team-3.jpg') }}" class="img-fluid rounded-circle">
                             </div>
                             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
-                                <h3 class="text-dark fontbold"> Nyi Ye Lin </h3>
-                                <p> Senior Web Developer </p>
+                                <h3 class="text-dark fontbold"> {{$instructor_name}} </h3>
+                                <p> {{$instructor_jobtitle}} </p>
 
                                 <div class="mt-2">
                                     <p> 
@@ -573,22 +703,7 @@
 
                             <div class="col-12">
                                 {{-- Bio --}}
-                                <p class="lh-base"> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>    
+                                <p class="lh-base"> {!! $instructor_bio !!} </p>    
                             </div>
                         </div>
                     </div>
@@ -603,6 +718,67 @@
             </div>
         </div>
     </div>
+
+    {{-- company Modal --}}
+    @if($company_array)
+    <div class="modal fade" id="companyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Company Info </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+                                <img src="{{ asset($company_logo) }}" class="img-fluid rounded-circle">
+                            </div>
+                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12">
+                                <h3 class="text-dark fontbold"> {{$company_name}} </h3>
+                                
+
+                                <div class="mt-2">
+                                    <p> 
+                                        <i class='bx bxs-star bx-lg custom_primary_Color mr-2' ></i> 
+                                        4.7 Ratings 
+                                    </p>
+
+                                    <p> 
+                                        <i class="icofont-badge custom_primary_Color mr-2"></i>
+                                        287,828 Reviews 
+                                    </p>
+
+                                    <p> 
+                                        <i class="icofont-users-social custom_primary_Color mr-2"></i>
+                                        887,947 Students 
+                                    </p>
+
+                                    <p> 
+                                        <i class='bx bxs-videos mr-2 custom_primary_Color bx-lg'></i>
+                                        9 Courses 
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                {{-- Bio --}}
+                                <p class="lh-base"> {!! $company_description !!} </p>    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- <div class="modal-footer">
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <a class="btn btn-warning" href="{{ route('instructor','1') }}"> View More </a>
+                    </div>
+                </div> --}}
+
+            </div>
+        </div>
+    </div>
+    @endif
 
     <!-- Report Modal -->
     <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -651,23 +827,33 @@
 
 
             // wishlist save
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+           
+            $('.btn_wishlist').click(function(){
+            var id = $(this).data('course_id');
+            console.log(id);
+            $.ajax({
+                url : '{{route("wishlist_save")}}',
+                method : 'post',
+                data : {id : id},
+                success:function(res){
+                    if(res == "ok"){
+                        $('.btn_wishlist').addClass('active');
+                    }else{
+                         $('.btn_wishlist').removeClass('active');
+
                     }
-                });
+                }
 
-              
+            })
 
+        })
 
-
-
-            
-
+  
             // Video Preview
             var $videoSrc;
             $(".videopreivewLink").click(function() {
                 $videoSrc = $(this).attr("data-src");
+                alert($videoSrc);
                 console.log("button clicked" + $videoSrc);
             });
 

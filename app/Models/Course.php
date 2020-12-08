@@ -56,5 +56,7 @@ class Course extends Model
 	    return $this->belongsTo('App\Models\Subcategory');
 	}
 
-
+	public function sections(){
+    	return $this->hasMany('App\Models\Section');
+    }
 }

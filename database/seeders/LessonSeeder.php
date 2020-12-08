@@ -49,7 +49,7 @@ class LessonSeeder extends Seeder
 
 		
     	
-    	for ($a=1; $a < 588; $a++) {
+    	for ($a=1; $a < 522; $a++) {
     		$randomArrayno = $faker->numberBetween(0, 25); 
 
         	$content = new Lesson;

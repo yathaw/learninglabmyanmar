@@ -79,7 +79,6 @@
                     </li> --}}
 
 
-x  
 
                     <li class="drop-down {{ Request::segment(1) === 'courses' ? 'active' : '' }}"><a href="{{ route('courses') }}"> Category </a>
                         <ul>

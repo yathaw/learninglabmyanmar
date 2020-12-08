@@ -257,7 +257,7 @@ class ContentSeeder extends Seeder
 	        array($faker->sentence(3), '',1),
 	    ];
 
-	    for ($c=2; $c < 69; $c++) { 
+	    for ($c=12; $c < 69; $c++) { 
         	for ($d=1; $d < 8; $d++) { 
 	        	$content = new Content;
 	        	$content->title = $faker->sentence(3);

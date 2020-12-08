@@ -13,8 +13,12 @@ class Section extends Model
 
     protected $fillable=['title','objective','sorting','course_id'];
 
+    public function course(){
+    	return $this->belongsTo('App\Models\Course');
+    }
+
     public function contents()
   {
-      return $this->hasMany('App\Models\Contents');
+      return $this->hasMany('App\Models\Content');
   }
 }

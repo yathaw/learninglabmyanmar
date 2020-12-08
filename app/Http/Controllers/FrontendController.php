@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Wishlist;
 use Auth;
 use App\Models\Sale;
+use App\Models\Section;
 
 use App\Models\Subcategory;
 use App\Models\Category;
@@ -26,7 +27,7 @@ class FrontendController extends Controller
     public function courses(){
 
         $wishlists = Wishlist::all();
-        $courses = Course::paginate(8);
+        $courses = Course::where('status',1)->paginate(8);
         $allcourses = Course::all();
         
     	return view('frontend.courses',compact('courses','allcourses','wishlists'));
@@ -34,8 +35,10 @@ class FrontendController extends Controller
 
     public function coursedetail($id){
         $course = Course::find($id);
+        $sections = Section::where('course_id',$id)->orderByRaw("CAST(sorting as Integer) ASC")->get();
         $wishlists = Wishlist::where('user_id',Auth::id())->get();
-    	return view('frontend.coursedetail',compact('course','wishlists'));
+
+    	  return view('frontend.coursedetail',compact('course','wishlists','sections'));
     }
 
     public function addtocart(){
@@ -72,7 +75,7 @@ class FrontendController extends Controller
 
     public function wishlist_save(Request $request)
     {
-        dd(request('id'));
+        // dd($request);
         $course_id = $request->id;
         $wishlists = Wishlist::withTrashed()->get();
         $user_id = Auth::id();
