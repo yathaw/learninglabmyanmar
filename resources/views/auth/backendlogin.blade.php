@@ -45,7 +45,22 @@
 										<img src="{{ asset('logo/logotext_color.png') }}" class="img-fluid mx-auto d-block">
 
 									</div>
-									<form method="POST" action="{{ route('login') }}">
+
+									@if ($errors->any())
+				                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+				                        <x-jet-validation-errors class="mb-4" />
+				                        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+				                    </div>
+				                    @endif
+
+				                    
+				                    @if (session('status'))
+				                        <div class="mb-4 font-medium text-sm text-center text-danger">
+				                            {{ session('status') }}
+				                        </div>
+				                    @endif
+				                    
+									<form method="POST" action="{{ route('backside_login') }}">
             						@csrf
 										<div class="mb-3">
 											<label class="form-label">Email</label>

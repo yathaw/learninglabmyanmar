@@ -431,15 +431,15 @@
 								</a>
 								<div class="dropdown-divider"></div>
 								
-								<form method="POST" action="{{ route('logout') }}">
-		                            @csrf
 
-		                            <x-jet-dropdown-link href="{{ route('logout') }}"
-		                                                onclick="event.preventDefault();
-		                                                            this.closest('form').submit();">
-		                                {{ __('Logout') }}
-		                            </x-jet-dropdown-link>
-		                        </form>
+								<a class="dropdown-item" href="javascript:void(0)" onclick="event.preventDefault();
+			                     document.getElementById('logout-form').submit();">Logout
+			                 </a>
+
+			                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+			                        @csrf
+			                    </form>
+
 							</div>
 						</li>
 						@endif

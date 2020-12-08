@@ -117,6 +117,8 @@ Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorti
 
 // Backend Login
 Route::get('/backside/login',[LoginController::class, 'backendLogin'])->name('backside.login');
+Route::post('backsidelogin_data',[LoginController::class,'backsidelogin_store'])->name('backside_login');
+
 // ------------------------------------------------------------------------
 
 /*

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
+use Auth;
 
 class LoginController extends Controller
 {
@@ -21,19 +21,49 @@ class LoginController extends Controller
     		$user_phone = $user->phone;
 	    	$user_password = $user->password;
 	    	//dd($user_password,$user_phone);
-	    	if(!Hash::check($password,$user_password ) && $user_phone == $phone){
+            $credentials = $request->only('phone', 'password');
 
-	    		return redirect()->back()->with('status','Yor phone and password is invalid our record !');
-	    	}else{
-	    		
-	    		return redirect()->route('frontend.index');
+            if (Auth::attempt($credentials)) {
+                // if success login
 
-	    	}
+                return redirect('courses');
+            }
+            // if failed login
+            return redirect()->back()->with('status','Your phone and password is invalid our record !');
+
+	    	
     	}else{
-    		return redirect()->back()->with('status','Yor phone and password is invalid our record !');
+    		return redirect()->back()->with('status','Your phone and password is invalid our record !');
 
     	}
-    	
+
+
+    }
+
+    public function backsidelogin_store(Request $request)
+    {
+        $email = $request->email;
+        $password = $request->password;
+        
+
+        $user= User::where('email',$email)->first();
+        if($user != null){
+
+            $credentials = $request->only('email', 'password');
+
+            if (Auth::attempt($credentials)) {
+                // if success login
+
+                return redirect('panel');
+            }
+            // if failed login
+            return redirect()->back()->with('status','Your email is invalid our record !');
+
+            
+        }else{
+            return redirect()->back()->with('status','Your email is invalid our record !');
+
+        }
 
 
     }
