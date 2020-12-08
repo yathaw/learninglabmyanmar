@@ -8,7 +8,7 @@
 				<div class="card-header">
 					<h5 class="card-title mb-0"> All Lists 
 
-					<a href="{{route('jobtitles.create')}}" class="btn custom_primary_btnColor float-right" >
+					<a href="{{route('backside.jobtitles.create')}}" class="btn custom_primary_btnColor float-right" >
 		            	<i class="align-middle fas fa-plus"></i>
 		            </a>
 
@@ -45,25 +45,16 @@
                             		<td>{{$i++}}</td>
                             		<td>{{$jobtitle->name}}</td>
                             		<td>
-                            			<a href="{{route('jobtitles.edit',$jobtitle->id)}}" class="btn btn-warning"><i class="far fa-edit"></i></a>
-                            			<form action="{{route('jobtitles.destroy',$jobtitle->id)}}" method="POST" class="d-inline-block">
+                            			<a href="{{route('backside.jobtitles.edit',$jobtitle->id)}}" class="btn btn-warning text-dark"><i class="align-middle " data-feather="edit-2"></i> </a>
+                            			<form action="{{route('backside.jobtitles.destroy',$jobtitle->id)}}" method="POST" class="d-inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-danger" type="submit"><i class="fas fa-trash-restore"></i></button>
+                                            <button class="btn btn-danger" type="submit"><i class="align-middle" data-feather="x"></i></button>
                                             
                                         </form>
                             		</td>
                             	</tr>
                             	@endforeach
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th> No </th>
-                                    <th> Name </th>
-                                    <th> Action </th>
-                                </tr>
-                            </tfoot>
-                            <tbody>
                             </tbody>
                         </table>
                     </div>

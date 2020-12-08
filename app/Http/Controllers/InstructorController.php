@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Instructor;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
 
 class InstructorController extends Controller
 {
@@ -14,7 +17,8 @@ class InstructorController extends Controller
      */
     public function index()
     {
-        return view('instructors.index');
+        $instructors = Instructor::all();
+        return view('instructors.index',compact('instructors'));
     }
 
     /**
@@ -36,7 +40,55 @@ class InstructorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'user_name' => 'required',
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => 'required',
+            'confirm_password' => 'required',
+            'headline' => 'required',
+            'biography' => 'required',
+            'website' => 'required',
+            'twitter' => 'required',
+            'facebook' => 'required',
+            'linkedin' => 'required',
+            'youtube' => 'required',
+            'instagram' => 'required',
+        ]);
+
+        if($request->hasfile('profile')){
+              $profile = $request->file('profile');
+              $upload_dir = public_path().'/profiles/';
+              $profile_name = time().'.'.$profile->getClientOriginalExtension();
+              $profile->move($upload_dir,$profile_name);
+              $profile_path = '/profiles/'.$profile_name;
+        }else{
+            $profile_path = '';
+        }
+
+        $user = new User();
+        $user->name = request('user_name');
+        $user->email = request('email');
+        $user->password = Hash::make(request('password'));
+        $user->phone = request('phone');
+        $user->profile_photo_path = $profile_path;
+        $user->save();
+
+        $user->assignRole('Instructor');
+
+        $instructor = new Instructor();
+        $instructor->headline = request('headline');
+        $instructor->bio = request('biography');
+        $instructor->website = request('website');
+        $instructor->twitter = request('twitter');
+        $instructor->facebook = request('facebook');
+        $instructor->linkedin = request('linkedin');
+        $instructor->youtube = request('youtube');
+        $instructor->instagram = request('instagram');
+        $instructor->status = 1;
+        $instructor->user_id = $user->id;
+        $instructor->save();
+
+        return redirect()->route('backside.instructors.index');
     }
 
     /**

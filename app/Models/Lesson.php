@@ -11,5 +11,10 @@ class Lesson extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['file','type','content_id'];
+    protected $fillable=['file','type','content_id','duration'];
+
+    public function content()
+  {
+      return $this->belongsTo('App\Models\Content');
+  }
 }

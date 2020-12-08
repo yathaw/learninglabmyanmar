@@ -12,4 +12,21 @@ class Content extends Model
     use SoftDeletes;
 
     protected $fillable=['title','description','sorting','contenttype_id','section_id'];
+
+    public function lessons()
+    {
+        return $this->hasMany('App\Models\Lesson');
+    }
+
+    public function assignments()
+    {
+        return $this->hasMany('App\Models\Assignment');
+    }
+
+    public function section()
+    {
+        return $this->belongsTo('App\Models\Section');
+    }
+
+    
 }

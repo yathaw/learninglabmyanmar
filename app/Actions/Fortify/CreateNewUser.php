@@ -24,15 +24,15 @@ class CreateNewUser implements CreatesNewUsers
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'role' => 'required',
-            'phone' => 'required',
+            'phone' => 'required'
         ])->validate();
 
        
-        $imageName = time().'.'.$input['photo']->extension();
+       /* $imageName = time().'.'.$input['photo']->extension();
             
         $path = '/profiles/'.$imageName;
        
-        $input['photo']->move(public_path('profiles'), $imageName);
+        $input['photo']->move(public_path('profiles'), $imageName);*/
 
 
         if($input['role'] == 'Student'){
@@ -42,7 +42,7 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
                 'phone' => $input['phone'],
-                'profile_photo_path' => $path,
+               
             ]);
 
             $user->assignRole('Student');
@@ -56,7 +56,7 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
                 'phone' => $input['phone'],
-                'profile_photo_path' => $path,
+                
 
             ]);
             $user->assignRole('Instructor');
@@ -70,7 +70,7 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
                 'phone' => $input['phone'],
-                'profile_photo_path' => $path,
+                
                 
             ]);
             $user->assignRole('Business');

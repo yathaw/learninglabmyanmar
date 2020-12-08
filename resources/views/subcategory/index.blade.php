@@ -38,19 +38,26 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
-                                    <th>Category</th>
+                                    
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             
                             <tbody>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th> Category </th>
-                        <th><a href="{{route('subcategory.edit',1)}}" class="btn btn-warning">Edit</a>
-                        <a href="{{route('subcategory.show',1)}}" class="btn btn-info">Show</a></th>
-                        
-                    </tbody>
+                              @php
+                                $i=1;
+                              @endphp
+
+                            @foreach($subcategories as $row)
+                            <tr>
+                              <td>{{$i++}}</td>
+                              <td>{{$row->name}}</td>
+                             
+                              <th><a href="{{route('subcategory.edit',$row->id)}}" class="btn btn-warning">Edit</a>
+                              <a href="{{route('subcategory.show',$row->id)}}" class="btn btn-info">Show</a></th>
+                            </tr>
+                            @endforeach
+                          </tbody>
                         </table>
                     </div>
         </div>

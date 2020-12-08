@@ -42,28 +42,23 @@
                                     </div>
                                 </div>
 
-                                {{-- <div class="row form-group my-4">
+                                <div class="row form-group my-4">
                                     <div class="col-md-6">
                                         <label for="titleId" class="form-label"> Choose Category </label>
 
                                         
-                                        <select class="form-select select2" name="category">
-                                            @foreach($categories->subcategory as $subcategory)
-                                            <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
+                                        <select class="form-select select2" name="subcategoryid">
+                                            @foreach($categories as $category)
+                                            <optgroup class="bg-dark" label="{{ $category->name }}">
+                                                @foreach($category->subcategories as $subcategory)
+                                                    <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
+                                                @endforeach
+                                            </optgroup>
                                             @endforeach
-                                            
+
                                         </select>
                                     </div>
- --}}
-                                    <div class="row form-group my-4">
-                                    <div class="col-md-6">
-                                        <label for="titleId" class="form-label"> Choose Category </label>
-                                        <select class="form-select select2" name="category">
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
+
 
                                     <div class="col-md-6">
                                         <label for="titleId" class="form-label"> Choose Level </label>
@@ -84,11 +79,21 @@
                                         <label for="instructorId" class="form-label"> Select Instructors </label>
 
                                         <select name="teachers[]" class="form-select select2 teacher" id="inputTeacher" multiple="multiple">
+                                            
+                                            @if(is_null($authuser->company_id))
+                                            <option value="{{$authuser->id}}">{{$authuser->name}}</option>
 
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @else
 
+                                            @foreach($users as $row)
+                                            @if($row->company_id == $companyid)
+
+                                            <option value="{{$row->id}}">{{$row->name}}</option>
+                                            @endif
+                                            @endforeach
+                                            @endif
+                                           
+                                            
                                         </select> 
                                     </div>
                                 </div>
@@ -181,15 +186,18 @@
 
                             <h6> Photo / Video </h6>
                             <section>
-                                <div class="my-5"> 
                                 <label>Photo(<small class="text-danger">jpeg|bmp|png</small>)</label>
-                                <input type="file" name="photo" class="form-control-file @error('photo') is-invalid @enderror" >
+                                
+                                {{-- <input type="file" name="photo" class="form-control-file @error('photo') is-invalid @enderror" > --}}
+                                <img id="blah" src="http://placehold.it/180" alt="your image" class="img-fluid d-block" />
+
+                                <input type='file' onchange="readURL(this);" />
+
                                 @error('photo')
                                 <span class="invalid-feedback" role="alert">
                                 <strong>{{$message}}</strong>
                                 </span>
                                 @enderror
-                                </div>
 
                                 <div class="my-5"> 
                                 <label>Video(<small class="text-danger">mp4</small>)</label>
@@ -200,9 +208,6 @@
                                 </span>
                                 @enderror
                                 </div>
-
-
-                                <input id="acceptTerms-2" name="acceptTerms" type="checkbox" class=""> <label for="acceptTerms-2">I agree with the Terms and Conditions.</label>
                             </section>
                         </form>
                     </div>
@@ -218,6 +223,19 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
+
+            readURL = function(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#blah')
+                            .attr('src', e.target.result);
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
 
 
             var form = $("#example-form");

@@ -79,15 +79,10 @@
                         </div>
 
                         <div class="row form-group mt-4">
-                            <div class="form-floating mb-3 col-md-6">
+                            <div class="form-floating mb-3 col-md-12">
                                 <input type="email" class="form-control form-control-sm" id="email" placeholder="Name" value="{{ old('email') }}" name="email">
                                 <label for="email"> Your Email </label>
                             </div>
-
-                            <div class="form-floating mb-3 col-md-6">
-                                <input type="file" class="form-control form-control-sm" id="photo" name="photo" value="{{old('photo')}}">
-                               <!--  <label for="photo">photo</label> -->
-                             </div>
 
                         </div>
 

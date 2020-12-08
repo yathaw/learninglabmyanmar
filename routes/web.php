@@ -17,6 +17,12 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
 
+// NYL
+use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\StudentController;
+//HH
+use App\Http\Controllers\Auth\LoginController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,17 +44,26 @@ Route::get('/',[FrontendController::class, 'index'])->name('frontend.index');
 
 // NYL
 Route::get('courses',[FrontendController::class, 'courses'])->name('courses');
+
 Route::post('courses_search',[FrontendController::class, 'courses_search'])->name('courses_search');
+
+Route::post('searchmystudying',[FrontendController::class, 'searchmystudying'])->name('searchmystudying');
+
 Route::post('wishlist_search',[FrontendController::class, 'wishlist_search'])->name('wishlist_search');
-Route::post('wishlist',[FrontendController::class, 'wishlist'])->name('wishlist');
+
+Route::post('wishlist_save',[FrontendController::class, 'wishlist_save'])->name('wishlist_save');
+
 Route::post('removewishlist',[FrontendController::class, 'removewishlist'])->name('removewishlist');
 
 Route::get('/course/{id}',[FrontendController::class, 'coursedetail'])->name('course');
+
 Route::get('cart',[FrontendController::class, 'addtocart'])->name('cart');
+
 Route::post('course_sale',[FrontendController::class, 'course_sale'])->name('course_sale');
 
 
 Route::get('instructors',[FrontendController::class, 'instructors'])->name('instructors');
+
 Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->name('instructor');
 
 //Honey
@@ -57,6 +72,7 @@ Route::post('business_store',[FrontendController::class,'business_store'])->name
 
 Route::get('instructor_info',[FrontendController::class,'instructor_info'])->name('instructor_info');
 Route::post('instructor_store',[FrontendController::class,'instructor_store'])->name('instructor.store');
+Route::post('login_data',[LoginController::class,'login_store'])->name('frontend_login');
 
 // ------------------------------------------------------------------------
 
@@ -76,13 +92,16 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/sale', SaleController::class);
 
     Route::resource('/section', SectionController::class);
-    //------------------kyw---------------------//
+//KYW
     Route::post('/section/getid',[SectionController::class,'getid'])->name('getid');
     Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
 
     Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
     
     Route::resource('/content', ContentController::class);
+    Route::post('/section/getsectionid',[ContentController::class,'getsectionid'])->name('getsectionid');
+    Route::post('/content/getcontentid',[ContentController::class,'getcontentid'])->name('getcontentid');
+
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);
     Route::resource('/attachment', AttachmentController::class);
@@ -90,11 +109,12 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/instructors', InstructorController::class);
     Route::resource('/jobtitles', JobtitleController::class);
 
+    //HH
+    Route::resource('students',StudentController::class);
+
 });
-
+Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
 // ------------------------------------------------------------------------
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -121,6 +141,7 @@ Route::get('/questionshownoti',[AccountController::class,'questionshownoti'])->n
 Route::post('/answerquestion',[AccountController::class,'answerquestion'])->name('answerquestion');
 Route::get('/answernoti',[AccountController::class,'answernoti'])->name('answernoti');
 Route::post('/questionreply',[AccountController::class,'questionreply'])->name('questionreply');
+Route::get('/checkoutnoti',[AccountController::class,'checkoutnoti'])->name('checkoutnoti');
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');

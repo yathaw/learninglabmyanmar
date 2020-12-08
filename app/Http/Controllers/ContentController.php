@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Content;
 use Illuminate\Http\Request;
+use App\Models\Section;
+use App\Models\Lesson;
+use App\Models\Assignment;
+
+use Owenoj\LaravelGetId3\GetId3;
 
 class ContentController extends Controller
 {
@@ -14,8 +19,9 @@ class ContentController extends Controller
      */
     public function index()
     {
-        $contents=Content::all();
-        return view('content.index',compact('contents'));
+        // $contents=Content::all();
+        // $lessons=Lesson::all();
+        return view('course.section_new');
     }
 
     /**
@@ -35,8 +41,97 @@ class ContentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {     
+        //dd($request);
+        // $request->validate([
+        //     "title"=>"required|min:5",
+        //     "description"=>"required",
+        //     "contenttype"=>"required",
+        // ]);
+
+        $content=new Content;
+        $content->title=$request->content_title;
+        $content->description=$request->content_description;
+
+        $content->section_id=$request->sectionid;
+        $content->sorting=1;
+
+        // $contentsorting= Content::where('section_id', $request->sectionid)->get();
+        // //dd($contentsorting);
+
+        // foreach($contentsorting as $contentsorting){
+        //     $sorting = $contentsorting->sorting;
+        //     $sorting_data = ++$sorting;
+        // }
+
+        // /*insert sorting*/
+        // if($contentsorting->isEmpty()){
+        // $content->sorting = 1;
+        // }else{
+        //     $content->sorting = $sorting_data;
+        // }
+        /*insert sorting*/
+
+       //$section->instructor_id=1;
+        $content->contenttype_id=$request->contenttypeid;
+        $content->save();
+
+        if($content->contenttype_id == 1){
+            if($request->file()){
+
+        $track = new GetId3(request()->file('file'));
+        //get all info
+        $track->extractInfo();
+        //get title
+        $track->getTitle();
+        //get playtime
+        $duration_time=$track->getPlaytime();
+        $duration_sec=$track->getPlaytimeSeconds();
+        //dd($duration_sec);
+
+            $fileName=time().'_'.$request->file->getClientOriginalName();
+            $path = $request->file('file')->storeAs('lesson', $fileName, 'public');
+            $filepath='/storage/'.$path;
+            }
+
+            $lesson=new Lesson;
+            $lesson->file=$filepath;
+            $lesson->content_id=$content->id;
+
+            $file = $request->file;
+            $fileExtension =$file->extension();
+            //dd($fileExtension);
+            $lesson->type=$fileExtension;
+            $lesson->duration= $duration_sec;
+            $lesson->save();
+
+
+        }else if($content->contenttype_id == 3){
+
+            if($request->file()){
+            $fileName=time().'_'.$request->file->getClientOriginalName();
+            $path = $request->file('file')->storeAs('assignment', $fileName, 'public');
+            $filepath='/storage/'.$path;
+            }
+
+            $assignment=new Assignment;
+            $assignment->file=$filepath;
+
+            $file = $request->file;
+            $fileExtension =$file->extension();
+            //dd($fileExtension);
+            $assignment->type=$fileExtension;
+
+            $assignment->content_id=$content->id;
+            $assignment->save();
+
+        }
+
+        
+
+       //return redirect()->route('backside.sectionlist',$request->sectionid);
+      return redirect()->route('backside.section.index');
+        
     }
 
     /**
@@ -81,6 +176,24 @@ class ContentController extends Controller
      */
     public function destroy(Content $content)
     {
-        //
+        $content->delete();
+
+        return redirect()->route('backside.section.index');
+    }
+
+    public function getsectionid(Request $request){
+        
+        $id = $request->id;
+        $section =Section::find($id);
+        return $section;
+
+    }
+
+    public function getcontentid(Request $request){
+        
+        $id = $request->id;
+        $content =Content::find($id);
+        return $content;
+
     }
 }

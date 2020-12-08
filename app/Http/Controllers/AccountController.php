@@ -20,12 +20,14 @@ use App\Models\Section;
 
 class AccountController extends Controller
 {
+
     public function mystudyings(){
         $tabs = 0;
         $wishlists = Wishlist::paginate(8);
         $user_id = Auth::id();
         $sales = Sale::where('user_id',$user_id)->paginate(8);
         return view('account.mystudyings',compact('tabs','wishlists','sales'));
+
     }
 
     public function wishlist(){
@@ -33,16 +35,20 @@ class AccountController extends Controller
         $wishlists = Wishlist::paginate(8);
         $user_id = Auth::id();
         $sales = Sale::where('user_id',$user_id)->paginate(8);
+
         return view('account.mystudyings',compact('tabs','wishlists','sales'));
+
 
     }
 
     public function collection(){
+
         $tabs = 1;
         $wishlists = Wishlist::paginate(8);
         $user_id = Auth::id();
         $sales = Sale::where('user_id',$user_id)->paginate(8);
         return view('account.mystudyings',compact('tabs','wishlists','sales'));
+
     }
 
     public function lecture($courseid){
@@ -56,7 +62,9 @@ class AccountController extends Controller
 
         $questions = Question::all();
         $answers = Answer::all();
+
         return view('account.lecturevideo',compact('questions','answers', 'course', 'sections'));
+
     }
 
     public function panel(){
@@ -207,6 +215,7 @@ class AccountController extends Controller
     }
 
 
+
     public function checkoutnoti()
     {
         $noti_data2=array();
@@ -231,4 +240,5 @@ class AccountController extends Controller
           
        return $noti_data2;
     }
+
 }
