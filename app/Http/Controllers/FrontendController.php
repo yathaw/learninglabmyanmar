@@ -14,6 +14,9 @@ use App\Models\Company;
 use App\Models\Instructor;
 use App\Models\User;
 
+use App\Events\CheckoutEvent;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\CheckoutNotification;
 
 class FrontendController extends Controller
 {
@@ -179,6 +182,16 @@ class FrontendController extends Controller
             $sale->courses()->attach($value['id']);
            }
        }
+
+        $checkoutnoti = [
+                'saleid' => $sale->id,
+                'invoiceno' => "Stu-".$invoice,
+                'total' =>$total,
+                'user_id' => $user_id
+            ];
+
+        Notification::send($sale,new CheckoutNotification($checkoutnoti));
+        event(new CheckoutEvent($sale));
 
        return response(json_decode($user_id));
    }

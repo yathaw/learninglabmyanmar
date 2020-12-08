@@ -195,8 +195,77 @@
 
 				<div class="navbar-collapse collapse">
 					<ul class="navbar-nav navbar-align">
+						@if(Auth::user()->getRoleNames()[0]=="Admin")
 						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-toggle="dropdown">
+							<a class="nav-icon dropdown-toggle checkoutnoti" href="#" id="alertsDropdown" data-toggle="dropdown">
+								<div class="position-relative">
+									<i class="align-middle" data-feather="bell"></i>
+									<span class="indicator">0</span>
+								</div>
+							</a>
+							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right py-0" aria-labelledby="alertsDropdown">
+								
+								<div class="dropdown-menu-header checkoutpanelnoti">
+									
+								</div>
+								<div class="list-group" id="checkoutnoti_data">
+									<!-- <a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-danger" data-feather="alert-circle"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Update completed</div>
+												<div class="text-muted small mt-1">Restart server 12 to complete the update.</div>
+												<div class="text-muted small mt-1">30m ago</div>
+											</div>
+										</div>
+									</a> -->
+									<!-- <a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-warning" data-feather="bell"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Lorem ipsum</div>
+												<div class="text-muted small mt-1">Aliquam ex eros, imperdiet vulputate hendrerit et.</div>
+												<div class="text-muted small mt-1">2h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-primary" data-feather="home"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">Login from 192.186.1.8</div>
+												<div class="text-muted small mt-1">5h ago</div>
+											</div>
+										</div>
+									</a>
+									<a href="#" class="list-group-item">
+										<div class="row g-0 align-items-center">
+											<div class="col-2">
+												<i class="text-success" data-feather="user-plus"></i>
+											</div>
+											<div class="col-10">
+												<div class="text-dark">New connection</div>
+												<div class="text-muted small mt-1">Christina accepted your request.</div>
+												<div class="text-muted small mt-1">14h ago</div>
+											</div>
+										</div>
+									</a> -->
+								</div>
+								<div class="dropdown-menu-footer">
+									<a href="#" class="text-muted">Show all notifications</a>
+								</div>
+								
+							</div>
+						</li>
+						@elseif(Auth::user()->getRoleNames()[0]=="Instructor")
+						<li class="nav-item dropdown">
+							<a class="nav-icon dropdown-toggle questionsnoti" href="#" id="alertsDropdown" data-toggle="dropdown">
 								<div class="position-relative">
 									<i class="align-middle" data-feather="bell"></i>
 									<span class="indicator">0</span>
@@ -260,6 +329,7 @@
 								</div>
 							</div>
 						</li>
+								@endif
 						<li class="nav-item dropdown">
 							<a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-toggle="dropdown">
 								<div class="position-relative">
@@ -427,6 +497,7 @@
     <script src="{{ asset('plugin/sortable/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('plugin/pusher.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('backend/js/noti.js')}}"></script>
+    <script src="{{ asset('plugin/admincheckoutnoti.js') }}"></script>
     <script type="text/javascript">
     	$.ajaxSetup({
             headers: {

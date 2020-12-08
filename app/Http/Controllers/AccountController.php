@@ -20,29 +20,35 @@ use App\Models\Section;
 
 class AccountController extends Controller
 {
-	public function mystudyings(){
-		$tabs = 0;
+
+    public function mystudyings(){
+        $tabs = 0;
         $wishlists = Wishlist::paginate(8);
         $user_id = Auth::id();
         $sales = Sale::where('user_id',$user_id)->paginate(8);
-    	return view('account.mystudyings',compact('tabs','wishlists','sales'));
+        return view('account.mystudyings',compact('tabs','wishlists','sales'));
+
     }
 
     public function wishlist(){
-		$tabs = 2;
+        $tabs = 2;
         $wishlists = Wishlist::paginate(8);
         $user_id = Auth::id();
         $sales = Sale::where('user_id',$user_id)->paginate(8);
-    	return view('account.mystudyings',compact('tabs','wishlists','sales'));
+
+        return view('account.mystudyings',compact('tabs','wishlists','sales'));
+
 
     }
 
     public function collection(){
-		$tabs = 1;
+
+        $tabs = 1;
         $wishlists = Wishlist::paginate(8);
         $user_id = Auth::id();
         $sales = Sale::where('user_id',$user_id)->paginate(8);
-    	return view('account.mystudyings',compact('tabs','wishlists','sales'));
+        return view('account.mystudyings',compact('tabs','wishlists','sales'));
+
     }
 
     public function lecture($courseid){
@@ -56,7 +62,9 @@ class AccountController extends Controller
 
         $questions = Question::all();
         $answers = Answer::all();
-    	return view('account.lecturevideo',compact('questions','answers', 'course', 'sections'));
+
+        return view('account.lecturevideo',compact('questions','answers', 'course', 'sections'));
+
     }
 
     public function panel(){
@@ -77,13 +85,13 @@ class AccountController extends Controller
         $question->title = request('summary');
         $question->description = request('comment');
         $question->course_id = request('contentid');
-        $question->user_id = 1;
+        $question->user_id = Auth::id();
         if($question->save()){
             $questionnoti = [
                 'id' => $question->id,
                 'title' => request('summary'),
                 'description' => request('comment'),
-                'user_id' => 1,
+                'user_id' => Auth::id(),
                 'course_id' => request('contentid')
             ];
 
@@ -205,4 +213,32 @@ class AccountController extends Controller
         $question = Question::where('id',$questionid)->with('user')->get();
         return response()->json(['answer'=>$answer,'question'=>$question]);
     }
+
+
+
+    public function checkoutnoti()
+    {
+        $noti_data2=array();
+        $outputdata = array();
+        /*if(Auth::check()){*/
+
+            /*$user  = Auth::user();*/
+    
+            $sales = Sale::all();
+            foreach($sales as $sale){
+                $id = $sale->id;
+
+                foreach($sale->unreadNotifications as $sal)
+                    {
+                        
+                            array_push($noti_data2, $sal);
+
+                 
+                        
+                    }
+            }
+          
+       return $noti_data2;
+    }
+
 }

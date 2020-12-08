@@ -36,6 +36,7 @@
                                     <th> No </th>
                                     <th> User Name </th>
                                     <th> Email</th>
+                                    <th> Phone </th>
                                     <th>Headline</th>
                                     <th>Website</th>
                                     <th>Twitter</th>
@@ -53,6 +54,7 @@
                             		<td>{{$i++}}</td>
                             		<td>{{$instructor->user->name}}</td>
                             		<td>{{$instructor->user->email}}</td>
+                                    <td>{{$instructor->user->phone}}</td>
                             		<td>{{$instructor->headline}}</td>
                             		<td>{{$instructor->website}}</td>
                             		<td>{{$instructor->twitter}}</td>
@@ -60,6 +62,10 @@
                             		<td>{{$instructor->linkedin}}</td>
                             		<td>{{$instructor->youtube}}</td>
                             		<td>{{$instructor->instagram}}</td>
+                                    <td>
+                                        <a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                        <a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                    </td>
                             	</tr>
                             	@endforeach
                             </tbody>
@@ -68,6 +74,7 @@
                                     <th> No </th>
                                     <th> User Name </th>
                                     <th> Email</th>
+                                    <th> Phone </th>
                                     <th>Headline</th>
                                     <th>Website</th>
                                     <th>Twitter</th>

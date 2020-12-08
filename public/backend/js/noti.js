@@ -1,37 +1,6 @@
 $(document).ready(function(){
-  var DURATION_IN_SECONDS = {
-    epochs: ['year', 'month', 'day', 'hour', 'minute'],
-    year: 31536000,
-    month: 2592000,
-    day: 86400,
-    hour: 3600,
-    minute: 60
-  };
 
-  function getDuration(seconds) {
-    var epoch, interval;
-
-    for (var i = 0; i < DURATION_IN_SECONDS.epochs.length; i++) {
-      epoch = DURATION_IN_SECONDS.epochs[i];
-      interval = Math.floor(seconds / DURATION_IN_SECONDS[epoch]);
-      if (interval >= 1) {
-        return {
-          interval: interval,
-          epoch: epoch
-        };
-      }
-    }
-
-  };
-
-  function timeSince(date) {
-    var seconds = Math.floor((new Date() - new Date(date)) / 1000);
-    var duration = getDuration(seconds);
-    var suffix = (duration.interval > 1 || duration.interval === 0) ? 's' : '';
-    return duration.interval + ' ' + duration.epoch + suffix;
-  };
-
-  var notificationsToggle    = $('.nav-icon');
+  var notificationsToggle    = $('.questionsnoti');
      
   showNoti();
 
@@ -40,10 +9,50 @@ $(document).ready(function(){
       var count = response.length;
       if(count > 0)
       {
+        notificationsToggle.find('span').html(count);
         var html='';
         $('.panelnoti').text(count+' New Notifications');
+        function timeAgo(someDateInThePast) {
+          var result = '';
+          var difference = Date.now() - someDateInThePast;
+
+          if (difference < 5 * 1000) {
+              return 'just now';
+          } else if (difference < 90 * 1000) {
+              return 'moments ago';
+          }
+
+          //it has minutes
+          if ((difference % 1000 * 3600) > 0) {
+              if (Math.floor(difference / 1000 / 60 % 60) > 0) {
+                  let s = Math.floor(difference / 1000 / 60 % 60) == 1 ? '' : 's';
+                  result = `${Math.floor(difference / 1000 / 60 % 60)} minute${s} `;
+              }
+          }
+
+          //it has hours
+          if ((difference % 1000 * 3600 * 60) > 0) {
+              if (Math.floor(difference / 1000 / 60 / 60 % 24) > 0) {
+                  let s = Math.floor(difference / 1000 / 60 / 60 % 24) == 1 ? '' : 's';
+                  result = `${Math.floor(difference / 1000 / 60 / 60 % 24)} hour${s}${result == '' ? '' : ','} ` + result;
+              }
+          }
+
+          //it has days
+          if ((difference % 1000 * 3600 * 60 * 24) > 0) {
+              if (Math.floor(difference / 1000 / 60 / 60 / 24) > 0) {
+                  let s = Math.floor(difference / 1000 / 60 / 60 / 24) == 1 ? '' : 's';
+                  result = `${Math.floor(difference / 1000 / 60 / 60 / 24)} day${s}${result == '' ? '' : ','} ` + result;
+              }
+
+          }
+
+          return result + ' ago';
+        }
         $.each(response,function(i,v){
+
           if(i<4){
+            const currentTimeStamp = Date.parse(v.created_at);
             html+=`<a href="#" class="list-group-item">
                     <div class="row g-0 align-items-center">
                       <div class="col-2">
@@ -52,7 +61,7 @@ $(document).ready(function(){
                       <div class="col-10">
                         <div class="text-dark">Update completed</div>
                         <div class="text-muted small mt-1">${v.data.description}</div>
-                        <div class="text-muted small mt-1">${timeSince(v.created_at)} ago</div>
+                        <div class="text-muted small mt-1">${timeAgo(currentTimeStamp)}</div>
                       </div>
                     </div>
                   </a>`;
@@ -61,10 +70,25 @@ $(document).ready(function(){
                 }
         });
         $('#noti_data').html(html);
-        notificationsToggle.find('span').html(count);
+        
       }else 
       {
+        var html='';
+        $('.panelnoti').text('0 New Notifications');
+        html+=`<a href="#" class="list-group-item">
+                    <div class="row g-0 align-items-center">
+                      <div class="col-2">
+                        <i class="text-danger" data-feather="alert-circle"></i>
+                      </div>
+                      <div class="col-10">
+                        <div class="text-dark text-center">Empty Notification</div>
+                        
+                      </div>
+                    </div>
+                  </a>`;
+        $('#noti_data').html(html);
         notificationsToggle.find('span').text(0);
+        
       }
     });
   }

@@ -25,13 +25,27 @@ class CourseController extends Controller
         $courses=Course::all();
 
         $authuser = Auth::user();
-        $instructor = $authuser->instructor;
-         $instructorid = $instructor->id;
-         //dd($authuser); user_id = 4 for Haleigh
-         //dd($instructorid);  //2 so, three courses appear
+        $auth_id = Auth::id();
+        if ($auth_id == 2) {
+            return view('course.index',compact('courses','categories','subcategories','auth_id'));
+        }
+        else{
+
+            $instructor = $authuser->instructor;
+            $instructorid = $instructor->id;
+            //dd($auth_id);
+            //dd($authuser); user_id = 4 for Haleigh
+            //dd($instructorid);  //2 so, three courses appear
+            return view('course.index',compact('courses','categories','subcategories','instructorid','auth_id'));
+
+        }
+       
+
+
+        
          
         
-        return view('course.index',compact('courses','categories','subcategories','instructorid'));
+        
     }
 
     /**
