@@ -18,4 +18,9 @@ class Installment extends Model
     {
     	return $this->belongsTo('App\Models\Sale');
     }
+
+    public function courses($value='')
+	{
+		return $this->belongsToMany('App\Models\Course')->withTimestamps();
+	}
 }

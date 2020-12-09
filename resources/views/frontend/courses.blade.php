@@ -16,7 +16,7 @@
       	</div>
     </section><!-- End Breadcrumbs -->
 
-    <section class="inner-page">
+    <section class="inner-page showdata">
       	<div class="container">
 
       		<div class="row">
@@ -361,6 +361,8 @@
 			var html = "";
 			var instructor = "";
 			var heart = false;
+			var sale = "";
+
 			$.post("{{route('courses_search')}}",{data:search_data},function(data){
 				console.log(data);
 				if(data){
@@ -391,6 +393,15 @@
 						        			
 						        		});
 						        		}
+
+						        		$.each(v.sales,function(c,d){
+						        			console.log(d);
+						        			if(d.pivot.status == 1){
+						        				sale += "true";
+						        			}else {
+						        				sale += "false";
+						        			}
+						        		})
 
 
 
@@ -461,7 +472,7 @@
 							            </small>
 							            <div class="d-grid gap-2 col-6 mx-auto">`;
 
-							            if(heart == true){
+							            if(heart == true && v.sales.length < 1){
 								        html +=  `<a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 cart" data-id="${v.id}" data-course_title="${v.title}" data-instructor = "${instructor}" data-user_id = "{{Auth::id()}}" data-price = "${v.price}" data-image = "${v.image}" `;
 
 
@@ -475,7 +486,11 @@
 									      			html+= `>
 								            	Add to Cart
 								            </a>`;
-								          }else{
+								          }else if(heart == true && sale == "true"){
+								          	html += `<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>`;
+								          }else if(heart == true && sale == "false")
+								          	html += `<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>`;
+								          else{
 								          	html+=`<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Add To Cart</button>`
 								          }
 
