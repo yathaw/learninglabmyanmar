@@ -91,6 +91,7 @@ class User extends Authenticatable
     public function courses($value='')
     {
         return $this->hasMany('App\Models\Course');
+    }
     public function sales($value='')
     {
         return $this->hasMany('App\Models\Sale');
