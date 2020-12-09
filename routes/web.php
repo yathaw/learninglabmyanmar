@@ -117,6 +117,9 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     // NYL
     Route::resource('installments',InstallmentController::class);
 
+    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
+
+    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
 
 });
 Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
