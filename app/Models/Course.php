@@ -42,7 +42,7 @@ class Course extends Model
 
 	public function sales($value='')
 	{
-		return $this->belongsToMany('App\Models\Sale')->withTimestamps();
+		return $this->belongsToMany('App\Models\Sale')->withPivot('status')->withTimestamps();
 	}
 
 	public function reviews($value='')

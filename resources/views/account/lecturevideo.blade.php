@@ -74,6 +74,7 @@
 
                                             <p class="mb-0 chapter{{ $content->id }} {{ $content_key == 0 ? 'text-primary' : '' }}  d-inline-block">  
 
+
                                                 {{ $content->title }}
                                                 
                                             </p>

@@ -14,10 +14,21 @@ class Sale extends Model
     use SoftDeletes;
     use Notifiable;
 
-    protected $fillable=['invoiceno','total','user_id'];
+    protected $fillable=['invoiceno','total','user_id','status'];
 
     public function courses($value='')
     {
-    	return $this->belongsToMany('App\Models\Course')->withTimestamps();
+    	return $this->belongsToMany('App\Models\Course')->withPivot('status')->withTimestamps();
+    }
+
+    public function user($value='')
+    {
+    	return $this->belongsTo('App\Models\User');
+    }
+
+    public function installments($value='')
+    {
+        return $this->hasMany('App\Models\Installment');
+        
     }
 }
