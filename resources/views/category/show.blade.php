@@ -2,7 +2,7 @@
  <main class="app-content">
       <div class="app-title">
         <div>
-          <h1><i class="fa fa-dashboard"></i> Blank Page</h1>
+          <h1><i class="fa fa-dashboard"></i> Learning Lab Myanmar</h1>
           <p>Start a beautiful journey here</p>
         </div>
         <ul class="app-breadcrumb breadcrumb">
@@ -14,7 +14,7 @@
         <div class="col-md-12">
           <div class="tile">
     <h2>Category Detail</h2>
-    <img src="{{asset($category->photo)}}" class="img-fluid" alt>
+    
     <p> {{$category->name}} </p>
     </div>
   </div>

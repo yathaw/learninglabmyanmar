@@ -15,13 +15,21 @@ use App\Models\Company;
 use App\Models\Instructor;
 use App\Models\User;
 
+use App\Events\CheckoutEvent;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\CheckoutNotification;
 
 class FrontendController extends Controller
 {
     public function index(){
-        $limitcategories = Category::all();
-        $subcategories = Subcategory::all();
-    	return view('frontend.index',compact('limitcategories'));
+        $limitcategories = Category::all()->random(3);
+        $newest_courses = Course::orderBy('created_at', 'DESC')->take(6)->get();
+        $top_courses = Course::all()->random(6); // rating ပေါ်မူတည်ပြီး တွက်မယ် လောလောဆယ် random ပဲ
+        $wishlists = Wishlist::all();
+
+
+        // dd($top_courses);
+    	return view('frontend.index',compact('limitcategories','newest_courses', 'top_courses', 'wishlists'));
     }
 
     public function courses(){
@@ -180,6 +188,16 @@ class FrontendController extends Controller
             $sale->courses()->attach($value['id'],['status'=>$status]);
            }
        }
+
+        $checkoutnoti = [
+                'saleid' => $sale->id,
+                'invoiceno' => "Stu-".$invoice,
+                'total' =>$total,
+                'user_id' => $user_id
+            ];
+
+        Notification::send($sale,new CheckoutNotification($checkoutnoti));
+        event(new CheckoutEvent($sale));
 
        return response(json_decode($user_id));
    }

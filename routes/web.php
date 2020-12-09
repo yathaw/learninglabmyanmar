@@ -22,6 +22,9 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\InstallmentController;
 
+//HH
+use App\Http\Controllers\Auth\LoginController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +74,7 @@ Route::post('business_store',[FrontendController::class,'business_store'])->name
 
 Route::get('instructor_info',[FrontendController::class,'instructor_info'])->name('instructor_info');
 Route::post('instructor_store',[FrontendController::class,'instructor_store'])->name('instructor.store');
+Route::post('login_data',[LoginController::class,'login_store'])->name('frontend_login');
 
 // ------------------------------------------------------------------------
 
@@ -116,6 +120,11 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
 
 });
 Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
+
+// Backend Login
+Route::get('/backside/login',[LoginController::class, 'backendLogin'])->name('backside.login');
+Route::post('backsidelogin_data',[LoginController::class,'backsidelogin_store'])->name('backside_login');
+
 // ------------------------------------------------------------------------
 
 /*
@@ -143,6 +152,7 @@ Route::get('/questionshownoti',[AccountController::class,'questionshownoti'])->n
 Route::post('/answerquestion',[AccountController::class,'answerquestion'])->name('answerquestion');
 Route::get('/answernoti',[AccountController::class,'answernoti'])->name('answernoti');
 Route::post('/questionreply',[AccountController::class,'questionreply'])->name('questionreply');
+Route::get('/checkoutnoti',[AccountController::class,'checkoutnoti'])->name('checkoutnoti');
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');

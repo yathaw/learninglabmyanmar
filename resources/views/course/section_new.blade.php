@@ -28,7 +28,7 @@
 										</div>
 										<div class="col-7">
 											<a href="#" data-toggle="collapse" data-target="#row{{$i}}" aria-expanded="false" aria-controls="row{{$i}}">
-												<b class="fontbold"> Section <span class="sectionNo">{{$section->sorting}}</span> : </b>{{$section->title}}
+												<b class="fontbold"> Section <span class="sectionNo">{{$section->id}}</span> : </b>{{$section->title}}
 
 												<small class="d-block mt-2">{{$section->objective}}</small>
 											</a>
@@ -118,7 +118,7 @@
 												@endforeach
 											</ul>
 										</div>
-
+										{{-- {!! $contents->links() !!} --}}
 									</div>
 								</div>
 
@@ -183,7 +183,7 @@
                        //var_dump($instructor);
                        //die();
                        @endphp
-                       @if($instructor_companyid !=Null))
+                       @if($instructor_companyid != Null)
 						<div class="row mb-3">
 						    <label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
 						    <div class="col-sm-10">
@@ -256,7 +256,6 @@
 							</div>
 						</div>
 
-
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -276,7 +275,17 @@
 					<h5 class="modal-title">Edit Section </h5>
 					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 				</div>
-				<form method="post" action="" enctype="multipart/form-data">
+				<form method="post" action="{{route('backside.section.update',$section->id)}}" enctype="multipart/form-data">  
+					<input type="hidden" name="courseid" id="updatecourseid" value="{{ $course->id }}">
+					{{-- <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="_method" value="put"> --}}
+					<input type="hidden" name="sectionid" id="updatesectionid">
+					@php
+					$authuser = Auth::user();
+        			$instructor = $authuser->instructor;
+        			$instructorid= $instructor->id;
+					@endphp
+					<input type="hidden" name="instructorid" id="updateinstructorid" value="{{$instructorid}}">
 					@csrf
 					@method('PUT')
 					<div class="modal-body m-3">
@@ -304,10 +313,20 @@
 							</div>
 						</div>
 
+						{{-- <div class="row mb-3">
+						    <label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
+						    <div class="col-sm-10">
+						    	<select class="form-control select2" name="instructorid">
+						    	
+						    	</select>
+						    </div>
+						</div> --}}
+
+
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Update changes</button>
+						<button type="submit" class="btn btn-primary" id="contentupdate">Update changes</button>
 					</div>
 				</form>
 			</div>
@@ -492,8 +511,9 @@ $('.editbtn').click(function(){
           	var id = $(this).data('id');
           	 //console.log(id);
           	 $.post('/backside/section/getid',{id:id},function(response){
-          	  //console.log(response.id);
-          	 //console.log(response.contenttype_id);
+          	 //console.log(response.id);
+          	 //console.log(response);
+          	 $('#updatesectionid').val(response.id);
           	 $('#titleEdit').val(response.title);
           	 $('#objectiveEdit').text(response.objective);
           	 var contenttypeid=response.contenttype_id;
@@ -546,6 +566,24 @@ $('.editbtn').click(function(){
 
 	})
 	 $('#editcontentModal').modal('show');
+
+});
+
+	$('#contentupdate').click(function(){
+	//alert('hi');
+	
+	var courseid=$('#updatecourseid').val();
+	var instructorid=$('#updateinstructorid').val();
+	var title=$('#titleEdit').val();
+	var objective=$('#objectiveEdit').val();
+	var sectionid=$('#updatesectionid').val();
+
+	
+	console.log(title);
+	console.log(objective);
+	console.log(sectionid);
+	console.log(courseid);
+	console.log(instructorid);
 
 });
 
