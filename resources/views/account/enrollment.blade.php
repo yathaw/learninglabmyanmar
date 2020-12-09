@@ -135,7 +135,7 @@
                  enddate: enddate
               },
               success: function(result){
-                 console.log(result.sales);
+                 
                  var html=''; var j=1;
                  html+=`<div class="col-12 col-lg-12 col-xxl-12 d-flex">
 													<div class="card flex-fill">
@@ -157,7 +157,7 @@
 															<tbody>`;
 								if(result.sales.length>0){			
                  $.each(result.sales,function(i,v){
-                 		console.log(v);
+                 		
                  		var date = new Date(v.created_at);
 
 										var day = date.getDate();
