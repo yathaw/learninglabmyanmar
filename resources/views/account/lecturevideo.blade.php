@@ -26,7 +26,7 @@
                         <iframe height="500" src="https://www.youtube-nocookie.com/embed/TgzY8syP7lo?start=9;autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"  class="card-img-top" id="videoarea"></iframe>
                     </div> --}}
                     <div class="video-player">
-                        <video class="js-player lesson_video_play vidoe-js" controls crossorigin preload="auto" playsinline id="videoarea">
+                        <video class="js-player lesson_video_play vidoe-js" controls crossorigin preload="auto" playsinline id="videoarea" style="--plyr-color-main: #f09819;">
                             <source type="video/mp4"/ >
 
                         </video>
@@ -98,7 +98,7 @@
             </div>
 
 
-            <div class="row mt-4">
+            <div class="row mt-4 text-left">
                 <div class="col-12">
                     <nav class="mb-5">
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">

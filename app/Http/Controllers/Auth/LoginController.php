@@ -26,7 +26,15 @@ class LoginController extends Controller
             if (Auth::attempt($credentials)) {
                 // if success login
 
-                return redirect('/');
+                $role = $user->getRoleNames();
+                if ($role[0] == "Business") {
+                    return redirect('panel');
+                }
+                else{
+                    return redirect('/');
+                }
+
+                
             }
             // if failed login
             return redirect()->back()->with('status','Your phone and password is invalid our record !');

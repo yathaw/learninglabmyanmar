@@ -282,8 +282,14 @@
 					<input type="hidden" name="sectionid" id="updatesectionid">
 					@php
 					$authuser = Auth::user();
-        			$instructor = $authuser->instructor;
-        			$instructorid= $instructor->id;
+					$role = $authuser->getRoleNames();
+
+	        			if ($role[0] == 'Instructor') {
+	        			$instructor = $authuser->instructor;
+	        			$instructorid= $instructor->id;
+	        		}else{
+	        			$instructorid = NULL;
+	        		}
 					@endphp
 					<input type="hidden" name="instructorid" id="updateinstructorid" value="{{$instructorid}}">
 					@csrf
