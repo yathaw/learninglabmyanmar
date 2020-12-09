@@ -20,6 +20,7 @@ use App\Http\Controllers\JobtitleController;
 // NYL
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\InstallmentController;
 
 
 /*
@@ -108,6 +109,10 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
 
     //HH
     Route::resource('students',StudentController::class);
+
+    // NYL
+    Route::resource('installments',InstallmentController::class);
+
 
 });
 Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');

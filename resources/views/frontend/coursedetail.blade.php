@@ -213,7 +213,13 @@
 
 
                                            @if(Auth::user())
+
+
+                                            
+
+
                                             @if(Auth::user()->instructor)
+
 
                                             @foreach($course->instructors as $instructor)
 
@@ -229,6 +235,26 @@
                                             @endforeach
 
                                             @else
+                                            @php
+                                                $count_sale = count(Auth::user()->sales);
+                                            @endphp
+
+                                                @if($count_sale > 0)
+                                                    @foreach(Auth::user()->sales as $sales)
+                                                        @foreach($sales->courses as $course_sale)
+                                                            @if($course_sale->pivot->course_id == $course->id && $course_sale->pivot->status == 0)
+
+                                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>
+
+                                                            @else
+                                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+
+                                                @else
+
+
                                                 <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
                                                 data-id="{{$course->id}}" data-course_title="{{$course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$course->price}}" data-image = "{{$course->image}}"
                                                     {{-- for wishlist --}}
@@ -243,6 +269,7 @@
                                                     >
                                                 Add To Cart
                                                 </a>
+                                                @endif
                                             
 
                                             @endif

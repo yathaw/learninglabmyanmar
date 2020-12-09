@@ -79,11 +79,21 @@
                                         <label for="instructorId" class="form-label"> Select Instructors </label>
 
                                         <select name="teachers[]" class="form-select select2 teacher" id="inputTeacher" multiple="multiple">
+                                            
+                                            @if(is_null($authuser->company_id))
+                                            <option value="{{$authuser->id}}">{{$authuser->name}}</option>
 
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                            @else
 
+                                            @foreach($users as $row)
+                                            @if($row->company_id == $companyid)
+
+                                            <option value="{{$row->id}}">{{$row->name}}</option>
+                                            @endif
+                                            @endforeach
+                                            @endif
+                                           
+                                            
                                         </select> 
                                     </div>
                                 </div>

@@ -221,6 +221,30 @@
 							            
 							            <div class="d-grid gap-2 col-6 mx-auto">
 							            	@if(Auth::user())
+							            	@if(Auth::user()->sales)
+							            	@php
+							            		$count_sale = count(Auth::user()->sales);
+							            	@endphp
+
+							            		@if($count_sale > 0)
+								            		@foreach(Auth::user()->sales as $sales)
+								            			@foreach($sales->courses as $course_sale)
+								            			
+
+								            				@if($course_sale->pivot->course_id == $course->id && $course_sale->pivot->status == 0)
+
+								            					<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>
+
+								            				@elseif($course_sale->pivot->course_id == $course->id && $course_sale->pivot->status == 1)
+								            					<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>
+								            				@endif
+								            			@endforeach
+								            		@endforeach
+								            	@endif
+								            @endif
+
+							            		
+
 							            	@foreach($course->instructors as $instructor)
 							      				@if(Auth::user()->instructor)
 
@@ -263,9 +287,17 @@
 
 								            	@endif
 								            @endforeach
+
+								            
+
+
+
+
 								            @else
 								            	<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Add To Cart</button>
 								            @endif
+
+
 
 
 								        </div>
@@ -330,6 +362,7 @@
 			var instructor = "";
 			var heart = false;
 			$.post("{{route('courses_search')}}",{data:search_data},function(data){
+				console.log(data);
 				if(data){
 					$.each(data,function(i,v){
 						

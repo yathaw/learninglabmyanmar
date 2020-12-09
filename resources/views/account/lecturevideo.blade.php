@@ -22,8 +22,14 @@
 
             <div class="row">
                 <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
-                    <div class="embed-responsive embed-responsive-4by3">            
+                    {{-- <div class="embed-responsive embed-responsive-4by3">            
                         <iframe height="500" src="https://www.youtube-nocookie.com/embed/TgzY8syP7lo?start=9;autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"  class="card-img-top" id="videoarea"></iframe>
+                    </div> --}}
+                    <div class="video-player">
+                        <video class="js-player lesson_video_play vidoe-js" controls crossorigin preload="auto" playsinline id="videoarea">
+                            <source type="video/mp4"/ >
+
+                        </video>
                     </div>
                 </div>
 
@@ -43,14 +49,31 @@
                             <div id="collapse{{ $section->id }}" class="accordion-collapse collapse {{ $section_key == 0 ? 'show' : '' }}" aria-labelledby="heading{{ $section->id }}" data-parent="#accordionExample">
                                 <div class="accordion-body">
 
-                                    <ul id="playlist" class="lh-lg list-group list-group-flush">
+                                    <ul id="playlist" class="lh-lg list-group list-group-flush text-left">
 
                                         @foreach($section->contents  as $content_key => $content)
-                                        <li videoUrl="https://www.youtube.com/embed/rk9bBpsLy3M" videoId="{{ $content->id }}" class="list-group-item px-0">
+
+                                        @php
+                                            # Lesson
+                                            if ($content->contenttype_id == 1) {
+                                                $fileLink = asset($content->lessons[0]->file);
+                                            }
+                                            # Assignment
+                                            else if ($content->contenttype_id == 3) {
+                                                $fileLink = asset($content->assignments[0]->file);
+                                            }
+                                            # Quizz
+                                            else{
+                                                $fileLink = '';
+                                            }
+                                        @endphp
+
+                                        <li videoUrl="{{ $fileLink }}" videoId="{{ $content->id }}" class="list-group-item px-0 {{ $content_key == 0 ? 'li_active' : '' }}">
 
                                             <i class='bx bxs-checkbox-checked fs-4 text-success'></i>
 
-                                            <p class="mb-0 chapter1 {{ $content_key == 0 ? 'text-primary' : '' }}  d-inline-block">  
+                                            <p class="mb-0 chapter{{ $content->id }} {{ $content_key == 0 ? 'text-primary' : '' }}  d-inline-block">  
+
 
                                                 {{ $content->title }}
                                                 
@@ -532,6 +555,10 @@
   
 
 @section('script_content')
+<link rel="stylesheet" type="text/css" href="{{ asset('plugin/plyr/demo.css') }}">
+<script src="{{ asset('plugin/plyr/plyr_plugin.js') }}"></script>
+<script src="{{ asset('plugin/plyr/default.js') }}"></script>
+
     <script type="text/javascript">
         $(document).ready(function(){
             $.ajaxSetup({
@@ -617,7 +644,6 @@
 
                 size_li = $("div.questionLists").length;
 
-                console.log(size_li);
                 $(".questionLists:lt(" + x + ")").show();
                 $(".loadmoreBtn").click(function () {
                     console.log(x);
@@ -655,8 +681,66 @@
 
 
             // Video
+
+            const player = Plyr.setup('.js-player',{
+                // invertTime: false,
+                i18n: {
+                    rewind: 'Rewind 15s',
+                    fastForward: 'Forward 15s',
+                    seek: "Seek",
+                    start: "Start",
+                    end: "End",
+                    seekTime : 10
+                },
+                controls: [
+                    'play-large', // The large play button in the center
+                    'restart', // Restart playback
+                    'rewind', // Rewind by the seek time (default 10 seconds)
+                    'play', // Play/pause playback
+                    'fast-forward', // Fast forward by the seek time (default 10 seconds)
+                    'progress', // The progress bar and scrubber for playback and buffering
+                    'current-time', // The current time of playback
+                    'mute', // Toggle mute
+                    'volume', // Volume control
+                    'captions', // Toggle captions
+                    'settings', // Settings menu
+                    'fullscreen', // Toggle fullscreen
+                    'airplay'
+                ],
+                events: ["ended", "progress", "stalled", "playing", "waiting", "canplay", "canplaythrough", "loadstart", "loadeddata", "loadedmetadata", "timeupdate", "volumechange", "play", "pause", "error", "seeking", "seeked", "emptied", "ratechange", "cuechange", "download", "enterfullscreen", "exitfullscreen", "captionsenabled", "captionsdisabled", "languagechange", "controlshidden", "controlsshown", "ready", "statechange", "qualitychange", "adsloaded", "adscontentpause", "adscontentresume", "adstarted", "adsmidpoint", "adscomplete", "adsallcomplete", "adsimpression", "adsclick"],
+                listeners: {
+                    seek: function (e) {
+                        // return false;    // required on v3
+                    },
+                    fastForward: 100
+                },
+                
+                clickToPlay: true,
+            });
+
             var starttime = 2;
             $(function() {
+                // var className = $('#playlist li').attr('class');
+                videoplay_currentActiveclass();
+
+                function videoplay_currentActiveclass(){
+                    if($('#playlist li').hasClass('li_active')){
+                        var videolink = $('ul#playlist').find('li.li_active').attr('videoUrl');
+                        var videoId = $('ul#playlist').find('li.li_active').attr('videoId');
+
+                        $("#videoarea").attr({
+                            "src": videolink,
+                            "poster": "",
+                            "autoplay": "autoplay"
+                                  });
+                        starttime = $(this).attr('startt');
+
+                    }
+
+                        // console.log("videolink");
+
+                }
+
                 $("#playlist li").on("click", function() {
 
                     var videolink = $(this).attr("videoUrl");
@@ -671,22 +755,19 @@
                               });
                     starttime = $(this).attr('startt');
 
+                    console.log(videolink);
 
                     $("#playlist li p").removeClass("text-primary");
                     $("p.chapter"+videoId).addClass("text-primary");
-
-                    
-
-
                     
 
                 });
 
             })
 
-            document.getElementById("videoarea").addEventListener("loadedmetadata", function() {
-                 this.currentTime = starttime;
-            }, false);
+            // document.getElementById("videoarea").addEventListener("loadedmetadata", function() {
+            //      this.currentTime = starttime;
+            // }, false);
 
             $('#askquestion').click(function(){
                 var vid = $(this).data('id');

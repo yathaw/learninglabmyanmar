@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Content;
 use App\Models\Lesson;
 use App\Models\Contenttype;
+use App\Models\Instructor;
 
 use Illuminate\Http\Request;
 
@@ -29,7 +30,14 @@ class SectionController extends Controller
         $lesson=Lesson::find($id);
 
         $contenttypes=Contenttype::all();
-        return view('course.section_new',compact('sections','contenttypes', 'course','contents','lesson'));
+
+        // if($course->id == $instructor->course_id){
+        //     $instructors=Instructor::all();
+        // }
+
+        $instructors=Instructor::all();
+        //$instructors=
+        return view('course.section_new',compact('sections','contenttypes', 'course','contents','lesson','instructors'));
     }
 
     /**
@@ -81,7 +89,30 @@ class SectionController extends Controller
         }
         /*insert sorting*/
 
-      $section->instructor_id=1;
+        // if(Auth::user->company_id == null){
+
+            $auth_id = Auth::id();
+
+            $user = Auth::user();
+            $role = $user->getRoleNames();
+
+            if ($role[0] == 'Instructor') {
+                $instructor = Instructor::where('user_id',$user->id)->first();
+
+                //dd($instructor->id);
+        }
+
+        //  $section->instructor_id=$instructor;
+        // }else{
+            
+        //     if($course->id == $instructor->course_id){
+        //         $instructors=Instructor::all();
+        //     }
+           
+        //     $section->instructor_id=$instructors;
+        // }
+
+       
 
       $section->save();
 

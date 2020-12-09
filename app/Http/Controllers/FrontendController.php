@@ -152,7 +152,9 @@ class FrontendController extends Controller
        $data = $request->data;
        $array = Array();
        $total = 0;
+       $status = 0;
        $invoice = rand(1000000,100);
+       $status=0;
        foreach ($data as $value) {
 
            if($user_id == $value['user_id']){
@@ -166,6 +168,7 @@ class FrontendController extends Controller
         $sale->invoiceno = "Stu-".$invoice;
         $sale->total = $total;
         $sale->user_id = $user_id;
+        $sale->status = $status;
         $sale->save();
         
 
@@ -174,7 +177,7 @@ class FrontendController extends Controller
        foreach ($data as $value) {
 
            if($user_id == $value['user_id']){
-            $sale->courses()->attach($value['id']);
+            $sale->courses()->attach($value['id'],['status'=>$status]);
            }
        }
 
