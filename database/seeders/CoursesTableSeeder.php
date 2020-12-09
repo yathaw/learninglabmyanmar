@@ -163,6 +163,7 @@ class CoursesTableSeeder extends Seeder
 	        	'price'			=> $courseList[10],
 	        	'level_id'		=> $courseList[11],
 	        	'subcategory_id'=> $courseList[12],
+                'user_id'       => 2,
 	        	'created_at'	=> now(),
 	        	'updated_at'	=> now(),
 	        ]);
@@ -180,9 +181,11 @@ class CoursesTableSeeder extends Seeder
 
 
         for ($b = 2; $b <= 9; $b++) {
+            $randomId = $faker->numberBetween(1, 2);
+
 	        DB::table('course_instructor')->insert([
 	            'course_id'     => $b,
-	            'instructor_id' => $faker->numberBetween(1, 2),
+	            'instructor_id' => $randomId,
 	            'created_at' => now(),
 	            'updated_at' => now()
 	        ]);

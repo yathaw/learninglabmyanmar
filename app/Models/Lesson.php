@@ -11,7 +11,7 @@ class Lesson extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['file','type','content_id','duration'];
+    protected $fillable=['file','type','content_id','duration','file_upload'];
 
     public function content()
   {

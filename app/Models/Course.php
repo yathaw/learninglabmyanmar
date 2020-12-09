@@ -24,6 +24,7 @@ class Course extends Model
 						'price',
 						'level_id',
 						'subcategory_id',
+						'user_id'
 						];
 
 	// NYL
@@ -56,6 +57,11 @@ class Course extends Model
 	    return $this->belongsTo('App\Models\Subcategory');
 	}
 
+	public function user()
+	{
+	    return $this->belongsTo('App\Models\User');
+	}
+
 	public function sections(){
     	return $this->hasMany('App\Models\Section');
     }
@@ -64,4 +70,9 @@ class Course extends Model
 	{
 		return $this->belongsToMany('App\Models\Installment')->withTimestamps();
 	}
+
+    public function contents()
+    {
+        return $this->hasManyThrough(Content::class, Section::class);
+    }
 }

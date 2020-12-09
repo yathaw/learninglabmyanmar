@@ -72,7 +72,10 @@ class AccountController extends Controller
 
     public function panel(){
         // Instructor
-        return view('account.instructorpanel');
+        $sales = Sale::where('status',1)->get();
+        $courses = Course::all();
+
+        return view('account.instructorpanel',compact('sales','courses'));
     }
 
 
