@@ -40,7 +40,7 @@
 												</a>
 											</span>
 
-											<a href="#" class="btn btn-light custom_primary_Color btn-sm editbtn" data-placement="top" title="Edit this section" data-toggle="modal" data-id={{$section->id}}>  
+											<a href="#" class="btn btn-light custom_primary_Color btn-sm editbtn" data-placement="top" title="Edit this section" data-toggle="modal" data-target="#editsectionModal" data-id={{$section->id}}>  
 												<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
 											</a>
 
@@ -250,9 +250,16 @@
 						</div>
 
 						<div class="row mb-3">
-							<label for="objectiveId" class="col-sm-2 col-form-label"> Upload File </label>
+							<label for="objectiveId" class="col-sm-2 col-form-label">File </label>
 							<div class="col-sm-10">
 								<input type="file" name="file">
+							</div>
+						</div>
+
+						<div class="row mb-3">
+							<label for="objectiveId" class="col-sm-2 col-form-label">Upload File </label>
+							<div class="col-sm-10">
+								<input type="file" name="file_upload">
 							</div>
 						</div>
 
@@ -275,19 +282,11 @@
 					<h5 class="modal-title">Edit Section </h5>
 					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 				</div>
-				<form method="post" action="{{route('backside.section.update',$section->id)}}" enctype="multipart/form-data">  
-					<input type="hidden" name="courseid" id="updatecourseid" value="{{ $course->id }}">
-					{{-- <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="_method" value="put"> --}}
+				<form id="editsectionform">
+					<input type="hidden" name="courseid" id="updatecourseid" >
 					<input type="hidden" name="sectionid" id="updatesectionid">
-					@php
-					$authuser = Auth::user();
-        			$instructor = $authuser->instructor;
-        			$instructorid= $instructor->id;
-					@endphp
-					<input type="hidden" name="instructorid" id="updateinstructorid" value="{{$instructorid}}">
-					@csrf
-					@method('PUT')
+					<input type="hidden" name="instructorid" id="updateinstructorid" >
+
 					<div class="modal-body m-3">
 						<div class="row mb-3">
 							<label for="titleEdit" class="col-sm-2 col-form-label"> Title </label>
@@ -313,20 +312,28 @@
 							</div>
 						</div>
 
-						{{-- <div class="row mb-3">
+						{{-- @php
+                       $authuser=Auth::user();
+                       $instructor_companyid=$authuser->company_id;   //null
+                       //var_dump($instructor);
+                       //die();
+                       @endphp
+                       @if($instructor_companyid != Null)
+						<div class="row mb-3">
 						    <label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
 						    <div class="col-sm-10">
-						    	<select class="form-control select2" name="instructorid">
-						    	
+						    	<select class="form-control select2" name="instructor" id="instructorEdit">
+						    		
 						    	</select>
 						    </div>
-						</div> --}}
+						</div>
+						@endif --}}
 
 
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary" id="contentupdate">Update changes</button>
+						<button type="submit" class="btn btn-primary" id="sectionupdate">Update changes</button>
 					</div>
 				</form>
 			</div>
@@ -510,16 +517,20 @@ $('.editbtn').click(function(){
           	//alert('hi');
           	var id = $(this).data('id');
           	 //console.log(id);
-          	 $.post('/backside/section/getid',{id:id},function(response){
+          	 $.get('/backside/section/'+id+'/edit',function(response){
           	 //console.log(response.id);
           	 //console.log(response);
           	 $('#updatesectionid').val(response.id);
+          	 $('#updatecourseid').val(response.course_id);
+          	 $('#updateinstructorid').val(response.instructor_id);
           	 $('#titleEdit').val(response.title);
           	 $('#objectiveEdit').text(response.objective);
+          	 $('#contenttypeEdit').val(response.contenttype_id);
+          	
           	 var contenttypeid=response.contenttype_id;
           	  	//console.log(contenttypeid);
-          	  	$.post('/backside/section/getcontenttype',{contenttypeid:contenttypeid},function(res){
-          	  		console.log(res);
+          	  	 $.post('/backside/section/getcontenttype',{contenttypeid:contenttypeid},function(res){
+          	  		//console.log(res);
           	  		var html = "";
           	  		$.each(res,function (i,v) {
           	  			html +=`<option value="${v.id}"`;
@@ -534,8 +545,8 @@ $('.editbtn').click(function(){
           	  		$('#contenttypeEdit').html(html);
           	  	})
 
-          	  })
           	 $('#editsectionModal').modal('show');
+          	 
 
           	})
 
@@ -556,9 +567,9 @@ $('.editbtn').click(function(){
 	$('.lessoneditbtn').click(function(){
 	//alert('hi');
 	var id=$(this).data('id');
-	console.log(id);
+	//console.log(id);
 	$.post('/backside/content/getcontentid',{id:id},function(response){
-	console.log(response);
+	//console.log(response);
 		$('#content_title').val(response.title);
 		$('#content_description').val(response.description);
 		//$('#content_file').val(response);
@@ -569,21 +580,49 @@ $('.editbtn').click(function(){
 
 });
 
-	$('#contentupdate').click(function(){
+$('#editsectionform').on('submit',function(event){
 	//alert('hi');
-	
+	event.preventDefault();
+	var sectionid=$('#updatesectionid').val();
 	var courseid=$('#updatecourseid').val();
 	var instructorid=$('#updateinstructorid').val();
 	var title=$('#titleEdit').val();
 	var objective=$('#objectiveEdit').val();
-	var sectionid=$('#updatesectionid').val();
-
+	var contenttypeid=$('#contenttypeEdit').val();
 	
-	console.log(title);
-	console.log(objective);
-	console.log(sectionid);
-	console.log(courseid);
-	console.log(instructorid);
+	// console.log(title);
+	// console.log(objective);
+	// console.log(id);
+	// console.log(courseid);
+	// console.log(instructorid);
+	// $.post('/sectionupdate/'+sectionid,{sectionid:sectionid,courseid:courseid,instructorid:instructorid,title:title,objective:objective},function(response){
+	// 	console.log(response);
+	// })
+	$.ajax({
+		url:'/backside/sectionupdate/'+sectionid,
+		type:"POST",
+		data:$('#editsectionform').serialize(),
+
+		// data:{
+		// 	sectionid:sectionid,
+		// 	courseid:courseid,
+		// 	instructorid:instructorid,
+		// 	title:title,
+		// 	objective:objective
+		// },
+		
+		dataType:'json',
+		headers:{
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+		success:function(response){
+			$('#editsectionform').trigger("reset");
+			$('#editsectionModal').modal('hide');
+			window.location.reload(true);
+		}
+
+	})
+});
 
 });
 

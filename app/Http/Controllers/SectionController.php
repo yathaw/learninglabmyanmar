@@ -129,8 +129,11 @@ class SectionController extends Controller
     public function edit(Section $section)
     {   
         //dd($section->id);
-        $contenttypes=Contenttype::all();
-        return view('course.section_new',compact('section','contenttypes'));
+        // $contenttypes=Contenttype::all();
+        // return view('course.section_new',compact('section','contenttypes'));
+      return $section;
+
+
     }
 
     /**
@@ -141,18 +144,18 @@ class SectionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Section $section)
-    {  //dd($section);
-        $request->validate([
-            "title"=>"required|min:5",
-            "objective"=>"required",
-        ]);
-
-        $section->title=$request->title;
-        $section->objective=$request->objective;
+    {  //dd($request);
+        $sectionid = $request->sectionid;
+        $courseid = $request->courseid;
+        $instructorid = $request->instructorid;
+        $title = $request->title;
+        $objective = $request->objective;
         
-        $section->contenttype_id=$request->contenttype;
-        $section->course_id=$request->courseid;
-        //$section->sorting=1;
+        $section->title=$title;
+        $section->objective=$objective;
+        
+        $section->contenttype_id=1;
+        $section->course_id=$courseid;
 
         $hasCourses_inSection = Section::where('course_id', $request->courseid)->get();
 
@@ -160,30 +163,16 @@ class SectionController extends Controller
             $sorting = $hasCourse_inSection->sorting;
             $sorting_data = ++$sorting;
         }
-
         /*insert sorting*/
         if($hasCourses_inSection->isEmpty()){
         $section->sorting = 1;
         }else{
             $section->sorting = $sorting_data;
         }
-        /*insert sorting*/
-
-        $authuser = Auth::user();
-        $instructor = $authuser->instructor;
-        $instructorid= $instructor->id;
-        $section->instructor_id=$instructorid;
-            //dd($instructorid);
-            // if($authuser->company_id == NULL){
-               
-            //     $section->instructor_id=$instructorid;
-            // }else{
-            //     $section->instructor_id=$request->instructor;
-            // }
 
       $section->save();
 
-       return redirect()->route('backside.section.index');
+      return $section;
 
    }
 
@@ -221,4 +210,40 @@ class SectionController extends Controller
         Section::where('id', $id)->update(array('sorting' => $sorting));
 
     }
+
+    public function getupdatesection(Request $request)
+    {   
+        //dd($request);
+        $sectionid = $request->sectionid;
+        $courseid = $request->courseid;
+        $instructorid = $request->instructorid;
+        $title = $request->title;
+        $objective = $request->objective;
+        
+        $section->title=$title;
+        $section->objective=$objective;
+        
+        $section->contenttype_id=1;
+        $section->course_id=$courseid;
+
+        $hasCourses_inSection = Section::where('course_id', $request->courseid)->get();
+
+        foreach($hasCourses_inSection as $hasCourse_inSection){
+            $sorting = $hasCourse_inSection->sorting;
+            $sorting_data = ++$sorting;
+        }
+        /*insert sorting*/
+        if($hasCourses_inSection->isEmpty()){
+        $section->sorting = 1;
+        }else{
+            $section->sorting = $sorting_data;
+        }
+
+      $section->save();
+
+      return $section;
+        
+    }
+
+
 }
