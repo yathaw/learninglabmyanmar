@@ -286,7 +286,7 @@
 					<input type="hidden" name="courseid" id="updatecourseid" >
 					<input type="hidden" name="sectionid" id="updatesectionid">
 
-					<input type="hidden" name="instructorid" id="updateinstructorid" >
+					{{-- <input type="hidden" name="instructorid" id="updateinstructorid" > --}}
 
 
 					@php
@@ -300,9 +300,9 @@
 	        			$instructorid = NULL;
 	        		}
 					@endphp
-					<input type="hidden" name="instructorid" id="updateinstructorid" value="{{$instructorid}}">
-					@csrf
-					@method('PUT')
+					{{-- <input type="hidden" name="instructorid" id="updateinstructorid" value="{{$instructorid}}"> --}}
+					{{-- @csrf
+					@method('PUT') --}}
 
 					<div class="modal-body m-3">
 						<div class="row mb-3">
@@ -329,7 +329,7 @@
 							</div>
 						</div>
 
-						{{-- @php
+						@php
                        $authuser=Auth::user();
                        $instructor_companyid=$authuser->company_id;   //null
                        //var_dump($instructor);
@@ -340,11 +340,13 @@
 						    <label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
 						    <div class="col-sm-10">
 						    	<select class="form-control select2" name="instructor" id="instructorEdit">
+
+						    		
 						    		
 						    	</select>
 						    </div>
 						</div>
-						@endif --}}
+						@endif
 
 
 					</div>
@@ -365,9 +367,8 @@
 					<h5 class="modal-title">Edit Content </h5>
 					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 				</div>
-				<form method="post" action="" enctype="multipart/form-data">
-					@csrf
-					@method('PUT')
+				<form id="editcontentform">
+					
 					<div class="modal-body m-3">
 						<div class="row mb-3">
 							<label for="content_title" class="col-sm-2 col-form-label"> Title </label>
@@ -412,6 +413,30 @@
                                       
                                         <li class="nav-item" role="presentation">
                                             <a class="nav-link" id="newPhoto-tab" data-toggle="tab" href="#newPhotoTab" role="tab" aria-controls="newPhotoTab" aria-selected="false"> New Video</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content mt-3" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="oldPhotoTab" role="tabpanel" aria-labelledby="oldPhoto-tab">
+                                            <img src="" class="img-fluid w-25" id="content_file">
+                                        </div>
+                                        
+                                        <div class="tab-pane fade" id="newPhotoTab" role="tabpanel" aria-labelledby="newPhoto-tab">
+                                            <input type="file" id="photo_id" name="photo">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-2">
+                                <label for="photo_id" class="col-sm-2 col-form-label"> Upload File</label>
+                                <div class="col-sm-10">
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link active" id="oldPhoto-tab" data-toggle="tab" href="#oldPhotoTab" role="tab" aria-controls="oldPhotoTab" aria-selected="true"> Old File </a>
+                                        </li>
+                                      
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" id="newPhoto-tab" data-toggle="tab" href="#newPhotoTab" role="tab" aria-controls="newPhotoTab" aria-selected="false"> New File</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content mt-3" id="myTabContent">
@@ -539,12 +564,15 @@ $('.editbtn').click(function(){
           	 //console.log(response);
           	 $('#updatesectionid').val(response.id);
           	 $('#updatecourseid').val(response.course_id);
-          	 $('#updateinstructorid').val(response.instructor_id);
+          	 
           	 $('#titleEdit').val(response.title);
           	 $('#objectiveEdit').text(response.objective);
           	 $('#contenttypeEdit').val(response.contenttype_id);
+          	 $('#instructorEdit').val(response.instructor_id);
           	
           	 var contenttypeid=response.contenttype_id;
+          	 var instructorid=response.instructor_id;
+          	 var courseid=response.course_id;
           	  	//console.log(contenttypeid);
           	  	 $.post('/backside/section/getcontenttype',{contenttypeid:contenttypeid},function(res){
           	  		//console.log(res);
@@ -562,7 +590,23 @@ $('.editbtn').click(function(){
           	  		$('#contenttypeEdit').html(html);
           	  	})
 
-          	 $('#editsectionModal').modal('show');
+          	  	 $.post('/backside/getinstructor',{instructorid:instructorid,courseid:courseid},function(response){
+          	  		console.log(response);
+          	 var html = "";
+          	 		$.each(response,function (i,v) {
+          	 			html +=`<option value="${v.id}"`;
+
+          	  			if(v.id==instructorid)
+          	 				html+=`selected`;
+
+          			html+=`>${v.instructor_id}</option>`;
+
+          			})
+
+          	 		$('#instructorEdit').html(html);
+          	  })
+
+          	  $('#editsectionModal').modal('show');
           	 
 
           	})
@@ -589,7 +633,7 @@ $('.editbtn').click(function(){
 	//console.log(response);
 		$('#content_title').val(response.title);
 		$('#content_description').val(response.description);
-		//$('#content_file').val(response);
+		$('#content_file').val(response);
 		//var test=response
 
 	})
@@ -606,28 +650,10 @@ $('#editsectionform').on('submit',function(event){
 	var title=$('#titleEdit').val();
 	var objective=$('#objectiveEdit').val();
 	var contenttypeid=$('#contenttypeEdit').val();
-	
-	// console.log(title);
-	// console.log(objective);
-	// console.log(id);
-	// console.log(courseid);
-	// console.log(instructorid);
-	// $.post('/sectionupdate/'+sectionid,{sectionid:sectionid,courseid:courseid,instructorid:instructorid,title:title,objective:objective},function(response){
-	// 	console.log(response);
-	// })
 	$.ajax({
 		url:'/backside/sectionupdate/'+sectionid,
 		type:"POST",
-		data:$('#editsectionform').serialize(),
-
-		// data:{
-		// 	sectionid:sectionid,
-		// 	courseid:courseid,
-		// 	instructorid:instructorid,
-		// 	title:title,
-		// 	objective:objective
-		// },
-		
+		data:$('#editsectionform').serialize(),	
 		dataType:'json',
 		headers:{
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
