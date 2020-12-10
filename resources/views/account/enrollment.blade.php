@@ -39,6 +39,51 @@
 		
 	</div>
 
+	<div class="row limitshow">
+		<div class="col-12 col-lg-12 col-xxl-12 d-flex">
+			<div class="card flex-fill">
+				<div class="card-header">
+
+					<h5 class="card-title mb-0">Lastest Course </h5>
+				</div>
+				<table class="table table-hover my-0">
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>Student Name</th>
+							<th class="d-none d-xl-table-cell">Start Date</th>
+							<th>Invoice No</th>
+							<th>Course Title</th>
+							<th class="d-none d-md-table-cell"> Price </th>
+						</tr>
+					</thead>
+					<tbody>
+						@php $i=1; @endphp
+						@foreach($enrolls as $enroll)
+						<tr>
+							<td>{{$i++}}</td>
+							<td class="d-none d-xl-table-cell">{{$enroll->user->name}}</td>
+							@php
+								$date = date('d/m/Y', strtotime($enroll->created_at));
+							@endphp
+							<td>{{$date}}</td>
+							<td>{{$enroll->invoiceno}}</td>
+							<td>
+								@foreach($enroll->courses as $ecourse)
+								<span class="badge bg-success">
+									{{$ecourse->title}}
+								</span>
+								@endforeach
+							</td>
+							<td class="d-none d-md-table-cell">{{$enroll->total}}</td>
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
 @section('script_content')
     
     <script type="text/javascript">
@@ -184,12 +229,14 @@
 												</div>`;
 									$('.outputshow').html(html);
 									$('.outputshow').show();
+									$('.limitshow').hide();
 								}else{
 									html+=`<tr class='clickableRow'>
 														<td colspan='6' class='text-center'>Your Search Data Not Found</td>
 													</tr></tbody></table></div></div>`;
 									$('.outputshow').html(html);
 									$('.outputshow').show();
+									$('.limitshow').hide();
 								}
               }
             });

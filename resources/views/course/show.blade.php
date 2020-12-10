@@ -8,7 +8,7 @@
     
       <div class="col-6 col-md-6">  
          <img src="{{asset($course->image)}}" alt="Unsplash" class="img-responsive w-50">
-            <h5 class="card-title mb-0"> {{ $course->name }} </h5>
+            <h5 class="card-title mb-0 my-2"> {{ $course->title }} </h5>
             <div class="badge bg-success my-2">Finished</div>
       </div>
 
