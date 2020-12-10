@@ -45,7 +45,7 @@ class JobtitleController extends Controller
         $jobtitle = new Jobtitle();
         $jobtitle->name = request('name');
         $jobtitle->save();
-        return redirect()->route('jobtitles.index');
+        return redirect()->route('backside.jobtitles.index');
 
     }
 
@@ -88,7 +88,7 @@ class JobtitleController extends Controller
       
         $jobtitle->name = request('name');
         $jobtitle->save();
-        return redirect()->route('jobtitles.index');
+        return redirect()->route('jobtitles.backside.index');
     }
 
     /**
@@ -100,7 +100,7 @@ class JobtitleController extends Controller
     public function destroy(Jobtitle $jobtitle)
     {
         $jobtitle->delete();
-        return redirect()->route('jobtitles.index');
+        return redirect()->route('backside.jobtitles.index');
         
 
     }
