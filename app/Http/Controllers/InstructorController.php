@@ -133,6 +133,14 @@ class InstructorController extends Controller
      */
     public function destroy(Instructor $instructor)
     {
-        //
+        // dd($instructor);
+        $user_id = $instructor->user_id;
+        // dd($user_id);
+        $user = User::find($user_id);
+        $instructor->delete();
+        $user->delete();
+        return redirect()->route('backside.instructors.index');
+
+
     }
 }

@@ -17,7 +17,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
 
-
+//KYW
 use App\Http\Controllers\BackendController;
 
 // NYL
@@ -95,13 +95,15 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/category',CategoryController::class);
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
+//NYL 
+    Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
 
     Route::resource('/section', SectionController::class);
 //KYW
    
     Route::get('/section/{section}/edit',[SectionController::class,'edit'])->name('sectionedit');
     Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
-
+    Route::post('/getinstructor',[SectionController::class,'getinstructor'])->name('getinstructor');
     Route::post('/sectionupdate/{id}',[BackendController::class,'sectionupdate'])->name('sectionupdate');
    
 

@@ -185,16 +185,19 @@
 
                             <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 order-xl-2 order-lg-2 order-md-1 order-sm-1 order-1 ">
                                 <div class="scrollcardDiv card scroll_card scroll_card_position">
-                                    <div class="embed-responsive embed-responsive-4by3">
-                                        
-                                        
-                                        <iframe height="300" src="{{asset($course->video)}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"  class="card-img-top"></iframe>
+                                    
+                                    <div class="video-player card-img-top">
+                                        <video class="js-player lesson_video_play vidoe-js" data-poster="{{ asset($course->image) }}" controls crossorigin preload="auto" playsinline id="videoarea" style="--plyr-color-main: #f09819;">
+                                            <source src="{{ asset($course->video) }}" type="video/mp4"/ >
+
+                                        </video>
                                     </div>
+
                                     <div class="card-body text-muted">
                                         <p>
                                             <span class="text-danger fs-3"> {{$course->price}} Ks  </span> 
 
-                                            <span class="text-decoration-line-through text-muted"> 50,000 Ks </span>
+                                            {{-- <span class="text-decoration-line-through text-muted"> 50,000 Ks </span> --}}
 
                                         </p>
 
@@ -236,6 +239,7 @@
 
                                             @else
                                             @php
+                                                $purched_array = array();
                                                 $count_sale = count(Auth::user()->sales);
                                             @endphp
 
@@ -247,10 +251,15 @@
                                                                 <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>
 
                                                             @else
-                                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>
+                                                                @php
+                                                                    array_push($purched_array, "true")
+                                                                @endphp
                                                             @endif
                                                         @endforeach
                                                     @endforeach
+                                                    @if(count($purched_array) > 0)
+                                                        <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>
+                                                    @endif
 
                                                 @else
 
@@ -359,9 +368,7 @@
 
                                     <ul type="none" class="lh-lg">
                                         @foreach($data as $result)
-                                            @foreach($result as $res)
-                                                <li> <i class="icofont-check-alt"></i> {{$res}} </li>
-                                            @endforeach
+                                            <li> <i class="icofont-check-alt"></i> {{$result}} </li>
                                         @endforeach
                                         
                                     </ul>
@@ -377,14 +384,12 @@
 
                                     @php
                                         // $data = json_decode($course->requirements,true);
-                                        $data = json_decode( $course->requirements,true);
+                                        $data = json_decode( $course->requirements);
                                     @endphp
 
                                     <ul type="none" class="lh-lg">
                                         @foreach($data as $result)
-                                            @foreach($result as $res)
-                                                <li> <i class="icofont-check-alt"></i> {{$res}} </li>
-                                            @endforeach
+                                            <li> <i class="icofont-check-alt"></i> {{$result}} </li>
                                         @endforeach
                                         
                                     </ul>
@@ -410,7 +415,7 @@
 
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
-                                        <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse{{$key}}" aria-expanded="true" aria-controls="collapse{{$key}}">
+                                        <button class="accordion-button {{ $key != 0 ? 'collapsed' : '' }}" type="button" data-toggle="collapse" data-target="#collapse{{$key}}" aria-expanded="true" aria-controls="collapse{{$key}}">
                                             {{$section->title}}
 
                                             <small class="fst-italic ml-4"> ( {{$count_content}} Lectures • 31 min ) </small>
@@ -846,12 +851,51 @@
         </div>
     </div>
 
+
 @section('script_content')
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugin/plyr/demo.css') }}">
+    <script src="{{ asset('plugin/plyr/plyr_plugin.js') }}"></script>
+    <script src="{{ asset('plugin/plyr/default.js') }}"></script>
     
     <script type="text/javascript">
 
         $(document).ready(function() {
 
+            const player = Plyr.setup('.js-player',{
+                // invertTime: false,
+                i18n: {
+                    rewind: 'Rewind 15s',
+                    fastForward: 'Forward 15s',
+                    seek: "Seek",
+                    start: "Start",
+                    end: "End",
+                    seekTime : 10
+                },
+                controls: [
+                    'play-large', // The large play button in the center
+                    'restart', // Restart playback
+                    'rewind', // Rewind by the seek time (default 10 seconds)
+                    'play', // Play/pause playback
+                    'fast-forward', // Fast forward by the seek time (default 10 seconds)
+                    'progress', // The progress bar and scrubber for playback and buffering
+                    'current-time', // The current time of playback
+                    'mute', // Toggle mute
+                    'volume', // Volume control
+                    'captions', // Toggle captions
+                    'settings', // Settings menu
+                    'fullscreen', // Toggle fullscreen
+                    'airplay'
+                ],
+                events: ["ended", "progress", "stalled", "playing", "waiting", "canplay", "canplaythrough", "loadstart", "loadeddata", "loadedmetadata", "timeupdate", "volumechange", "play", "pause", "error", "seeking", "seeked", "emptied", "ratechange", "cuechange", "download", "enterfullscreen", "exitfullscreen", "captionsenabled", "captionsdisabled", "languagechange", "controlshidden", "controlsshown", "ready", "statechange", "qualitychange", "adsloaded", "adscontentpause", "adscontentresume", "adstarted", "adsmidpoint", "adscomplete", "adsallcomplete", "adsimpression", "adsclick"],
+                listeners: {
+                    seek: function (e) {
+                        // return false;    // required on v3
+                    },
+                    fastForward: 100
+                },
+                
+                clickToPlay: true,
+            });
 
             // wishlist save
            

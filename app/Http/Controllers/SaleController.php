@@ -86,6 +86,16 @@ class SaleController extends Controller
         //
     }
 
+
+    // remove sale course
+    public function remove_sale_course(Request $request)
+    {
+        $sale_id = $request->sale_id;
+        $course_id = $request->course_id;
+        $sale = Sale::find($sale_id);
+        $sale->courses()->detach($course_id);
+        return "ok";
+    }
     public function enrollment()
     {
        /* $enrolls = Sale::whereHas('courses',function($q){

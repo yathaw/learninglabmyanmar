@@ -26,7 +26,10 @@ class AccountController extends Controller
         $wishlists = Wishlist::paginate(8);
         $user_id = Auth::id();
 
-        $sales = Sale::where('user_id',$user_id)->where('status',1)->paginate(8);
+        $sales = Sale::where('user_id',$user_id)->with(array('courses'=>function($q){
+            $q->wherePivot('status',1)->get();
+        }))->paginate(8);
+        // dd($sales);
     	return view('account.mystudyings',compact('tabs','wishlists','sales'));
     }
 

@@ -23,17 +23,34 @@ class CompanySeeder extends Seeder
             '/storage/companylogo/24680.png',
             '/storage/companylogo/56789.png'
         ];
-        $j = 0;
-        for ($i = 0; $i == 3; $i++) {
-		    $company = new Company;
-            $company->name = $faker->company;
-            $company->logo = $companyLogo[$j++];
-            $company->address = $faker->company;
-            $company->description = $faker->company;
-            $company->created_at = now();
-            $company->updated_at = now();
-            $company->save();
+        // for ($i = 1; $i == 3; $i++) {
 
-		}
+        Company::create([
+            'name'         => $faker->company,
+            'logo'         => $companyLogo[0],
+            'address'      => $faker->address,
+            'description'  => $faker->realText($maxNbChars = 200, $indexSize = 2),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        Company::create([
+            'name'         => $faker->company,
+            'logo'         => $companyLogo[1],
+            'address'      => $faker->address,
+            'description'  => $faker->realText($maxNbChars = 200, $indexSize = 2),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        Company::create([
+            'name'         => $faker->company,
+            'logo'         => $companyLogo[2],
+            'address'      => $faker->address,
+            'description'  => $faker->realText($maxNbChars = 200, $indexSize = 2),
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
     }
 }

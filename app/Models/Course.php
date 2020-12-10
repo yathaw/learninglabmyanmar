@@ -66,6 +66,11 @@ class Course extends Model
     	return $this->hasMany('App\Models\Section');
     }
 
+    public function installments($value='')
+	{
+		return $this->belongsToMany('App\Models\Installment')->withTimestamps();
+	}
+
     public function contents()
     {
         return $this->hasManyThrough(Content::class, Section::class);
