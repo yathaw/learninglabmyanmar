@@ -239,6 +239,7 @@
 
                                             @else
                                             @php
+                                                $purched_array = array();
                                                 $count_sale = count(Auth::user()->sales);
                                             @endphp
 
@@ -250,10 +251,15 @@
                                                                 <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>
 
                                                             @else
-                                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>
+                                                                @php
+                                                                    array_push($purched_array, "true")
+                                                                @endphp
                                                             @endif
                                                         @endforeach
                                                     @endforeach
+                                                    @if(count($purched_array) > 0)
+                                                        <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>
+                                                    @endif
 
                                                 @else
 

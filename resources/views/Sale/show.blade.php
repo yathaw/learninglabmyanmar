@@ -1,4 +1,42 @@
 <x-backend>
+
+   <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col-md-6">
+         <div class="card shadow">
+            <div class="row">
+               <div class="col-md-5 text-center pt-4">
+                  <img src="{{asset('/storage/courseimg/11111.jpg')}}" class="img-fluid rounded-circle w-75">
+               </div>
+               <div class="col-md-7">
+                  <div class="my-3 py-3">
+                     <div class="row form-group my-2">
+                        <label class="col-md-4">Invoiceno</label>
+                        <h4 class="col-md-8">{{$sale->invoiceno}}</h4>
+                     </div>
+
+                     <div class="row form-group my-2">
+                        <label class="col-md-4">Name</label>
+                        <h4 class="col-md-8">{{$sale->user->name}}</h4>
+                     </div>
+
+                     <div class="row form-group my-2">
+                        <label class="col-md-4">Phone</label>
+                        <h5 class="col-md-8">{{$sale->user->phone}}</h5>
+                     </div>
+
+                     <div class="row form-group my-2">
+                        <label class="col-md-4">Email</label>
+                        <h5 class="col-md-8">{{$sale->user->email}}</h5>
+                     </div>
+                     
+                     
+                  </div>
+
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
    
    <div class="row row-cols-1 row-cols-md-3 g-4">
 
@@ -76,7 +114,8 @@
                @if($course->pivot->status == 1)
                <input type="button" disabled="" class="form-control btn btn-success d-block" value="Purched">
                @else
-               <a href="javascript:void(0)" data-toggle="modal" data-target="#installmentmodal" class="btn btn-outline-success d-block installmentpay" data-course="{{$course->title}}" data-course_id ="{{$course->id}}"data-total="{{$course->price}}" data-id="{{$sale->id}}">Installment</a>
+               <a href="javascript:void(0)" data-toggle="modal" data-target="#installmentmodal" class="btn btn-outline-success d-block installmentpay" data-course="{{$course->title}}" data-course_id ="{{$course->id}}" data-total="{{$course->price}}" data-id="{{$sale->id}}">Installment</a>
+               <a href="javascript:void(0)" class="btn btn-outline-danger d-block mt-3 remove_btn" data-course_id="{{$course->id}}" data-id="{{$sale->id}}">Remove</a>
                @endif
             </div>
 
@@ -258,6 +297,24 @@
               }
 
             })
+          })
+
+          $('.remove_btn').click(function() {
+             var course_id = $(this).data('course_id');
+             var sale_id = $(this).data('id');
+             var ans = confirm('Ready to remove?');
+             if(ans){
+               //salecontroller
+               $.ajax({
+                  url : "{{route('backside.remove_sale_course')}}",
+
+                  method : 'post',
+                  data : {course_id : course_id , sale_id : sale_id},
+                  success:function(res){
+                     location.reload();
+                  }
+               })
+             }
           })
 
         });

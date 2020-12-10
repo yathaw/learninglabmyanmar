@@ -17,6 +17,9 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
 
+
+use App\Http\Controllers\BackendController;
+
 // NYL
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\StudentController;
@@ -92,11 +95,18 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/category',CategoryController::class);
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
+//NYL 
+    Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
 
     Route::resource('/section', SectionController::class);
 //KYW
-    Route::post('/section/getid',[SectionController::class,'getid'])->name('getid');
+   
+    Route::get('/section/{section}/edit',[SectionController::class,'edit'])->name('sectionedit');
     Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
+
+    Route::post('/sectionupdate/{id}',[BackendController::class,'sectionupdate'])->name('sectionupdate');
+   
+
 
     Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
     
@@ -117,8 +127,14 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     // NYL
     Route::resource('installments',InstallmentController::class);
 
+    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
+
+    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
 
 });
+
+
+
 Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
 
 // Backend Login

@@ -71,7 +71,7 @@ class FrontendController extends Controller
        $search_data = Course::where('title','like','%'.$data.'%')->with(array('instructors' => function($query)
        {
         $query->with('user');
-       }))->with('wishlists')->get();
+       }))->with('wishlists')->with('sales')->get();
 
 
        // dd($search_data);
@@ -206,17 +206,40 @@ class FrontendController extends Controller
    public function searchmystudying(Request $request)
    {
        $data = $request->data;
+
        $sales = Sale::where('user_id',Auth::id())->get();
+
+       $sale_courses = Array();
        $courses = Array();
-       foreach ($sales as $value) {
-            foreach ($value->courses as $course) {
-                    $search_course = Course::where('title','like','%'.$data.'%')->with(array('instructors' => function($query)
-                       {
-                        $query->where('user_id',Auth::id())->with('user');
-                       }))->with('sales')->where('id',$course->id)->get();
-                    array_push($courses, $search_course);
-                }    
+      
+      // loop when auth user = sale user_id
+
+       foreach ($sales as $sale) {
+            
+          foreach ($sale->courses as $course) {
+
+            // when course_sale status is 1, set data to array
+
+            if($course->pivot->status == 1){
+              array_push($sale_courses, $course);
+            } 
+          }
        }
+
+
+       // loop course_sale status 1 data
+
+       foreach($sale_courses as $sale_course){
+
+          $search_course = Course::where('id',$sale_course->id)->where('title','like','%'.$data.'%')->with(array('instructors'=>function($q){
+              $q->with('user');
+            }))->with(array('sales'=>function($q){
+            $q->where('user_id',Auth::id())->get();
+          }))->get();
+            array_push($courses, $search_course);
+          }
+
+       // dd($courses);
        
        return response(json_encode($courses));
    }

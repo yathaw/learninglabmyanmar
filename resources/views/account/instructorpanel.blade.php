@@ -23,7 +23,13 @@
 							<a href="">
 								<div class="card-body">
 									<h5 class="card-title mb-4"> Enrollments </h5>
-									<h1 class="mt-1 mb-3"> 3 </h1>
+									<h1 class="mt-1 mb-3">
+										@if(count($sales) > 0)
+											<a href="{{route('backside.enrollment')}}" class="text-dark"> {{count($sales)}} </a>
+										@else
+											0
+										@endif
+									</h1>
 								</div>
 							</a>
 						</div>
@@ -41,7 +47,7 @@
 							<a href="">
 								<div class="card-body">
 									<h5 class="card-title mb-4">Courses</h5>
-									<h1 class="mt-1 mb-3"> 4 </h1>
+									<h1 class="mt-1 mb-3"> {{count($courses)}} </h1>
 								</div>
 							</a>
 						</div>

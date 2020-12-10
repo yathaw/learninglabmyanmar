@@ -94,15 +94,24 @@ class ContentController extends Controller
             $filepath='/storage/'.$path;
             }
 
+            if($request->file()){
+            $fileName1=time().'_'.$request->file_upload->getClientOriginalName();
+            $path1 = $request->file('file_upload')->storeAs('lessonfile', $fileName1, 'public');
+            $filepath1='/storage/'.$path1;
+            }
+
             $lesson=new Lesson;
-            $lesson->file=$filepath;
+            
             $lesson->content_id=$content->id;
 
+            $lesson->file=$filepath;
             $file = $request->file;
             $fileExtension =$file->extension();
             //dd($fileExtension);
             $lesson->type=$fileExtension;
             $lesson->duration= $duration_sec;
+
+            $lesson->file_upload=$filepath1;
             $lesson->save();
 
 

@@ -1076,20 +1076,25 @@
 				var html = "";
 				var instructor = "";
 				var heart = false;
+				// frontendcontroller
 				$.post('searchmystudying',{data:data},function(res){
-					// console.log(typeof(res));
 					if(res){
 						var response = JSON.parse(res);
+						console.log(response);
+
 						$.each(response,function(g,h){
 							$.each(h,function(i,v){
 								
 
 							$.each(v.sales,function(c,d){
-								
-								if(d.user_id == user_id && d.pivot.course_id == v.id){
-									heart = true;
+								// console.log(d);
+								if(d.pivot.status == 1){
+									if(d.user_id == user_id && d.pivot.course_id == v.id){
+										heart = true;
+									};
 								};
 							})
+							
 							if(heart == true){
 							
 							html+=`<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">

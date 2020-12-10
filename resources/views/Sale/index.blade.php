@@ -47,8 +47,11 @@
                     @php
                       $array = array();
                       $course_count = array();
+                      $installment_course = array();
+                      $sale_installment = array();
                     @endphp
                     @foreach($sale->courses as $course)
+
                         @if($course->pivot->status == 1)
                           @php
                             array_push($course_count, $course);
@@ -60,8 +63,28 @@
                         @endif
 
                     @endforeach
+                    @foreach($sale->installments as $installment)
+                      @php 
+                        array_push($sale_installment, $installment);
+                        array_push($installment_course, $installment->courses);
+                      @endphp
+                    @endforeach
+
                     @php
+
+                      // sale installment data from installment table
+
+                      $sale_installment_data = json_encode($sale_installment);
+
+                      // installment course data
+                      $installment_course_data = json_encode($installment_course);
+                    
+                      // course_sale status 1 course
+
                       $purche_data = json_encode($course_count);
+
+                      // course_sale status 0 course
+
                       $course_data = json_encode($array);
                       $total = 0;
                       foreach($array as $value) {
@@ -71,15 +94,20 @@
                       <tr>
                         <th>{{$i}}</th>
                         <th>{{$sale->invoiceno}}</th>
-                        <th>{{$total}} KS</th>
+                        <th>@if($total==0)
+                              {{$sale->total}} KS
+                            @else
+                              {{$total}} KS
+                            @endif</th>
                         <th> {{$sale->user->name}} </th>
                         <th>
                           @if($sale->status == 1 && count($sale->courses) == count($course_count))
                           <p class="text-success">Paid</p>
+                          <p class="py-0">( {{count($course_count)}} of {{count($sale->courses)}} Courses)</p>
                           @else
                           
-                          <p class="text-danger">
-                          Unfinished</p>
+                          <p class="text-danger">Unfinished</p>
+                          <p class="py-0">( {{count($course_count)}} of {{count($sale->courses)}} Courses)</p>
                           @endif
                         </th>
                         <th>
@@ -93,11 +121,11 @@
                               
 
                               @if(count($sale->installments) > 0 && $sale->status==1 && count($sale->courses) == count($course_count))
-                                <a href="#" class="dropdown-item payment" data-target="payment_history" data-course="{{$purche_data}}">Purched</a>
+                                <a href="#" class="dropdown-item payment" data-target="#payment_history" data-toggle="modal" data-sale_installment="{{$sale_installment_data}}" data-installment_course = "{{$installment_course_data}}">Purched</a>
 
                               @else
                                 <a class="dropdown-item installmentpay" data-target="#installmentmodel" data-toggle="modal" data-total = "{{$sale->total}}" data-course="{{$course_data}}" data-id="{{$sale->id}}">Installment</a>
-                                <a href="#" class="dropdown-item payment" data-toggle="modal" data-target="#payment_history" data-course="{{$purche_data}}">Purched</a>
+                                <a href="#" class="dropdown-item payment" data-toggle="modal" data-target="#payment_history" data-course="">Purched</a>
 
                               @endif
                                 
@@ -136,7 +164,7 @@
             <div class="col-md-10 mx-auto">
               <input type="hidden" name="sale_id" class="sale_id">
               <input type="hidden" name="total" class="total">
-              <input type="hidden" name="" class="course_id">
+              <input type="hidden" name="course_id" class="course_id">
 
 
 
@@ -228,25 +256,8 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-10 mx-auto">
-              <div class="card">
-                <div class="card-body border">
-                  <div class="row">
-                    <div class="col-md-6 text-center">
-                      <h3>Course Name</h3>
-                      <h5>200,000 ks</h5>
-                      <p>20-12-2020</p>
-                    </div>
-                    <div class="col-md-6 text-center">
-                      <img src="{{asset('/storage/companylogo/12345.png')}}" class="img-fluid" width="120px">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="modal-body payment_history_show">
+          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -308,6 +319,8 @@
 
           $('#listTable').DataTable();
 
+          // modal
+
           $('.installmentpay').click(function(){
             var id = $(this).data('id');
             // var total = $(this).data('total');
@@ -336,7 +349,7 @@
 
           })
 
-
+          // store in database
           $('#installment_store').submit(function(event){
             event.preventDefault();
             var installment_data = new FormData(this);
@@ -369,32 +382,50 @@
             })
           })
 
+
+
           $('.payment').click(function() {
-            var courses = $(this).data('course');
+            var sale_installment = $(this).data('sale_installment');
+            var installment_course = $(this).data('installment_course');
             html = '';
             var total=0;
-            $.each(courses,function(i,v){
-              html+=`<div class="row">
-                      <div class="col-md-11 mx-auto">
-                        <div class="card border">
-                          <div class="card-body">
-                            <div class="row">
-                              <div class="col-md-6 text-center">
-                                <h2 class="text-gray-800 font-weight-bold">${v.title}</h2>
-                                <h4>${v.price} Ks</h4>
-                                <p>date</p>
-                              </div>
-                              <div class="col-md-6 text-center">
-                                <img src="{{asset('/storage/companylogo/12345.png')}}" class="img-fluid" width="120px">
+            $.each(sale_installment,function(i,v){
+              $.each(installment_course,function(a,b){
+                // course
+                $.each(b,function(c,d) {
+
+                  if(d.pivot.installment_id == v.id){
+
+                    html+=`<div class="row">
+                            <div class="col-md-11 mx-auto">
+                              <div class="card border">
+                                <div class="card-body">
+                                  <div class="row">
+                                    <div class="col-md-8">
+                                      <h3>${d.title}</h3>
+
+                                      <h4>${d.price} Ks</h4>
+                                      
+                                      <p>${v.type}</p>
+                                      <p>${v.paiddate}</p>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                      <img src="{{asset('/storage/companylogo/12345.png')}}" class="img-fluid" width="120px">
+                                    </div>
+                                  </div>
+                                  
+                                </div>
                               </div>
                             </div>
-                            
-                          </div>
-                        </div>
-                      </div>
-                    
-                  </div>`
+                          
+                        </div>`
+                      }
+
+                    })
+                })
             })
+
+            $('.payment_history_show').html(html);
           })
 
         });

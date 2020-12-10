@@ -15,6 +15,7 @@ class SaleController extends Controller
     public function index()
     {
         $sales = Sale::get();
+
         return view('sale.index',compact('sales'));
     }
 
@@ -83,5 +84,31 @@ class SaleController extends Controller
     public function destroy(Sale $sale)
     {
         //
+    }
+
+
+    // remove sale course
+    public function remove_sale_course(Request $request)
+    {
+        $sale_id = $request->sale_id;
+        $course_id = $request->course_id;
+        $sale = Sale::find($sale_id);
+        $sale->courses()->detach($course_id);
+        return "ok";
+    }
+    public function enrollment()
+    {
+        $enrolls = Sale::where('status',1)->get();
+        return view('account.enrollment',compact('enrolls'));
+    }
+
+    public function enrollmentsearch(Request $request)
+    {
+        $startdate = $request->startdate;
+        $enddate = $request->enddate;
+
+        $sale = Sale::where('status',1)->whereBetween('created_at', [$startdate, $enddate])->with('user','courses')->get();
+
+        return response()->json(['sales'=>$sale]);        
     }
 }
