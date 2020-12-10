@@ -21,6 +21,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('plugin/style.css') }}">
 
 	<link href="{{ asset('backend/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('frontend/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
+	
 
 	<!-- Datatable CSS -->
     <link rel="stylesheet" type="text/css" href="{{ asset('plugin/datatable/dataTables.bootstrap4.css') }}">
@@ -57,12 +59,16 @@
 					<li class="sidebar-header">
 						Pages
 					</li>
-
+					@php
+						$authRole = Auth::user()->getRoleNames()[0];
+					@endphp
+					@if(!$authRole=="Admin" || !$authRole=="Developer")
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{ route('frontend.index') }}">
               				<i class="align-middle mr-2" data-feather="repeat"></i> <span class="align-middle"> Switch to Student </span>
             			</a>
 					</li>
+					@endif
 
 					{{-- Admin, Company, Instructor --}}
 					<li class="sidebar-item {{ Request::segment(1) === 'panel' ? 'active' : '' }}">
@@ -73,61 +79,65 @@
 
 
 					{{-- Admin --}}
-
+					@if($authRole=="Admin" || $authRole=="Developer")
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="">
               				<i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle"> Revenue </span>
             			</a>
 					</li>
+					@endif
 
 					{{-- Admin, Company --}}
 
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="tables-bootstrap.html">
+					<li class="sidebar-item {{ Request::segment(2) === 'sale' ? 'active' : '' }}">
+						<a class="sidebar-link" href="{{route('backside.sale.index')}}">
               				<i class="align-middle" data-feather="credit-card"></i> <span class="align-middle">Sale</span>
             			</a>
 					</li>
-
+					@if(!in_array($authRole, array('Admin','Developer'), true ))
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="{{route('backside.course.index')}}">
               				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Students </span>
             			</a>
 					</li>
+					@endif
 
-					<li class="sidebar-item {{ Request::segment(2) === 'course' ? 'active' : '' }}">
+					<li class="sidebar-item {{ Request::segment(2) === 'course' && Request::segment(3) != 'create' ? 'active' : '' }}">
 						<a class="sidebar-link" href="{{route('backside.course.index')}}">
               				<i class="align-middle" data-feather="tag"></i> <span class="align-middle"> Courses </span>
             			</a>
 					</li>
 
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('backside.sale.index')}}">
-              				<i class="align-middle" data-feather="bookmark"></i> <span class="align-middle"> Sale </span>
+					<li class="sidebar-item {{ Request::segment(2) === 'course' && Request::segment(3) ==='create' ? 'active' : '' }}">
+						<a class="sidebar-link" href="{{route('backside.course.create')}}">
+              				<i class="align-middle" data-feather="file-plus"></i> <span class="align-middle"> New Courses </span>
             			</a>
 					</li>
+					@php
+						$usersNav = Request::segment(2) === 'companies' ||  Request::segment(2) === 'instructors' ||  Request::segment(2) === 'students';
+					@endphp
 					
-
-
-					<li class="sidebar-item">
-						<a data-target="#users" data-toggle="collapse" class="sidebar-link collapsed">
+					@if($authRole=="Admin" || $authRole=="Developer")
+					<li class="sidebar-item {{ $usersNav ? 'active' : '' }}">
+						<a data-target="#users" data-toggle="collapse" class="sidebar-link {{ $usersNav ? '' : 'collapsed' }} ">
 			              	<i class="align-middle" data-feather="users"></i> <span class="align-middle"> Users </span>
 			            </a>
-						<ul id="users" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-							<li class="sidebar-item">
+						<ul id="users" class="sidebar-dropdown list-unstyled collapse {{ $usersNav ? 'show' : '' }}" data-parent="#sidebar">
+							<li class="sidebar-item {{ Request::segment(2) === 'companies' ? 'active' : '' }}">
 								<a class="sidebar-link" href="{{route('backside.companies.index')}}"> Business </a>
 							</li>
 
-							<li class="sidebar-item">
+							<li class="sidebar-item {{ Request::segment(2) === 'instructors' ? 'active' : '' }}">
 								<a class="sidebar-link" href="{{route('backside.instructors.index')}}"> Insturctors </a>
 							</li>
 
-							<li class="sidebar-item">
+							<li class="sidebar-item {{ Request::segment(2) === 'students' ? 'active' : '' }}">
 								<a class="sidebar-link" href="{{route('backside.students.index')}}"> Students </a>
 							</li>
 							
 						</ul>
 					</li>
+					@endif
 
 
 					<li class="sidebar-item">
@@ -148,7 +158,7 @@
 					<li class="sidebar-header">
 						Addons
 					</li>
-					@if(Auth::user()->getRoleNames()[0]=="Admin" || "Developer")
+					@if($authRole=="Admin" || $authRole=="Developer")
 					<li class="sidebar-item">
 						<a data-target="#components" data-toggle="collapse" class="sidebar-link collapsed">
 			              	<i class="align-middle" data-feather="briefcase"></i> <span class="align-middle"> Components </span>
@@ -425,6 +435,13 @@
                 				<img src="{{ asset($profile) }}" class="avatar img-fluid rounded mr-1" alt="Charles Hall" style="object-fit: cover" /> <span class="text-dark"> {{Auth::user()->name}} </span>
             				</a>
 							<div class="dropdown-menu dropdown-menu-right">
+								<a href="" class="dropdown-item">
+									<span class="text-dark"> {{Auth::user()->name}} </span>
+									<span class="text-dark d-block"> {{Auth::user()->email}} </span>
+								</a>
+
+								<div class="dropdown-divider"></div>
+
 								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile </a>
 								<a class="dropdown-item" href="#">
 									<i class="align-middle mr-1" data-feather="lock"></i> Change Password 
@@ -434,7 +451,7 @@
 
 								<a class="dropdown-item" href="javascript:void(0)" onclick="event.preventDefault();
 			                     document.getElementById('logout-form').submit();">Logout
-			                 </a>
+			                 	</a>
 
 			                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
 			                        @csrf
@@ -498,6 +515,8 @@
     <script src="{{ asset('plugin/pusher.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('backend/js/noti.js')}}"></script>
     <script src="{{ asset('plugin/admincheckoutnoti.js') }}"></script>
+    <script src="{{ asset('plugin/anime.min.js') }}"></script>
+
     <script type="text/javascript">
     	$.ajaxSetup({
             headers: {

@@ -2,6 +2,13 @@
 	font-family: quicksand_regular;
 }
 
+.mmfont{
+    font-family: Unicode;
+}
+
+.tooltip {
+    font-family: Unicode !important;
+}
 .fontbold{
 	font-family: quicksand_bold;
 }
@@ -1080,7 +1087,10 @@ ul#playlist{
 }
 
 
-
+.backendCoursecard{
+    height: 150px !important;
+    object-fit: cover;
+}
 
 
 

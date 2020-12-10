@@ -151,7 +151,7 @@
 
 {{-- payment modal --}}
 <div class="modal fade" id="installmentmodel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="exampleModalLabel">Installment</h4>
@@ -273,6 +273,25 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
+
+            function custom_template(obj){
+                var data = $(obj.element).data();
+                var text = $(obj.element).text();
+                if(data && data['img_src']){
+                    img_src = data['img_src'];
+                    template = $("<div><img src=\"" + img_src + "\" style=\"width:30px;height:30px;\"/><p style=\"font-weight: 700;display:inline;margin-left:10px;\">" + text + "</p></div>");
+                    return template;
+                }
+            }
+            var options = {
+                'templateSelection': custom_template,
+                'templateResult': custom_template,
+                // allowClear: true,
+                theme: 'bootstrap4',
+            }
+            
+            $('.js-example-basic-single').select2(options);
+
 
           function showValidationErrors(name, error) {
            

@@ -11,7 +11,9 @@ class BackendController extends Controller
     	//dd($request);
     	$sectionid = $request->sectionid;
         $courseid = $request->courseid;
+
         $instructorid = $request->instructorid;
+        
         $title = $request->title;
         $objective = $request->objective;
         $contenttypeid=$request->contenttype;
