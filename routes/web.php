@@ -172,6 +172,7 @@ Route::get('/checkoutnoti',[AccountController::class,'checkoutnoti'])->name('che
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');
+Route::resource('collections',CollectionController::class);
 Route::get('wishlist',[AccountController::class, 'wishlist'])->name('wishlist');
 
 // ------------------------------------------------------------------------

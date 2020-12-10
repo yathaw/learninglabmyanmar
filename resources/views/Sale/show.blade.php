@@ -83,6 +83,7 @@
                   <i class="align-middle mr-2" data-feather="play-circle"></i>
                   <small class="pl-3"> 0 hours on-demand video </small>
                </p>
+               
                <p> 
                   <i class="align-middle mr-2" data-feather="file"></i>
                   <small class="pl-3"> 0 Articles </small>
