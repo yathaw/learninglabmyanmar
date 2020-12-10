@@ -52,11 +52,17 @@ class LessonSeeder extends Seeder
     	for ($a=1; $a < 522; $a++) {
     		$randomArrayno = $faker->numberBetween(0, 25); 
 
+            if ($lessonLists[$randomArrayno][1] == 'MP4') {
+                $duration = '248.16';
+            }else{
+                $duration = '';
+            }
+
         	$content = new Lesson;
         	$content->file = $lessonLists[$randomArrayno][0];
         	$content->type = $lessonLists[$randomArrayno][1];
         	$content->content_id = $a;
-            $content->duration='248.16';
+            $content->duration= $duration;
         	$content->created_at  = now();
         	$content->updated_at  = now();
         	$content->save();

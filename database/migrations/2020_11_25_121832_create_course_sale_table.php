@@ -23,7 +23,6 @@ class CreateCourseSaleTable extends Migration
                     ->references('id')
                     ->on('sales')
                     ->onDelete('cascade');
-            $table->smallInteger('status');
             $table->softDeletes();
             $table->timestamps();
         });
