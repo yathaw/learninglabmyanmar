@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Wishlist;
 use Auth;
 use App\Models\Sale;
+use App\Models\Section;
 
 use App\Models\Subcategory;
 use App\Models\Category;
@@ -14,19 +15,27 @@ use App\Models\Company;
 use App\Models\Instructor;
 use App\Models\User;
 
+use App\Events\CheckoutEvent;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\CheckoutNotification;
 
 class FrontendController extends Controller
 {
     public function index(){
-        $limitcategories = Category::all();
-        $subcategories = Subcategory::all();
-    	return view('frontend.index',compact('limitcategories'));
+        $limitcategories = Category::all()->random(3);
+        $newest_courses = Course::orderBy('created_at', 'DESC')->take(6)->get();
+        $top_courses = Course::all()->random(6); // rating ပေါ်မူတည်ပြီး တွက်မယ် လောလောဆယ် random ပဲ
+        $wishlists = Wishlist::all();
+
+
+        // dd($top_courses);
+    	return view('frontend.index',compact('limitcategories','newest_courses', 'top_courses', 'wishlists'));
     }
 
     public function courses(){
 
         $wishlists = Wishlist::all();
-        $courses = Course::paginate(8);
+        $courses = Course::where('status',1)->paginate(8);
         $allcourses = Course::all();
         
     	return view('frontend.courses',compact('courses','allcourses','wishlists'));
@@ -34,8 +43,10 @@ class FrontendController extends Controller
 
     public function coursedetail($id){
         $course = Course::find($id);
+        $sections = Section::where('course_id',$id)->orderByRaw("CAST(sorting as Integer) ASC")->get();
         $wishlists = Wishlist::where('user_id',Auth::id())->get();
-    	return view('frontend.coursedetail',compact('course','wishlists'));
+
+    	  return view('frontend.coursedetail',compact('course','wishlists','sections'));
     }
 
     public function addtocart(){
@@ -72,7 +83,7 @@ class FrontendController extends Controller
 
     public function wishlist_save(Request $request)
     {
-        dd(request('id'));
+        // dd($request);
         $course_id = $request->id;
         $wishlists = Wishlist::withTrashed()->get();
         $user_id = Auth::id();
@@ -149,7 +160,9 @@ class FrontendController extends Controller
        $data = $request->data;
        $array = Array();
        $total = 0;
+       $status = 0;
        $invoice = rand(1000000,100);
+       $status=0;
        foreach ($data as $value) {
 
            if($user_id == $value['user_id']){
@@ -163,6 +176,7 @@ class FrontendController extends Controller
         $sale->invoiceno = "Stu-".$invoice;
         $sale->total = $total;
         $sale->user_id = $user_id;
+        $sale->status = $status;
         $sale->save();
         
 
@@ -171,9 +185,19 @@ class FrontendController extends Controller
        foreach ($data as $value) {
 
            if($user_id == $value['user_id']){
-            $sale->courses()->attach($value['id']);
+            $sale->courses()->attach($value['id'],['status'=>$status]);
            }
        }
+
+        $checkoutnoti = [
+                'saleid' => $sale->id,
+                'invoiceno' => "Stu-".$invoice,
+                'total' =>$total,
+                'user_id' => $user_id
+            ];
+
+        Notification::send($sale,new CheckoutNotification($checkoutnoti));
+        event(new CheckoutEvent($sale));
 
        return response(json_decode($user_id));
    }

@@ -183,7 +183,7 @@
         <div class="container position-relative">
             <h1 class="logoFont"> Learning Lab Myanmar </h1>
             <h2> Find the best Courses and Upgrade your skills. Learn Anytime, Anywhere, Accelerate your future </h2>
-            <a href="{{ route('courses') }}" class="btn-get-started scrollto">Get Started</a>
+            <a href="{{ route('register') }}" class="btn-get-started scrollto"> Register Now </a>
         </div>
     </section>
     <!-- End Hero -->

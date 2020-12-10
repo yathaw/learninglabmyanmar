@@ -36,6 +36,7 @@
                                     <th> No </th>
                                     <th>User Name</th>
                                     <th>Email</th>
+                                    <th>Phone</th>
                                     <th>Company Name</th>
                                     <th>Logo</th>
                                     <th>Address</th>
@@ -50,13 +51,14 @@
                             		<td>{{$i++}}</td>
                                     <td>{{$company->user->name}}</td>
                                     <td>{{$company->user->email}}</td>
+                                    <td>{{$company->user->phone}}</td>
                             		<td>{{$company->name}}</td>
                             		<td><img src="{{$company->logo}}" class="img-fluid"></td>
                             		<td>{{$company->address}}</td>
                             		<td>{{$company->description}}</td>
                             		<td>
-                            			<a href="" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                            			<a href="" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                            			<a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                            			<a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                             		</td>
                             	</tr>
                             	@endforeach
@@ -66,6 +68,7 @@
                                     <th> No </th>
                                     <th>User Name</th>
                                     <th>Email</th>
+                                    <th>Phone</th>
                                     <th>Company Name</th>
                                     <th>Logo</th>
                                     <th>Address</th>

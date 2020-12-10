@@ -21,22 +21,22 @@ class UsersTableSeeder extends Seeder
 
         $userLists = [
             
-            array($faker->firstNameMale, 'developer@gmail.com', 'mic@123', $faker->phoneNumber, NULL, $faker->randomDigitNotNull(), 'Developer'),
-            array($faker->firstNameFemale, 'admin@gmail.com', 'mic@123', $faker->phoneNumber, NULL, $faker->randomDigitNotNull(), 'Admin'),
+            array($faker->firstNameMale, 'developer@gmail.com', 'mic@123', $faker->randomNumber(5, true), NULL, $faker->randomDigitNotNull(), 'Developer'),
+            array($faker->firstNameFemale, 'admin@gmail.com', 'mic@123', $faker->randomNumber(5, true), NULL, $faker->randomDigitNotNull(), 'Admin'),
 
-            array($faker->firstNameFemale, 'teacherone@gmail.com', '123456789', $faker->phoneNumber, NULL, $faker->randomDigitNotNull(), 'Instructor'),
-            array($faker->firstNameMale, 'teachertwo@gmail.com', '123456789', $faker->phoneNumber, NULL, $faker->randomDigitNotNull(), 'Instructor'),
+            array($faker->firstNameFemale, 'teacherone@gmail.com', '123456789', $faker->randomNumber(5, true), NULL, $faker->randomDigitNotNull(), 'Instructor'),
+            array($faker->firstNameMale, 'teachertwo@gmail.com', '123456789', $faker->randomNumber(5, true), NULL, $faker->randomDigitNotNull(), 'Instructor'),
             
-            array($faker->firstNameFemale, 'teacherthree@gmail.com', '123456789', $faker->phoneNumber, '1', $faker->randomDigitNotNull(), 'Instructor'),
-            array($faker->firstNameMale, 'teacherfour@gmail.com', '123456789', $faker->phoneNumber, '1', $faker->randomDigitNotNull(), 'Instructor'),
-            array($faker->firstNameMale, 'teacherfive@gmail.com', '123456789', $faker->phoneNumber, '1', $faker->randomDigitNotNull(), 'Instructor'),
-            array($faker->firstNameMale, 'teachersix@gmail.com', '123456789', $faker->phoneNumber, '1', $faker->randomDigitNotNull(), 'Instructor'),
-            array($faker->firstNameMale, 'teacherseven@gmail.com', '123456789', $faker->phoneNumber, '1', $faker->randomDigitNotNull(), 'Instructor'),
+            array($faker->firstNameFemale, 'teacherthree@gmail.com', '123456789', $faker->randomNumber(5, true), '1', $faker->randomDigitNotNull(), 'Instructor'),
+            array($faker->firstNameMale, 'teacherfour@gmail.com', '123456789', $faker->randomNumber(5, true), '1', $faker->randomDigitNotNull(), 'Instructor'),
+            array($faker->firstNameMale, 'teacherfive@gmail.com', '123456789', $faker->randomNumber(5, true), '1', $faker->randomDigitNotNull(), 'Instructor'),
+            array($faker->firstNameMale, 'teachersix@gmail.com', '123456789', $faker->randomNumber(5, true), '1', $faker->randomDigitNotNull(), 'Instructor'),
+            array($faker->firstNameMale, 'teacherseven@gmail.com', '123456789', $faker->randomNumber(5, true), '1', $faker->randomDigitNotNull(), 'Instructor'),
 
-            array($faker->firstNameFemale, 'companyone@gmail.com', '123456789', $faker->phoneNumber, '1', $faker->randomDigitNotNull(), 'Business'),
-            array($faker->firstNameMale, 'companytwo@gmail.com', '123456789', $faker->phoneNumber, '2', $faker->randomDigitNotNull(), 'Business'),
+            array($faker->firstNameFemale, 'companyone@gmail.com', '123456789', $faker->randomNumber(5, true), '1', $faker->randomDigitNotNull(), 'Business'),
+            array($faker->firstNameMale, 'companytwo@gmail.com', '123456789', $faker->randomNumber(5, true), '2', $faker->randomDigitNotNull(), 'Business'),
 
-            array($faker->firstNameFemale, 'studentone@gmail.com', '123456789', $faker->phoneNumber, NULL, $faker->randomDigitNotNull(), 'Student'),
+            array($faker->firstNameFemale, 'studentone@gmail.com', '123456789', $faker->randomNumber(5, true), NULL, $faker->randomDigitNotNull(), 'Student'),
 
         ];
 
@@ -57,7 +57,7 @@ class UsersTableSeeder extends Seeder
             $user = new User;
             $user->name = $faker->name;
             $user->email = $faker->safeEmail();
-            $user->phone = $faker->phoneNumber;
+            $user->phone = $faker->randomNumber(5, true);
             $user->company_id = NULL;
             $user->jobtitle_id = $faker->randomDigitNotNull();
 

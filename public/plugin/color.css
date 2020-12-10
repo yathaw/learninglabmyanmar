@@ -45,3 +45,19 @@ textarea:focus,
   	outline: none !important;
   	box-shadow: none !important;
 }
+
+.pagination > li > a,
+.pagination > li > span {
+    color: #f09819 !important;
+}
+
+.pagination > .active > a,
+.pagination > .active > a:focus,
+.pagination > .active > a:hover,
+.pagination > .active > span,
+.pagination > .active > span:focus,
+.pagination > .active > span:hover {
+    background-color: #f09819 !important;
+    border-color: #f09819 !important;
+    color: #fff !important;
+}

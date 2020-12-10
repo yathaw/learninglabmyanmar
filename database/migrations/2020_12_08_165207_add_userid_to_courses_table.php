@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSalesTable extends Migration
+class AddUseridToCoursesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,11 @@ class CreateSalesTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales', function (Blueprint $table) {
-            $table->id();
-            $table->string('invoiceno');
-            $table->string('total');
+        Schema::table('courses', function (Blueprint $table) {
             $table->foreignId('user_id')
                     ->references('id')
                     ->on('users')
                     ->onDelete('cascade');
-            $table->smallInteger('status');
-            $table->softDeletes();
-            $table->timestamps();
         });
     }
 
@@ -34,6 +28,8 @@ class CreateSalesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sales');
+        Schema::table('courses', function (Blueprint $table) {
+            //
+        });
     }
 }

@@ -118,7 +118,7 @@
 												@endforeach
 											</ul>
 										</div>
-
+										{{-- {!! $contents->links() !!} --}}
 									</div>
 								</div>
 
@@ -285,7 +285,24 @@
 				<form id="editsectionform">
 					<input type="hidden" name="courseid" id="updatecourseid" >
 					<input type="hidden" name="sectionid" id="updatesectionid">
+
 					<input type="hidden" name="instructorid" id="updateinstructorid" >
+
+
+					@php
+					$authuser = Auth::user();
+					$role = $authuser->getRoleNames();
+
+	        			if ($role[0] == 'Instructor') {
+	        			$instructor = $authuser->instructor;
+	        			$instructorid= $instructor->id;
+	        		}else{
+	        			$instructorid = NULL;
+	        		}
+					@endphp
+					<input type="hidden" name="instructorid" id="updateinstructorid" value="{{$instructorid}}">
+					@csrf
+					@method('PUT')
 
 					<div class="modal-body m-3">
 						<div class="row mb-3">

@@ -22,16 +22,48 @@ class CourseController extends Controller
     {
         $categories = Category::all();
         $subcategories = Subcategory::all();
-        $courses=Course::all();
+        
 
         $authuser = Auth::user();
-        $instructor = $authuser->instructor;
-         $instructorid = $instructor->id;
-         //dd($authuser); user_id = 4 for Haleigh
-         //dd($instructorid);  //2 so, three courses appear
+        $auth_id = Auth::id();
+        $role = $authuser->getRoleNames();
+
+        if ($role[0] == 'Instructor') {
+            $instructor = $authuser->instructor;
+            $instructorid = $instructor->id;
+
+            $courses = Course::whereHas('instructors', function($q) use ($instructorid)
+            {
+                $q->where('instructor_id', '=', $instructorid);
+                
+            })->paginate(8);
+
+        }
+        elseif ($role[0] == 'Business') {
+            $companyid = $authuser->company_id;
+            $instructors = User::where('company_id', $companyid)->get();
+
+            $courses = Course::whereHas('instructors', function($q) use ($companyid)
+            {
+                $q->whereHas('user', function($q1) use ($companyid)
+                {
+                    $q1->where('company_id', '=', $companyid);
+                });
+            })->paginate(8);
+        }
+        else{
+            
+            $courses=Course::paginate(8);
+            
+
+        }
+       
+
+        return view('course.index',compact('courses','categories','subcategories','auth_id'));
+        
          
         
-        return view('course.index',compact('courses','categories','subcategories','instructorid'));
+        
     }
 
     /**
@@ -101,6 +133,11 @@ class CourseController extends Controller
             $path1 ='/storage/'.$filepath1;
         }
 
+            $auth_id = Auth::id();
+
+            $user = Auth::user();
+            $role = $user->getRoleNames();
+
             $course =new Course;
             $course->title = $request->title;
             $course->subtitle=$request->subtitle;
@@ -115,15 +152,12 @@ class CourseController extends Controller
             $course->price=$request->pricing;
             $course->image=$path;
             $course->video=$path1;
-
+            $course->usre_id = $auth_id;
            
             $course->save();
 
 
-            $auth_id = Auth::id();
-
-            $user = Auth::user();
-            $role = $user->getRoleNames();
+            
 
             if ($role[0] == 'Instructor') {
                 $instructor = Instructor::where('user_id',$user->id)->first();
@@ -208,7 +242,10 @@ class CourseController extends Controller
         }else{
             $path1=$request->oldvideo;
         }
+            $auth_id = Auth::id();
 
+            $user = Auth::user();
+            $role = $user->getRoleNames();
          
             $course->title = $request->title;
             $course->subtitle=$request->subtitle;
@@ -224,14 +261,12 @@ class CourseController extends Controller
             $course->image=$path;
             $course->video=$path1;
 
+            $course->usre_id = $auth_id;
            
             $course->save();
 
 
-            $auth_id = Auth::id();
-
-            $user = Auth::user();
-            $role = $user->getRoleNames();
+           
 
             if ($role[0] == 'Instructor') {
                 $instructor = Instructor::where('user_id',$user->id)->first();

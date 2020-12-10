@@ -88,4 +88,13 @@ class User extends Authenticatable
         return $this->belongsTo('App\Models\Company');
     }
 
+    public function courses($value='')
+    {
+        return $this->hasMany('App\Models\Course');
+    }
+    public function sales($value='')
+    {
+        return $this->hasMany('App\Models\Sale');
+    }
+
 }

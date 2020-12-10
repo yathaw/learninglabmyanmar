@@ -34,14 +34,19 @@
                     @endif
 
                     
-                    <form action="{{ route('login') }}" method="post" role="form" class="registerForm">
+                    @if (session('status'))
+                        <div class="mb-4 font-medium text-sm text-center text-danger">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+                    <form action="{{ route('frontend_login') }}" method="post" role="form" class="registerForm">
                         @csrf
-                        
-
                        
                         <div class="form-floating mb-3 col-md-12">
-                            <input type="email" class="form-control form-control-sm" id="email" placeholder="Name" value="{{ old('email') }}" name="email">
-                            <label for="email"> Your Email </label>
+                            <input type="number" name="phone" class="form-control form-control-sm" id="phone" placeholder="Enter phone number" value="{{ old('phone')}}">
+                            <label for="phone">Your Phone</label>
+                           <!--  <input type="email" class="form-control form-control-sm" id="email" placeholder="Name" value="{{ old('email') }}" name="email"> -->
+                           <!--  <label for="email"> Your Email </label> -->
                         </div>
 
 

@@ -9,6 +9,7 @@ use App\Models\Lesson;
 use App\Models\Contenttype;
 use App\Models\Instructor;
 
+
 use Illuminate\Http\Request;
 use Auth;
 
@@ -26,8 +27,11 @@ class SectionController extends Controller
     {      
         $course = Course::find($id);
         $sections=Section::orderBy('sorting')->get();
+
         
         $contents=Content::all();
+        // $contents=Content::paginate(8);
+
         $lesson=Lesson::find($id);
 
         $contenttypes=Contenttype::all();
@@ -144,35 +148,35 @@ class SectionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Section $section)
-    {  //dd($request);
-        $sectionid = $request->sectionid;
-        $courseid = $request->courseid;
-        $instructorid = $request->instructorid;
-        $title = $request->title;
-        $objective = $request->objective;
+    // {  //dd($request);
+    //     $sectionid = $request->sectionid;
+    //     $courseid = $request->courseid;
+    //     $instructorid = $request->instructorid;
+    //     $title = $request->title;
+    //     $objective = $request->objective;
         
-        $section->title=$title;
-        $section->objective=$objective;
+    //     $section->title=$title;
+    //     $section->objective=$objective;
         
-        $section->contenttype_id=1;
-        $section->course_id=$courseid;
+    //     $section->contenttype_id=1;
+    //     $section->course_id=$courseid;
 
-        $hasCourses_inSection = Section::where('course_id', $request->courseid)->get();
+    //     $hasCourses_inSection = Section::where('course_id', $request->courseid)->get();
 
-        foreach($hasCourses_inSection as $hasCourse_inSection){
-            $sorting = $hasCourse_inSection->sorting;
-            $sorting_data = ++$sorting;
-        }
-        /*insert sorting*/
-        if($hasCourses_inSection->isEmpty()){
-        $section->sorting = 1;
-        }else{
-            $section->sorting = $sorting_data;
-        }
+    //     foreach($hasCourses_inSection as $hasCourse_inSection){
+    //         $sorting = $hasCourse_inSection->sorting;
+    //         $sorting_data = ++$sorting;
+    //     }
+    //     /*insert sorting*/
+    //     if($hasCourses_inSection->isEmpty()){
+    //     $section->sorting = 1;
+    //     }else{
+    //         $section->sorting = $sorting_data;
+    //     }
 
-      $section->save();
+    //   $section->save();
 
-      return $section;
+    //   return $section;
 
    }
 
@@ -211,39 +215,7 @@ class SectionController extends Controller
 
     }
 
-    public function getupdatesection(Request $request)
-    {   
-        //dd($request);
-        $sectionid = $request->sectionid;
-        $courseid = $request->courseid;
-        $instructorid = $request->instructorid;
-        $title = $request->title;
-        $objective = $request->objective;
-        
-        $section->title=$title;
-        $section->objective=$objective;
-        
-        $section->contenttype_id=1;
-        $section->course_id=$courseid;
-
-        $hasCourses_inSection = Section::where('course_id', $request->courseid)->get();
-
-        foreach($hasCourses_inSection as $hasCourse_inSection){
-            $sorting = $hasCourse_inSection->sorting;
-            $sorting_data = ++$sorting;
-        }
-        /*insert sorting*/
-        if($hasCourses_inSection->isEmpty()){
-        $section->sorting = 1;
-        }else{
-            $section->sorting = $sorting_data;
-        }
-
-      $section->save();
-
-      return $section;
-        
-    }
+    
 
 
 }
