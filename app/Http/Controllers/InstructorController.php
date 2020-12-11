@@ -223,7 +223,7 @@ class InstructorController extends Controller
 
     public function instructor_studentlist($id)
     {
-        // $users = User::where('')
-        return view ('instructors.student_list',compact(''));
+        dd($id);
+        //return view ('instructors.student_list',compact(''));
     }
 }

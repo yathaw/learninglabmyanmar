@@ -104,7 +104,7 @@
 
 					@if($authRole == "Instructor")
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('backside.instructor_studentlist',Auth::user()->id)}}">
+						<a class="sidebar-link" href="{{route('instructor_studentlist',Auth::user()->id)}}">
               				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Students </span>
             			</a>
 					</li>
@@ -113,12 +113,12 @@
 
 					@if($authRole == "Business")
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('backside.instructor_list',Auth::user()->id)}}">
+						<a class="sidebar-link" href="{{route('instructor_list',Auth::user()->id)}}">
               				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Instructors </span>
             			</a>
 					</li>
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="{{route('backside.student_list',Auth::user()->id)}}">
+						<a class="sidebar-link" href="{{route('student_list',Auth::user()->id)}}">
               				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Students </span>
             			</a>
 					</li>
@@ -471,7 +471,7 @@
 
 								<!-- HH -->
 								@if($authRole == "Instructor" || $authRole == "Business")
-								<a href="{{route('backside.account_remove',Auth::user()->id)}}" class="dropdown-item"><i class="align-middle mr-1" data-feather="user"></i>Close Account</a>
+								<a href="{{route('account_remove',Auth::user()->id)}}" class="dropdown-item"><i class="align-middle mr-1" data-feather="user"></i>Close Account</a>
 								@endif
 								<div class="dropdown-divider"></div>
 								
