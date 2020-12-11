@@ -74,6 +74,7 @@
 							      		</a>
 
 							      		@php 
+
 							      			$array = array();
 							      		@endphp
 							      		
@@ -81,6 +82,8 @@
 							      		{{-- check auth --}}
 							      		@if(Auth::user())
 
+							      		{{-- check role business --}}
+							      		
 							      		{{-- check course instructor --}}
 							      		@if(count($course->instructors) == 0)
 
@@ -220,8 +223,15 @@
 							            </small>
 							            
 							            <div class="d-grid gap-2 col-6 mx-auto">
-							            	@if(Auth::user())
+
+							            	
+
+							            	@if(Auth::user() && Auth::user()->getRoleNames()[0] != "Business")
+
 							            	@if(Auth::user()->sales)
+
+
+
 							            	@php
 							            		$pending_array = array();
 							            		$purched_array = array();
@@ -302,6 +312,9 @@
 								            	@endif
 								            @endforeach
 
+
+
+								            
 								            @else
 								            	<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>
 								            @endif

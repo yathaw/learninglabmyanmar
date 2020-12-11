@@ -215,7 +215,7 @@
                                         @endif
 
 
-                                           @if(Auth::user())
+                                           @if(Auth::user() &&  Auth::user()->getRoleNames()[0] != "Business")
 
                                             @if(Auth::user()->instructor)
 
@@ -272,7 +272,7 @@
                                                     @endforeach
                                                     
                                                     >
-                                                Add To Cart
+                                                Purchase
                                                 </a>
                                                 @endif
                                             
@@ -293,12 +293,12 @@
                                                         @endforeach
                                                         
                                                         >
-                                                    Add To Cart
+                                                    Purcahse
                                                 </a>
                                             @endif
 
                                             @else
-                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Add To Cart</button>
+                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purcahse</button>
                                             @endif
                                         </div>
 
