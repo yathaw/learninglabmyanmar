@@ -51,8 +51,14 @@
                                     <td>{{$user->email}}</td>
                             		
                             		<td>
-                            			<a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                            			<a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                            			<a href="#" class="btn btn-warning"><i class="align-middle " data-feather="edit-2"></i></a>
+                            			
+                                        <form action="{{route('backside.students.destroy',$user->id)}}" method="POST" class="d-inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger" type="submit"><i class="align-middle" data-feather="x"></i></button>
+                                            
+                                        </form>
                             		</td>
                             	</tr>
                                
