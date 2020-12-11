@@ -64,7 +64,7 @@
         $countVideo = 0;
         $countlesson = 0;
         $countassignment = 0;
-
+        $duration = 0;
         foreach ($course->contents as $content) {
             foreach ($content->lessons as $lesson) {
                 $type = $lesson['type'];
@@ -395,13 +395,15 @@
                                         <h4 class="tab-title"> What will  Learn </h4>
                                         @php
                                             $data = json_decode($course->outline,true);
+
                                         @endphp
 
                                         <ul type="none" class="lh-lg">
+                                            @if($data != NULL)
                                             @foreach($data as $result)
                                                 <li  class="my-3"> <i class="align-middle mr-2" data-feather="check-square"></i> {{$result}} </li>
                                             @endforeach
-                                            
+                                            @endif
                                         </ul>
 
                                         <hr>
@@ -412,10 +414,11 @@
                                         @endphp
 
                                         <ul type="none" class="lh-lg">
+                                            @if($data != NULL)
                                             @foreach($data as $result)
                                                 <li class="my-3"> <i class="align-middle mr-2" data-feather="check-square"></i> {{$result}} </li>
                                             @endforeach
-                                            
+                                            @endif
                                         </ul>
                                     </div>
                                 </div>
