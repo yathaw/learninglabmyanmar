@@ -88,7 +88,7 @@ Route::post('login_data',[LoginController::class,'login_store'])->name('frontend
 */
 
 //KKS
-Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
+Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/course', CourseController::class);
 
 

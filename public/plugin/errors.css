@@ -1,0 +1,260 @@
+* {
+	 box-sizing: border-box;
+}
+ body, html {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow: hidden;
+}
+ body {
+	background-color: #784C0D;
+	font-family: quicksand_medium;
+}
+h1#headerBg {
+    font-size: 45vw;
+    text-align: center;
+    position: fixed;
+    width: 100vw;
+    z-index: 1;
+    color: #ffffff26;
+    text-shadow: 0 0 50px rgba(0, 0, 0, 0.07);
+    /*top: 50%;*/
+    transform: translateY(-50%);
+    font-family: quicksand_varialbeFont_wght;
+}
+
+ .container {
+	 z-index: 1;
+	 position: absolute;
+	 top: 50%;
+	 left: 50%;
+	 transform: translate(-50%, -50%);
+	 text-align: center;
+	 padding: 10px;
+	 min-width: 300px;
+}
+ .container div {
+	 display: inline-block;
+}
+ .container .lock {
+	 opacity: 1;
+}
+ .container h1 {
+	 font-family: 'quicksand_varialbeFont_wght';
+	 font-size: 100px;
+	 text-align: center;
+	 color: #eee;
+	 font-weight: 100;
+	 margin: 0;
+}
+ .container p, .container h3 {
+	 color: #fff;
+}
+ .lock {
+	 transition: 0.5s ease;
+	 position: relative;
+	 overflow: hidden;
+	 opacity: 0;
+}
+ .lock.generated {
+	 transform: scale(0.5);
+	 position: absolute;
+	 animation: 2s move linear;
+	 animation-fill-mode: forwards;
+}
+ .lock ::after {
+	 content: '';
+	 background: #a74006;
+	 opacity: 0.3;
+	 display: block;
+	 position: absolute;
+	 height: 100%;
+	 width: 50%;
+	 top: 0;
+	 left: 0;
+}
+ .lock .bottom {
+	 background: #d68910;
+	 height: 40px;
+	 width: 60px;
+	 display: block;
+	 position: relative;
+	 margin: 0 auto;
+}
+ .lock .top {
+	 height: 60px;
+	 width: 50px;
+	 border-radius: 50%;
+	 border: 10px solid #fff;
+	 display: block;
+	 position: relative;
+	 top: 30px;
+	 margin: 0 auto;
+}
+ .lock .top::after {
+	 padding: 10px;
+	 border-radius: 50%;
+}
+ @keyframes move {
+	 to {
+		 top: 100%;
+	}
+}
+ @media (max-width: 420px) {
+	 .container {
+		 transform: translate(-50%, -50%) scale(0.8);
+	}
+	 .lock.generated {
+		 transform: scale(0.3);
+	}
+}
+
+a.button{
+  	display:inline-block;
+	
+	font:normal normal 300 1.2em 'quicksand_regular';
+	text-decoration:none;	
+	
+	color:rgba(248, 204, 141, 1);
+	background-color:transparent;
+	border:1px solid rgba(248, 204, 141, 1);
+	border-radius:100px;
+	
+	padding: .3em 1.2em;
+	margin:5px;
+			
+	background-size: 200% 100%;	
+	background-image: linear-gradient(to right, transparent 50%, rgba(248, 204, 141, 1) 50%);
+	transition: background-position .3s cubic-bezier(0.19, 1, 0.22, 1) .1s, color .5s ease 0s, background-color .5s ease;
+}
+
+a.button:hover{
+	color:rgba(90, 57, 9, 1);
+	background-color:rgba(248, 204, 141, 1);
+	background-position: -100% 100%;
+}
+
+
+
+
+.emojis-wrapper {
+	 display: flex;
+	 flex-direction: row;
+	 flex-wrap: wrap;
+	 justify-content: space-around;
+	 margin-top: 40px;
+}
+ .emoji {
+	 border-radius: 50%;
+	 position: relative;
+	 width: 100px;
+	 height: 100px;
+	 background-color: #ffeb96;
+}
+ .emoji1:after, .emoji1:before {
+	 position: absolute;
+	 content: "";
+	 height: 10px;
+	 width: 10px;
+	 background-color: #414141;
+	 border-radius: 50%;
+	 top: 48px;
+	 animation: emoji1-face-move 5s ease-in-out infinite, emoji1-eyes-blink 2s ease-in-out infinite;
+	 animation-direction: alternate;
+}
+ .emoji1:after {
+	 left: 30px;
+}
+ .emoji1:before {
+	 left: 85px;
+}
+ .emoji1 .mouth {
+	 position: absolute;
+	 height: 3px;
+	 width: 35px;
+	 background-color: #414141;
+	 border-radius: 5px;
+	 top: 68px;
+	 left: 45px;
+	 animation: emoji1-face-move 5s ease-in-out infinite;
+	 animation-direction: alternate;
+}
+ @keyframes emoji1-eyes-blink {
+	 0% {
+		 height: 10px;
+	}
+	 97% {
+		 height: 10px;
+	}
+	 100% {
+		 height: 0px;
+	}
+}
+ @keyframes emoji1-face-move {
+	 0% {
+		 transform: translateX(0);
+	}
+	 30% {
+		 transform: translateX(0);
+	}
+	 35% {
+		 transform: translateX(-20px);
+	}
+	 65% {
+		 transform: translateX(-20px);
+	}
+	 70% {
+		 transform: translateX(-10px);
+	}
+	 85% {
+		 transform: translateX(-10px);
+	}
+	 90% {
+		 transform: translateX(0);
+	}
+	 100% {
+		 transform: translateX(0);
+	}
+}
+
+
+
+
+.compcontainer {
+  width: 75%;
+  height: 13rem;
+  padding: 1rem 0;
+}
+@media (max-width: 650px) {
+  .compcontainer {
+    height: 10rem;
+  }
+}
+.compcontainer svg {
+  max-width: 100%;
+  max-height: 100%;
+  animation: bouncy 1300ms linear infinite;
+}
+
+@keyframes bouncy {
+  0% {
+    transform: translateY(10px) translateX(0) rotate(0);
+  }
+  25% {
+    transform: translateX(-10px) rotate(-10deg);
+  }
+  50% {
+    transform: translateX(0) rotate(0deg);
+  }
+  75% {
+    transform: translateX(10px) rotate(10deg);
+  }
+  100% {
+    transform: translateY(10px) translateX(0) rotate(0);
+  }
+}
+
+
+
+
