@@ -27,7 +27,7 @@
                                                 <h4 class="fontbold text-dark"> {{$newest_course->title}}</h4>
                                             </a>
                                             
-                                            @php 
+                                        @php 
                                             $array = array();
                                         @endphp
                                         

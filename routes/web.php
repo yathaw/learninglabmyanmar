@@ -88,7 +88,7 @@ Route::post('login_data',[LoginController::class,'login_store'])->name('frontend
 */
 
 //KKS
-Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
+Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/course', CourseController::class);
 
 
@@ -183,7 +183,15 @@ Route::get('/checkoutnoti',[AccountController::class,'checkoutnoti'])->name('che
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');
+Route::resource('collections',CollectionController::class);
 Route::get('wishlist',[AccountController::class, 'wishlist'])->name('wishlist');
+
+Route::get('purchase_history',[AccountController::class, 'purchase_history'])->name('purchase_history');
+
+Route::get('history_detial/{id}',[AccountController::class, 'history_detial'])->name('history_detial');
+
+
+
 
 // ------------------------------------------------------------------------
 

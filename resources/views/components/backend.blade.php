@@ -290,7 +290,7 @@
 									</a> -->
 								</div>
 								<div class="dropdown-menu-footer">
-									<a href="#" class="text-muted">Show all notifications</a>
+									<a href="{{route('backside.sale.index')}}" class="text-muted">Show all notifications</a>
 								</div>
 								
 							</div>

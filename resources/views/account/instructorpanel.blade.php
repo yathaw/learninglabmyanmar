@@ -20,18 +20,21 @@
 				<div class="row">
 					<div class="col-sm-6">
 						<div class="card">
-							<a href="">
+							@if(count($sales) > 0)
+							<a href="{{route('backside.enrollment')}}">
 								<div class="card-body">
 									<h5 class="card-title mb-4"> Enrollments </h5>
-									<h1 class="mt-1 mb-3">
-										@if(count($sales) > 0)
-											<a href="{{route('backside.enrollment')}}" class="text-dark"> {{count($sales)}} </a>
-										@else
-											0
-										@endif
-									</h1>
+									<h1 class="mt-1 mb-3">{{count($sales)}}</h1>
 								</div>
 							</a>
+							@else
+							<a href="#">
+								<div class="card-body">
+									<h5 class="card-title mb-4"> Enrollments </h5>
+									<h1 class="mt-1 mb-3">0</h1>
+								</div>
+							</a>
+							@endif
 						</div>
 						<div class="card">
 							<a href="">
@@ -44,12 +47,21 @@
 					</div>
 					<div class="col-sm-6">
 						<div class="card">
-							<a href="">
+							@if(count($courses) > 0)
+							<a href="{{route('backside.course.index')}}">
 								<div class="card-body">
 									<h5 class="card-title mb-4">Courses</h5>
 									<h1 class="mt-1 mb-3"> {{count($courses)}} </h1>
 								</div>
 							</a>
+							@else
+							<a href="#">
+								<div class="card-body">
+									<h5 class="card-title mb-4">Courses</h5>
+									<h1 class="mt-1 mb-3"> 0 </h1>
+								</div>
+							</a>
+							@endif
 						</div>
 						<div class="card">
 							<a href="">
@@ -96,13 +108,15 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr class='clickableRow' data-href='{{ route('backside.course.show','1') }}'>
-							<td>Project Apollo</td>
-							<td class="d-none d-xl-table-cell">01/01/2020</td>
+						@foreach($recentcourses as $recentcourse)
+						<tr class='clickableRow' data-href='{{ route('backside.course.show',$recentcourse->id) }}'>
+							<td>{{$recentcourse->title}}</td>
+							<td class="d-none d-xl-table-cell">{{$recentcourse->created_at->format('d/m/Y')}}</td>
 							<td><span class="badge bg-success">Done</span></td>
-							<td class="d-none d-md-table-cell">Vanessa Tucker</td>
+							<td class="d-none d-md-table-cell">{{$recentcourse->price}}</td>
 						</tr>
-						<tr class='clickableRow' data-href='{{ route('backside.course.show','2') }}'>
+						@endforeach
+						<!-- <tr class='clickableRow' data-href='{{ route('backside.course.show','2') }}'>
 							<td>Project Fireball</td>
 							<td class="d-none d-xl-table-cell">01/01/2020</td>
 							<td><span class="badge bg-danger">Cancelled</span></td>
@@ -143,7 +157,7 @@
 							<td class="d-none d-xl-table-cell">01/01/2020</td>
 							<td><span class="badge bg-warning">In progress</span></td>
 							<td class="d-none d-md-table-cell">William Harris</td>
-						</tr>
+						</tr> -->
 					</tbody>
 				</table>
 			</div>

@@ -176,9 +176,11 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
+
         $sections = Section::where('course_id',$course->id)->orderByRaw("CAST(sorting as Integer) ASC")->get();
 
         return view('course.show',compact('course','sections'));
+
     }
 
     /**

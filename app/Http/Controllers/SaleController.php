@@ -98,7 +98,14 @@ class SaleController extends Controller
     }
     public function enrollment()
     {
-        $enrolls = Sale::where('status',1)->get();
+       /* $enrolls = Sale::whereHas('courses',function($q){
+            $q->where('course_sale.status',1);
+        })->where('sales.status',1)->get();*/
+        
+        $enrolls = Sale::whereHas('courses',function($q){
+            $q->where('course_sale.status',1);
+        })->where('sales.status',1)->orderBy('created_at','desc')->limit(8)->get();
+
         return view('account.enrollment',compact('enrolls'));
     }
 
@@ -107,7 +114,9 @@ class SaleController extends Controller
         $startdate = $request->startdate;
         $enddate = $request->enddate;
 
-        $sale = Sale::where('status',1)->whereBetween('created_at', [$startdate, $enddate])->with('user','courses')->get();
+        $sale = Sale::whereHas('courses',function($q){
+                $q->where('course_sale.status',1);
+            })->where('sales.status',1)->whereDate('sales.created_at', '>=', $startdate)->whereDate('sales.created_at', '<=', $enddate)->with('user','courses')->get();
 
         return response()->json(['sales'=>$sale]);        
     }
