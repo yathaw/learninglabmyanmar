@@ -124,6 +124,17 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     //HH
     Route::resource('students',StudentController::class);
 
+    Route::get('account_remove/{id}',[InstructorController::class,'account_remove'])->name('account_remove');
+
+    Route::get('instructor_student/{id}',[InstructorController::class,'instructor_studentlist'])->name('instructor_studentlist');
+
+    Route::get('company_instructor/{id}',[CompanyController::class,'instructor_list'])->name('instructor_list');
+
+    Route::get('remove_instructor/{id}',[CompanyController::class,'remove_instructor'])->name('remove_instructor');
+    Route::get('company_student/{id}',[CompanyController::class,'student_list'])->name('student_list');
+
+
+
     // NYL
     Route::resource('installments',InstallmentController::class);
 
