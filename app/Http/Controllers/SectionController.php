@@ -8,6 +8,7 @@ use App\Models\Content;
 use App\Models\Lesson;
 use App\Models\Contenttype;
 use App\Models\Instructor;
+use App\Models\User;
 
 
 use Illuminate\Http\Request;
@@ -148,37 +149,11 @@ class SectionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Section $section)
-    // {  //dd($request);
-    //     $sectionid = $request->sectionid;
-    //     $courseid = $request->courseid;
-    //     $instructorid = $request->instructorid;
-    //     $title = $request->title;
-    //     $objective = $request->objective;
-        
-    //     $section->title=$title;
-    //     $section->objective=$objective;
-        
-    //     $section->contenttype_id=1;
-    //     $section->course_id=$courseid;
+    { 
+    
 
-    //     $hasCourses_inSection = Section::where('course_id', $request->courseid)->get();
 
-    //     foreach($hasCourses_inSection as $hasCourse_inSection){
-    //         $sorting = $hasCourse_inSection->sorting;
-    //         $sorting_data = ++$sorting;
-    //     }
-    //     /*insert sorting*/
-    //     if($hasCourses_inSection->isEmpty()){
-    //     $section->sorting = 1;
-    //     }else{
-    //         $section->sorting = $sorting_data;
-    //     }
-
-    //   $section->save();
-
-    //   return $section;
-
-   }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -207,15 +182,25 @@ class SectionController extends Controller
         return $content_array;
     }
 
+    public function getinstructor(Request $request)
+    {
+        $instructor = $request->instructorid;
+        $course=$request->courseid;
+
+       /* $user_id = Auth::user()->id;
+        $instructorid = Instructor::where('user_id', $user_id)->get();*/
+        $section_courses=Section::where('course_id',$course)->distinct()->get(['instructor_id']);
+        //dd($section_courses);
+
+        return $section_courses;
+
+    }
+
     public function sectionsorting_modernize(Request $request){
         $id = $request->id;
         $sorting = $request->sorting;
 
         Section::where('id', $id)->update(array('sorting' => $sorting));
-
     }
-
-    
-
 
 }

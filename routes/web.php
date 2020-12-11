@@ -17,7 +17,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
 
-
+//KYW
 use App\Http\Controllers\BackendController;
 
 // NYL
@@ -101,7 +101,7 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
    
     Route::get('/section/{section}/edit',[SectionController::class,'edit'])->name('sectionedit');
     Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
-
+    Route::post('/getinstructor',[SectionController::class,'getinstructor'])->name('getinstructor');
     Route::post('/sectionupdate/{id}',[BackendController::class,'sectionupdate'])->name('sectionupdate');
    
 
