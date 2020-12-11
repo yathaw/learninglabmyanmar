@@ -16,7 +16,7 @@
       	</div>
     </section><!-- End Breadcrumbs -->
 
-    <section class="inner-page">
+    <section class="inner-page showdata">
       	<div class="container">
 
       		<div class="row">
@@ -204,8 +204,8 @@
 						        		<div class="price">
 						        			<span class="text-danger fs-5"> {{$course->price}} Ks  </span> 
 
-								    		<span class="text-decoration-line-through text-muted"> 
-								    		55,000 Ks </span>
+								    		{{-- <span class="text-decoration-line-through text-muted"> 
+								    		55,000 Ks </span> --}}
 
 								    		<i class='bx bxs-purchase-tag text-danger' ></i>
 						        		</div>
@@ -216,7 +216,7 @@
 						        	<div class="card-content">
 							            <small class="card-text text-muted" >
 
-							            	{!! $course->subtitle !!}
+							            	{!! \Illuminate\Support\Str::limit($course->subtitle, 80) !!}
 							            </small>
 							            
 							            <div class="d-grid gap-2 col-6 mx-auto">
@@ -264,7 +264,7 @@
 															@endforeach
 															
 															>
-										            	Add To Cart
+										            	Purchase
 										            	</a>
 										           
 										            @endif
@@ -281,7 +281,7 @@
 															@endforeach
 															
 															>
-										            	Add To Cart
+										            	Purchase
 										            	</a>
 										            
 
@@ -294,7 +294,7 @@
 
 
 								            @else
-								            	<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Add To Cart</button>
+								            	<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>
 								            @endif
 
 
@@ -311,21 +311,12 @@
 
 			        </div>
 			        
-			        {{-- 
+			        
 			        <nav aria-label="Page navigation example" class="mt-5">
 					  	<ul class="pagination justify-content-center">
-					    	<li class="page-item disabled">
-					      		<a class="page-link" href="#" tabindex="-1" aria-disabled="true"> << </a>
-					    	</li>
-					    	<li class="page-item"><a class="page-link" href="#">1</a></li>
-					    	<li class="page-item"><a class="page-link" href="#">2</a></li>
-					    	<li class="page-item"><a class="page-link" href="#">3</a></li>
-					    	<li class="page-item">
-					      		<a class="page-link" href="#"> >> </a>
-					    	</li>
+							{!! $courses->links() !!}
 					  	</ul>
-					</nav> --}}
-					{{-- {!! $courses->links() !!} --}}
+					</nav>
 
 		      	</div>
 
@@ -361,6 +352,8 @@
 			var html = "";
 			var instructor = "";
 			var heart = false;
+			var sale = "";
+
 			$.post("{{route('courses_search')}}",{data:search_data},function(data){
 				console.log(data);
 				if(data){
@@ -391,6 +384,15 @@
 						        			
 						        		});
 						        		}
+
+						        		$.each(v.sales,function(c,d){
+						        			console.log(d);
+						        			if(d.pivot.status == 1){
+						        				sale += "true";
+						        			}else {
+						        				sale += "false";
+						        			}
+						        		})
 
 
 
@@ -461,7 +463,7 @@
 							            </small>
 							            <div class="d-grid gap-2 col-6 mx-auto">`;
 
-							            if(heart == true){
+							            if(heart == true && v.sales.length < 1){
 								        html +=  `<a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 cart" data-id="${v.id}" data-course_title="${v.title}" data-instructor = "${instructor}" data-user_id = "{{Auth::id()}}" data-price = "${v.price}" data-image = "${v.image}" `;
 
 
@@ -473,9 +475,13 @@
 													})	 
 										      		
 									      			html+= `>
-								            	Add to Cart
+								            	Purchase
 								            </a>`;
-								          }else{
+								          }else if(heart == true && sale == "true"){
+								          	html += `<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>`;
+								          }else if(heart == true && sale == "false")
+								          	html += `<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>`;
+								          else{
 								          	html+=`<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Add To Cart</button>`
 								          }
 

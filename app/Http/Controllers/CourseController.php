@@ -9,6 +9,8 @@ use App\Models\Category;
 use App\Models\Level;
 use App\Models\Instructor;
 use App\Models\User;
+use App\Models\Section;
+
 use Auth;
 
 class CourseController extends Controller
@@ -27,6 +29,7 @@ class CourseController extends Controller
         $authuser = Auth::user();
         $auth_id = Auth::id();
         $role = $authuser->getRoleNames();
+        $allcourses = Course::all();
 
         if ($role[0] == 'Instructor') {
             $instructor = $authuser->instructor;
@@ -53,13 +56,13 @@ class CourseController extends Controller
         }
         else{
             
-            $courses=Course::paginate(8);
+            $courses=Course::orderBy('status')->paginate(8);
             
 
         }
        
 
-        return view('course.index',compact('courses','categories','subcategories','auth_id'));
+        return view('course.index',compact('courses','categories','subcategories','auth_id','role','allcourses'));
         
          
         
@@ -103,12 +106,7 @@ class CourseController extends Controller
         //dd($request->situations);
         //dd($request);
 
-        
-        
-         $data[] = $request->situations;
-         $data1[]=$request->requirements;
-
-       
+        // dd($request->acceptTerms);
 
         //if the file include, please upload (eg:input type="file")
         if ($request->file()) {
@@ -144,8 +142,8 @@ class CourseController extends Controller
             $course->subcategory_id=$request->subcategoryid;
             $course->level_id=$request->level;
             $course->description = $request->description;
-            $course->requirements=json_encode($data);
-            $course->situation=json_encode($data1);
+            $course->requirements=json_encode($request->situations);
+            $course->situation=json_encode($request->requirements);
             $course->certificate = $request->acceptTerms;
             $course->share = 0;
             $course->status =0;
@@ -178,7 +176,9 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        return view('course.show',compact('course'));
+        $sections = Section::where('course_id',$course->id)->orderByRaw("CAST(sorting as Integer) ASC")->get();
+
+        return view('course.show',compact('course','sections'));
     }
 
     /**
@@ -210,11 +210,6 @@ class CourseController extends Controller
 
           //dd($request->oldvideo);
 
-        $data[] = $request->situations;
-         $data1[]=$request->requirements;
-
-
-       
 
         //if the file include, please upload (eg:input type="file")
         if ($request->file()) {
@@ -252,8 +247,8 @@ class CourseController extends Controller
             $course->subcategory_id=$request->subcategoryid;
             $course->level_id=$request->level;
             $course->description = $request->description;
-            $course->requirements=json_encode($data);
-            $course->situation=json_encode($data1);
+            $course->requirements=json_encode($request->situations);
+            $course->situation=json_encode($request->requirements);
             $course->certificate = $request->acceptTerms;
             $course->share = 0;
             $course->status =0;

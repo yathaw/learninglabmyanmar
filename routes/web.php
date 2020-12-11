@@ -95,6 +95,8 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/category',CategoryController::class);
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
+//NYL 
+    Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
 
     Route::resource('/section', SectionController::class);
 //KYW
@@ -125,6 +127,9 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     // NYL
     Route::resource('installments',InstallmentController::class);
 
+    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
+
+    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
 
 });
 

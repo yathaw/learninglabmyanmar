@@ -21,7 +21,7 @@ class CreateSalesTable extends Migration
                     ->references('id')
                     ->on('users')
                     ->onDelete('cascade');
-            $table->smallInteger('status');
+            
             $table->softDeletes();
             $table->timestamps();
         });
