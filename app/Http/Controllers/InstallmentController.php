@@ -40,6 +40,14 @@ class InstallmentController extends Controller
         $course_array = array();
         $course_id = explode(',',$request->course_id);
         // dd($course_id);
+        if($request->hasfile('installment_photo')){
+            $photo = time().'_'.$request->installment_photo->getClientOriginalName();
+            $filepath = $request->file('installment_photo')->storeAs('bankphoto',$photo,'public');
+            $path = '/storage/'.$filepath;
+
+        };
+        
+        // dd($path);
 
         $update_course_status= 1;
         $request->validate([
@@ -55,6 +63,7 @@ class InstallmentController extends Controller
         $installment->paiddate = $request->installment_date;
         $installment->user_id = Auth::user()->id;
         $installment->sale_id = $sale_id;
+        $installment->photo = $path;
         $installment->save();
 
         $sale = Sale::find($sale_id);

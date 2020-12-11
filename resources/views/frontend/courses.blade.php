@@ -182,7 +182,7 @@
 
 
 
-						        		<p class="card-text fst-italic text-muted">
+						        		{{-- <p class="card-text fst-italic text-muted">
 						        			
 						        			@foreach($course->instructors as $instructor)
 						        				{{$instructor->user->name}}
@@ -190,7 +190,7 @@
 						        					$instructor = $instructor->user->name;
 						        				@endphp
 						        			@endforeach
-						        		</p>
+						        		</p> --}}
 
 						        		<div class="rating">
 						        			<i class='bx bxs-star custom_primary_Color'></i>
@@ -223,6 +223,8 @@
 							            	@if(Auth::user())
 							            	@if(Auth::user()->sales)
 							            	@php
+							            		$pending_array = array();
+							            		$purched_array = array();
 							            		$count_sale = count(Auth::user()->sales);
 							            	@endphp
 
@@ -233,13 +235,25 @@
 
 								            				@if($course_sale->pivot->course_id == $course->id && $course_sale->pivot->status == 0)
 
+								            					@php
+								            						array_push($pending_array, 'true')
+								            					@endphp
+
 								            					<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>
 
 								            				@elseif($course_sale->pivot->course_id == $course->id && $course_sale->pivot->status == 1)
-								            					<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>
+								            					@php
+								            						array_push($purched_array, 'true')
+								            					@endphp
 								            				@endif
 								            			@endforeach
 								            		@endforeach
+
+									            		@if($purched_array)
+									            			 <a href="{{route('lecture',$course->id)}}" class="btn custom_primary_btnColor mt-3">Go to Course</a>
+									            		@endif
+
+
 								            	@endif
 								            @endif
 
@@ -249,7 +263,7 @@
 							      				@if(Auth::user()->instructor)
 
 
-							      					@if($instructor->pivot->instructor_id != Auth::user()->instructor->id)
+							      					@if($instructor->pivot->instructor_id != Auth::user()->instructor->id && !$purched_array && !$pending_array)
 
 
 										            	<a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
@@ -268,7 +282,7 @@
 										            	</a>
 										           
 										            @endif
-										            @else
+										            @elseif(!$purched_array && !$pending_array)
 										            	<a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
 										            	data-id="{{$course->id}}" data-course_title="{{$course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$course->price}}" data-image = "{{$course->image}}"
 										            	 	{{-- for wishlist --}}
@@ -287,11 +301,6 @@
 
 								            	@endif
 								            @endforeach
-
-								            
-
-
-
 
 								            @else
 								            	<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>
@@ -352,7 +361,7 @@
 			var html = "";
 			var instructor = "";
 			var heart = false;
-			var sale = "";
+			var sale =  new Array();
 
 			$.post("{{route('courses_search')}}",{data:search_data},function(data){
 				console.log(data);
@@ -386,18 +395,18 @@
 						        		}
 
 						        		$.each(v.sales,function(c,d){
-						        			console.log(d);
+						        			// console.log(d);
 						        			if(d.pivot.status == 1){
-						        				sale += "true";
+						        				sale = "true";
 						        			}else {
-						        				sale += "false";
+						        				sale = "false";
 						        			}
 						        		})
 
 
 
 						        		if(heart == true){
-
+						        			console.log(sale);
 
 						      			html+=`<a class="favouriteBtn one `;  
 						      			$.each(v.wishlists,function(w,l){
@@ -478,11 +487,11 @@
 								            	Purchase
 								            </a>`;
 								          }else if(heart == true && sale == "true"){
-								          	html += `<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>`;
+								          	html += ` <a href="{{route('lecture',':course_detail_id')}}" class="btn custom_primary_btnColor mt-3">Go to Course</a>`;
 								          }else if(heart == true && sale == "false")
-								          	html += `<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>`;
+								          	html += `<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>`;
 								          else{
-								          	html+=`<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Add To Cart</button>`
+								          	html+=`<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>`
 								          }
 
 
@@ -493,6 +502,8 @@
 			        	</div>`;
 			        	html = html.replace(':id',v.id);
 			        	html = html.replace(':course_id',v.id);
+			        	html = html.replace(':course_detail_id',v.id);
+
 
 					});
 					

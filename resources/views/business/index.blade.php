@@ -30,7 +30,7 @@
 					</div>
 
 					<div class="table-responsive m-t-40">
-                        <table id="listTable" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                         <table id="listTable" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                             <thead class="custom_primary_bgColor text-white">
                                 <tr>
                                     <th> No </th>
@@ -46,20 +46,37 @@
                             <tbody>
                             	<?php $i =1; ?>
                             	@foreach($companies as $company)
+
+
+
                             	<tr>
                             		<td>{{$i++}}</td>
-                                    <td>{{$company->user->name}}</td>
-                                    <td>{{$company->user->email}}</td>
-                                    <td>{{$company->user->phone}}</td>
+                                    @foreach($company->user as $company_user)
+                                    @php 
+                                        $role_name = $company_user->getRoleNames();
+                                    @endphp
+                                    @if($role_name[0] == "Business" && $company_user->status == '0')
+                               
+                                    <td>
+                                        {{$company_user->name}}</td>
+                                    <td>{{$company_user->email}}</td>
+                                    <td>{{$company_user->phone}}</td>
                             		<td>{{$company->name}}</td>
                             		
                             		<td>{{$company->address}}</td>
                             		
                             		<td>
-                                        <button class="btn btn-primary" id="business_detail" data-user_name="{{$company->user->name}}" data-email="{{$company->user->email}}" data-phone="{{$company->user->phone}}" data-company_name="{{$company->name}}" data-logo="{{$company->logo}}" data-address="{{$company->address}}" data-description="{{$company->description}}"><i class="fas fa-info-circle"></i></button>
+                                        <button class="btn btn-primary" id="business_detail" data-user_name="{{$company_user->name}}" data-email="{{$company_user->email}}" data-phone="{{$company_user->phone}}" data-company_name="{{$company->name}}" data-logo="{{$company->logo}}" data-address="{{$company->address}}" data-description="{{$company->description}}"><i class="fas fa-info-circle"></i></button>
                             			<a href="#" class="btn btn-warning"><i class="align-middle " data-feather="edit-2"></i></a>
-                            			<a href="#" class="btn btn-danger"><i class="align-middle" data-feather="x"></i></a>
+                            			<form action="{{route('backside.companies.destroy',$company->id)}}" method="POST" class="d-inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger" type="submit"><i class="fas fa-user-times"></i></button>
+                                            
+                                        </form>
                             		</td>
+                                    @endif
+                                    @endforeach
                             	</tr>
                             	@endforeach
                             </tbody>
@@ -172,7 +189,8 @@
 
         	$('#listTable').DataTable();
 
-            $('#business_detail').click(function(){
+            $('tbody').on('click','#business_detail',function(){
+                alert('honey');
                 var user_name = $(this).data('user_name');
                 var email = $(this).data('email');
                 var phone = $(this).data('phone');

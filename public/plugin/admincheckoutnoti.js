@@ -53,11 +53,12 @@ $(document).ready(function(){
         
         $.each(response,function(i,v){
 
+          let url = '/backside/sale/'+v.data.saleid;
 
           if(i<4){
             const currentTimeStamp = Date.parse(v.created_at);
-            html+=`<a href="#" class="list-group-item">
-                    <div class="row g-0 align-items-center">
+            html+='<a href="'+url+'" class="list-group-item">';
+                   html+=`<div class="row g-0 align-items-center">
                       <div class="col-2">
                         <i class="text-danger" data-feather="alert-circle"></i>
                       </div>

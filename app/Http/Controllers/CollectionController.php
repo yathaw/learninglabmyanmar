@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Collection;
+use Auth;
 
 class CollectionController extends Controller
 {
@@ -34,7 +36,22 @@ class CollectionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+                    'title'=>'required',
+                    'description'=>'required',
+                    ]);
+        $title = $request->title;
+        $description = $request->description;
+        $user = Auth::user();
+
+        $collection = new Collection;
+        $collection->title = $title;
+        $collection->description = $description;
+        $collection->user_id = $user->id;
+        $collection->save();
+
+        return response()->json($collection);
+
     }
 
     /**
