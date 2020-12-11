@@ -6,6 +6,8 @@ use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Course;
+use App\Models\Instructor;
 
 
 class CompanyController extends Controller
@@ -18,6 +20,7 @@ class CompanyController extends Controller
     public function index()
     {
         $companies = Company::all();
+        // dd($companies);
         return view('business.index',compact('companies'));
     }
 
@@ -137,6 +140,69 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
-        //
+        $company_id = $company->id;
+        
+        $users = User::where('company_id',$company_id)->get();
+
+        foreach($users as $user){
+            $user->status = 1;
+            $user->save();
+
+            $user_role_name = $user->getRoleNames();
+            if($user_role_name[0] == 'Instructor')
+            {
+                $instructor = Instructor::where('user_id',$user->id)->first();
+                $instructor->delete();
+                
+            }
+            if($user_role_name[0] == 'Business')
+            {
+                $company->delete();
+            }
+
+            $courses = Course::where('user_id',$user->id)->get();
+            foreach ($courses as $course) {
+
+                $course->status = 2;
+                $course->save();
+                # code...
+            }
+           
+        }
+
+        return redirect()->route('backside.companies.index');
+
+    }
+
+    public function instructor_list($id)
+    {
+        $user = User::find($id);
+        $company_id = $user->company_id;
+
+        $user_instructors = User::where([['company_id',$company_id],['status',0]])->get();
+        
+        return view('business.instructor_list',compact('user_instructors'));
+    }
+
+    public function remove_instructor($id)
+    {
+        $user = User::find($id);
+        $user->status = 1;
+        $user->save();
+
+        $courses = Course::where('user_id',$id)->get();
+        foreach ($courses as $course) {
+            $course->status=2;
+            $course->save();
+        }
+
+        $instructor =Instructor::where('user_id',$id)->first();
+        $instructor->delete();
+        return back();
+    }
+
+    public function student_list($id)
+    {
+        dd($id);
     }
 }

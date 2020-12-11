@@ -95,8 +95,30 @@
             			</a>
 					</li>
 					@if(!in_array($authRole, array('Admin','Developer'), true ))
-					<li class="sidebar-item">
+					<!-- <li class="sidebar-item">
 						<a class="sidebar-link" href="{{route('backside.course.index')}}">
+              				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Students </span>
+            			</a>
+					</li> -->
+					@endif
+
+					@if($authRole == "Instructor")
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{route('instructor_studentlist',Auth::user()->id)}}">
+              				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Students </span>
+            			</a>
+					</li>
+					@endif
+
+
+					@if($authRole == "Business")
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{route('instructor_list',Auth::user()->id)}}">
+              				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Instructors </span>
+            			</a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{{route('student_list',Auth::user()->id)}}">
               				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Students </span>
             			</a>
 					</li>
@@ -446,6 +468,11 @@
 								<a class="dropdown-item" href="#">
 									<i class="align-middle mr-1" data-feather="lock"></i> Change Password 
 								</a>
+
+								<!-- HH -->
+								@if($authRole == "Instructor" || $authRole == "Business")
+								<a href="{{route('account_remove',Auth::user()->id)}}" class="dropdown-item"><i class="align-middle mr-1" data-feather="user"></i>Close Account</a>
+								@endif
 								<div class="dropdown-divider"></div>
 								
 

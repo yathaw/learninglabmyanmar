@@ -217,10 +217,6 @@
 
                                            @if(Auth::user())
 
-
-                                            
-
-
                                             @if(Auth::user()->instructor)
 
 
@@ -258,7 +254,7 @@
                                                         @endforeach
                                                     @endforeach
                                                     @if(count($purched_array) > 0)
-                                                        <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purched</button>
+                                                        <a href="{{route('lecture',$course->id)}}" class="btn custom_primary_btnColor mt-3">Go to Course</a>
                                                     @endif
 
                                                 @else
@@ -397,28 +393,130 @@
                             </div>
                         </div>
 
+
+
+
+                        @php
+                            $total_duration = 0;
+                            $video = 0;
+                            $article = 0;
+                            $countassignment = 0;
+                           
+                          @endphp
+                          @foreach($course->contents as $content)
+
+                            @foreach($content->lessons as $lesson)
+
+                              @php
+                                // video
+                                $duration = $lesson['duration'];
+                                $type = $lesson['type'];
+
+                                if($type != "MP4"){
+                                    $article++;
+                                }
+
+                                if($type == "MP4"){
+                                    $video++;
+                                    $total_duration += $duration++;
+                                    
+                                }
+
+                                // assignment
+                              @endphp
+                            @endforeach
+
+                            @foreach ($content->assignments as $assignment) 
+                                @php
+                                  $countassignment++;
+                                @endphp
+                            @endforeach
+                                  
+                          @endforeach
+
+
+                          @if($total_duration)
+                            @php
+                              $dt = Carbon\Carbon::now();
+                              $days = $dt->diffInDays($dt->copy()->addSeconds($total_duration));
+
+                              $hours = $dt->diffInHours($dt->copy()->addSeconds($total_duration)->subDays($days));
+                              $minutes = $dt->diffInMinutes($dt->copy()->addSeconds($total_duration)->subDays($days)->subHours($hours));
+
+                              $seconds = $dt->diffInSeconds($dt->copy()->addSeconds($total_duration)->subDays($days)->subHours($hours)->subMinutes($minutes));
+                              // dd($seconds);
+
+                              $totaltimes = Carbon\CarbonInterval::days($days)->hours($hours)->minutes($minutes)->forHumans();
+                            @endphp
+                          @else
+                            @php
+                              $totaltimes='0 Second';
+                            @endphp
+                          @endif
                         {{-- Course content --}}
                         <div class="col-12 mt-5">
                             <h4 class="fontbold"> Course content </h4>
                             @php
+
                                 $count_section = count($sections);
                             @endphp
                             
-                            <p class="mt-3"> {{$count_section}} Sections • 623 Lectures • 62h 58m total length </p>
+                            <p class="mt-3"> {{$count_section}} Sections • {{$video}} Lectures • {{$totaltimes}} total length </p>
 
                             <div class="accordion" id="accordionExample">
+                                {{-- video duration --}}
+                                @php
+                                    $i=0;
+                                @endphp
                                
                                 @foreach($sections as $key => $section)
                                 @php
                                     $count_content = count($section->contents);
                                 @endphp
 
+                                @if($section->course_id == $course->id)
+                                    @php
+                                        $contentTotal_duration = 0;
+                                        foreach ($section->contents as $content) {
+
+                                            foreach ($content->lessons as $lesson) {
+                                                $type = $lesson->type;
+                                                if($type == "MP4"){
+                                                    $duration = $lesson->duration;
+
+                                                }
+                                                $contentTotal_duration += $duration++;
+                                            }
+                                        }
+                                        // dd($contentTotal_duration);
+                                        if($contentTotal_duration){
+                                            $datetime = Carbon\Carbon::now();
+                                            $days = $datetime->diffInDays($datetime->copy()->addSeconds($contentTotal_duration));
+
+                                            $hours = $datetime->diffInHours($datetime->copy()->addSeconds($contentTotal_duration)->subDays($days));
+                                            $minutes = $datetime->diffInMinutes($datetime->copy()->addSeconds($contentTotal_duration)->subDays($days)->subHours($hours));
+
+                                            $seconds = $datetime->diffInSeconds($datetime->copy()->addSeconds($contentTotal_duration)->subDays($days)->subHours($hours)->subMinutes($minutes));
+                                              // dd($seconds);
+
+                                            $content_time = Carbon\CarbonInterval::days($days)->hours($hours)->minutes($minutes)->forHumans();
+                                        }else{
+                                            $content_time="0 Second";
+                                        }
+                                    @endphp
+                                @endif
+
+
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingOne">
                                         <button class="accordion-button {{ $key != 0 ? 'collapsed' : '' }}" type="button" data-toggle="collapse" data-target="#collapse{{$key}}" aria-expanded="true" aria-controls="collapse{{$key}}">
                                             {{$section->title}}
 
-                                            <small class="fst-italic ml-4"> ( {{$count_content}} Lectures • 31 min ) </small>
+                                            
+                                           
+
+
+                                            <small class="fst-italic ml-4"> ( {{$count_content}} Lectures • {{$content_time}} ) </small>
                                         </button>
                                     </h2>
                                     <div id="collapse{{$key}}" class="accordion-collapse collapse @if($key == 0) show @endif" aria-labelledby="headingOne" data-parent="#accordionExample">
@@ -430,19 +528,52 @@
                                             </p> --}}
                                             
                                         @php
-                                            $data = App\Models\Content::where('section_id',$section->id)->orderByRaw("CAST(sorting as Integer) ASC")->get()
+                                            $data = App\Models\Content::where('section_id',$section->id)->orderByRaw("CAST(sorting as Integer) ASC")->get();
+                                            $onelesson_duration = 0;
                                         @endphp
 
                                         @foreach($data as $content)
                                             @foreach($content->lessons as $lesson)
 
+                                            @if($lesson->type == "MP4")
+                                                @php
+
+                                                    $lesson_duration = $lesson->duration;
+                                                    
+                                                    $onelesson_duration += $lesson_duration++;
+                                                    
+                                                @endphp
+                                            @endif
+                                                    @if($onelesson_duration)
+                                                    @php
+
+                                                        $lesson_time = Carbon\Carbon::now();
+                                                        $days = $lesson_time->diffInDays($lesson_time->copy()->addSeconds($onelesson_duration));
+
+                                                        $hours = $lesson_time->diffInHours($lesson_time->copy()->addSeconds($onelesson_duration)->subDays($days));
+                                                        $minutes = $lesson_time->diffInMinutes($lesson_time->copy()->addSeconds($onelesson_duration)->subDays($days)->subHours($hours));
+
+                                                        $seconds = $lesson_time->diffInSeconds($lesson_time->copy()->addSeconds($onelesson_duration)->subDays($days)->subHours($hours)->subMinutes($minutes));
+                                                          // dd($seconds);
+
+                                                        $lesson_total_time = Carbon\CarbonInterval::days($days)->hours($hours)->minutes($minutes)->forHumans();
+                                                    @endphp
+
+                                                    @else
+                                                    @php
+                                                        $lesson_total_time = "0 Second";
+                                                    @endphp
+
+                                                    @endif
+                                               
+                                            
 
                                                 <p class="lh-lg">
                                                     <i class='bx bx-play-circle mr-2 bx-lg' ></i>
                                                         <a href="javascript:void(0)" class="text-primary text-decoration-underline videopreivewLink" data-toggle="modal" data-src="{{$lesson->file}}" data-target="#videopreviewModal"> {{$content->title}} </a>
                                                     <span class="float-right"> 
                                                         @if($lesson->type == "MP4") 
-                                                            00;30
+                                                            {{$lesson_total_time}}
                                                         @else
                                                             {{$lesson->type}}
                                                         @endif

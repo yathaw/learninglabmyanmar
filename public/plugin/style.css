@@ -1193,7 +1193,7 @@ ul#playlist{
     -webkit-transition: background 0.4s, color 0.4s;    
 }
 .sky-tabs > label:hover span span {
-    background: #2da5da;
+    background: #F3AD47;
     color: #fff;    
 }
 .sky-tabs > label.disabled span span {
@@ -1204,7 +1204,7 @@ ul#playlist{
     cursor: default;
 }
 .sky-tabs > input:checked + label span span {
-    background: #2da5da;
+    background: #F3AD47;
     color: #fff;
 }
 .sky-tabs > .switcher {
@@ -1678,7 +1678,7 @@ ul#playlist{
 }
 .sky-tabs .typography a {
     text-decoration: underline;
-    color: #2da5da;
+    color: #F3AD47;
 }
 .sky-tabs .typography a:hover {
     text-decoration: none;
@@ -1696,7 +1696,7 @@ ul#playlist{
 }
 .sky-tabs .typography .link {
     text-decoration: underline;
-    color: #2da5da;
+    color: #F3AD47;
     cursor: pointer;
 }
 .sky-tabs .typography .link:hover {
@@ -1718,7 +1718,16 @@ ul#playlist{
     text-align: right;
 }
 
-
+.sky-tabs > label [class^="icon-"] {
+    display: block;
+    float: left;
+    width: 50px;
+    margin: 0 12px 0 -6px;
+  font-style: normal;
+  font-size: 16px;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+}
 /**/
 /* pad */
 /**/
@@ -1737,6 +1746,60 @@ ul#playlist{
 /* phone */
 /**/
 @media screen and (max-width: 767px) {
+
+    .aya:before{
+
+        background-image: url('../payment/aya_bank.png');
+        vertical-align: middle;
+        background-size: 30px auto;
+        display: inline-block;
+        width: 30px; 
+        height: 30px;
+        content:"";
+    }
+
+    .kbz:before{
+
+        background-image: url('../payment/kbz_bank.png');
+        vertical-align: middle;
+        background-size: 30px auto;
+        display: inline-block;
+        width: 30px; 
+        height: 30px;
+        content:"";
+    }
+
+    .cb:before{
+
+        background-image: url('../payment/cb_bank.png');
+        vertical-align: middle;
+        background-size: 30px auto;
+        display: inline-block;
+        width: 30px; 
+        height: 30px;
+        content:"";
+    }
+
+    .kpay:before{
+
+        background-image: url('../payment/k_pay.png');
+        vertical-align: middle;
+        background-size: 30px auto;
+        display: inline-block;
+        width: 30px; 
+        height: 30px;
+        content:"";
+    }
+    .wave:before{
+
+        background-image: url('../payment/wavepay.png');
+        vertical-align: middle;
+        background-size: 30px auto;
+        display: inline-block;
+        width: 30px; 
+        height: 30px;
+        content:"";
+    }
     
     .sky-tabs .grid-col,
     .sky-tabs .grid-col:first-child {
@@ -1776,7 +1839,7 @@ ul#playlist{
         font-size: 16px;
     }
     .sky-tabs-response-to-icons > label span span {
-        padding: 0;
+        /*padding: 0;*/
     }
     .sky-tabs-response-to-icons.sky-tabs-pos-left > label,
     .sky-tabs-response-to-icons.sky-tabs-pos-right > label {
@@ -1821,7 +1884,35 @@ ul#playlist{
     }
 }
 
-
+.scroll-arrow {
+     width: 12px;
+     height: 12px;
+     transform: rotate(45deg);
+     border-right: 2px solid #f09819;
+     border-bottom: 2px solid #f09819;
+     animation: arrow-wave 1s infinite;
+     animation-direction: alternate;
+}
+ .scroll-arrow:nth-child(1) {
+     animation-delay: 0.1s;
+}
+ .scroll-arrow:nth-child(2) {
+     animation-delay: 0.2s;
+}
+ .scroll-arrow:nth-child(3) {
+     animation-delay: 0.3s;
+}
+ @keyframes arrow-wave {
+     0% {
+         opacity: 0;
+    }
+     50% {
+         opacity: 0.5;
+    }
+     100% {
+         opacity: 1;
+    }
+}
 
 
 

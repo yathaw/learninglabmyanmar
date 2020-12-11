@@ -17,7 +17,7 @@ class LoginController extends Controller
     	
 
     	$user= User::where('phone',$phone)->first();
-    	if($user != null){
+    	if($user != null && $user->status == "0"){
     		$user_phone = $user->phone;
 	    	$user_password = $user->password;
 	    	//dd($user_password,$user_phone);
