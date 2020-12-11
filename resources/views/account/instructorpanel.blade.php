@@ -91,6 +91,7 @@
 		</div>
 	</div>
 
+	@if(count($recentcourses) > 0)
 	<div class="row">
 		<div class="col-12 col-lg-12 col-xxl-12 d-flex">
 			<div class="card flex-fill">
@@ -108,7 +109,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						@if(count($recentcourses) > 0)
+						
 							@foreach($recentcourses as $recentcourse)
 							<tr class='clickableRow' data-href='{{ route('backside.course.show',$recentcourse->id) }}'>
 								<td>{{$recentcourse->title}}</td>
@@ -117,11 +118,7 @@
 								<td class="d-none d-md-table-cell">{{$recentcourse->price}}</td>
 							</tr>
 							@endforeach
-						@else
-							<tr>
-								<td class="text-center" colspan="4">Empty Data</td>
-							</tr>
-						@endif
+						
 						<!-- <tr class='clickableRow' data-href='{{ route('backside.course.show','2') }}'>
 							<td>Project Fireball</td>
 							<td class="d-none d-xl-table-cell">01/01/2020</td>
@@ -169,7 +166,13 @@
 			</div>
 		</div>
 	</div>
-
+	@else
+	<div class="row">
+		<div class="col-md-4 mx-auto">
+			<img src="{{asset('externalphoto/nocourse.gif')}}">
+		</div>
+	</div>
+	@endif
 @section('script_content')
     
     <script type="text/javascript">
