@@ -38,9 +38,8 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Company Name</th>
-                                    <th>Logo</th>
                                     <th>Address</th>
-                                    <th>Description</th>
+                                    
                                     <th> Action </th>
                                 </tr>
                             </thead>
@@ -53,12 +52,13 @@
                                     <td>{{$company->user->email}}</td>
                                     <td>{{$company->user->phone}}</td>
                             		<td>{{$company->name}}</td>
-                            		<td><img src="{{$company->logo}}" class="img-fluid"></td>
+                            		
                             		<td>{{$company->address}}</td>
-                            		<td>{{$company->description}}</td>
+                            		
                             		<td>
-                            			<a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                            			<a href="#" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                                        <button class="btn btn-primary" id="business_detail" data-user_name="{{$company->user->name}}" data-email="{{$company->user->email}}" data-phone="{{$company->user->phone}}" data-company_name="{{$company->name}}" data-logo="{{$company->logo}}" data-address="{{$company->address}}" data-description="{{$company->description}}"><i class="fas fa-info-circle"></i></button>
+                            			<a href="#" class="btn btn-warning"><i class="align-middle " data-feather="edit-2"></i></a>
+                            			<a href="#" class="btn btn-danger"><i class="align-middle" data-feather="x"></i></a>
                             		</td>
                             	</tr>
                             	@endforeach
@@ -70,9 +70,8 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Company Name</th>
-                                    <th>Logo</th>
                                     <th>Address</th>
-                                    <th>Description</th>
+                                        
                                     <th> Action </th>
                                 </tr>
                             </tfoot>
@@ -85,6 +84,86 @@
 		</div>
 	</div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="business_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Instructor detail </h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+                <div class="col-md-3 offset-1">
+                    <label>Logo :</label>
+                </div>
+                <div class="col-md-8">
+                    <img src="" id="logo" class="img-fluid">
+                </div>
+            </div> 
+
+            <div class="row">
+                <div class="col-md-2 offset-1">
+                    <label>Name :</label>
+                </div>
+                <div class="col-md-9">
+                    <p id="user_name"></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 offset-1">
+                    <label>Email :</label>
+                </div>
+                <div class="col-md-9">
+                    <p id="email"></p>
+                </div>
+            </div>
+
+              <div class="row">
+                <div class="col-md-2 offset-1">
+                    <label>Phone :</label>
+                </div>
+                <div class="col-md-9">
+                    <p id="phone"></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 offset-1">
+                    <label>Company :</label>
+                </div>
+                <div class="col-md-9">
+                    <p id="company_name"></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 offset-1">
+                    <label>Address :</label>
+                </div>
+                <div class="col-md-9">
+                    <p id="address"></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 offset-1">
+                    <label>Description:</label>
+                </div>
+                <div class="col-md-9">
+                    <p id="description"></p>
+                </div>
+            </div>     
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 @section('script_content')
     
     <script type="text/javascript">
@@ -92,6 +171,26 @@
         $(document).ready(function() {
 
         	$('#listTable').DataTable();
+
+            $('#business_detail').click(function(){
+                var user_name = $(this).data('user_name');
+                var email = $(this).data('email');
+                var phone = $(this).data('phone');
+                var company_name = $(this).data('company_name');
+                var address = $(this).data('address');
+                var description = $(this).data('description');
+                var logo = $(this).data('logo');
+                $('#user_name').text(user_name);
+                $('#email').text(email);
+                $('#phone').text(phone);
+                $('#company_name').text(company_name);
+                $('#address').text(address);
+                $('#description').text(description);
+                $('#logo').attr('src',logo);
+                $('#business_modal').modal('show');
+
+
+            })
 
         });
 

@@ -90,10 +90,13 @@ class AccountController extends Controller
 
     public function panel(){
         // Instructor
-        $sales = Sale::where('status',1)->get();
+        $sales = Sale::whereHas('courses',function($q){
+                    $q->where('course_sale.status',1);
+                })->where('sales.status',1)->get();
         $courses = Course::all();
+        $recentcourses = Course::orderBy( 'id' , 'desc' )->limit(8)->get();
 
-        return view('account.instructorpanel',compact('sales','courses'));
+        return view('account.instructorpanel',compact('sales','courses','recentcourses'));
     }
 
 
