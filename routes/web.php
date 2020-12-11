@@ -175,6 +175,13 @@ Route::get('collection',[AccountController::class, 'collection'])->name('collect
 Route::resource('collections',CollectionController::class);
 Route::get('wishlist',[AccountController::class, 'wishlist'])->name('wishlist');
 
+Route::get('purchase_history',[AccountController::class, 'purchase_history'])->name('purchase_history');
+
+Route::get('history_detial/{id}',[AccountController::class, 'history_detial'])->name('history_detial');
+
+
+
+
 // ------------------------------------------------------------------------
 
 /*

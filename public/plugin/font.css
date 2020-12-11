@@ -32,3 +32,9 @@
 	font-family: 'loaded';
 	src:url(../fonts/loaded.ttf);
 }
+
+@font-face 
+{
+  	font-family:'Unicode';
+  	src: url('../fonts/mon3.woff') format('woff');
+}

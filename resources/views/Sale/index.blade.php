@@ -33,6 +33,7 @@
                         <th>Invoiceno</th>
                         <th>Total</th>
                         <th>User</th>
+                        <th>Phone</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -65,9 +66,11 @@
                     @endforeach
                     @foreach($sale->installments as $installment)
                       @php 
+
                         array_push($sale_installment, $installment);
                         array_push($installment_course, $installment->courses);
                       @endphp
+                      {{-- <img src="{{asset($installment->photo)}}" class="img-fluid"> --}}
                     @endforeach
 
                     @php
@@ -75,6 +78,7 @@
                       // sale installment data from installment table
 
                       $sale_installment_data = json_encode($sale_installment);
+
 
                       // installment course data
                       $installment_course_data = json_encode($installment_course);
@@ -100,6 +104,8 @@
                               {{$total}} KS
                             @endif</th>
                         <th> {{$sale->user->name}} </th>
+                        <th> {{$sale->user->phone}} </th>
+
                         <th>
                           @if($sale->status == 1 && count($sale->courses) == count($course_count))
                           <p class="text-success">Paid</p>
@@ -125,7 +131,7 @@
 
                               @else
                                 <a class="dropdown-item installmentpay" data-target="#installmentmodel" data-toggle="modal" data-total = "{{$sale->total}}" data-course="{{$course_data}}" data-id="{{$sale->id}}">Installment</a>
-                                <a href="#" class="dropdown-item payment" data-toggle="modal" data-target="#payment_history" data-course="">Purched</a>
+                                <a href="#" class="dropdown-item payment" data-toggle="modal" data-target="#payment_history" data-sale_installment="{{$sale_installment_data}}" data-installment_course = "{{$installment_course_data}}">Purched</a>
 
                               @endif
                                 
@@ -151,7 +157,7 @@
 
 {{-- payment modal --}}
 <div class="modal fade" id="installmentmodel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="exampleModalLabel">Installment</h4>
@@ -231,6 +237,15 @@
                 </div>
               </div>
 
+              <div class="row form-group my-3">
+                <label class="form-control-label col-md-4">Paid Salit</label>
+                <div class="col-md-8" id="form-group-installment_photo">
+                  <input type="file" name="installment_photo" id="installment_photo">
+                  <span class="text-danger show-error"></span>
+
+                </div>
+              </div>
+
 
 
             </div>
@@ -273,6 +288,25 @@
     <script type="text/javascript">
 
         $(document).ready(function() {
+
+            function custom_template(obj){
+                var data = $(obj.element).data();
+                var text = $(obj.element).text();
+                if(data && data['img_src']){
+                    img_src = data['img_src'];
+                    template = $("<div><img src=\"" + img_src + "\" style=\"width:30px;height:30px;\"/><p style=\"font-weight: 700;display:inline;margin-left:10px;\">" + text + "</p></div>");
+                    return template;
+                }
+            }
+            var options = {
+                'templateSelection': custom_template,
+                'templateResult': custom_template,
+                // allowClear: true,
+                theme: 'bootstrap4',
+            }
+            
+            $('.js-example-basic-single').select2(options);
+
 
           function showValidationErrors(name, error) {
            
@@ -368,6 +402,7 @@
           $('.payment').click(function() {
             var sale_installment = $(this).data('sale_installment');
             var installment_course = $(this).data('installment_course');
+            console.log(sale_installment);
             html = '';
             var total=0;
             $.each(sale_installment,function(i,v){
@@ -376,7 +411,7 @@
                 $.each(b,function(c,d) {
 
                   if(d.pivot.installment_id == v.id){
-
+                    var date = new Date(v.paiddate).getDate()+' - '+new Date(v.paiddate).getMonth()+' - '+new Date(v.paiddate).getFullYear();
                     html+=`<div class="row">
                             <div class="col-md-11 mx-auto">
                               <div class="card border">
@@ -388,11 +423,82 @@
                                       <h4>${d.price} Ks</h4>
                                       
                                       <p>${v.type}</p>
-                                      <p>${v.paiddate}</p>
+                                      <p>${date}</p>
                                     </div>
-                                    <div class="col-md-4 text-center">
-                                      <img src="{{asset('/storage/companylogo/12345.png')}}" class="img-fluid" width="120px">
-                                    </div>
+                                    <div class="col-md-4 text-center">`;
+
+                                    if(v.type == "Cash Money"){
+
+                                      html+=`<img src="{{ asset('payment/cash.jpg') }}" class="img-fluid" width="120px">`
+
+                                    }else if(v.type == "AYA"){
+
+                                      html+=`<img src="{{ asset('payment/aya_bank.png') }}" class="img-fluid" width="120px">`
+
+                                    }else if(v.type == "CB"){
+
+                                      html+=`<img src="{{ asset('payment/cb_bank.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "KBZ"){
+
+                                      html+=`<img src="{{ asset('payment/kbz_bank.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "KBZ Pay"){
+
+                                      html+=`<img src="{{ asset('payment/k_pay.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "Wave Money"){
+
+                                      html+=`<img src="{{ asset('payment/wavemoney.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "Wave Pay"){
+
+                                      html+=`<img src="{{ asset('payment/wavepay.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "MAB Bank"){
+
+                                      html+=`<img src="{{ asset('payment/mab_bank.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "Yoma Bank"){
+
+                                      html+=`<img src="{{ asset('payment/yoma_bank.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "AGD Bank"){
+
+                                      html+=`<img src="{{ asset('payment/agd_bank.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "One Pay"){
+
+                                      html+=`<img src="{{ asset('payment/onepay.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "MPT Money"){
+
+                                      html+=`<img src="{{ asset('payment/mpt_money.jpg') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "True Money"){
+
+                                      html+=`<img src="{{ asset('payment/truemoney.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "Visa"){
+
+                                      html+=`<img src="{{ asset('payment/visa.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "Master"){
+
+                                      html+=`<img src="{{ asset('payment/master.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else if(v.type == "PayPal"){
+
+                                      html+=`<img src="{{ asset('payment/paypal.png') }}" class="img-fluid" width="120px">`
+                                      
+                                    }else{
+
+                                      html+=`<img src="{{ asset('payment/jcb.png') }}" class="img-fluid" width="120px">`
+
+                                    }
+
+
+                                    html+=`</div>
                                   </div>
                                   
                                 </div>

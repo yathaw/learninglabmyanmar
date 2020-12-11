@@ -9,7 +9,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-transparent p-0 mt-1 mb-0">
                     <li class="breadcrumb-item"><a href="{{ route('panel') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('backside.category.index') }}">List</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('backside.course.index') }}">List</a></li>
                     <li class="breadcrumb-item active" aria-current="page"> New </li>
                 </ol>
             </nav>

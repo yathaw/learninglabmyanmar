@@ -2,7 +2,7 @@
 
    <div class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col-md-6">
-         <div class="card shadow">
+         <div class="card shadow rounded circle">
             <div class="row">
                <div class="col-md-5 text-center pt-4">
                   <img src="{{asset('/storage/courseimg/11111.jpg')}}" class="img-fluid rounded-circle w-75">
@@ -41,39 +41,67 @@
    <div class="row row-cols-1 row-cols-md-3 g-4">
 
       @foreach($sale->courses as $course)
+      @php
+        $total_duration = 0;
+        $video = 0;
+        $article = 0;
+        $countassignment = 0;
+      @endphp
+      @foreach($course->contents as $content)
+
+        @foreach($content->lessons as $lesson)
+
+          @php
+            // video
+            $duration = $lesson['duration'];
+            $type = $lesson['type'];
+
+            if($type != "MP4"){
+                $article++;
+            }
+
+            if($type == "MP4"){
+                $video++;
+                $total_duration += $duration++;
+            }
+            
+
+            // assignment
+          @endphp
+        @endforeach
+
+        @foreach ($content->assignments as $assignment) 
+            @php
+              $countassignment++;
+            @endphp
+        @endforeach
+              
+      @endforeach
+
+      @if($total_duration)
+        @php
+          $dt = Carbon\Carbon::now();
+          $days = $dt->diffInDays($dt->copy()->addSeconds($total_duration));
+
+          $hours = $dt->diffInHours($dt->copy()->addSeconds($total_duration)->subDays($days));
+          $minutes = $dt->diffInMinutes($dt->copy()->addSeconds($total_duration)->subDays($days)->subHours($hours));
+
+          $seconds = $dt->diffInSeconds($dt->copy()->addSeconds($total_duration)->subDays($days)->subHours($hours)->subMinutes($minutes));
+          // dd($seconds);
+
+          $totaltimes = Carbon\CarbonInterval::days($days)->hours($hours)->minutes($minutes)->forHumans();
+        @endphp
+      @else
+        @php
+          $totaltimes='0 Second';
+        @endphp
+      @endif
       
       <div class="col-12 col-md-6 col-lg-4">
          <div class="card h-100">
             <img class="card-img-top" src="{{asset($course->image)}}" alt="Unsplash">
             <div class="card-header px-4 pt-4">
-               {{-- <div class="card-actions float-right">
-                  <div class="dropdown show">
-                     <a href="#" data-toggle="dropdown" data-display="static">
-                     <i class="align-middle" data-feather="more-horizontal"></i>
-                     </a>
-                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item text-success fw-bolder" href="{{ route('backside.sectionlist',$course->id) }}"> 
-                        <i class="align-middle mr-2" data-feather="file-plus"></i> 
-                        Add Course Content 
-                        </a>
-                        <a class="dropdown-item text-info fw-bolder" href="{{ route('backside.course.show',$course->id) }}"> 
-                        <i class="align-middle mr-2" data-feather="info"></i> Detail 
-                        </a>
-                        <a class="dropdown-item text-warning fw-bolder" href="{{ route('backside.course.edit',$course->id) }}"> 
-                        <i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
-                        </a>
-                      
-                        <form method="post" action="{{ route('backside.course.destroy',$course->id) }}" class="d-inline-block ml-3" onsubmit="return confirm('Are you Sure want to Delete?')">
-                           @csrf
-                           @method('DELETE')
-
-                           <button class="btn btn-light text-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Remove this section" type="submit"> 
-                              <i class="align-middle mr-2" data-feather="edit-2"></i> Remove 
-                           </button>
-                        </form>
-                     </div>
-                  </div>
-               </div> --}}
+               
                <h4 class=" mb-0"> {{ $course->title }} </h4>
                
             </div>
@@ -81,16 +109,16 @@
                <p> This Course Includes : </p>
                <p> 
                   <i class="align-middle mr-2" data-feather="play-circle"></i>
-                  <small class="pl-3"> 0 hours on-demand video </small>
+                  <small class="pl-3"> {{$totaltimes}} hours on-demand video </small>
                </p>
                
                <p> 
                   <i class="align-middle mr-2" data-feather="file"></i>
-                  <small class="pl-3"> 0 Articles </small>
+                  <small class="pl-3"> {{$article}} Articles </small>
                </p>
                <p> 
                   <i class="align-middle mr-2" data-feather="check-square"></i>
-                  <small class="pl-3"> 0 Assignments </small>
+                  <small class="pl-3"> {{$countassignment}} Assignments </small>
                </p>
                @if($course->certificate == "on")
                <p> 
@@ -102,12 +130,21 @@
                   <i class="align-middle mr-2" data-feather="dollar-sign"></i> 
                   <small class="pl-3"> {{ $course->price }} Ks </small>
                </p>
-               
+
                @if($course->instructors)
-               @foreach($course->instructors as $instructor)
-               <img src="{{ asset($instructor->user->profile_photo_path) }}" class="rounded-circle mr-1" alt="Avatar" width="28" height="28">
-               @endforeach
-               @endif
+               
+               <p>
+                <i class="align-middle mr-2 " data-feather="users"></i> 
+
+                 
+                 @foreach($course->instructors as $instructor)
+                 {{-- {{ $loop->first ? '' : ',' }} --}}
+                 <small class="pl-3 ">{{$instructor->user->name}}</small>
+                 {{-- <img src="{{ asset($instructor->user->profile_photo_path) }}" class="rounded-circle mr-1" alt="Avatar" width="28" height="28"> --}}
+                 @endforeach
+               </p>
+              @endif
+
 
                
             </div>
@@ -207,6 +244,15 @@
                 </div>
               </div>
 
+              <div class="row form-group my-3">
+                <label class="form-control-label col-md-4">Paid Salit</label>
+                <div class="col-md-8" id="form-group-installment_photo">
+                  <input type="file" name="installment_photo" id="installment_photo">
+                  <span class="text-danger show-error"></span>
+
+                </div>
+              </div>
+
 
 
             </div>
@@ -226,6 +272,26 @@
        <script type="text/javascript">
 
         $(document).ready(function() {
+
+          function custom_template(obj){
+              var data = $(obj.element).data();
+              var text = $(obj.element).text();
+              if(data && data['img_src']){
+                  img_src = data['img_src'];
+                  template = $("<div><img src=\"" + img_src + "\" style=\"width:30px;height:30px;\"/><p style=\"font-weight: 700;display:inline;margin-left:10px;\">" + text + "</p></div>");
+                  return template;
+              }
+          }
+
+          var options = {
+                'templateSelection': custom_template,
+                'templateResult': custom_template,
+                // allowClear: true,
+                theme: 'bootstrap4',
+            }
+
+          $('.js-example-basic-single').select2(options);
+
 
           function showValidationErrors(name, error) {
            

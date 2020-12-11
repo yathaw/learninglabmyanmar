@@ -58,6 +58,19 @@ class AccountController extends Controller
         return view('account.mystudyings',compact('tabs','wishlists','sales','collections'));
 
     }
+    public function purchase_history()
+    {
+        $sales = Sale::where("user_id",Auth::id())->get();
+        return view('account.purchase_history',compact('sales'));
+    }
+    
+    public function history_detial(Request $request)
+    {
+        $sale = Sale::find($request->id);
+        return view('account.purchase_history_detail',compact('sale'));
+    }
+
+    
 
     public function lecture($courseid){
         $course = Course::find($courseid);
