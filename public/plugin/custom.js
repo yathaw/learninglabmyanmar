@@ -1,5 +1,6 @@
 $(document).ready(function(){
 
+    
 
     $(".favouriteBtn").click(function() {
 	  	if ( $(this).hasClass( "deactivate" ) ) {
