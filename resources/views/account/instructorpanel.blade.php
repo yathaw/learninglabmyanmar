@@ -108,14 +108,20 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach($recentcourses as $recentcourse)
-						<tr class='clickableRow' data-href='{{ route('backside.course.show',$recentcourse->id) }}'>
-							<td>{{$recentcourse->title}}</td>
-							<td class="d-none d-xl-table-cell">{{$recentcourse->created_at->format('d/m/Y')}}</td>
-							<td><span class="badge bg-success">Done</span></td>
-							<td class="d-none d-md-table-cell">{{$recentcourse->price}}</td>
-						</tr>
-						@endforeach
+						@if(count($recentcourses) > 0)
+							@foreach($recentcourses as $recentcourse)
+							<tr class='clickableRow' data-href='{{ route('backside.course.show',$recentcourse->id) }}'>
+								<td>{{$recentcourse->title}}</td>
+								<td class="d-none d-xl-table-cell">{{$recentcourse->created_at->format('d/m/Y')}}</td>
+								<td><span class="badge bg-success">Done</span></td>
+								<td class="d-none d-md-table-cell">{{$recentcourse->price}}</td>
+							</tr>
+							@endforeach
+						@else
+							<tr>
+								<td class="text-center" colspan="4">Empty Data</td>
+							</tr>
+						@endif
 						<!-- <tr class='clickableRow' data-href='{{ route('backside.course.show','2') }}'>
 							<td>Project Fireball</td>
 							<td class="d-none d-xl-table-cell">01/01/2020</td>
