@@ -93,15 +93,16 @@ class SectionController extends Controller
         }else{
             $section->sorting = $sorting_data;
         }
-        /*insert sorting*/
 
         $authuser = Auth::user();
-        $instructor = $authuser->instructor;
-        $instructorid= $instructor->id;
-            //dd($instructorid);
-            if($authuser->company_id == NULL){
-               
+        $role = $authuser->getRoleNames();
+        
+            if($authuser->company_id == NULL && $role[0] == 'Instructor' ){ 
+                $instructor = $authuser->instructor;
+                $instructorid= $instructor->id; 
                 $section->instructor_id=$instructorid;
+            }else if($authuser->company_id == NULL && $role[0] == 'Admin'){
+                $section->instructor_id=$request->instructor;
             }else{
                 $section->instructor_id=$request->instructor;
             }
@@ -184,15 +185,42 @@ class SectionController extends Controller
 
     public function getinstructor(Request $request)
     {
-        $instructor = $request->instructorid;
-        $course=$request->courseid;
+        $instructorid = $request->instructorid;
+        $courseid=$request->courseid;
+        
+        $course=Course::all();
 
-       /* $user_id = Auth::user()->id;
-        $instructorid = Instructor::where('user_id', $user_id)->get();*/
-        $section_courses=Section::where('course_id',$course)->distinct()->get(['instructor_id']);
-        //dd($section_courses);
+  //        $recipe = Recipe::find($request->id);
+  // $ingredient->recipes()->attach($recipe->id);
 
-        return $section_courses;
+  $instructor=Instructor::find($request->instructorid);
+  $courseinstructor=$course->instructors();
+
+
+        // foreach($instructors as $instructor){
+        //     foreach($instructor->courses as $instructor_course){
+        //         $courseinstructor=$instructor_course;
+        //     }
+        // }
+
+        // $subcategory = Subcategory::find($id);
+
+
+        // $category_id = $subcategory->category->id;
+        // $subcategories = Subcategory::where('category_id',$category_id)->get();
+
+        // $subcategoryitems = Item::where('subcategory_id',$id)->paginate(6);
+        // $latestitems = Item::latest()->take(3)->get();
+
+
+        // $count_result = Item::where('subcategory_id',$id)->count();
+
+        // $instructor_id=$instructorid->courses();
+        // dd($instructor_id);
+        //$courseinstructor=$course->instructors();
+
+        return $courseinstructor;
+       
 
     }
 

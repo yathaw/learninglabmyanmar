@@ -16,13 +16,14 @@ class BackendController extends Controller
         
         $title = $request->title;
         $objective = $request->objective;
-        $contenttypeid=$request->contenttype;
+        $contenttypeid=$request->contenttypeid;
         $section=Section::find($id);
         $section->title=$title;
         $section->objective=$objective;
         
         $section->contenttype_id=$contenttypeid;
         $section->course_id=$courseid;
+        $section->instructor_id=$instructorid;
 
         $hasCourses_inSection = Section::where('course_id', $request->courseid)->get();
 
