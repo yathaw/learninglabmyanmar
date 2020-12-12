@@ -88,7 +88,7 @@ Route::post('login_data',[LoginController::class,'login_store'])->name('frontend
 */
 
 //KKS
-Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
+Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/course', CourseController::class);
 
 
@@ -124,6 +124,7 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     //HH
     Route::resource('students',StudentController::class);
 
+    
     // NYL
     Route::resource('installments',InstallmentController::class);
 
@@ -133,6 +134,15 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
 
 });
 
+    //HH
+    Route::get('account_remove/{id}',[InstructorController::class,'account_remove'])->name('account_remove');
+
+    Route::get('instructor_student/{id}',[InstructorController::class,'instructor_studentlist'])->name('instructor_studentlist');
+
+    Route::get('company_instructor/{id}',[CompanyController::class,'instructor_list'])->name('instructor_list');
+
+    Route::get('remove_instructor/{id}',[CompanyController::class,'remove_instructor'])->name('remove_instructor');
+    Route::get('company_student/{id}',[CompanyController::class,'student_list'])->name('student_list');
 
 
 Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
@@ -172,7 +182,15 @@ Route::get('/checkoutnoti',[AccountController::class,'checkoutnoti'])->name('che
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');
+Route::resource('collections',CollectionController::class);
 Route::get('wishlist',[AccountController::class, 'wishlist'])->name('wishlist');
+
+Route::get('purchase_history',[AccountController::class, 'purchase_history'])->name('purchase_history');
+
+Route::get('history_detial/{id}',[AccountController::class, 'history_detial'])->name('history_detial');
+
+
+
 
 // ------------------------------------------------------------------------
 

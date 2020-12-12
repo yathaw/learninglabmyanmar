@@ -6,6 +6,8 @@ use App\Models\Instructor;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Course;
+use App\Models\Company;
 
 
 class InstructorController extends Controller
@@ -136,11 +138,94 @@ class InstructorController extends Controller
         // dd($instructor);
         $user_id = $instructor->user_id;
         // dd($user_id);
+
         $user = User::find($user_id);
+        $user->status = 1;
+        $user->save();
+
+        $instructor_id = $instructor->id;
+        $courses = Course::where('user_id',$user_id)->get();
+
+        foreach ($courses as $course) {
+            $course->status = 2;
+            $course->save();
+            # code...
+        }
+
         $instructor->delete();
-        $user->delete();
+
         return redirect()->route('backside.instructors.index');
 
 
+    }
+
+    public function account_remove($id)
+    {
+        $user = User::find($id);
+        
+        $user_role_name = $user->getRoleNames();
+        //dd($user_role_name[0]);
+        if($user_role_name[0] == "Instructor"){
+            $user->status = 1;
+            $user->save();
+            $instructor = Instructor::where('user_id',$id)->first();
+            //dd($instructor);
+            $instructor->delete();
+
+            $courses = Course::where('user_id',$id)->get();
+            //dd($id,$instructor_id,$courses);
+            foreach ($courses as $course) {
+                $course->status = 2;
+                $course->save();
+            }
+        }
+        if($user_role_name[0] == "Business")
+        {
+            // dd($user_role_name);
+            $company_id = $user->company_id;
+            $company = Company::find($company_id);
+            $company->delete();
+
+            $users = User::where('company_id',$company_id)->get();
+
+            foreach($users as $user){
+                $user->status = 1;
+                $user->save();
+
+                $user_role_name = $user->getRoleNames();
+                if($user_role_name[0] == 'Instructor')
+                {
+                    $instructor = Instructor::where('user_id',$user->id)->first();
+                    $instructor->delete();
+                    
+                }
+                if($user_role_name[0] == 'Business')
+                {
+                    $company->delete();
+                }
+
+                $courses = Course::where('user_id',$user->id)->get();
+                foreach ($courses as $course) {
+
+                    $course->status = 2;
+                    $course->save();
+                    # code...
+                }
+               
+            }
+        }
+       
+        
+
+        return back();
+
+    } 
+
+    public function instructor_studentlist($id)
+    {
+       // dd($id);
+      $instructor = Instructor::where('user_id',$id)->get();
+      dd($instructor);
+        //return view ('instructors.student_list',compact(''));
     }
 }

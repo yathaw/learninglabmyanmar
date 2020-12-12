@@ -129,6 +129,8 @@
                             <li><a href="{{ route('mystudyings') }}"> My Studying </a></li>
                             <li><a href="{{ route('wishlist') }}"> Wishlist </a></li>
                             <li><a href="{{ route('collection') }}"> Collection </a></li>
+                            <li><a href="{{ route('purchase_history') }}"> Purchase History </a></li>
+
 
                             <li class="nav-icon"><a href="#" >  Notification <span class="badge rounded-pill bg-danger float-right"> 0 </span> </a></li>
 
@@ -183,7 +185,12 @@
         <div class="container position-relative">
             <h1 class="logoFont"> Learning Lab Myanmar </h1>
             <h2> Find the best Courses and Upgrade your skills. Learn Anytime, Anywhere, Accelerate your future </h2>
-            <a href="{{ route('register') }}" class="btn-get-started scrollto"> Register Now </a>
+            @auth
+                <a href="{{ route('courses') }}" class="btn-get-started scrollto"> Start Course </a>
+
+            @else
+                <a href="{{ route('register') }}" class="btn-get-started scrollto"> Register Now </a>
+            @endauth
         </div>
     </section>
     <!-- End Hero -->

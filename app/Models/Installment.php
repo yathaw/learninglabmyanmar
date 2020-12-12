@@ -12,7 +12,7 @@ class Installment extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['amount','type','paidamount','sale_id','user_id'];
+    protected $fillable=['amount','type','paidamount','sale_id','user_id','photo'];
 
     public function sales($value='')
     {
