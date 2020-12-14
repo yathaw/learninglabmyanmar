@@ -28,7 +28,7 @@
 										</div>
 										<div class="col-7">
 											<a href="#" data-toggle="collapse" data-target="#row{{$i}}" aria-expanded="false" aria-controls="row{{$i}}">
-												<b class="fontbold"> Section <span class="sectionNo">{{$section->id}}</span> : </b>{{$section->title}}
+												<b class="fontbold"> Section <span class="sectionNo">{{$i}}</span> : </b>{{$section->title}}
 
 												<small class="d-block mt-2">{{$section->objective}}</small>
 											</a>
@@ -69,7 +69,7 @@
 
 											@foreach($contents as $content)
 											@if($content->section_id  == $section->id)
-											@if($content->contenttype_id == 1)
+											
 
 											<li class="lecture_sort" data-sid="{{$section->id}}" data-id="{{$lesson->id}}">
 												<div class="col-12 my-2">
@@ -113,7 +113,7 @@
 														</div>
 													</div>
 												</li>
-												@endif
+												
 												@endif
 												@endforeach
 											</ul>
@@ -173,17 +173,16 @@
 								</div>
 							</div>
 
-							{{-- @php 
-							var_dump($instructor->user);
-							die();
-							@endphp --}}
+						
                        @php
                        $authuser=Auth::user();
+					   $role = $authuser->getRoleNames();
                        $instructor_companyid=$authuser->company_id;   //null
                        //var_dump($instructor);
                        //die();
                        @endphp
-                       @if($instructor_companyid != Null)
+                       @if($instructor_companyid != Null || $role[0]=='Admin')
+                      
 						<div class="row mb-3">
 						    <label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
 						    <div class="col-sm-10">
@@ -198,6 +197,7 @@
 						    	</select>
 						    </div>
 						</div>
+						
 						@endif
 
 					</div>
@@ -329,24 +329,23 @@
 							</div>
 						</div>
 
-						@php
+					   {{-- @php
                        $authuser=Auth::user();
-                       $instructor_companyid=$authuser->company_id;   //null
-                       //var_dump($instructor);
-                       //die();
+					   $role = $authuser->getRoleNames();
+                       $instructor_companyid=$authuser->company_id; 
                        @endphp
-                       @if($instructor_companyid != Null)
+                       @if($instructor_companyid != Null || $role[0]=='Admin') --}}
+                      
 						<div class="row mb-3">
-						    <label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
+						    <label for="objectiveId" class="col-sm-2 col-form-label">Instructor</label>
 						    <div class="col-sm-10">
 						    	<select class="form-control select2" name="instructor" id="instructorEdit">
-
-						    		
 						    		
 						    	</select>
 						    </div>
 						</div>
-						@endif
+						
+						{{-- @endif --}}
 
 
 					</div>
@@ -592,14 +591,15 @@ $('.editbtn').click(function(){
 
           	  	 $.post('/backside/getinstructor',{instructorid:instructorid,courseid:courseid},function(response){
           	  		console.log(response);
+
           	 var html = "";
           	 		$.each(response,function (i,v) {
-          	 			html +=`<option value="${v.id}"`;
+          	 			html +=`<option value="${v.instructor_id}"`;
 
-          	  			if(v.id==instructorid)
+          	  			if(v.instructor_id==instructorid)
           	 				html+=`selected`;
 
-          			html+=`>${v.instructor_id}</option>`;
+          			html+=`>${v.name}</option>`;
 
           			})
 
@@ -646,10 +646,12 @@ $('#editsectionform').on('submit',function(event){
 	event.preventDefault();
 	var sectionid=$('#updatesectionid').val();
 	var courseid=$('#updatecourseid').val();
-	var instructorid=$('#updateinstructorid').val();
+	var instructorid=$('#instructorEdit').val();
+	console.log(instructorid);
 	var title=$('#titleEdit').val();
 	var objective=$('#objectiveEdit').val();
 	var contenttypeid=$('#contenttypeEdit').val();
+	console.log(contenttypeid);
 	$.ajax({
 		url:'/backside/sectionupdate/'+sectionid,
 		type:"POST",

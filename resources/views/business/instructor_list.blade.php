@@ -49,30 +49,24 @@
                             </thead>
                             <tbody>
                             	<?php $i=1; ?>
-                            	@foreach($instructors as $instructor)
-                                @if($instructor->user->status == '0')
+                            	@foreach($user_instructors as $user_instructor)
+                                @php 
+                                $role_name = $user_instructor->getRoleNames();
+
+                                @endphp
+                               @if($role_name[0] == "Instructor")
+
                             	<tr>
                             		<td>{{$i++}}</td>
-                            		<td>{{$instructor->user->name}}</td>
-                            		<td>{{$instructor->user->email}}</td>
-                                    <td>{{$instructor->user->phone}}</td>
-                            		<td>{{$instructor->headline}}</td>
-                            		<!-- <td>{{$instructor->website}}</td>
-                            		<td>{{$instructor->twitter}}</td>
-                            		<td>{{$instructor->facebook}}</td>
-                            		<td>{{$instructor->linkedin}}</td>
-                            		<td>{{$instructor->youtube}}</td>
-                            		<td>{{$instructor->instagram}}</td> -->
+                            		<td>{{$user_instructor->name}}</td>
+                            		<td>{{$user_instructor->email}}</td>
+                                    <td>{{$user_instructor->phone}}</td>
+                            		<td>{{$user_instructor->instructor->headline}}</td>
                                     <td>
-                                        <button class="btn btn-primary" id="detail" data-name="{{$instructor->user->name}}" data-email="{{$instructor->user->email}}" data-phone="{{$instructor->user->phone}}" data-headline="{{$instructor->headline}}" data-website="{{$instructor->website}}" data-twitter="{{$instructor->twitter}}" data-facebook="{{$instructor->facebook}}" data-linkedin="{{$instructor->linkedlin}}" data-youtube="{{$instructor->youtube}}" data-instagram="{{$instructor->instagram}}"><i class="fas fa-info-circle"></i></button>
+                                        <button class="btn btn-primary" id="detail" data-name="{{$user_instructor->name}}" data-email="{{$user_instructor->email}}" data-phone="{{$user_instructor->phone}}" data-headline="{{$user_instructor->instructor->headline}}" data-website="{{$user_instructor->instructor->website}}" data-twitter="{{$user_instructor->instructor->twitter}}" data-facebook="{{$user_instructor->instructor->facebook}}" data-linkedin="{{$user_instructor->instructor->linkedlin}}" data-youtube="{{$user_instructor->instructor->youtube}}" data-instagram="{{$user_instructor->instructor->instagram}}"><i class="fas fa-info-circle"></i></button>
                                         <a href="#" class="btn btn-warning"><i class="align-middle " data-feather="edit-2"></i></a>
-                                       
-                                        <form action="{{route('backside.instructors.destroy',$instructor->id)}}" method="POST" class="d-inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-danger" type="submit"><i class="fas fa-user-times"></i></button>
-                                            
-                                        </form>
+
+                                        <a href="{{route('backside.remove_instructor',$user_instructor->id)}}" class="btn btn-danger"><i class="fas fa-user-times"></i></a>
                                     </td>
                             	</tr>
                                 @endif
@@ -85,12 +79,6 @@
                                     <th> Email</th>
                                     <th> Phone </th>
                                     <th>Headline</th>
-                                   <!--  <th>Website</th>
-                                    <th>Twitter</th>
-                                    <th>Facebook</th>
-                                    <th>Linkedin</th>
-                                    <th>Youtube</th>
-                                    <th>Instagram</th> -->
                                     <th> Action </th>
                                 </tr>
                             </tfoot>
@@ -219,7 +207,7 @@
 
         	$('#listTable').DataTable();
 
-            $('tbody').on('click','#detail',function(){
+            $('#detail').click(function(){
                 var name = $(this).data('name');
                 var email = $(this).data('email');
                 var phone = $(this).data('phone');

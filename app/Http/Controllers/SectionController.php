@@ -93,15 +93,16 @@ class SectionController extends Controller
         }else{
             $section->sorting = $sorting_data;
         }
-        /*insert sorting*/
 
         $authuser = Auth::user();
-        $instructor = $authuser->instructor;
-        $instructorid= $instructor->id;
-            //dd($instructorid);
-            if($authuser->company_id == NULL){
-               
+        $role = $authuser->getRoleNames();
+        
+            if($authuser->company_id == NULL && $role[0] == 'Instructor' ){ 
+                $instructor = $authuser->instructor;
+                $instructorid= $instructor->id; 
                 $section->instructor_id=$instructorid;
+            }else if($authuser->company_id == NULL && $role[0] == 'Admin'){
+                $section->instructor_id=$request->instructor;
             }else{
                 $section->instructor_id=$request->instructor;
             }
@@ -184,16 +185,20 @@ class SectionController extends Controller
 
     public function getinstructor(Request $request)
     {
-        $instructor = $request->instructorid;
-        $course=$request->courseid;
+        $instructorid = $request->instructorid;
+        $courseid=$request->courseid;
+           
+        // $instructors= DB::table('course_instructor')
+        //                 ->where('course_id','=',$courseid)
+        //                 ->get(); // id
 
-       /* $user_id = Auth::user()->id;
-        $instructorid = Instructor::where('user_id', $user_id)->get();*/
-        $section_courses=Section::where('course_id',$course)->distinct()->get(['instructor_id']);
-        //dd($section_courses);
+        $instructors= DB::table('course_instructor')
+                       ->where('course_id','=',$courseid)
+                       ->join('instructors', 'instructors.id', '=', 'course_instructor.instructor_id')
+                       ->join('users', 'users.id', '=', 'instructors.user_id')
+                         ->get(); 
 
-        return $section_courses;
-
+       return $instructors;
     }
 
     public function sectionsorting_modernize(Request $request){

@@ -18,7 +18,7 @@ class Company extends Model
 
     public function user($value='')
     {
-    	return $this->hasOne('App\Models\User');
+    	return $this->hasMany('App\Models\User');
     }
 
 }

@@ -162,13 +162,13 @@
 							  	<a href="javascript:void(0)" class="btn custom_primary_btnColor" data-toggle="modal" data-target="#newcollectionModal"> Create New Collection </a>
 							</div>
 
-
+							@foreach($collections as $collection)
 							<section class="testimonials my-5">
 							    <div class="container">
 
 							        <div class="section-title">
-							        	<h2>Learn PHP </h2>
-							        	<p> Learning The Fundamental </p>
+							        	<h2>{{$collection->title}} </h2>
+							        	<p> {{$collection->description}} </p>
 							        	<div class="d-grid gap-2 col-2 mx-auto my-3">
   											<div class="btn-group">
 											  	<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
@@ -404,6 +404,7 @@
 
 							    </div>
 						    </section>
+						    @endforeach
 
 
 							<section class="testimonials my-5">
@@ -845,26 +846,28 @@
                     <h5 class="modal-title" id="exampleModalLabel"> Create New Collection </h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form>
+                <form id="store_collection">
                     <div class="modal-body">
 
-                        <div class="form-floating mb-3 col-md-12">
-                            <input type="text" class="form-control" id="subject" placeholder="Title or summary">
+                        <div class="form-floating mb-3 col-md-12" id="form-group-title">
+                            <input type="text" class="form-control" id="subject" placeholder="Title or summary" name="title">
                             <label for="subject"> Title </label>
                             <div class="validate"></div>
+                            <span class="text-danger show-error"></span>
 
                         </div>
 
-                        <div class="form-floating my-2">
-                            <textarea class="form-control" placeholder="Leave a descriptison here" id="floatingTextarea2" style="height: 100px"></textarea>
+                        <div class="form-floating my-2" id="form-group-description">
+                            <textarea class="form-control" placeholder="Leave a descriptison here" name="description" id="floatingTextarea2" style="height: 100px"></textarea>
                             <label for="floatingTextarea2"> Description </label>
+                            <span class="text-danger show-error"></span>
                         </div>
 
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
 
@@ -1164,6 +1167,64 @@
 
 			// end search in my studying
 
+			// store new collection
+
+          function showValidationErrors(name, error) {
+           
+              var group = $("#form-group-" + name);
+               console.log(group);
+              group.addClass('has-error');
+              group.find('.show-error').html(error);
+          }
+
+          function clearValidationError(name) {
+              console.log(name);
+              var group = $("#form-group-" + name);
+              group.removeClass('has-error');
+              group.find('.show-error').html('');
+          }
+
+          $("#installment_date").on('change', function () {
+              clearValidationError($(this).attr('id').replace('#', ''))
+          });
+
+          $("#payment").on('change', function () {
+              clearValidationError($(this).attr('id').replace('#', ''))
+          });
+
+
+
+          $('#store_collection').submit(function(event){
+            event.preventDefault();
+            var collection_data = new FormData(this);
+            // console.log(installment_data);
+            $.ajax({
+              url : '{{route('collections.store')}}',
+              data:collection_data,
+              processData : false,
+              contentType: false,
+              type : 'POST',
+              success:function(res){
+                if(res){
+                  $('#newcollectionModal').hide();
+                  location.reload();
+                }
+
+              },
+              error:function(error){
+                if(error.status == 422){
+                      var errors = error.responseJSON;
+                      var data = errors.errors;
+          
+                      $.each(data,function(i,v){
+                          showValidationErrors(i,v);
+                      })
+                      $('.newcollectionModal').modal('show');
+                  }
+              }
+
+            })
+        })
 
 			
 
