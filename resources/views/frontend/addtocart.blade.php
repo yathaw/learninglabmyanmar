@@ -15,7 +15,7 @@
       	</div>
     </section><!-- End Breadcrumbs -->
 
-    <section class="inner-page d-none">
+    <section class="inner-page d-none" id="shoppingcartDiv">
       	<div class="container">
         
       
@@ -52,7 +52,7 @@
 		</div>
     </section>
 
-    <section class="inner-page pt-3">
+    <section class="inner-page d-none" id="ordersuccessDiv">
       	<div class="container-fluid">
       		<div class="section-title pb-0">
 				<h2 class="text-center my-4"> Thank you </h2>
@@ -64,6 +64,16 @@
 					<p class="mmfont fs-5 lh-base mb-5"> Bank Transfer နည်းလမ်းများအား Bank တခုစီတိုင်းတွင် အသေးစိတ်ဖော်ပြထားပါသည်။  </p>
 
 					<p class="mmfont fs-5 lh-base mb-5"> ငွေလွဲပြီးလျှင် <span class="text-danger fw-bolder"> Slip </span> (သို့မဟုတ်)  <span class="text-danger fw-bolder"> Screen Shot </span> လေးကို Learning Lab Myanmar Page Messanger သို့ပို့ပေးရမည်ဖြစ်ပါသည်။ </p>
+					
+					<section id="section07" class="demo d-lg-block d-md-block d-sm-none d-none p-0">
+						<div class="d-flex justify-content-center">
+							<a href="#transfermoneyDiv"> 
+								<div class="scroll-arrow"></div>
+								<div class="scroll-arrow"></div>
+								<div class="scroll-arrow"></div> 
+							</a>
+						</div>
+					</section>
 				
 				</div>
 				<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 order-xl-2 order-lg-2 order-md-2 order-sm-1 order-1">
@@ -73,75 +83,146 @@
 			</div>
       	</div>
 
-      	<div class="container mt-0">
+      	<section class="container" id="transfermoneyDiv">
       		<div class="row">
 				<div class="col-12">
-					<div id="narrow-browser-alert" class="alert alert-info text-center">
-      					How to Transfer Money
-      				</div>
-				</div>
-				
-				<div class="col-12">
-					<div class="sky-tabs sky-tabs-pos-top-left sky-tabs-anim-flip sky-tabs-response-to-icons">				
-						<input type="radio" name="sky-tabs" checked id="sky-tab1" class="sky-tab-content-1">
-						<label for="sky-tab1"><span><span> AYA Bank </span></span></label>
-				
-						<input type="radio" name="sky-tabs" id="sky-tab2" class="sky-tab-content-2">
-						<label for="sky-tab2"><span><span><i class="icon-picture"></i>da Vinci</span></span></label>
-				
-						<input type="radio" name="sky-tabs" id="sky-tab3" class="sky-tab-content-3">
-						<label for="sky-tab3"><span><span><i class="icon-cogs"></i>Einstein</span></span></label>
-				
-						<input type="radio" name="sky-tabs" id="sky-tab4" class="sky-tab-content-4">
-						<label for="sky-tab4"><span><span><i class="icon-globe"></i>Newton</span></span></label>
-				
-						<label class="switcher"><span><span><a href="#"><i class="icon-reorder"></i>Tabs</a></span></span></label>
-				
-				<ul>
-					<li class="sky-tab-content-1">					
-						<div class="typography">
-							<h1>Nikola Tesla</h1>
-							<p>Serbian-American inventor, electrical engineer, mechanical engineer, physicist, and futurist best known for his contributions to the design of the modern alternating current (AC) electrical supply system.</p>
-							<p>Tesla started working in the telephony and electrical fields before emigrating to the United States in 1884 to work for Thomas Edison. He soon struck out on his own with financial backers, setting up laboratories/companies to develop a range of electrical devices. His patented AC induction motor and transformer were licensed by George Westinghouse, who also hired Tesla as a consultant to help develop an alternating current system. Tesla is also known for his high-voltage, high-frequency power experiments in New York and Colorado Springs which included patented devices and theoretical work used in the invention of radio communication, for his X-ray experiments, and for his ill-fated attempt at intercontinental wireless transmission in his unfinished Wardenclyffe Tower project.</p>
-							<p>Tesla's achievements and his abilities as a showman demonstrating his seemingly miraculous inventions made him world-famous. Although he made a great deal of money from his patents, he spent a lot on numerous experiments. He lived for most of his life in a series of New York hotels although the end of his patent income and eventual bankruptcy led him to live in diminished circumstances. Tesla still continued to invite the press to parties he held on his birthday to announce new inventions he was working and make (sometimes unusual) statements. Because of his pronouncements and the nature of his work over the years, Tesla gained a reputation in popular culture as the archetypal "mad scientist". He died in room 3327 of the New Yorker Hotel on 7 January 1943.</p>
-							<p class="text-right"><em>Find out more about Nikola Tesla from <a href="http://en.wikipedia.org/wiki/Nikola_Tesla" target="_blank">Wikipedia</a>.</em></p>
+					<div class="alert alert-warning text-center">
+      					<div class="section-title pb-0">
+							<h2 class="text-center my-4"> How To Transfer Money </h2>
+							<p class="mmfont text-muted"> ငွေလွဲပြီးလျှင် <span class="text-danger fw-bolder"> Slip </span> (သို့မဟုတ်)  <span class="text-danger fw-bolder"> Screen Shot </span> လေးကို Learning Lab Myanmar Page Messanger သို့ပို့ပေးရမည်ဖြစ်ပါသည်။ </p>
 						</div>
-					</li>
-					
-					<li class="sky-tab-content-2">
-						<div class="typography">
-							<h1>Leonardo da Vinci</h1>
-							<p>Italian Renaissance polymath: painter, sculptor, architect, musician, mathematician, engineer, inventor, anatomist, geologist, cartographer, botanist, and writer. His genius, perhaps more than that of any other figure, epitomized the Renaissance humanist ideal. Leonardo has often been described as the archetype of the Renaissance Man, a man of "unquenchable curiosity" and "feverishly inventive imagination". He is widely considered to be one of the greatest painters of all time and perhaps the most diversely talented person ever to have lived. According to art historian Helen Gardner, the scope and depth of his interests were without precedent and "his mind and personality seem to us superhuman, the man himself mysterious and remote". Marco Rosci states that while there is much speculation about Leonardo, his vision of the world is essentially logical rather than mysterious, and that the empirical methods he employed were unusual for his time.</p>
-							<p>Born out of wedlock to a notary, Piero da Vinci, and a peasant woman, Caterina, at Vinci in the region of Florence, Leonardo was educated in the studio of the renowned Florentine painter, Verrocchio. Much of his earlier working life was spent in the service of Ludovico il Moro in Milan. He later worked in Rome, Bologna and Venice, and he spent his last years in France at the home awarded him by Francis I.</p>
-							<p class="text-right"><em>Find out more about Leonardo da Vinci from <a href="http://en.wikipedia.org/wiki/Leonardo_da_Vinci" target="_blank">Wikipedia</a>.</em></p>
-						</div>
-					</li>
-					
-					<li class="sky-tab-content-3">
-						<div class="typography">
-							<h1>Albert Einstein</h1>
-							<p>German-born theoretical physicist who developed the general theory of relativity, one of the two pillars of modern physics (alongside quantum mechanics). While best known for his mass–energy equivalence formula E = mc2 (which has been dubbed "the world's most famous equation"), he received the 1921 Nobel Prize in Physics "for his services to theoretical physics, and especially for his discovery of the law of the photoelectric effect". The latter was pivotal in establishing quantum theory.</p>
-							<p>Near the beginning of his career, Einstein thought that Newtonian mechanics was no longer enough to reconcile the laws of classical mechanics with the laws of the electromagnetic field. This led to the development of his special theory of relativity. He realized, however, that the principle of relativity could also be extended to gravitational fields, and with his subsequent theory of gravitation in 1916, he published a paper on the general theory of relativity.</p>
-							<p>He continued to deal with problems of statistical mechanics and quantum theory, which led to his explanations of particle theory and the motion of molecules. He also investigated the thermal properties of light which laid the foundation of the photon theory of light. In 1917, Einstein applied the general theory of relativity to model the large-scale structure of the universe.</p>
-							<p class="text-right"><em>Find out more about Albert Einstein from <a href="http://en.wikipedia.org/wiki/Albert_Einstein" target="_blank">Wikipedia</a>.</em></p>
-						</div>
-					</li>
-					
-					<li class="sky-tab-content-4">
-						<div class="typography">
-							<h1>Isaac Newton</h1>
-							<p>English physicist and mathematician who is widely regarded as one of the most influential scientists of all time and as a key figure in the scientific revolution. His book Philosophiæ Naturalis Principia Mathematica ("Mathematical Principles of Natural Philosophy"), first published in 1687, laid the foundations for most of classical mechanics. Newton also made seminal contributions to optics and shares credit with Gottfried Leibniz for the invention of the infinitesimal calculus.</p>
-							<p>Newton's Principia formulated the laws of motion and universal gravitation that dominated scientists' view of the physical universe for the next three centuries. It also demonstrated that the motion of objects on the Earth and that of celestial bodies could be described by the same principles. By deriving Kepler's laws of planetary motion from his mathematical description of gravity, Newton removed the last doubts about the validity of the heliocentric model of the cosmos.</p>
-							<p class="text-right"><em>Find out more about Isaac Newton from <a href="http://en.wikipedia.org/wiki/Isaac_Newton" target="_blank">Wikipedia</a>.</em></p>
-						</div>
-					</li>					
-				</ul>
-			</div>
-				</div>
-			</div>
-      	</div>
 
-      </section>
+      					<div class="col-12 mt-3">
+							<div class="sky-tabs sky-tabs-pos-top-left sky-tabs-anim-flip sky-tabs-response-to-icons">				
+								<input type="radio" name="sky-tabs" checked id="sky-tab1" class="sky-tab-content-1">
+
+								<label for="sky-tab1"><span> <span> <i class="aya"></i> AYA Bank </span></span></label>
+						
+								<input type="radio" name="sky-tabs" id="sky-tab2" class="sky-tab-content-2">
+								<label for="sky-tab2"><span><span> <i class="kbz"></i> KBZ Bank </span></span></label>
+						
+								<input type="radio" name="sky-tabs" id="sky-tab3" class="sky-tab-content-3">
+								<label for="sky-tab3"><span><span> <i class="cb"></i> CB Bank </span></span></label>
+						
+								<input type="radio" name="sky-tabs" id="sky-tab4" class="sky-tab-content-4">
+								<label for="sky-tab4"><span><span> <i class="kpay"></i> K-Pay </span></span></label>
+
+								<input type="radio" name="sky-tabs" id="sky-tab5" class="sky-tab-content-5">
+								<label for="sky-tab5"><span><span> <i class="wave"></i> Wave Money </span></span></label>
+						
+								<label class="switcher"><span><span><a href="#"><i class="icon-reorder"></i>Tabs</a></span></span></label>
+						
+								<ul>
+									<li class="sky-tab-content-1">	
+										<div class="row typography">
+											<div class="col-xl-6 col-lg-6 col-md-8 col-sm-12 col-12 order-xl-1 order-lg-1 order-md-1 order-sm-2 order-2">
+												<h4> <small class="fs-6"> Account Name - </small> U Yan Myoe Aung </h4>
+
+												<h3> 0063 2010 1000 9409 </h3>
+											</div>
+
+											<div class="col-xl-6 col-lg-6 col-md-4 col-sm-12 col-12 order-xl-2 order-lg-2 order-md-2 order-sm-1 order-1">
+												<img src="{{ asset('payment/aya_bank_full.png') }}" class="img-fluid mx-auto d-block">
+												
+											</div>
+										</div>				
+										
+									</li>
+									
+									<li class="sky-tab-content-2">
+										<div class="row typography">
+											<div class="col-xl-6 col-lg-6 col-md-8 col-sm-12 col-12 order-xl-1 order-lg-1 order-md-1 order-sm-2 order-2">
+												<h4> <small class="fs-6"> Account Name - </small> U Yan Myoe Aung </h4>
+
+												<h3> 999 307 999 2846 6801 </h3>
+											</div>
+
+											<div class="col-xl-6 col-lg-6 col-md-4 col-sm-12 col-12 order-xl-2 order-lg-2 order-md-2 order-sm-1 order-1">
+												<img src="{{ asset('payment/kbz_bank_full.png') }}" class="img-fluid mx-auto d-block">
+												
+											</div>
+										</div>	
+									</li>
+									
+									<li class="sky-tab-content-3">
+										<div class="row typography">
+											<div class="col-xl-6 col-lg-6 col-md-8 col-sm-12 col-12 order-xl-1 order-lg-1 order-md-1 order-sm-2 order-2">
+												<h4> <small class="fs-6"> Account Name - </small> U Yan Myoe Aung </h4>
+
+												<h3> 0002 6001 0011 0329 </h3>
+											</div>
+
+											<div class="col-xl-6 col-lg-6 col-md-4 col-sm-12 col-12 order-xl-2 order-lg-2 order-md-2 order-sm-1 order-1">
+												<img src="{{ asset('payment/cb_bank_full.png') }}" class="img-fluid mx-auto d-block">
+												
+											</div>
+										</div>	
+									</li>
+									
+									<li class="sky-tab-content-4">
+										<div class="row typography">
+											<div class="col-xl-6 col-lg-6 col-md-8 col-sm-12 col-12 order-xl-1 order-lg-1 order-md-1 order-sm-2 order-2">
+												<h6> KPay Account  </h6>
+
+												<h3> 0063 2010 1000 9409 </h3>
+											</div>
+
+											<div class="col-xl-6 col-lg-6 col-md-4 col-sm-12 col-12 order-xl-2 order-lg-2 order-md-2 order-sm-1 order-1">
+												<img src="{{ asset('payment/k_pay.png') }}" class="img-fluid mx-auto d-block">
+												
+											</div>
+										</div>	
+									</li>
+
+									<li class="sky-tab-content-5">
+										<div class="row typography">
+											<div class="col-xl-6 col-lg-6 col-md-8 col-sm-12 col-12 order-xl-1 order-lg-1 order-md-1 order-sm-2 order-2">
+												<h6> Wave Money Phone No  </h6>
+
+												<h3> 09 772 750 502 </h3>
+
+												<h3> 09 772 750 503 </h3>
+
+											</div>
+
+											<div class="col-xl-6 col-lg-6 col-md-4 col-sm-12 col-12 order-xl-2 order-lg-2 order-md-2 order-sm-1 order-1">
+												<img src="{{ asset('payment/wavefull.png') }}" class="img-fluid mx-auto d-block">
+												
+											</div>
+										</div>
+									</li>					
+								</ul>
+		      				</div>
+						</div>
+					</div>
+				</div>
+			</div>
+      	</section>
+
+    </section>
+
+    <section class="inner-page pt-0 d-none" id="emptyshoppingcartDiv">
+    	<div class="container">
+    		<div class="section-title pb-0">
+				<h2 class="text-center my-4"> Your Cart is Currently Empty </h2>
+				<p> Before proceed you must enroll some courses to your shopping cart. You will find a lot interesting courses in your "Cart Page" </p>
+			</div>
+
+			<div class="row">
+				<div class="offset-xl-4 col-xl-4 offset-xl-4 offset-lg-4 col-lg-4 offset-lg-4 col-md-12 col-sm-12 col-12">
+					<img src="{{ asset('externalphoto/empty_shoppingbag.gif') }}" class="img-fluid mx-auto d-block">
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="d-grid gap-2 col-4 mx-auto mt-3">
+				  	<a class="btn btn-warning btn-lg rounded-pill" href="{{ route('courses') }}"> Start Course </a>
+				</div>
+			</div>
+
+
+    	</div>
+    </section>
 
 
 </x-frontend>

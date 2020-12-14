@@ -31,6 +31,7 @@ class AccountController extends Controller
         $sales = Sale::where('user_id',$user_id)->with(array('courses'=>function($q){
             $q->wherePivot('status',1)->get();
         }))->paginate(8);
+
         $collections = Collection::all();
         
     	return view('account.mystudyings',compact('tabs','wishlists','sales','collections'));

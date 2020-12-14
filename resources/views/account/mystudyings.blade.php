@@ -48,14 +48,34 @@
               		<div class="tab-content" id="myTabContent">
 
               			{{-- Buy Course Tab --}}
+              			
                 		<div class="tab-pane fade" id="buyCourse" role="tabpanel" aria-labelledby="home-tab">
+                			@if(count($sales)>0)
+                			@php
+                				$count_course =0;
+                				$status = false;
+                			@endphp
+                			@foreach($sales as $sale) 
+                			@foreach($sale->courses as $course)
+                			@if($course->pivot->status == 1)
+                			@php
+                				$count_course++;
+                			@endphp
+							@endif
+							@endforeach
+
+
+							
+
+							@endforeach
                       		<div class="row mb-5">
 				      			<div class="col-12 ">
 				      				<div class="card bg-light border-0">
 				      					<div class="card-body">
 				      						<div class="row">
 				      							<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
-				      								<p> Showing 8 of 20 Results  </p>
+				      								<p> Showing 8 of 
+				      									 {{$count_course}}Results  </p>
 				      							</div>
 
 				      							<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
@@ -74,9 +94,10 @@
 
 				      		<div class="row g-4 mystudying">
 
-
+				      			
 				      			@foreach($sales as $sale)
 				      			@foreach($sale->courses as $course)
+				      			@if($course->pivot->status == 1)
 
 								<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
 								    <div class="card h-100">
@@ -130,34 +151,37 @@
 								      	</div>
 								    </div>
 								</div>
-
+								@endif
 								@endforeach
 								@endforeach
 
+
+								
 								
 							  
 							</div>
 
-							<nav aria-label="Page navigation example" class="mt-5">
+							<nav aria-label="Page navigation example" class="mt-5 paginate">
 							  	<ul class="pagination justify-content-center">
-							    	<li class="page-item disabled">
-							      		<a class="page-link" href="#" tabindex="-1" aria-disabled="true"> << </a>
-							    	</li>
-							    	<li class="page-item"><a class="page-link" href="#">1</a></li>
-							    	<li class="page-item"><a class="page-link" href="#">2</a></li>
-							    	<li class="page-item"><a class="page-link" href="#">3</a></li>
-							    	<li class="page-item">
-							      		<a class="page-link" href="#"> >> </a>
-							    	</li>
+									{!! $sales->links() !!}
 							  	</ul>
 							</nav>
 
+
+							@else
+							<div class="text-center">
+								<img src="{{asset('/externalphoto/empty_buycourse.gif')}}" class="img-fluid" width="40%" height="60%">
+							</div>
+							@endif
+
                 		</div>
+                		
                 		
               			{{-- Collect Tab --}}
 
+              			
                 		<div class="tab-pane fade" id="collectionList" role="tabpanel" aria-labelledby="profile-tab">  
-
+                			@if(count($collections)>0)
                 			<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 							  	<a href="javascript:void(0)" class="btn custom_primary_btnColor" data-toggle="modal" data-target="#newcollectionModal"> Create New Collection </a>
 							</div>
@@ -648,13 +672,19 @@
 
 							    </div>
 						    </section>
-                			
+                			@else
+							<div class="text-center">
+								<img src="{{asset('/externalphoto/empty_collection.gif')}}" class="img-fluid" width="40%" height="60%">
+							</div>
+							@endif
                 		</div>
+                		
                 		
 
               			{{-- Wishlist Tab --}}
 
                 		<div class="tab-pane fade" id="wishList" role="tabpanel" aria-labelledby="rating-tab">
+                			@if(count($wishlists)>0)
                   			<div class="row mb-5">
 				      			<div class="col-12 ">
 				      				<div class="card bg-light border-0">
@@ -762,6 +792,11 @@
 					        {!! $wishlists->links() !!}
 
 					        </div>
+					        @else
+							<div class="text-center">
+								<img src="{{asset('/externalphoto/emtyp_wishlist.gif')}}" class="img-fluid" width="40%" height="60%">
+							</div>
+							@endif
 
                 		</div>
 
@@ -957,8 +992,8 @@
 				var html = "";
 
 				$.post("{{route('wishlist_search')}}",{data:search_data},function(data){
-					// console.log(data);
-					if(data){
+					
+					if(data.length > 0){
 						$.each(data,function(i,v){
 							$.each(v.wishlists,function(w,l) {
 								
@@ -1041,11 +1076,16 @@
 							})
 						});
 					
-		        	$('.searchwishlistshow').html(html);
+		        		$('.searchwishlistshow').html(html);
 						
 					}else{
-						$('.searchwishlistshow').html("");
-					}
+					
+					html+=`<div class="text-center">
+								<img src="{{asset('/externalphoto/empty_result.gif')}}" class="img-fluid" width="40%" height="60%">
+							</div>`;
+					$('.searchwishlistshow').html(html);
+					$('.paginate').hide();
+				}
 				})
 			
 			})
@@ -1079,13 +1119,15 @@
 				var html = "";
 				var instructor = "";
 				var heart = false;
+				var empty = false;
 				// frontendcontroller
 				$.post('searchmystudying',{data:data},function(res){
+					
 					if(res){
 						var response = JSON.parse(res);
-						console.log(response);
-
+						
 						$.each(response,function(g,h){
+							if(h.length > 0){
 							$.each(h,function(i,v){
 								
 
@@ -1156,11 +1198,23 @@
 								</div>`;
 								}
 								
+							})
+						}else{
+							empty = true;
+						}
 						})
-					})
 
 						$('.mystudying').html(html);
 					}
+						if(empty == true){
+						
+						html+=`<div class="text-center">
+									<img src="{{asset('/externalphoto/empty_result.gif')}}" class="img-fluid" width="40%" height="60%">
+								</div>`;
+						$('.mystudying').html(html);
+						$('.paginate').hide();
+					}
+				
 				})
 				
 			})

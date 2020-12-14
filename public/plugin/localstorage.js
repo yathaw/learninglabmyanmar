@@ -1,6 +1,7 @@
 $(document).ready(function(){
+	
 	cartnoti();
-	showdata();
+	showdata();   
 
 	$('.unauth').click(function(){
 	    alert("Please login to success this process!");
@@ -82,8 +83,22 @@ $(document).ready(function(){
 	function showdata() {
 		var user_id = $('.user_id').data('user_id');
 		var localstorage = localStorage.getItem('course_buy');
-		if(localstorage){
-			var localstorage_arr = JSON.parse(localstorage);
+		var localstorage_arr = JSON.parse(localstorage);
+		if(localstorage_arr){
+		console.log(localstorage);
+		if(localstorage_arr.length > 0){
+			if ($('#shoppingcartDiv').hasClass( "d-none")) {
+		    	$('#shoppingcartDiv').removeClass("d-none")
+		  	}
+
+		  	if (!$('#emptyshoppingcartDiv').hasClass( "d-none" ) ) {
+		    	$('#emptyshoppingcartDiv').addClass("d-none")
+		  	}
+
+	   		if (!$('#ordersuccessDiv').hasClass( "d-none" ) ) {
+		    	$('#ordersuccessDiv').addClass("d-none")
+		  	}
+
 			var html = "";
 			var total = 0;
 			var course_count = 0;
@@ -153,6 +168,16 @@ $(document).ready(function(){
 			$('.course_count').html(course_count);
 			$('.total').html(total+' Ks');
 		}else{
+			if ($('#emptyshoppingcartDiv').hasClass( "d-none" ) ) {
+		    	$('#emptyshoppingcartDiv').removeClass("d-none")
+		  	}
+			if (!$('#shoppingcartDiv').hasClass( "d-none")) {
+		    	$('#shoppingcartDiv').addClass("d-none")
+		  	}
+
+	   		if (!$('#ordersuccessDiv').hasClass( "d-none" ) ) {
+		    	$('#ordersuccessDiv').addClass("d-none")
+		  	}
 
 			var html = "";
 			var course_count = 0;
@@ -161,6 +186,7 @@ $(document).ready(function(){
 			$('.showcart').html(html);
 			$('.course_count').html(course_count);
 			$('.total').html(total+' Ks');
+		}
 		}
 	}
 
@@ -309,8 +335,25 @@ $(document).ready(function(){
 
 					var localstorage_str = JSON.stringify(localstorage_arr);
 					localStorage.setItem('course_buy',localstorage_str);
-					showdata();
+					// showdata();
 					cartnoti();
+
+					$('#shoppingcartDiv').hide();
+			   		$('#emptyshoppingcartDiv').hide();
+
+				    $('#ordersuccessDiv').show();
+
+				    if (!$('#emptyshoppingcartDiv').hasClass( "d-none" ) ) {
+				    	$('#emptyshoppingcartDiv').addClass("d-none")
+				  	}
+					if (!$('#shoppingcartDiv').hasClass( "d-none")) {
+				    	$('#shoppingcartDiv').addClass("d-none")
+				  	}
+
+			   		if ($('#ordersuccessDiv').hasClass( "d-none" ) ) {
+				    	$('#ordersuccessDiv').removeClass("d-none")
+				  	}
+
 				}
 			})
 		}
