@@ -223,9 +223,10 @@ class InstructorController extends Controller
 
     public function instructor_studentlist($id)
     {
-       // dd($id);
-      $instructor = Instructor::where('user_id',$id)->get();
-      dd($instructor);
-        //return view ('instructors.student_list',compact(''));
+      
+      $user = User::find($id);
+      $user_courses = $user->courses;
+      
+      return view ('instructors.student_list',compact('user_courses'));
     }
 }

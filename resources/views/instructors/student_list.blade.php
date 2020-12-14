@@ -40,20 +40,40 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            	<?php $i =1; ?>
-                            	@foreach($users as $user)
+                            	@php $i =1; 
+                                $student_users = array();
+                                @endphp
+                            	@foreach($user_courses as $user_course)
+                                    @php
+                                        $user_course_sales = $user_course->sales;
+                                        
+                                    @endphp
                                 
-                                
+                                    @foreach($user_course_sales as $user_course_sale)
+                                    @php
+                                      array_push($student_users,$user_course_sale->user);
+
+                                    @endphp
+                                    
+                                    @endforeach
+                                @endforeach
+
+                                @php 
+                                   
+                                    $unique_student = array_unique($student_users);
+                                @endphp
+
+                                @foreach($unique_student as $student)
                             	<tr>
                             		<td>{{$i++}}</td>
                                    
-                            		<td>{{$user->name}}</td>
-                                    <td>{{$user->email}}</td>
+                            		<td>{{$student->name}}</td>
+                                    <td>{{$student->email}}</td>
                             		
                             		<td>
                             			<a href="#" class="btn btn-warning"><i class="align-middle " data-feather="edit-2"></i></a>
                             			
-                                        <form action="{{route('backside.students.destroy',$user->id)}}" method="POST" class="d-inline-block">
+                                        <form action="{{route('backside.students.destroy',$student->id)}}" method="POST" class="d-inline-block">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger" type="submit"><i class="align-middle" data-feather="x"></i></button>
@@ -61,16 +81,11 @@
                                         </form>
                             		</td>
                             	</tr>
+                                @endforeach
                                
-                            	@endforeach
                             </tbody>
                             <tfoot>
-                                <tr>
-                                    <th> No </th>
-                                    <th>User Name</th>
-                                    <th>Email</th>
-                                    <th> Action </th>
-                                </tr>
+                               
                             </tfoot>
                             <tbody>
                             </tbody>
