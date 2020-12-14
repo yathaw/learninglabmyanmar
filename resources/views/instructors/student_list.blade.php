@@ -40,25 +40,29 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            	<?php $i =1; ?>
+                            	@php $i =1; 
+                                $student_users = array();
+                                @endphp
                             	@foreach($user_courses as $user_course)
                                     @php
                                         $user_course_sales = $user_course->sales;
-                                        $student_users = array();
+                                        
                                     @endphp
                                 
-                                @foreach($user_course_sales as $user_course_sale)
-                                @php
-                                  array_push($student_users,$user_course_sale->user);
+                                    @foreach($user_course_sales as $user_course_sale)
+                                    @php
+                                      array_push($student_users,$user_course_sale->user);
 
-                                @endphp
-                                
-                                @endforeach
+                                    @endphp
+                                    
+                                    @endforeach
                                 @endforeach
 
                                 @php 
+                                   
                                     $unique_student = array_unique($student_users);
                                 @endphp
+
                                 @foreach($unique_student as $student)
                             	<tr>
                             		<td>{{$i++}}</td>
