@@ -100,8 +100,15 @@
                             @if($course->status == 0)
                                 @if(in_array($role[0], array('Admin','Developer'), true ) && $userRole[0] != 'Admin')
                                     <a class="dropdown-item text-success fw-bolder" href="{{ route('backside.sectionlist',$course->id) }}" data-toggle="tooltip" data-placement="top" title="Course ကို Public ချပြရန် ခွင့်ပြုပါမည်"> 
-                                    <i class="align-middle mr-2" data-feather="check"></i> 
-                                    Approve
+                                    <i class="align-middle mr-2" data-feather="check"></i>
+
+                                    @if($row->status == 0)
+                                 <form method="post" action="{{route('backside.course.approve',$course->id)}}">
+                                    @csrf
+                                    <button class="btn btn-success" type="submit">Approve</button>
+                                    <a href="{{route('backside.course.index')}}" class="btn btn-success">Back</a>
+                                 </form>
+
                                     </a>
                                 @endif
                             @endif

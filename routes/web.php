@@ -17,6 +17,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
 
+
 //KYW
 use App\Http\Controllers\BackendController;
 
@@ -95,6 +96,9 @@ Route::group(['prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/category',CategoryController::class);
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
+    Route::post('approve',[CourseController::class,'approve'])->name('course.approve');
+    Route::post('courses_search',[CourseController::class, 'courses_search'])->name('courses_search');
+
 //NYL 
     Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
 

@@ -287,4 +287,27 @@ class CourseController extends Controller
          $course->delete();
          return redirect()->route('backside.course.index');
     }
+
+    public function approve($id)
+    {
+        $course= Course::find($id);
+        $course->status =1;
+        $course->save();
+        return back();
+    }
+
+    public function courses_search(Request $request)
+    {
+       $data = $request->data;
+
+
+       $search_data = Course::where('title','like','%'.$data.'%')->with(array('instructors' => function($query)
+       {
+        $query->with('user');
+       }))->get();
+
+
+       // dd($search_data);
+       return response(json_decode($search_data));
+    }
 }
