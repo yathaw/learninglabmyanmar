@@ -99,17 +99,38 @@
 								        		<small class="card-text text-muted"> </small>
 								      	</div>
 								      	<div class="card-footer bg-transparent border-top-0">
+								      		@if(isset($completelessons))
+								      		@if(count($completelessons) > 0)
+
+
+								      		@foreach($completelessons as $completelesson_key=> $completelesson)
+
+								      		
+								      		@if($completelesson['courseid'] == $course->id)
+
+								      		@php
+								      			$count_section = $completelesson['count_section'];
+								      			$count_content = $completelesson['count_content'];
+								      			$count_completelesson = count($completelesson['lessons']);
+
+								      			$percentage_decimal = (($count_completelesson/$count_content)*100);
+                            					$percentage = round($percentage_decimal);
+
+								      		@endphp
+
 								      		<div class="row">
 								      			<div class="col-12">
 								      				<div class="progress" style="height: 5px;">
-				                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 80%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+				                                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $percentage }}%;" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="{{ $percentage }}"></div>
 				                                    </div>
 								      			</div>
 								      		</div>
+								      		
+
 								        	<div class="row mt-3">
 								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
 								        			
-				                                    <small class="text-muted"> 80% complete </small>
+				                                    <small class="text-muted"> {{ $percentage }}% complete </small>
 								        		</div>
 
 								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -127,6 +148,47 @@
 							                        </a>
 								        		</div>
 								        	</div>
+								        	@endif
+								        	@endforeach
+
+								        	@else
+
+								        	<div class="row">
+								      			<div class="col-12">
+								      				<div class="progress" style="height: 5px;">
+				                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="0"></div>
+				                                    </div>
+								      			</div>
+								      		</div>
+								      		
+
+								        	<div class="row mt-3">
+								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+								        			
+				                                    <small class="text-muted"> 0% complete </small>
+								        		</div>
+
+								        		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+								        			<a href="javascript:void(0)" data-toggle="modal" data-target="#ratingModal">
+									        			<div class="rating float-right">
+							                                <i class='bx bxs-star custom_primary_Color'></i>
+							                                <i class='bx bxs-star custom_primary_Color'></i>
+							                                <i class='bx bxs-star custom_primary_Color' ></i>
+							                                <i class='bx bxs-star-half custom_primary_Color' ></i>
+
+							                                <i class='bx bx-star' ></i>
+
+							                                <small class="text-muted d-block"> Your Ratings  </small>
+							                            </div>
+							                        </a>
+								        		</div>
+								        	</div>
+
+
+								        	@endif
+								        	@endif
+
+
 								      	</div>
 								    </div>
 								</div>

@@ -17,6 +17,8 @@ use App\Models\Sale;
 use App\Models\Section;
 use App\Models\User;
 use App\Models\Lesson;
+use App\Models\Instructor;
+
 
 
 // NYL
@@ -36,9 +38,78 @@ class AccountController extends Controller
             $q->wherePivot('status',1)->get();
         }))->paginate(8);
 
+        
+        $completelessons = array();
+
+        foreach ($sales as $sale) {
+            foreach ($sale->courses as $course) {
+                $courseid = $course['id'];
+                $count_section = count($course->sections);
+                $count_content = count($course->contents);
+
+                $completelesson = array(
+                        'courseid'          => $courseid,
+                        'count_section'     => $count_section,
+                        'count_content'     => $count_content,
+                        'lessons'           => array()
+                    );
+
+
+                foreach($course->sections as $section)
+                {
+
+
+                    foreach ($section->contents as $key => $content) {
+                        // Lesson
+                        if ($content->contenttype_id == 1) {
+                            foreach ($content->lessons as $lesson) {
+
+                                $lesson_id = $lesson->id;
+
+                                $get_completeLesson = User::with(['lessons' => function($q) use($user_id, $lesson_id)    {
+                                    $q->where('lesson_user.user_id', $user_id);
+                                    $q->where('lesson_user.lesson_id', $lesson_id);
+                                    $q->where('lesson_user.status',1);
+
+                                }]) 
+                                ->find($user_id);
+
+                                foreach ($get_completeLesson->lessons as $user_lesson) {
+                                    $pivot_lesson_id = $user_lesson->pivot->lesson_id;
+                                    $pivot_status = $user_lesson->pivot->status;
+                                    $pivot_timeline = $user_lesson->pivot->timeline;
+
+                                    $completelesson['lessons'][] = array(
+                                        'lesssonid'    =>  $pivot_lesson_id,
+                                        'status'    =>  $pivot_status,
+                                        'timeline'    =>  $pivot_timeline,
+                                        
+                                    );
+
+                                    // array_push($completelessons, $completelesson);
+                                    
+                                }
+
+
+                            }
+                        }
+                    }
+
+                }
+
+                array_push($completelessons,  $completelesson);
+
+            }
+        }
+
+        // dd($sales);
+        // dd($completelessons);
+
+        // die();
+
         $collections = Collection::all();
         
-    	return view('account.mystudyings',compact('tabs','wishlists','sales','collections'));
+    	return view('account.mystudyings',compact('tabs','wishlists','sales','collections','completelessons'));
     }
 
     public function wishlist(){
@@ -94,7 +165,17 @@ class AccountController extends Controller
                 $q->where('lesson_user.status',1);
             }]) 
             ->find($user_id);
-        // dd($user_lessons->lessons);
+
+
+        $instructors = User::whereHas('instructor', function($q) use ($courseid)
+            {
+                $q->whereHas('courses', function($q1) use ($courseid)
+                {
+                    $q1->where('course_instructor.course_id', '=', $courseid);
+                });
+            })
+            ->role('Instructor')
+            ->get();
 
         foreach ($user_lesson->lessons as $user_lesson) {
             $pivot_lesson_id = $user_lesson->pivot->lesson_id;
@@ -116,7 +197,7 @@ class AccountController extends Controller
         $questions = Question::all();
         $answers = Answer::all();
 
-        return view('account.lecturevideo',compact('questions','answers', 'course', 'sections','user_id','completeLessons'));
+        return view('account.lecturevideo',compact('questions','answers', 'course', 'sections','user_id','completeLessons','instructors'));
 
     }
 
