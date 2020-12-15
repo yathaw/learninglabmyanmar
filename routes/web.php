@@ -17,6 +17,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
 
+
 //KYW
 use App\Http\Controllers\BackendController;
 
@@ -86,21 +87,21 @@ Route::post('login_data',[LoginController::class,'login_store'])->name('frontend
 | Backend (Admin) Frame
 |--------------------------------------------------------------------------
 */
-
-//KKS
-Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'backside.'], function(){
+Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/course', CourseController::class);
 
 
     Route::resource('/category',CategoryController::class);
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
+    Route::post('approve',[CourseController::class,'approve'])->name('course.approve');
+    Route::post('courses_search',[CourseController::class, 'courses_search'])->name('courses_search');
+
 //NYL 
     Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
 
     Route::resource('/section', SectionController::class);
-//KYW
-   
+
     Route::get('/section/{section}/edit',[SectionController::class,'edit'])->name('sectionedit');
     Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
     Route::post('/getinstructor',[SectionController::class,'getinstructor'])->name('getinstructor');
@@ -117,6 +118,12 @@ Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'bac
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);
     Route::resource('/attachment', AttachmentController::class);
+//KYW
+
+});
+//KKS
+Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'as' => 'backside.'], function(){
+
     Route::resource('/companies', CompanyController::class);
     Route::resource('/instructors', InstructorController::class);
     Route::resource('/jobtitles', JobtitleController::class);
@@ -175,6 +182,12 @@ Route::get('panel',[AccountController::class, 'panel'])->name('panel');
 */
 Route::get('mystudyings',[AccountController::class, 'mystudyings'])->name('mystudyings');
 Route::get('/lecture/{id}',[AccountController::class, 'lecture'])->name('lecture');
+
+// YTMN
+Route::post('lesson_user',[AccountController::class, 'lesson_user'])->name('lesson_user');
+Route::post('lesson_state',[AccountController::class, 'lesson_state'])->name('lesson_state');
+
+
 Route::post('/questionstore',[AccountController::class, 'questionstore'])->name('questionstore');
 Route::get('/questionnoti',[AccountController::class,'questionnoti'])->name('questionnoti');
 Route::get('/questionshownoti',[AccountController::class,'questionshownoti'])->name('questionshownoti');
@@ -216,8 +229,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 
 
-// nyiyelin
-
+// YTMN
+Route::post('getinstructor_bycompanyid',[CourseController::class, 'getinstructor'])->name('getinstructor_bycompanyid');
 
 
 
