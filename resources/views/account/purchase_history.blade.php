@@ -22,12 +22,7 @@
                   			</a>
                 		</li>
                 
-                		<li class="nav-item">
-                  			<a class="nav-link nab bg-transparent" id="pendinghistoryTab" data-toggle="tab" href="#pendinghistory" role="tab" aria-controls="pendinghistory" aria-selected="false" data-target="#pendinghistory">
-                    			Pending
-                  			</a>
-
-                		</li>
+                		
                 
                 		
               		</ul>
@@ -44,6 +39,7 @@
 		    <div class="row">
             	<div class="col-md-12">
               		<div class="tab-content" id="myTabContent">
+              			@if(count($sales)>0)
               			<div class="tab-pane fade show active" id="purchasehistory" role="tabpanel" aria-labelledby="purchasehistoryTab">
 		              		<table class="table ">
 		        				<thead>
@@ -101,66 +97,15 @@
 		        				</tbody>
 		        			</table>
 		        		</div>
+		        		@else
+		        		<div class="text-center">
+							<img src="{{asset('/externalphoto/empty_purchasehistory.gif')}}" class="img-fluid" width="40%" height="60%">
+						</div>
+						@endif
+
         			
         		
-        			<div class="tab-pane fade" id="pendinghistory" role="tabpanel" aria-labelledby="pendinghistoryTab">
-	        			<table class="table ">
-	        				<thead>
-	        					<tr>
-	        						<th>Pending History</th>
-	        						<th>Invoice</th>
-	        						<th>Date</th>
-	        						<th>Total Price</th>
-	        						<th>Pending Course</th>
-	        						<th>Action</th>
-	        						
-	        					</tr>
-	        				</thead>
-	        				<tbody>
-	        					@foreach($sales as $sale)
-	        						@php
-	        							$courses = '';
-	        							$count_course = array();
-	        							$amount=0;
-
-	        						@endphp
-	        						
-		        						@foreach($sale->courses as $value)
-		        							@if($value->pivot->status == 0)
-		        							@php
-		        								$courses=$value;
-		        								array_push($count_course,$value);
-		        								$amount+=$value->price
-		        							@endphp
-		        							@endif
-		        								
-					        				
-					        			@endforeach
-					        			@if($courses)
-					        				@php
-		    									$date = strtotime($courses->created_at);
-		    									$data = date('d-m-Y',$date);
-
-		    								@endphp
-				        					<tr>
-				        						<td></td>
-				        						<td>{{$sale->invoiceno}}</td>
-				        						<td>{{$data}}</td>
-				        						<td>{{$amount}} KS</td>
-				        						<td>{{count($count_course)}} of {{count($sale->courses)}}</td>
-
-				        						<td>
-				        							<a href="" class="btn btn-outline-info">Pending</a>
-				        						</td>
-
-				        					</tr>
-				        				@endif
-			        				
-	        					@endforeach
-	        				</tbody>
-	        			</table>
-	        		</div>
-            	</div>
+            		</div>
           	</div>
 
 		</div>

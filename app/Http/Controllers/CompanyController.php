@@ -203,6 +203,12 @@ class CompanyController extends Controller
 
     public function student_list($id)
     {
-        dd($id);
+        // dd($id);
+        $company_user = User::find($id);
+        
+        $company_id = $company_user->company_id;
+        // dd($company_id);
+        $users = User::where('company_id',$company_id)->get();
+        return view('business.student_list',compact('users'));
     }
 }

@@ -13,4 +13,9 @@ class Collection extends Model
     use SoftDeletes;
     protected $fillable=['title','description','user_id'];
 
+    public function courses($value='')
+    {
+    	return $this->belongsToMany('App\Models\Course')->withPivot('sorting')->withTimestamps();
+    }
+
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Collection;
 use Auth;
+use App\Models\Sale;
+use App\Models\Wishlist;
 
 class CollectionController extends Controller
 {
@@ -96,6 +98,8 @@ class CollectionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        dd($id);
     }
+
+    
 }

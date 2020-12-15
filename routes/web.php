@@ -141,15 +141,18 @@ Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'a
 
 });
 
-    //HH
-    Route::get('account_remove/{id}',[InstructorController::class,'account_remove'])->name('account_remove');
+//HH
+Route::get('account_remove',[InstructorController::class,'account_remove'])->name('account_remove');
 
-    Route::get('instructor_student/{id}',[InstructorController::class,'instructor_studentlist'])->name('instructor_studentlist');
+Route::get('instructor_student/{id}',[InstructorController::class,'instructor_studentlist'])->name('instructor_studentlist');
 
-    Route::get('company_instructor/{id}',[CompanyController::class,'instructor_list'])->name('instructor_list');
+Route::get('company_instructor/{id}',[CompanyController::class,'instructor_list'])->name('instructor_list');
 
-    Route::get('remove_instructor/{id}',[CompanyController::class,'remove_instructor'])->name('remove_instructor');
-    Route::get('company_student/{id}',[CompanyController::class,'student_list'])->name('student_list');
+Route::get('remove_instructor/{id}',[CompanyController::class,'remove_instructor'])->name('remove_instructor');
+
+Route::get('company_student/{id}',[CompanyController::class,'student_list'])->name('student_list');
+
+Route::get('confirm_remove',[InstructorController::class,'confirm_remove'])->name('confirm_remove');
 
 
 Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
@@ -195,8 +198,15 @@ Route::get('/checkoutnoti',[AccountController::class,'checkoutnoti'])->name('che
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');
-Route::resource('collections',CollectionController::class);
+
+Route::get('course_collection/{id}',[AccountController::class,'add_course_collection'])->name('add_course_collection');
+
+Route::post('store_course_collection',[AccountController::class,'store_course_collection'])->name('store_course_collection');
+
+
 Route::get('wishlist',[AccountController::class, 'wishlist'])->name('wishlist');
+
+Route::resource('collections',CollectionController::class);
 
 Route::get('purchase_history',[AccountController::class, 'purchase_history'])->name('purchase_history');
 
