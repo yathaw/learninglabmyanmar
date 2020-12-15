@@ -591,14 +591,15 @@ $('.editbtn').click(function(){
 
           	  	 $.post('/backside/getinstructor',{instructorid:instructorid,courseid:courseid},function(response){
           	  		console.log(response);
+
           	 var html = "";
           	 		$.each(response,function (i,v) {
-          	 			html +=`<option value="${v.id}"`;
+          	 			html +=`<option value="${v.instructor_id}"`;
 
-          	  			if(v.id==instructorid)
+          	  			if(v.instructor_id==instructorid)
           	 				html+=`selected`;
 
-          			html+=`>${v.instructor_id}</option>`;
+          			html+=`>${v.name}</option>`;
 
           			})
 
@@ -645,10 +646,12 @@ $('#editsectionform').on('submit',function(event){
 	event.preventDefault();
 	var sectionid=$('#updatesectionid').val();
 	var courseid=$('#updatecourseid').val();
-	var instructorid=$('#updateinstructorid').val();
+	var instructorid=$('#instructorEdit').val();
+	console.log(instructorid);
 	var title=$('#titleEdit').val();
 	var objective=$('#objectiveEdit').val();
 	var contenttypeid=$('#contenttypeEdit').val();
+	console.log(contenttypeid);
 	$.ajax({
 		url:'/backside/sectionupdate/'+sectionid,
 		type:"POST",

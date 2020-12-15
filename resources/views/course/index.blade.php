@@ -5,6 +5,12 @@
         
     @endphp
 
+    @if ($courses == '')
+        <img src="{{asset('externalphoto/nocourse.gif')}}">
+
+    @else
+
+
     <div class="row">
         <div class="col-auto d-none d-sm-block">
             <h3 class="d-inline-block"><strong> Course List </strong> </h3> <p> Showing {{$count}} of {{$total}} Results  </p> 
@@ -36,27 +42,21 @@
         $countVideo = 0;
         $countlesson = 0;
         $countassignment = 0;
-
         foreach ($course->contents as $content) {
             foreach ($content->lessons as $lesson) {
                 $duration = $lesson['duration'];
                 $type = $lesson['type'];
-
                 if ($type != "MP4") {
                     $countlesson++;
                 }
-
                 if ($type == "MP4") {
                     $countVideo++;
                 }
-
                 $totalDuration += $duration++;
-
             }
             foreach ($content->assignments as $assignment) {
                 $countassignment++;
             }
-
         }
         if ($totalDuration) {
                                 
@@ -64,15 +64,12 @@
             $days = $dt->diffInDays($dt->copy()->addSeconds($totalDuration));
             $hours = $dt->diffInHours($dt->copy()->addSeconds($totalDuration)->subDays($days));
             $minutes = $dt->diffInMinutes($dt->copy()->addSeconds($totalDuration)->subDays($days)->subHours($hours));
-
             $totaltimes = Carbon\CarbonInterval::days($days)->hours($hours)->minutes($minutes)->forHumans();
         }
         else{
             $totaltimes = '0 Second';
         }
-
         $userRole = $course->user->getRoleNames();
-
     @endphp
      
     <div class="col-12 col-md-6 col-lg-3">
@@ -248,6 +245,7 @@
             </nav>
         </div>
    </div>
+   @endif
    @section('script_content')
    <script type="text/javascript">
       $(document).ready(function() {

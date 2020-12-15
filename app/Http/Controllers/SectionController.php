@@ -187,41 +187,18 @@ class SectionController extends Controller
     {
         $instructorid = $request->instructorid;
         $courseid=$request->courseid;
-        
-        $course=Course::all();
+           
+        // $instructors= DB::table('course_instructor')
+        //                 ->where('course_id','=',$courseid)
+        //                 ->get(); // id
 
-  //        $recipe = Recipe::find($request->id);
-  // $ingredient->recipes()->attach($recipe->id);
+        $instructors= DB::table('course_instructor')
+                       ->where('course_id','=',$courseid)
+                       ->join('instructors', 'instructors.id', '=', 'course_instructor.instructor_id')
+                       ->join('users', 'users.id', '=', 'instructors.user_id')
+                         ->get(); 
 
-  $instructor=Instructor::find($request->instructorid);
-  $courseinstructor=$course->instructors();
-
-
-        // foreach($instructors as $instructor){
-        //     foreach($instructor->courses as $instructor_course){
-        //         $courseinstructor=$instructor_course;
-        //     }
-        // }
-
-        // $subcategory = Subcategory::find($id);
-
-
-        // $category_id = $subcategory->category->id;
-        // $subcategories = Subcategory::where('category_id',$category_id)->get();
-
-        // $subcategoryitems = Item::where('subcategory_id',$id)->paginate(6);
-        // $latestitems = Item::latest()->take(3)->get();
-
-
-        // $count_result = Item::where('subcategory_id',$id)->count();
-
-        // $instructor_id=$instructorid->courses();
-        // dd($instructor_id);
-        //$courseinstructor=$course->instructors();
-
-        return $courseinstructor;
-       
-
+       return $instructors;
     }
 
     public function sectionsorting_modernize(Request $request){

@@ -17,6 +17,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
 
+
 //KYW
 use App\Http\Controllers\BackendController;
 
@@ -89,6 +90,16 @@ Route::post('login_data',[LoginController::class,'login_store'])->name('frontend
 Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::resource('/course', CourseController::class);
 
+
+    Route::resource('/category',CategoryController::class);
+    Route::resource('/subcategory',SubcategoryController::class);
+    Route::resource('/sale', SaleController::class);
+    Route::post('approve',[CourseController::class,'approve'])->name('course.approve');
+    Route::post('courses_search',[CourseController::class, 'courses_search'])->name('courses_search');
+
+//NYL 
+    Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
+
     Route::resource('/section', SectionController::class);
 
     Route::get('/section/{section}/edit',[SectionController::class,'edit'])->name('sectionedit');
@@ -112,15 +123,7 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
 });
 //KKS
 Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'as' => 'backside.'], function(){
-    Route::resource('/category',CategoryController::class);
-    Route::resource('/subcategory',SubcategoryController::class);
-    Route::resource('/sale', SaleController::class);
-//NYL 
-    Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
 
-
-   
-    
     Route::resource('/companies', CompanyController::class);
     Route::resource('/instructors', InstructorController::class);
     Route::resource('/jobtitles', JobtitleController::class);
