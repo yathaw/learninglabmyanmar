@@ -59,6 +59,112 @@ class AccountController extends Controller
         return view('account.mystudyings',compact('tabs','wishlists','sales','collections'));
 
     }
+
+
+    public function add_course_collection($id)
+    {
+        
+        $collection = Collection::find($id);
+        $user_id = Auth::id();
+        $sales = Sale::where('user_id',$user_id)->paginate(8);
+        return view('account.add_course_collection',compact('sales','collection'));
+    }
+
+    public function store_course_collection(Request $request)
+    {
+        // dd($request);
+        $courses_id = $request->course_collect_id;
+
+        $collection_id = $request->collection_id;
+        $collection = Collection::find($collection_id);
+        $collection_data = array();
+        $course_array = array();
+        $data_false = true;
+        if(count($collection->courses)>0){
+
+            foreach ($collection->courses as $course) {
+                // dd($course);
+                foreach ($courses_id as $value) {
+                   
+                    if($course->pivot->course_id == $value){
+
+                        array_push($collection_data , 'true');
+
+                    }else{
+                        
+                        array_push($collection_data , 'false');
+                        array_push($course_array, $value);
+
+                    }
+                    
+                }
+            }
+        }else{
+
+                array_push($collection_data , 'false');
+                foreach ($courses_id as $value) { 
+                    array_push($course_array, $value);
+                }
+
+        }
+        dd($collection_data);
+        
+        foreach($collection_data as $colleciton_condition){
+                
+
+            if($colleciton_condition == 'false'){
+                $data_false = false;
+
+            }
+        }
+
+            if($data_false == false){
+                $sorting_collection = $collection->courses()->orderByRaw("CAST(sorting as Integer) ASC")->get();
+        
+
+                foreach ($sorting_collection as $value) {
+                    
+                    $sorting = ++$value->pivot->sorting;
+                }
+
+
+                $data =[];
+                if($sorting_collection->isEmpty()){
+                    $sorting = 1;
+
+                    for ($i=0; $i < count($course_array) ; $i++) { 
+                   
+                    
+                        
+                        $data[$i]['sorting']=$sorting++;
+                        $data[$i]['course_id']=$course_array[$i];
+                        $data[$i]['collection_id']=$collection_id;
+                        
+
+                    }
+                    $collection->courses()->attach($data);
+
+                }else{
+                    for ($i=0; $i < count($course_array) ; $i++) {
+                        // dd($sorting);
+                        $data[$i]['sorting']=$sorting++;
+                        $data[$i]['course_id']=$course_array[$i];
+                        $data[$i]['collection_id']=$collection_id;
+                    }
+                    $collection->courses()->attach($data);
+                        
+                }
+            }
+            
+
+        // return redirect()->route('collection');
+
+
+    }
+
+
+
+
     public function purchase_history()
     {
         $sales = Sale::where("user_id",Auth::id())->get();
@@ -90,14 +196,50 @@ class AccountController extends Controller
     }
 
     public function panel(){
-        // Instructor
-        $sales = Sale::whereHas('courses',function($q){
-                    $q->where('course_sale.status',1);
-                })->where('sales.status',1)->get();
-        $courses = Course::all();
-        $recentcourses = Course::orderBy( 'id' , 'desc' )->limit(8)->get();
+        $role = Auth::user()->getRoleNames();
+        $user_id = Auth::id();
 
-        return view('account.instructorpanel',compact('sales','courses','recentcourses'));
+        //Admin
+        if($role[0] == 'Admin'){
+            $sales = Sale::whereHas('courses',function($q){
+                        $q->where('course_sale.status',1);
+                    })->where('sales.status',1)->get();
+            $courses = Course::all();
+            $recentcourses = Course::orderBy( 'id' , 'desc' )->limit(8)->get();
+
+            return view('account.instructorpanel',compact('sales','courses','recentcourses'));
+        }elseif($role[0] == 'Instructor'){
+            // Instructor
+    
+           $sales = Sale::whereHas('courses',function($q){
+                        $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->where('instructors.user_id',Auth::id());
+                    })->where('sales.status',1)->get();
+            
+            $courses = Course::whereHas('instructors',function($q){
+                            $q->where('instructors.user_id',Auth::id());
+                        })->get();
+
+            $recentcourses = Course::whereHas('instructors',function($q){
+                            $q->where('instructors.user_id',Auth::id());
+                        })->orderBy('id','desc')->limit(8)->get();
+
+            return view('account.instructorpanel',compact('sales','courses','recentcourses'));
+        }elseif($role[0] == 'Business'){
+
+            $sales = Sale::whereHas('courses',function($q){
+                        $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id')->where('instructors.user_id',Auth::id());
+                    })->where('sales.status',1)->get();
+            
+              $courses = Course::whereHas('instructors',function($q){
+                            $q->where('instructors.user_id',Auth::id())->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id');
+                        })->get();
+
+            $recentcourses = Course::whereHas('instructors',function($q){
+                            $q->where('instructors.user_id',Auth::id())->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id');
+                        })->orderBy('id','desc')->limit(8)->get();
+            
+            return view('account.instructorpanel',compact('sales','courses','recentcourses'));
+        }
     }
 
 

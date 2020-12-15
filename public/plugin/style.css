@@ -1915,4 +1915,11 @@ ul#playlist{
 }
 
 
+.add_course_collection_checkbox{
+    position: absolute;
+    top: 0px !important;
+    right: 0px;
+}
+
+
 

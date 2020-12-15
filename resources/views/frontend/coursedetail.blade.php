@@ -55,9 +55,6 @@
                                         $instructor_bio = $instructor->bio;
                                         $instructor_headline = $instructor->headline;
 
-                                        
-                                        
-
                                     @endphp
 
                                     @if($instructor->user->company)
