@@ -15,6 +15,10 @@ use App\Models\Answer;
 use App\Events\AnswerEvent;
 use App\Models\Sale;
 use App\Models\Section;
+use App\Models\User;
+use App\Models\Lesson;
+
+
 // NYL
 use App\Models\Collection;
 
@@ -180,19 +184,118 @@ class AccountController extends Controller
     
 
     public function lecture($courseid){
+        $user_id = Auth::id();
+
         $course = Course::find($courseid);
 
         $unorderedsections=Section::where('course_id', $courseid)->get();
         
         $sections = $unorderedsections->sort();
+        $user = User::find($user_id);
+
+        $completeLessons = array();
+
+        $user_lesson = User::with(['lessons' => function($q) use($user_id)    {
+                $q->where('lesson_user.user_id', $user_id);
+                $q->where('lesson_user.status',1);
+            }]) 
+            ->find($user_id);
+        // dd($user_lessons->lessons);
+
+        foreach ($user_lesson->lessons as $user_lesson) {
+            $pivot_lesson_id = $user_lesson->pivot->lesson_id;
+            $pivot_status = $user_lesson->pivot->status;
+            $pivot_timeline = $user_lesson->pivot->timeline;
+
+            $learninglesson = array(
+                'lesssonid'    =>  $pivot_lesson_id,
+                'status'    =>  $pivot_status,
+                'timeline'    =>  $pivot_timeline
+            );
+
+            array_push($completeLessons, $learninglesson);
+            
+        }
+        // dd($completeLessons);
         // $contents=Content::all();
         // $lesson=Lesson::find($id);
-
         $questions = Question::all();
         $answers = Answer::all();
 
-        return view('account.lecturevideo',compact('questions','answers', 'course', 'sections'));
+        return view('account.lecturevideo',compact('questions','answers', 'course', 'sections','user_id','completeLessons'));
 
+    }
+
+    public function lesson_user(Request $request){
+        $lesson_id = $request->lesson_id;
+        $pause_duration = $request->duration;
+        $user_id = $request->user_id;
+
+        $lesson = Lesson::find($lesson_id);
+        $user = User::find($user_id);
+
+        $duration = $lesson->duration;
+
+        if ($duration == $pause_duration) {
+            $status = 1; // Complete;
+        }else{
+            $status = 0;
+        }
+
+
+        $user_lessons = $user->whereHas('lessons', function($q) use ($lesson_id)
+            {
+                $q->where('lesson_user.lesson_id', '=', $lesson_id);
+            })
+            ->get();
+
+        if($user_lessons->isEmpty()){
+            $user->lessons()->attach($lesson_id,['status' => $status, 'timeline' => $pause_duration ]);
+        }else{
+            foreach ($user->lessons as $user_lesson) {
+                $pivot_lesson_id = $user_lesson->pivot->lesson_id;
+                $pivot_status = $user_lesson->pivot->status;
+                $pivot_timeline = $user_lesson->pivot->timeline;
+
+                if ($lesson_id == $pivot_lesson_id && $pivot_status != 1) {
+                    
+                    if ($pause_duration >$pivot_timeline) {
+                        $user->lessons()->updateExistingPivot($lesson_id,['status' => $status, 'timeline' => $pause_duration ]);
+                    }
+                    
+
+                } 
+            }
+        }
+
+    }
+
+    public function lesson_state(Request $request){
+        $lesson_id = $request->lesson_id;
+        $user_id = $request->user_id;
+
+        $user_lesson = User::with(['lessons' => function($q) use($user_id, $lesson_id)    {
+            $q->where('lesson_user.user_id', $user_id);
+            $q->where('lesson_user.lesson_id', $lesson_id);
+            $q->where('lesson_user.status',0);
+
+        }]) 
+        ->find($user_id);
+        $learninglesson = array();
+
+        foreach ($user_lesson->lessons as $user_lesson) {
+            $pivot_lesson_id = $user_lesson->pivot->lesson_id;
+            $pivot_status = $user_lesson->pivot->status;
+            $pivot_timeline = $user_lesson->pivot->timeline;
+
+            $learninglesson = array(
+                'lesssonid'    =>  $pivot_lesson_id,
+                'status'    =>  $pivot_status,
+                'timeline'    =>  $pivot_timeline
+            );
+            
+        }
+        return $learninglesson;
     }
 
     public function panel(){
