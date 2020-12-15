@@ -10,6 +10,8 @@ use App\Models\Level;
 use App\Models\Instructor;
 use App\Models\User;
 use App\Models\Section;
+use App\Models\Company;
+
 
 use Auth;
 
@@ -78,18 +80,56 @@ class CourseController extends Controller
     {
         $users = User::all();
         $authuser = Auth::user();
-        $companyid = $authuser->company_id;
-        //dd($companyid);
-        //dd($authuser->name); 
+        $role = $authuser->getRoleNames();
 
+        if ($role[0] == 'Admin') {
+            $companies = Company::all();
+        }
+
+        else{
+            $companies = NULL;
+        }
+
+
+        if($role[0] == 'Business') {
+            $companyid = $authuser->company_id;
+
+            $instructors = User::whereHas('company', function($q) use ($companyid)
+            {
+                $q->where('company_id', '=', $companyid);
+            })
+            ->role('Instructor')
+            ->get();
+        }else{
+            $instructors = NULL;
+        }
+
+        // dd($instructors);
         $categories=Category::all();
         $subcategories=Subcategory::all();
         $levels = Level::all();
-        $instructors=Instructor::all();
+
+
+
 
 
       
-        return view('course.create',compact('categories','subcategories','levels','instructors','companyid','users','authuser'));
+        return view('course.create',compact('categories','subcategories','levels','instructors','users','authuser','companies'));
+    }
+
+    public function getinstructor(Request $request){
+        $companyid = $request->id;
+
+        // $instructors = User::where('company_id',$companyid)->get();
+
+        $instructors = User::whereHas('company', function($q) use ($companyid)
+            {
+                $q->where('company_id', '=', $companyid);
+            })
+            ->role('Instructor')
+            ->get();
+
+        return $instructors;
     }
 
     /**
@@ -163,7 +203,7 @@ class CourseController extends Controller
                 //dd($instructor->id);
             }
 
-            $course->instructors()->attach($subject_id);
+            $course->instructors()->attach();
 
             return redirect()->route('backside.course.index');
     }

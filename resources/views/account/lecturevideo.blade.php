@@ -22,14 +22,17 @@
 
             <div class="row">
                 <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
-                    {{-- <div class="embed-responsive embed-responsive-4by3">            
-                        <iframe height="500" src="https://www.youtube-nocookie.com/embed/TgzY8syP7lo?start=9;autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"  class="card-img-top" id="videoarea"></iframe>
-                    </div> --}}
+                   
                     <div class="video-player">
                         <video class="js-player lesson_video_play vidoe-js" controls crossorigin preload="auto" playsinline id="videoarea" style="--plyr-color-main: #f09819;">
                             <source type="video/mp4"/ >
 
                         </video>
+                    </div>
+
+                    <div class="alert alert-warning my-3" role="alert">
+                        Take Notes
+                        <a class="btn btn-light btn-sm float-right"> <i class='bx bx-download'></i> Download </a>
                     </div>
                 </div>
 
@@ -56,21 +59,43 @@
                                         @php
                                             # Lesson
                                             if ($content->contenttype_id == 1) {
+
+                                                $fileId = $content->lessons[0]->id;
                                                 $fileLink = asset($content->lessons[0]->file);
+                                                $duration = $content->lessons[0]->duration;
+
+                                                $lessonId = $content->lessons[0]->id;
+
                                             }
                                             # Assignment
                                             else if ($content->contenttype_id == 3) {
+                                                $fileId = $content->assignments[0]->id;
                                                 $fileLink = asset($content->assignments[0]->file);
+                                                $duration = '';
                                             }
                                             # Quizz
                                             else{
                                                 $fileLink = '';
+                                                $duration = '';
                                             }
+
+                                            // Learning Video
+
+
                                         @endphp
 
-                                        <li videoUrl="{{ $fileLink }}" videoId="{{ $content->id }}" class="list-group-item px-0 {{ $content_key == 0 ? 'li_active' : '' }}">
+                                        <li fileLink="{{ $fileLink }}" contentId="{{ $content->id }}" fileId="{{ $fileId
+                                         }}" videoDuration="{{ $duration }}" userId="{{ $user_id }}" class="list-group-item px-0 {{ $content_key == 0 ? 'li_active' : '' }}">
 
-                                            <i class='bx bxs-checkbox-checked fs-4 text-success'></i>
+                                            @foreach($completeLessons as $completeLesson)
+                                                @if($completeLesson['lesssonid'] == $lessonId)
+                                                    <i class='bx bxs-checkbox-checked fs-4 text-success'></i>
+                                                @else
+                                                    <i class='bx bx-checkbox-checked fs-4' ></i>
+
+                                                @endif
+
+                                            @endforeach
 
                                             <p class="mb-0 chapter{{ $content->id }} {{ $content_key == 0 ? 'text-primary' : '' }}  d-inline-block">  
 
@@ -78,7 +103,7 @@
                                                 {{ $content->title }}
                                                 
                                             </p>
-                                            <span class="float-right"> 00:28 </span>
+                                            <span class="float-right"> {{ $duration }}</span>
                                         </li>
 
                                         @endforeach
@@ -332,13 +357,16 @@
                                             <div class="card-body">
                                                 <h4 class="fontbold"> What you'll Learn </h4>
 
+                                                @php
+                                                    $outlines = json_decode($course->outline);
+                                                    $requirements = json_decode( $course->requirements);
+
+                                                @endphp
+
                                                 <ul type="none" class="lh-lg">
-                                                    <li> <i class="icofont-check-alt"></i> Beginner level introduction to Docker</li>
-                                                    <li> <i class="icofont-check-alt"></i> Build Docker images using Dockerfiles with Hands-On Exercises</li>
-                                                    <li> <i class="icofont-check-alt"></i> Build Application stack using Docker Compose Files with Hands-On Exercises</li>
-                                                    <li> <i class="icofont-check-alt"></i> Basic Docker Commands with Hands-On Exercises</li>
-                                                    <li> <i class="icofont-check-alt"></i> Understand what Docker Compose is</li>
-                                                    <li> <i class="icofont-check-alt"></i> Understand what Docker Swarm is</li>
+                                                    @foreach($outlines as $outline)
+                                                        <li> <i class="icofont-check-alt"></i> {{$outline}} </li>
+                                                    @endforeach
                                                 </ul>
                                             </div>
                                         </div>
@@ -350,11 +378,10 @@
                                             <div class="card-body">
                                                 <h4 class="fontbold"> Requirements </h4>
 
-                                                <ul class="lh-lg">
-                                                    <li> Beginner level introduction to Docker</li>
-                                                    <li> Build Docker images using Dockerfiles with Hands-On Exercises</li>
-                                                    <li> Build Application stack using Docker Compose Files with Hands-On Exercises</li>
-                                                    <li> Basic Docker Commands with Hands-On Exercises</li>
+                                                <ul type="none" class="lh-lg">
+                                                    @foreach($requirements as $requirement)
+                                                        <li> <i class="icofont-check-alt"></i> {{$requirement}} </li>
+                                                    @endforeach
                                                 </ul>
                                             </div>
                                         </div>
@@ -366,55 +393,7 @@
                                         <div class="expander">
                                           <!-- start of expanding area -->
                                         <div class="inner-bit">
-                                            <p> COMPLETELY REDONE ON OCTOBER 12th 2020, WITH OVER 500 BRAND NEW VIDEOS! </p>
-
-                                            <p>Hi! Welcome to the brand new version of The Web Developer Bootcamp, Udemy's most popular web development course.  This course was just completely overhauled to prepare students for the 2021 job market, with over 60 hours of brand new content. This is the only course you need to learn web development. There are a lot of options for online developer training, but this course is without a doubt the most comprehensive and effective on the market.  Here's why: </p>
-
-                                            <ul>
-                                                <li> This is the only Udemy course taught by a professional bootcamp instructor with a track record of success. </li>
-                                                <li> 94% of my in-person bootcamp students go on to get full-time developer jobs. Most of them are complete beginners when I start working with them. </li>
-                                                <li> The previous 2 bootcamp programs that I taught cost $14,000 and $21,000.  This course is just as comprehensive but with brand new content for a fraction of the price </li>
-                                                <li> Everything I cover is up-to-date and relevant to 2021's developer job market. This course does not cut any corners. I just spent 8 months redoing this behemoth of a course! </li>
-                                                <li> We build 13+ projects, including a gigantic production application called YelpCamp. No other course walks you through the creation of such a substantial application. </li>
-                                                <li> The course is constantly updated with new content, projects, and modules.  Think of it as a subscription to a never-ending supply of developer training. </li>
-                                                <li> You get to meet my cats and chickens! </li>
-                                            </ul>
-
-                                            <p> When you're learning to program you often have to sacrifice learning the exciting and current technologies in favor of the "beginner friendly" classes.  With this course, you get the best of both worlds.  This is a course designed for the complete beginner, yet it covers some of the most exciting and relevant topics in the industry. <br> Throughout the brand new version of the course we cover tons of tools and technologies including: </p>
-
-                                            <ul>
-                                                <li> HTML5 </li>
-                                                <li> CSS3 </li>
-                                                <li> Flexbox </li>
-                                                <li> Responsive Design </li>
-                                                <li> JavaScript (all 2020 modern syntax, ES6, ES2018, etc.) </li>
-                                                <li> Asynchronous JavaScript - Promises, async/await, etc. </li>
-                                                <li> AJAX and single page apps </li>
-                                                <li> Bootstrap 4 and 5 (alpha) </li>
-                                                <li> SemanticUI </li>
-                                                <li> Bulma CSS Framework </li>
-                                                <li> DOM Manipulation </li>
-                                                <li> Unix(Command Line) Commands </li>
-                                                <li> NodeJS </li>
-                                                <li> NPM </li>
-                                                <li> ExpressJS </li>
-                                                <li> Templating </li>
-                                                <li> REST </li>
-                                                <li> SQL vs. NoSQL databases </li>
-                                                <li> MongoDB </li>
-                                                <li> Database Associations </li>
-                                                <li> Schema Design </li>
-                                                <li> Mongoose </li>
-                                                <li> Authentication From Scratch </li>
-                                                <li> Cookies & Sessions </li>
-                                                <li>  Authorization </li>
-                                                <li> Common Security Issues - SQL Injection, XSS, etc. </li>
-                                                <li> Developer Best Practices </li>
-                                                <li> Deploying Apps </li>
-                                                <li> Cloud Databases </li>
-                                                <li> Image Upload and Storage </li>
-                                                <li> Maps and Geocoding </li>
-                                            </ul>
+                                            {!! $course->description !!}
                                         </div>
                                         </div>
 
@@ -567,6 +546,8 @@
                 }
             });
 
+            var currentplayVideo;
+
             var DURATION_IN_SECONDS = {
                 epochs: ['year', 'month', 'day', 'hour', 'minute'],
                 year: 31536000,
@@ -646,16 +627,12 @@
 
                 $(".questionLists:lt(" + x + ")").show();
                 $(".loadmoreBtn").click(function () {
-                    console.log(x);
-
-                    console.log(size_li);
 
                     if (media.matches) {
                         x = x + 4 <= size_li ? x + 4 : size_li;
                     } else {
                         x = x + x <= size_li ? x + x : size_li;
                     }
-                    console.log(size_li);
                     $(".questionLists:lt(" + x + ")").show();
                     if (x == size_li) {
                         $(".loadmore_wrapper").addClass('d-none');
@@ -718,47 +695,130 @@
                 clickToPlay: true,
             });
 
-            var starttime = 2;
+            var plyrtime;
+
+
+            $('.lesson_video_play').on('play',function(){
+
+               
+                var lesson_id = currentplayVideo.fileid;
+                var duration = currentplayVideo.duration;
+                var user_id = currentplayVideo.userid;
+
+                var current_time = this.currentTime;
+                // alert(current_time);
+                // startInterval();
+            })
+            $('.lesson_video_play').on('pause',function(){
+                var lesson_id = currentplayVideo.fileid;
+                var duration = currentplayVideo.duration;
+                var user_id = currentplayVideo.userid;
+
+                var current_time = this.currentTime;
+
+
+                // clearInterval(plyrtime);
+                // plyrtime = current_time;
+
+                var pause_time = current_time.toFixed(2)
+                // if(duration == pause_time){
+                $.post('/lesson_user',{lesson_id:lesson_id, duration:pause_time,user_id:user_id},function(res){
+                    // console.log(res);
+                });
+                // }
+            });
+
+
+            // function startInterval() {
+            //    //checks every 100ms to see if the video has reached 6s
+            //     console.log('playing startInterval');
+
+            //     plyrtime = setInterval(function(){
+            //         console.log(player);
+            //     },100);
+
+              
+            // }
+
+            
+
+
             $(function() {
                 // var className = $('#playlist li').attr('class');
                 videoplay_currentActiveclass();
 
                 function videoplay_currentActiveclass(){
                     if($('#playlist li').hasClass('li_active')){
-                        var videolink = $('ul#playlist').find('li.li_active').attr('videoUrl');
-                        var videoId = $('ul#playlist').find('li.li_active').attr('videoId');
+                        var fileLink = $('ul#playlist').find('li.li_active').attr('fileLink');
+                        var contentId = $('ul#playlist').find('li.li_active').attr('contentId');
+                        var videoDuration = $('ul#playlist').find('li.li_active').attr('videoDuration');
+                        var userId = $('ul#playlist').find('li.li_active').attr('userId');
+                        var fileId = $('ul#playlist').find('li.li_active').attr("fileId");
+
+
+                        currentplayVideo = {
+                            "duration" : videoDuration,
+                            "userid" : userId,
+                            "fileid" : parseInt(fileId)
+                        };
+
 
                         $("#videoarea").attr({
-                            "src": videolink,
+                            "src": fileLink,
                             "poster": "",
-                            "autoplay": "autoplay"
+                            "autoplay": "autoplay",
+                            "data-id":contentId,
+                            "data-duration" : videoDuration,
+                            "data-userid" : userId,
+                            "data-fileid" : fileId
+
                                   });
+
+                        currentvideoState(fileId, userId);
+
                         starttime = $(this).attr('startt');
 
                     }
 
-                        // console.log("videolink");
+                        // console.log("fileLink");
 
                 }
 
                 $("#playlist li").on("click", function() {
 
-                    var videolink = $(this).attr("videoUrl");
-                    var videoId = $(this).attr("videoId");
+                    var fileLink = $(this).attr("fileLink");
+                    var contentId = $(this).attr("contentId");
+                    var videoDuration = $(this).attr("videoDuration");
+                    var userId = $(this).attr("userId");
+                    var fileId = $(this).attr("fileId");
 
-                    var askid = $("#askquestion").attr("data-id",videoId);
+
+                    var askid = $("#askquestion").attr("data-id",contentId);
+
+                    currentplayVideo = {
+                        "duration" : videoDuration,
+                        "userid" : userId,
+                        "fileid" : parseInt(fileId)
+                    };
 
                     $("#videoarea").attr({
-                        "src": $(this).attr("videoUrl"),
+                        "src": $(this).attr("fileLink"),
                         "poster": "",
-                        "autoplay": "autoplay"
+                        "autoplay": "autoplay",
+                        "data-id":contentId,
+                        "data-duration" : videoDuration,
+                        "data-userid" : userId,
+                        "data-fileid" : parseInt(fileId)
+
                               });
+                    
+                    currentvideoState(fileId, userId);
+
                     starttime = $(this).attr('startt');
 
-                    console.log(videolink);
 
                     $("#playlist li p").removeClass("text-primary");
-                    $("p.chapter"+videoId).addClass("text-primary");
+                    $("p.chapter"+contentId).addClass("text-primary");
                     
 
                 });
@@ -769,6 +829,18 @@
             //      this.currentTime = starttime;
             // }, false);
 
+            function currentvideoState(fileId, userId){
+                $.post('/lesson_state',{lesson_id:fileId, user_id:userId},function(res){
+                    if (res.lesssonid) {
+                        var starttime = res.timeline;
+                        console.log(starttime);
+                        $('.lesson_video_play').on("loadstart", function() {
+                            this.seek(starttime);
+                        });
+                    }
+                });
+            }
+
             $('#askquestion').click(function(){
                 var vid = $(this).data('id');
                 if(vid){
@@ -776,7 +848,7 @@
                     $('#askquestionModal').modal();
                 }else{
 
-                    var vid = $('#playlist li').attr('videoId');
+                    var vid = $('#playlist li').attr('contentId');
                     $('#contentid').val(vid);
                     $('#askquestionModal').modal();
                 }
