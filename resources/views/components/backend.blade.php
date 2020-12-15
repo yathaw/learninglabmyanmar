@@ -471,7 +471,7 @@
 
 								<!-- HH -->
 								@if($authRole == "Instructor" || $authRole == "Business")
-								<a href="{{route('account_remove',Auth::user()->id)}}" class="dropdown-item"><i class="align-middle mr-1" data-feather="user"></i>Close Account</a>
+								<a href="{{route('confirm_remove')}}" class="dropdown-item"><i class="align-middle mr-1" data-feather="user"></i>Close Account</a>
 								@endif
 								<div class="dropdown-divider"></div>
 								

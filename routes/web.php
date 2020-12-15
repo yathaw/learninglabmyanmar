@@ -134,15 +134,18 @@ Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'bac
 
 });
 
-    //HH
-    Route::get('account_remove/{id}',[InstructorController::class,'account_remove'])->name('account_remove');
+//HH
+Route::get('account_remove',[InstructorController::class,'account_remove'])->name('account_remove');
 
-    Route::get('instructor_student/{id}',[InstructorController::class,'instructor_studentlist'])->name('instructor_studentlist');
+Route::get('instructor_student/{id}',[InstructorController::class,'instructor_studentlist'])->name('instructor_studentlist');
 
-    Route::get('company_instructor/{id}',[CompanyController::class,'instructor_list'])->name('instructor_list');
+Route::get('company_instructor/{id}',[CompanyController::class,'instructor_list'])->name('instructor_list');
 
-    Route::get('remove_instructor/{id}',[CompanyController::class,'remove_instructor'])->name('remove_instructor');
-    Route::get('company_student/{id}',[CompanyController::class,'student_list'])->name('student_list');
+Route::get('remove_instructor/{id}',[CompanyController::class,'remove_instructor'])->name('remove_instructor');
+
+Route::get('company_student/{id}',[CompanyController::class,'student_list'])->name('student_list');
+
+Route::get('confirm_remove',[InstructorController::class,'confirm_remove'])->name('confirm_remove');
 
 
 Route::post('/sectionsorting_modernize',[SectionController::class, 'sectionsorting_modernize'])->name('sectionsorting_modernize');
