@@ -50,13 +50,13 @@
 
 
                             	<tr>
-                            		<td>{{$i++}}</td>
+                            		
                                     @foreach($company->user as $company_user)
                                     @php 
                                         $role_name = $company_user->getRoleNames();
                                     @endphp
                                     @if($role_name[0] == "Business" && $company_user->status == '0')
-                               
+                                    <td>{{$i}}</td>
                                     <td>
                                         {{$company_user->name}}</td>
                                     <td>{{$company_user->email}}</td>
@@ -75,6 +75,9 @@
                                             
                                         </form>
                             		</td>
+                                    @php
+                                    $i++;
+                                    @endphp
                                     @endif
                                     @endforeach
                             	</tr>
