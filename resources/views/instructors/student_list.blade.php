@@ -50,7 +50,8 @@
                                     @endphp
                                 
                                     @foreach($user_course_sales as $user_course_sale)
-                                    @if($user_course_sale->status == 1)
+
+                                    @if($user_course_sale->pivot->status == 1)
                                     @php
                                       array_push($student_users,$user_course_sale->user);
 

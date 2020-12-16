@@ -62,7 +62,6 @@ class CourseController extends Controller
             
 
         }
-       
 
         return view('course.index',compact('courses','categories','subcategories','auth_id','role','allcourses'));
         

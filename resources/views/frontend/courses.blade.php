@@ -81,6 +81,7 @@
 
 							      		{{-- check auth --}}
 							      		@if(Auth::user())
+							      		@if(!Auth::user()->company)
 
 							      		{{-- check role business --}}
 							      		
@@ -178,6 +179,7 @@
 											</a>
 
 					        			@endif
+					        			@endif
 					        			{{-- end check data array --}}
 					        			@endif
 					        			{{-- end check auth --}}
@@ -229,6 +231,7 @@
 							            	@if(Auth::user() && Auth::user()->getRoleNames()[0] != "Business")
 
 							            	@if(Auth::user()->sales)
+							            	@if(!Auth::user()->company)
 
 
 
@@ -317,8 +320,9 @@
 
 
 								            
-								            @else
+								            @else()
 								            	<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>
+								            @endif
 								            @endif
 
 

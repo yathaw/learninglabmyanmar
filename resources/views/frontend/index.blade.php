@@ -29,12 +29,14 @@
                                             
                                         @php 
                                             $array = array();
-                                            
+
                                         @endphp
                                         
                                         {{-- nyi --}}
                                         {{-- check auth --}}
                                         @if(Auth::user())
+
+                                        @if(!Auth::user()->company)
 
                                         {{-- check course instructor --}}
                                         @if(count($newest_course->instructors) == 0)
@@ -132,8 +134,8 @@
                                         @endif
                                         {{-- end check data array --}}
                                         @endif
-                                        {{-- end check auth --}}
-
+                                        {{-- endid check auth --}}
+                                        @endif
                                         {{-- nyi --}}
 
                                             <p class="card-text fst-italic text-muted">
@@ -174,7 +176,8 @@
                                             </small>
                                             
                                             <div class="d-grid gap-2 col-6 mx-auto">
-                                                @if(Auth::user() && Auth::user()->getRoleNames()[0] != "Business")
+                                            @if(Auth::user() && Auth::user()->getRoleNames()[0] != "Business")
+                                            @if(!Auth::user()->company)
 
                                             @if(Auth::user()->sales)
 
@@ -266,6 +269,7 @@
                                             @else
                                                 <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>
                                             @endif
+                                            @endif
 
 
                                             </div>
@@ -319,6 +323,8 @@
                                             {{-- nyi --}}
                                             {{-- check auth --}}
                                             @if(Auth::user())
+
+                                            @if(!Auth::user()->company)
 
                                             {{-- check course instructor --}}
                                             @if(count($top_course->instructors) == 0)
@@ -418,7 +424,7 @@
                                             {{-- end check data array --}}
                                             @endif
                                             {{-- end check auth --}}
-
+                                            @endif
                                             {{-- nyi --}}
 
 
@@ -463,6 +469,7 @@
                                                 @if(Auth::user() && Auth::user()->getRoleNames()[0] != "Business")
 
                                             @if(Auth::user()->sales)
+                                            @if(!Auth::user()->company)
 
 
 
@@ -551,6 +558,7 @@
                                             
                                             @else
                                                 <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>
+                                            @endif
                                             @endif
 
 
