@@ -66,7 +66,7 @@
                                         <button class="btn btn-primary" id="detail" data-name="{{$user_instructor->name}}" data-email="{{$user_instructor->email}}" data-phone="{{$user_instructor->phone}}" data-headline="{{$user_instructor->instructor->headline}}" data-website="{{$user_instructor->instructor->website}}" data-twitter="{{$user_instructor->instructor->twitter}}" data-facebook="{{$user_instructor->instructor->facebook}}" data-linkedin="{{$user_instructor->instructor->linkedlin}}" data-youtube="{{$user_instructor->instructor->youtube}}" data-instagram="{{$user_instructor->instructor->instagram}}"><i class="fas fa-info-circle"></i></button>
                                         <a href="#" class="btn btn-warning"><i class="align-middle " data-feather="edit-2"></i></a>
 
-                                        <a href="{{route('backside.remove_instructor',$user_instructor->id)}}" class="btn btn-danger"><i class="fas fa-user-times"></i></a>
+                                        <a href="{{route('remove_instructor',$user_instructor->id)}}" class="btn btn-danger"><i class="fas fa-user-times"></i></a>
                                     </td>
                             	</tr>
                                 @endif

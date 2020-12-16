@@ -38,35 +38,23 @@ class LessonSeeder extends Seeder
     		array('/storage/lesson/lesson17.MP4', 'MP4','/storage/lesson/lesson17.MP4'),
     		array('/storage/lesson/lesson18.MP4', 'MP4','/storage/lesson/lesson18.MP4'),
     		array('/storage/lesson/lesson19.MP4', 'MP4','/storage/lesson/lesson19.MP4'),
-    		array('/storage/lesson/lesson20.MP4', 'MP4','/storage/lesson/lesson20.MP4'),
-    		array('/storage/lesson/desginRules.pdf', 'pdf','/storage/lesson/desginRules.pdf'),
-    		array('/storage/lesson/project.pdf', 'pdf','/storage/lesson/project.pdf'),
-    		array('/storage/lesson/test.pdf', 'pdf','/storage/lesson/test.pdf'),
-    		array('/storage/lesson/img1.jpeg', 'jpeg','/storage/lesson/img1.jpeg'),
-    		array('/storage/lesson/HTML.pptx', 'pptx','/storage/lesson/HTML.pptx'),
-    		array('/storage/lesson/JS.pptx', 'pptx','/storage/lesson/JS.pptx'),
+    		array('/storage/lesson/lesson20.MP4', 'MP4','/storage/lesson/lesson20.MP4')
     	];
 
 		
     	
     	for ($a=1; $a < 522; $a++) {
-    		$randomArrayno = $faker->numberBetween(0, 25); 
+    		$randomArrayno = $faker->numberBetween(0, 19); 
 
-            if ($lessonLists[$randomArrayno][1] == 'MP4') {
-                $duration = '248.16';
-            }else{
-                $duration = '';
-            }
-
-        	$content = new Lesson;
-        	$content->file = $lessonLists[$randomArrayno][0];
-        	$content->type = $lessonLists[$randomArrayno][1];
-        	$content->content_id = $a;
-            $content->duration= $duration;
-        	$content->created_at  = now();
-        	$content->updated_at  = now();
-            $content->file_upload = $lessonLists[$randomArrayno][2];
-        	$content->save();
+        	$lesson = new Lesson;
+        	$lesson->file = $lessonLists[$randomArrayno][0];
+        	$lesson->type = $lessonLists[$randomArrayno][1];
+        	$lesson->content_id = $a;
+            $lesson->duration= '248.16';
+            $lesson->file_upload = '/storage/lesson/desginRules.pdf';
+        	$lesson->created_at  = now();
+        	$lesson->updated_at  = now();
+        	$lesson->save();
     	}
     }
 }

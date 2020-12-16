@@ -14,7 +14,12 @@ class Lesson extends Model
     protected $fillable=['file','type','content_id','duration','file_upload'];
 
     public function content()
-  {
-      return $this->belongsTo('App\Models\Content');
-  }
+  	{
+		return $this->belongsTo('App\Models\Content');
+  	}
+
+  	public function usesrs()
+  	{
+		return $this->belongsToMany('App\Models\User')->withPivot('status','timeline')->withTimestamps();
+  	}
 }

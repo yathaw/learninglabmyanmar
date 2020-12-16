@@ -74,6 +74,7 @@
 							      		</a>
 
 							      		@php 
+
 							      			$array = array();
 							      		@endphp
 							      		
@@ -81,6 +82,8 @@
 							      		{{-- check auth --}}
 							      		@if(Auth::user())
 
+							      		{{-- check role business --}}
+							      		
 							      		{{-- check course instructor --}}
 							      		@if(count($course->instructors) == 0)
 
@@ -220,8 +223,15 @@
 							            </small>
 							            
 							            <div class="d-grid gap-2 col-6 mx-auto">
-							            	@if(Auth::user())
+
+							            	
+
+							            	@if(Auth::user() && Auth::user()->getRoleNames()[0] != "Business")
+
 							            	@if(Auth::user()->sales)
+
+
+
 							            	@php
 							            		$pending_array = array();
 							            		$purched_array = array();
@@ -302,6 +312,9 @@
 								            	@endif
 								            @endforeach
 
+
+
+								            
 								            @else
 								            	<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>
 								            @endif
@@ -321,7 +334,7 @@
 			        </div>
 			        
 			        
-			        <nav aria-label="Page navigation example" class="mt-5">
+			        <nav aria-label="Page navigation example" class="mt-5 paginate">
 					  	<ul class="pagination justify-content-center">
 							{!! $courses->links() !!}
 					  	</ul>
@@ -364,8 +377,8 @@
 			var sale =  new Array();
 
 			$.post("{{route('courses_search')}}",{data:search_data},function(data){
-				console.log(data);
-				if(data){
+				
+				if(data.length > 0){
 					$.each(data,function(i,v){
 						
 						html+=`<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
@@ -406,7 +419,7 @@
 
 
 						        		if(heart == true){
-						        			console.log(sale);
+						        			
 
 						      			html+=`<a class="favouriteBtn one `;  
 						      			$.each(v.wishlists,function(w,l){
@@ -488,8 +501,13 @@
 								            </a>`;
 								          }else if(heart == true && sale == "true"){
 								          	html += ` <a href="{{route('lecture',':course_detail_id')}}" class="btn custom_primary_btnColor mt-3">Go to Course</a>`;
-								          }else if(heart == true && sale == "false")
+
+
+								          }else if(heart == true && sale == "false"){
 								          	html += `<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>`;
+								          }
+
+
 								          else{
 								          	html+=`<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>`
 								          }
@@ -508,6 +526,16 @@
 					});
 					
 					$('.searchcourseshow').html(html);
+
+				}
+
+				else{
+					
+					html+=`<div class="text-center">
+								<img src="{{asset('/externalphoto/empty_result.gif')}}" class="img-fluid" width="40%" height="60%">
+							</div>`;
+					$('.searchcourseshow').html(html);
+					$('.paginate').hide();
 				}
 			})
 			

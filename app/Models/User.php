@@ -97,4 +97,9 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Sale');
     }
 
+    public function lessons()
+    {
+        return $this->belongsToMany('App\Models\Lesson')->withPivot('status','timeline')->withTimestamps();
+    }
+
 }
