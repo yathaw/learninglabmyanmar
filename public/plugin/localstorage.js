@@ -84,7 +84,7 @@ $(document).ready(function(){
 		var user_id = $('.user_id').data('user_id');
 		var localstorage = localStorage.getItem('course_buy');
 		var localstorage_arr = JSON.parse(localstorage);
-
+		if(localstorage_arr){
 		console.log(localstorage);
 		if(localstorage)
 		{
@@ -201,6 +201,7 @@ $(document).ready(function(){
 		   		if (!$('#ordersuccessDiv').hasClass( "d-none" ) ) {
 			    	$('#ordersuccessDiv').addClass("d-none")
 			  	}
+		}
 		}
 	}
 

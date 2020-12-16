@@ -198,8 +198,15 @@ Route::get('/checkoutnoti',[AccountController::class,'checkoutnoti'])->name('che
 
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');
-Route::resource('collections',CollectionController::class);
+
+Route::get('course_collection/{id}',[AccountController::class,'add_course_collection'])->name('add_course_collection');
+
+Route::post('store_course_collection',[AccountController::class,'store_course_collection'])->name('store_course_collection');
+
+
 Route::get('wishlist',[AccountController::class, 'wishlist'])->name('wishlist');
+
+Route::resource('collections',CollectionController::class);
 
 Route::get('purchase_history',[AccountController::class, 'purchase_history'])->name('purchase_history');
 

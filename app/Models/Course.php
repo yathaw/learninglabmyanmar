@@ -75,4 +75,9 @@ class Course extends Model
     {
         return $this->hasManyThrough(Content::class, Section::class);
     }
+
+    public function collections($value='')
+    {
+    	return $this->belongsToMany('App\Models\Collection')->withPivot('sorting')->withTimestamps();
+    }
 }

@@ -30,9 +30,9 @@
                         </video>
                     </div>
 
-                    <div class="alert alert-warning my-3" role="alert">
+                    <div class="alert alert-warning my-3" role="alert" id="notedownloadDiv">
                         Take Notes
-                        <a class="btn btn-light btn-sm float-right"> <i class='bx bx-download'></i> Download </a>
+                        <a class="btn btn-light btn-sm float-right" id="notedownloadBtn" download> <i class='bx bx-download'></i> Download </a>
                     </div>
                 </div>
 
@@ -42,11 +42,34 @@
 
                         @foreach($sections as $section_key => $section)
 
+                        @php
+                            $totalDuration = 0;
+
+                            foreach ($section->contents as $key => $content) {
+                                $duration = $content->lessons[0]->duration;
+                                $totalDuration += $duration++;
+                            }
+
+                            if ($totalDuration) {
+                                
+                                $dt = Carbon\Carbon::now();
+                                $days = $dt->diffInDays($dt->copy()->addSeconds($totalDuration));
+                                $hours = $dt->diffInHours($dt->copy()->addSeconds($totalDuration)->subDays($days));
+                                $minutes = $dt->diffInMinutes($dt->copy()->addSeconds($totalDuration)->subDays($days)->subHours($hours));
+
+                                $contenttotaltimes = Carbon\CarbonInterval::days($days)->hours($hours)->minutes($minutes)->forHumans();
+                            }
+                            else{
+                                $contenttotaltimes = '0 Second';
+                            }
+
+                        @endphp
+
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading{{ $section->id }}">
                                 <button class="accordion-button {{ $section_key != 0 ? 'collapsed' : '' }}" type="button" data-toggle="collapse" data-target="#collapse{{ $section->id }}" aria-expanded="true" aria-controls="collapse{{ $section->id }}"> {{ $section->title }}
 
-                                    <small class="fst-italic ml-4"> ( 10 Lectures • 31 min ) </small>
+                                    <small class="fst-italic ml-4"> ( {{ count($section->contents) }} Lectures • {{ $contenttotaltimes }} ) </small>
                                 </button>
                             </h2>
                             <div id="collapse{{ $section->id }}" class="accordion-collapse collapse {{ $section_key == 0 ? 'show' : '' }}" aria-labelledby="heading{{ $section->id }}" data-parent="#accordionExample">
@@ -65,6 +88,7 @@
                                                 $duration = $content->lessons[0]->duration;
 
                                                 $lessonId = $content->lessons[0]->id;
+                                                $notefileLink = asset($content->lessons[0]->file_upload);
 
                                             }
                                             # Assignment
@@ -72,20 +96,35 @@
                                                 $fileId = $content->assignments[0]->id;
                                                 $fileLink = asset($content->assignments[0]->file);
                                                 $duration = '';
+                                                $notefileLink = '';
                                             }
                                             # Quizz
                                             else{
                                                 $fileLink = '';
                                                 $duration = '';
+                                                $notefileLink = '';
                                             }
 
                                             // Learning Video
+
+                                            if ($duration) {
+                                
+                                                $dt = Carbon\Carbon::now();
+                                                $days = $dt->diffInDays($dt->copy()->addSeconds($duration));
+                                                $hours = $dt->diffInHours($dt->copy()->addSeconds($duration)->subDays($days));
+                                                $minutes = $dt->diffInMinutes($dt->copy()->addSeconds($duration)->subDays($days)->subHours($hours));
+
+                                                $lessontotaltimes = Carbon\CarbonInterval::days($days)->hours($hours)->minutes($minutes)->forHumans();
+                                            }
+                                            else{
+                                                $lessontotaltimes = '0 Second';
+                                            }
 
 
                                         @endphp
 
                                         <li fileLink="{{ $fileLink }}" contentId="{{ $content->id }}" fileId="{{ $fileId
-                                         }}" videoDuration="{{ $duration }}" userId="{{ $user_id }}" class="list-group-item px-0 {{ $content_key == 0 ? 'li_active' : '' }}">
+                                         }}" videoDuration="{{ $duration }}" userId="{{ $user_id }}" notefileLink="{{ $notefileLink }}" class="list-group-item px-0 {{ $content_key == 0 ? 'li_active' : '' }}">
 
                                             @foreach($completeLessons as $completeLesson)
                                                 @if($completeLesson['lesssonid'] == $lessonId)
@@ -103,7 +142,9 @@
                                                 {{ $content->title }}
                                                 
                                             </p>
-                                            <span class="float-right"> {{ $duration }}</span>
+                                            @if($duration)
+                                            <span class="float-right"> {{ $lessontotaltimes }}</span>
+                                            @endif
                                         </li>
 
                                         @endforeach
@@ -408,10 +449,24 @@
                         </div>
                         <div class="tab-pane fade" id="instructorinfo" role="tabpanel" aria-labelledby="instructorinfoTab">
                             <div class="container">
+                                @if(isset($instructors))
+                                @if(!$instructors[0]['company_id'])
+
+                                @php
+                                    if ($instructors[0]->profile_photo_path != NULL) {
+                                        $profile = $instructors[0]->profile_photo_path;
+                                    }
+                                    else{
+                                        $profile = "profiles/user.png";
+                                    }
+
+                                @endphp
+
+
                                 <div class="row team">
                                     <div class="col-xl-9 col-lg-9 col-md-6 col-sm-12 col-12 order-xl-1 order-lg-1 order-md-1 order-sm-2 order-2">
-                                        <h3 class="text-dark fontbold"> Nyi Ye Lin </h3>
-                                        <p> Senior Web Developer </p>
+                                        <h3 class="text-dark fontbold"> {{ $instructors[0]->name }} </h3>
+                                        <p> {{ $instructors[0]->instructor->headline }} </p>
 
                                         <div class="mt-2">
                                             <p> 
@@ -441,22 +496,7 @@
                                             <div class="expander">
                                                 <!-- start of expanding area -->
                                                 <div class="inner-bit">
-                                                    <p class="lh-base"> Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+                                                    <p class="lh-base"> {{ $instructors[0]->instructor->bio }} </p>
                                                 </div>
                                             </div>
 
@@ -466,24 +506,101 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12 order-xl-2 order-lg-2 order-md-2 order-sm-1 order-1 d-flex align-items-stretch">
+                                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
                                         <div class="member">
                                             <div class="member-img">
-                                                <img src="{{ asset('frontend/img/team/team-1.jpg') }}" class="img-fluid" alt="">
+                                                <a href="{{ route('instructor',$instructors[0]->instructor->id) }}">
+                                                    <img src="{{ asset($profile) }}" class="img-fluid" alt="">
+                                                </a>
                                                 <div class="social">
-                                                    <a href=""><i class="icofont-twitter"></i></a>
-                                                    <a href=""><i class="icofont-facebook"></i></a>
-                                                    <a href=""><i class="icofont-instagram"></i></a>
-                                                    <a href=""><i class="icofont-linkedin"></i></a>
+                                                    <a href="{{ $instructors[0]->instructor->twitter }}"><i class="icofont-twitter"></i></a>
+                                                    <a href="{{ $instructors[0]->instructor->facebook }}"><i class="icofont-facebook"></i></a>
+                                                    <a href="{{ $instructors[0]->instructor->instagram }}"><i class="icofont-instagram"></i></a>
+                                                    <a href="{{ $instructors[0]->instructor->linkedin }}"><i class="icofont-linkedin"></i></a>
                                                 </div>
                                             </div>
                                             <div class="member-info">
-                                                <h4> Nyi Ye Lin</h4>
-                                                <span> Senior Web Developer </span>
+                                                <a href="{{ route('instructor',$instructors[0]->instructor->id) }}">
+                                                    <h4>{{ $instructors[0]->name }}</h4>
+                                                    <span>{{ $instructors[0]->jobtitle->name }}</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                @else
+
+                                @php
+                                    $companyname = $instructors[0]->company->name;
+                                    $companylogo = asset($instructors[0]->company->logo);
+                                    $companydesc = $instructors[0]->company->description;
+                                @endphp
+                                <div class="row justify-content-center">
+                                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-10 col-10 ">
+                                        <div class="card mb-3">
+                                            <div class="row g-0">
+                                                <div class="col-md-4">
+                                                    <img src="{{ $companylogo }}" class="img-fluid ">
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"> {{ $companyname }}</h5>
+                                                        <small class="card-text text-muted"> {{ $companydesc }} </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row justify-content-center team">
+
+                                    <h3 class="mt-5"> Instructors in this course </h3>
+                                    <hr>
+
+                                    @foreach($instructors as $row)
+
+                                    @php
+                                        if ($row->profile_photo_path != NULL) {
+                                            $profile = $row->profile_photo_path;
+                                        }
+                                        else{
+                                            $profile = "profiles/user.png";
+                                        }
+
+                                    @endphp
+
+                                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+                                        <div class="member">
+                                            <div class="member-img">
+                                                <a href="{{ route('instructor',$row->instructor->id) }}">
+                                                    <img src="{{ asset($profile) }}" class="img-fluid" alt="">
+                                                </a>
+                                                <div class="social">
+                                                    <a href="{{ $row->instructor->twitter }}"><i class="icofont-twitter"></i></a>
+                                                    <a href="{{ $row->instructor->facebook }}"><i class="icofont-facebook"></i></a>
+                                                    <a href="{{ $row->instructor->instagram }}"><i class="icofont-instagram"></i></a>
+                                                    <a href="{{ $row->instructor->linkedin }}"><i class="icofont-linkedin"></i></a>
+                                                </div>
+                                            </div>
+                                            <div class="member-info">
+                                                <a href="{{ route('instructor',$row->instructor->id) }}">
+                                                    <h4>{{ $row->name }}</h4>
+                                                    <span>{{ $row->jobtitle->name }}r</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @endforeach
+
+
+                                </div>
+
+                                @endif
+                                @endif
+
                             </div>
                             
                         </div>
@@ -754,7 +871,15 @@
                         var videoDuration = $('ul#playlist').find('li.li_active').attr('videoDuration');
                         var userId = $('ul#playlist').find('li.li_active').attr('userId');
                         var fileId = $('ul#playlist').find('li.li_active').attr("fileId");
+                        var notefileLink = $('ul#playlist').find('li.li_active').attr("notefileLink");
+                        
+                        if (notefileLink) {
+                            $('#notedownloadDiv').show();
+                            $('#notedownloadBtn').attr({'href' : notefileLink});
+                        }else{
+                            $('#notedownloadDiv').hide();
 
+                        }
 
                         currentplayVideo = {
                             "duration" : videoDuration,
@@ -791,7 +916,7 @@
                     var videoDuration = $(this).attr("videoDuration");
                     var userId = $(this).attr("userId");
                     var fileId = $(this).attr("fileId");
-
+                    var notefileLink = $(this).attr("notefileLink");
 
                     var askid = $("#askquestion").attr("data-id",contentId);
 
@@ -811,6 +936,14 @@
                         "data-fileid" : parseInt(fileId)
 
                               });
+
+                    if (notefileLink) {
+                            $('#notedownloadDiv').show();
+                            $('#notedownloadBtn').attr({'href' : notefileLink});
+                        }else{
+                            $('#notedownloadDiv').hide();
+
+                        }
                     
                     currentvideoState(fileId, userId);
 
