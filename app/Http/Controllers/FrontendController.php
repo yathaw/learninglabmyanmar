@@ -128,7 +128,9 @@ class FrontendController extends Controller
         $data = $request->data;
 
 
-        $search_data = Course::where('title','like','%'.$data.'%')->with(array('instructors' => function($query)
+        $search_data = Course::where('title','like','%'.$data.'%')->with(array('sales'=>function($q){
+            $q->where('user_id',Auth::id())->get();
+          }))->with(array('instructors' => function($query)
            {
             $query->with('user');
            }))->with('wishlists')->get();

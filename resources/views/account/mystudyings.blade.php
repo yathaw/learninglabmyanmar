@@ -495,21 +495,80 @@
 								        	
 
 								        	<div class="card-content">
+								        		
 									            <small class="card-text text-muted">
-									            	{{$wishlist->course->subtitle}}
+									            	{!! \Illuminate\Support\Str::limit($wishlist->course->subtitle, 80) !!}
 									            </small>
+									            {{-- {{$wishlist->course->sales}} --}}
+									            @php
+									            	$purchase_array=array();
+									            	$pending_array = array();
+									            @endphp
+									            @if(count($wishlist->course->sales) > 0)
+
+
+									            @foreach($wishlist->course->sales as $sale_course)
+
+									            
 									            <div class="d-grid gap-2 col-6 mx-auto">
-										            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart" data-id="{{$wishlist->course->id}}" data-course_title="{{$wishlist->course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$wishlist->course->price}}" data-image = "{{$wishlist->course->image}}" data-wishlist = "save"
-													>
-										            	Add to Cart
-										            </a>
+									            	@if($sale_course->pivot->status == 1 && $sale_course->user_id == Auth::id())
+									            		@php
+									            			array_push($purchase_array, 'true');
+									            		@endphp
+											            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3">
+											            	Go To Course
+											            </a>
+
+										            @elseif($sale_course->pivot->status == 0 && $sale_course->user_id == Auth::id())
+										            	@php
+									            			array_push($pending_array, 'true');
+									            		@endphp
+										            	<button disabled="disabled" class="btn custom_primary_btnColor mt-3">
+											            	Pending
+											            </button>
+
+											       
+										            @endif
 
 
 										        </div>
+
+										        
+										        @endforeach
+										        
+										        @endif
+									            @foreach($wishlist->course->sales as $sale_course)
+
+										         	@if($purchase_array==null && $pending_array==null && $sale_course->user_id != Auth::id())
+
+											        	<div class="d-grid gap-2 col-6 mx-auto">
+												            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart" data-id="{{$wishlist->course->id}}" data-course_title="{{$wishlist->course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$wishlist->course->price}}" data-image = "{{$wishlist->course->image}}" data-wishlist = "save"
+															>
+												            	Purchase
+												            </a>
+
+
+												        </div>	
+													@endif
+												@endforeach
+										        	
+
+											     @if(count($wishlist->course->sales) == 0)
+											        	<div class="d-grid gap-2 col-6 mx-auto">
+											            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart" data-id="{{$wishlist->course->id}}" data-course_title="{{$wishlist->course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$wishlist->course->price}}" data-image = "{{$wishlist->course->image}}" data-wishlist = "save"
+														>
+											            	Purchase
+											            </a>
+
+
+											        </div>
+										        @endif
+										        
 									        </div>
 								      	</div>
 								    </div>
 					        	</div>
+
 					        @endif
 
 					        @endforeach
@@ -714,24 +773,48 @@
 			
 			var user_id = $(this).data('id');
 				var html = "";
-
+				var subtitle;
+				var sale_true = new Array;
+				var sale_false;
+				var user_condition;
+				var sale_user_false_id;
+				var instructor;
+				var user_condition_id;
 				$.post("{{route('wishlist_search')}}",{data:search_data},function(data){
 					
 					if(data.length > 0){
 						$.each(data,function(i,v){
+
+							$.each(v.sales,function(a,b){
+								console.log(b);
+									if(b.pivot.status == 1 && b.user_id == user_id){
+										
+										sale_true = 'true';
+									}else if(b.pivot.status == 0 && b.user_id == user_id){
+										
+										sale_false = 'false';
+										sale_user_false_id = b.user_id;
+									}
+									
+
+							})
+
+							// console.log(sale_true+' / '+sale_false+ ' / ' + user_condition);
+
 							$.each(v.wishlists,function(w,l) {
-								
+								subtitle = v.subtitle.slice(0,60);
+
 								if(l.user_id == user_id){
 										html+=`<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
 					        		<div class="card courseCard h-100 border-0">
 					        			<div class="card-img-wrapper">
-					        				<a href="{{route('course','1')}}">
+					        				<a href="{{route('course',':id')}}">
 									      		<img src="${v.image}" class="card-img-top" alt="...">
 									      	</a>
 								      	</div>
 								      	<div class="card-body">
 								      		<div class="card-title">
-								      			<a href="{{route('course','1')}}" class="text-decoration-none text-muted">
+								      			<a href="{{route('course',':course_id')}}" class="text-decoration-none text-muted">
 									      			<h4 class="fontbold text-dark"> ${v.title} </h4>
 									      		</a>
 
@@ -756,6 +839,7 @@
 								        		<p class="card-text fst-italic text-muted">`;
 
 								        		$.each(v.instructor,function(a,b){
+								        				instructor = b.user.name;
 								        				html+= $(b.user.name);
 								        			});
 
@@ -779,26 +863,63 @@
 								        		</div>
 
 								      		</div>
+								      			<div class="card-content">
+										           	<small class="card-text text-muted">
+										            	${subtitle}
+										            </small>`;
+
 								        	
+										    if(v.sales.length < 1){
+										    	html+=`
+										            <div class="d-grid gap-2 col-6 mx-auto">
+											            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 cart" data-id="${v.id}" 
+											            	data-course_title="${v.title}" 
+											            	data-instructor = "${instructor}" 
+											            	data-user_id = "{{Auth::id()}}" 
+											            	data-price = "${v.price}" 
+											            	data-image = "${v.image}" " >
+											            	Purchase
+											            </a>
+											        </div>
+											        `;
+								      		
+								      		}else{
+								      		// console.log(sale_user_false_id +'/'+ user_id);
+								      		// console.log(user_condition_id + '/'+ user_id);
+								      			if(sale_true == 'true'){
+								      			html+=`
+											            <div class="d-grid gap-2 col-6 mx-auto">
+												            <a href="{{route('lecture',':course_detail_id')}}" class="btn custom_primary_btnColor mt-3">
+												            	Go To Course
+												            </a>
+												        </div>
+											        `;
+									      		}else if(sale_false == 'false' && sale_user_false_id == user_id){
+									      			html+=`
+												            <div class="d-grid gap-2 col-6 mx-auto">
+													            <button disabled="disabled" class="btn custom_primary_btnColor mt-3">
+													            	Pending
+													            </button>
+													        </div>
+												        `;
+									      		}
 
-								        	<div class="card-content">
-									            <small class="card-text text-muted">
-									            	${v.description}
-									            </small>
-									            <div class="d-grid gap-2 col-6 mx-auto">
-										            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3">
-										            	Add to Cart
-										            </a>
+									      		
+								      			
+								      		}
 
-
-										        </div>
-									        </div>
+								        	
+								      	html+=`</div>
 								      	</div>
 								    </div>
 					        	</div>`
 					        		}
 							})
+						html = html.replace(':id',v.id);
+			        	html = html.replace(':course_id',v.id);
+			        	html = html.replace(':course_detail_id',v.id);
 						});
+						
 					
 		        		$('.searchwishlistshow').html(html);
 						
