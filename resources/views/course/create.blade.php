@@ -221,7 +221,7 @@
                                     {{-- <input type="file" name="photo" class="form-control-file @error('photo') is-invalid @enderror" > --}}
                                     <img id="blah" src="http://placehold.it/180" alt="your image" class="img-fluid d-block" />
 
-                                    <input type='file' onchange="readURL(this);" />
+                                    <input type='file' name="photo" onchange="readURL(this);" />
 
                                     @error('photo')
                                     <span class="invalid-feedback" role="alert">
@@ -302,8 +302,12 @@
                 titleTemplate: '<span class="step">#index#</span> #title#',
                 onFinished: function (event, currentIndex)
                 {
-                    $("#hiddenArea").val($("#descriptionId").html());
-                    form.submit();
+                    var about = document.querySelector('textarea[name=description]');
+                    var value = JSON.stringify(quill.getContents());
+                    console.log(value);
+                    console.log(Object.values(value));
+                    // about.value
+                    // form.submit();
 
                 }
             });

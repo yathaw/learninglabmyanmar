@@ -249,3 +249,13 @@ Route::get('coursecount',[CoursecountController::class, 'coursecount'])->name('c
 
 // Route::get('revenuereport','CoursecountController@revenuereport')->name('revenuereport');
 Route::get('revenuereport',[CoursecountController::class, 'revenuereport'])->name('revenuereport');
+
+Route::get('/clear-cache-all', function() {
+
+    Artisan::call('cache:clear');
+
+  
+
+    dd("Cache Clear All");
+
+});
