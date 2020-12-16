@@ -73,12 +73,7 @@
             foreach ($content->lessons as $lesson) {
                 $duration = $lesson['duration'];
                 $type = $lesson['type'];
-                if ($type != "MP4") {
-                    $countlesson++;
-                }
-                if ($type == "MP4") {
                     $countVideo++;
-                }
                 $totalDuration += $duration++;
             }
             foreach ($content->assignments as $assignment) {
@@ -171,10 +166,6 @@
                     <small class="pl-3"> {{ $countVideo }}  Videos </small>
                 </p>
                 <p> 
-                    <i class="align-middle mr-2" data-feather="file"></i>
-                    <small class="pl-3"> {{ $countlesson }} Articles </small>
-                </p>
-                <p> 
                     <i class="align-middle mr-2" data-feather="check-square"></i>
                     <small class="pl-3"> {{ $countassignment }} Assignments </small>
                 </p>
@@ -214,6 +205,12 @@
                 </p>
 
                 @endif
+
+                <hr>
+
+                <p class="text-muted mt-2 font-italic"> 
+                    Created By : {{ $course->user->name }}
+                </p>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item px-4 pb-4">
