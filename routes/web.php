@@ -106,6 +106,7 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
     Route::post('/getinstructor',[SectionController::class,'getinstructor'])->name('getinstructor');
     Route::post('/sectionupdate/{id}',[BackendController::class,'sectionupdate'])->name('sectionupdate');
+    Route::resource('/instructors', InstructorController::class);
    
 
 
@@ -125,7 +126,6 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
 Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'as' => 'backside.'], function(){
 
     Route::resource('/companies', CompanyController::class);
-    Route::resource('/instructors', InstructorController::class);
     Route::resource('/jobtitles', JobtitleController::class);
 
     //HH
