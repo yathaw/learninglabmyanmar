@@ -114,7 +114,7 @@ class AccountController extends Controller
 
     public function wishlist(){
         $tabs = 2;
-        $wishlists = Wishlist::paginate(8);
+        $wishlists = Wishlist::where('user_id',Auth::id())->paginate(8);
         $user_id = Auth::id();
 
         $sales = Sale::where('user_id',$user_id)->with(array('courses'=>function($q){

@@ -109,12 +109,12 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/instructors', InstructorController::class);
    
 
-
     Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
     
     Route::resource('/content', ContentController::class);
     Route::post('/section/getsectionid',[ContentController::class,'getsectionid'])->name('getsectionid');
     Route::post('/content/getcontentid',[ContentController::class,'getcontentid'])->name('getcontentid');
+    Route::post('/content/getlesson',[ContentController::class,'getlesson'])->name('getlesson');
 
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);
@@ -249,3 +249,13 @@ Route::get('coursecount',[CoursecountController::class, 'coursecount'])->name('c
 
 // Route::get('revenuereport','CoursecountController@revenuereport')->name('revenuereport');
 Route::get('revenuereport',[CoursecountController::class, 'revenuereport'])->name('revenuereport');
+
+Route::get('/clear-cache-all', function() {
+
+    Artisan::call('cache:clear');
+
+  
+
+    dd("Cache Clear All");
+
+});

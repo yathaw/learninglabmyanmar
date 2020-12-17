@@ -29,11 +29,14 @@
                                             
                                         @php 
                                             $array = array();
+
                                         @endphp
                                         
                                         {{-- nyi --}}
                                         {{-- check auth --}}
                                         @if(Auth::user())
+
+                                        @if(!Auth::user()->company)
 
                                         {{-- check course instructor --}}
                                         @if(count($newest_course->instructors) == 0)
@@ -131,8 +134,8 @@
                                         @endif
                                         {{-- end check data array --}}
                                         @endif
-                                        {{-- end check auth --}}
-
+                                        {{-- endid check auth --}}
+                                        @endif
                                         {{-- nyi --}}
 
                                             <p class="card-text fst-italic text-muted">
@@ -173,52 +176,100 @@
                                             </small>
                                             
                                             <div class="d-grid gap-2 col-6 mx-auto">
-                                                @if(Auth::user())
-                                                @foreach($newest_course->instructors as $instructor)
-                                                    @if(Auth::user()->instructor)
+                                            @if(Auth::user() && Auth::user()->getRoleNames()[0] != "Business")
+                                            @if(!Auth::user()->company)
+
+                                            @if(Auth::user()->sales)
 
 
-                                                        @if($instructor->pivot->instructor_id != Auth::user()->instructor->id)
 
+                                            @php
+                                                $pending_array = array();
+                                                $purched_array = array();
+                                                $count_sale = count(Auth::user()->sales);
+                                            @endphp
 
-                                                            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
-                                                            data-id="{{$newest_course->id}}" data-course_title="{{$newest_course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$newest_course->price}}" data-image = "{{$newest_course->image}}"
-                                                                {{-- for wishlist --}}
-                                                                @foreach($wishlists as $wishlist)
-                                                                @if($wishlist->course_id == $newest_course->id && Auth::id() == $wishlist->user_id)
-
-                                                                data-wishlist = "save"
-
-                                                                @endif 
-                                                                @endforeach
-                                                                
-                                                                >
-                                                            Add To Cart
-                                                            </a>
-                                                       
-                                                        @endif
-                                                        @else
-                                                            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
-                                                            data-id="{{$newest_course->id}}" data-course_title="{{$newest_course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$newest_course->price}}" data-image = "{{$newest_course->image}}"
-                                                                {{-- for wishlist --}}
-                                                                @foreach($wishlists as $wishlist)
-                                                                @if($wishlist->course_id == $newest_course->id && Auth::id() == $wishlist->user_id)
-
-                                                                data-wishlist = "save"
-
-                                                                @endif 
-                                                                @endforeach
-                                                                
-                                                                >
-                                                            Add To Cart
-                                                            </a>
+                                                @if($count_sale > 0)
+                                                    @foreach(Auth::user()->sales as $sales)
+                                                        @foreach($sales->courses as $course_sale)
                                                         
 
-                                                    @endif
-                                                @endforeach
-                                                @else
-                                                    <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Add To Cart</button>
+                                                            @if($course_sale->pivot->course_id == $newest_course->id && $course_sale->pivot->status == 0)
+
+                                                                @php
+                                                                    array_push($pending_array, 'true')
+                                                                @endphp
+
+                                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>
+
+                                                            @elseif($course_sale->pivot->course_id == $newest_course->id && $course_sale->pivot->status == 1)
+                                                                @php
+                                                                    array_push($purched_array, 'true')
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+
+                                                        @if($purched_array)
+                                                             <a href="{{route('lecture',$newest_course->id)}}" class="btn custom_primary_btnColor mt-3">Go to Course</a>
+                                                        @endif
+
+
                                                 @endif
+                                            @endif
+
+                                                
+
+                                            @foreach($newest_course->instructors as $instructor)
+                                                @if(Auth::user()->instructor)
+
+
+                                                    @if($instructor->pivot->instructor_id != Auth::user()->instructor->id && !$purched_array && !$pending_array)
+
+
+                                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
+                                                        data-id="{{$newest_course->id}}" data-course_title="{{$newest_course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$newest_course->price}}" data-image = "{{$newest_course->image}}"
+                                                            {{-- for wishlist --}}
+                                                            @foreach($wishlists as $wishlist)
+                                                            @if($wishlist->course_id == $newest_course->id && Auth::id() == $wishlist->user_id)
+
+                                                            data-wishlist = "save"
+
+                                                            @endif 
+                                                            @endforeach
+                                                            
+                                                            >
+                                                        Purchase
+                                                        </a>
+                                                   
+                                                    @endif
+                                                    @elseif(!$purched_array && !$pending_array)
+                                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
+                                                        data-id="{{$newest_course->id}}" data-course_title="{{$newest_course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$newest_course->price}}" data-image = "{{$newest_course->image}}"
+                                                            {{-- for wishlist --}}
+                                                            @foreach($wishlists as $wishlist)
+                                                            @if($wishlist->course_id == $newest_course->id && Auth::id() == $wishlist->user_id)
+
+                                                            data-wishlist = "save"
+
+                                                            @endif 
+                                                            @endforeach
+                                                            
+                                                            >
+                                                        Purchase
+                                                        </a>
+                                                    
+
+                                                @endif
+                                            @endforeach
+
+
+
+                                            
+                                            @else
+                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>
+                                            @endif
+                                            @endif
 
 
                                             </div>
@@ -265,47 +316,52 @@
                                                 <h4 class="fontbold text-dark"> {{$top_course->title}}</h4>
                                             </a>
                                             
+                                            @php 
+                                            $array = array();
+                                            @endphp
+                                            
+                                            {{-- nyi --}}
+                                            {{-- check auth --}}
                                             @if(Auth::user())
-                                            @foreach($top_course->instructors as $instructor)
+
+                                            @if(!Auth::user()->company)
+
+                                            {{-- check course instructor --}}
+                                            @if(count($top_course->instructors) == 0)
+
+                                                @php
+                                                    array_push($array, "true");
+                                                @endphp
+                                            @endif
+                                            {{-- end check course instructor --}}
+
+
+                                            {{-- check auth instructor --}}
                                             @if(Auth::user()->instructor)
 
 
+                                            @foreach($top_course->instructors as $instructor)
+
                                                 @if($instructor->pivot->instructor_id != Auth::user()->instructor->id)
 
-                                                        <a class="favouriteBtn one
-                                                            @foreach($wishlists as $wishlist)
-                                                            @if($wishlist->course_id == $top_course->id && Auth::id() == $wishlist->user_id)
-
-                                                                active
-
-                                                            @endif 
-                                                            @endforeach
-                                                            mobile button--secondary float-right wishlist" data-course_id = "{{$top_course->id}}">
-                                                                <div class="btn__effect">
-                                                                    <svg width="515.99" height="480.73" class="heart-stroke icon-svg icon-svg--size-4 icon-svg--color-silver" viewBox="20 18 29 28" aria-hidden="true" focusable="false"><path d="M28.3 21.1a4.3 4.3 0 0 1 4.1 2.6 2.5 2.5 0 0 0 2.3 1.7c1 0 1.7-.6 2.2-1.7a3.7 3.7 0 0 1 3.7-2.6c2.7 0 5.2 2.7 5.3 5.8.2 4-5.4 11.2-9.3 15a2.8 2.8 0 0 1-2 1 3.4 3.4 0 0 1-2.2-1c-9.6-10-9.4-13.2-9.3-15 0-1 .6-5.8 5.2-5.8m0-3c-5.3 0-7.9 4.3-8.2 8.5-.2 3.2.4 7.2 10.2 17.4a6.3 6.3 0 0 0 4.3 1.9 5.7 5.7 0 0 0 4.1-1.9c1.1-1 10.6-10.7 10.3-17.3-.2-4.6-4-8.6-8.4-8.6a7.6 7.6 0 0 0-6 2.7 8.1 8.1 0 0 0-6.2-2.7z"></path></svg>
-                                                                    <svg class="heart-full icon-svg icon-svg--size-4 icon-svg--color-blue" viewBox="0 0 19.2 18.5" aria-hidden="true" focusable="false"><path d="M9.66 18.48a4.23 4.23 0 0 1-2.89-1.22C.29 10.44-.12 7.79.02 5.67.21 2.87 1.95.03 5.42.01c1.61-.07 3.16.57 4.25 1.76A5.07 5.07 0 0 1 13.6 0c2.88 0 5.43 2.66 5.59 5.74.2 4.37-6.09 10.79-6.8 11.5-.71.77-1.7 1.21-2.74 1.23z"></path></svg>
-                                                                    <svg class="broken-heart" xmlns="http://www.w3.org/2000/svg" width="48" height="16" viewBox="5.707 17 48 16"><g fill="#F48FB1">
-                                                                    <path class="broken-heart--left" d="M29.865 32.735V18.703a4.562 4.562 0 0 0-3.567-1.476c-2.916.017-4.378 2.403-4.538 4.756-.118 1.781.227 4.006 5.672 9.737a3.544 3.544 0 0 0 2.428 1.025l-.008-.008.013-.002z"/>
-                                                                    <path class="broken-heart--right" d="M37.868 22.045c-.135-2.588-2.277-4.823-4.697-4.823a4.258 4.258 0 0 0-3.302 1.487l-.004-.003v14.035a3.215 3.215 0 0 0 2.289-1.033c.598-.596 5.882-5.99 5.714-9.663z"/></g>
-                                                                    <path class="broken-heart--crack" fill="none" stroke="#FFF" stroke-miterlimit="10" d="M29.865 18.205v14.573"/></svg>
-                                                                    
-                                                                    <div class="effect-group">
-                                                                        <span class="effect"></span>
-                                                                        <span class="effect"></span>
-                                                                        <span class="effect"></span>
-                                                                        <span class="effect"></span>
-                                                                        <span class="effect"></span>
-                                                                    </div>
-                                                                </div>
-                                                            </a>
+                                                    @php
+                                                        array_push($array, "true");
+                                                    @endphp
+        
 
                                                 @endif
 
+
+                                            @endforeach
+
+
+                                            {{-- check auth instructor --}}
 
                                             @else
                                             
                                             <a class="favouriteBtn one
                                             @foreach($wishlists as $wishlist)
+
                                             @if($wishlist->course_id == $top_course->id && Auth::id() == $wishlist->user_id)
 
                                                 active
@@ -331,10 +387,45 @@
                                                 </div>
                                             </a>
                                             @endif
-                                            @endforeach
-                                            @endif
-                                            
+                                            {{-- check auth instructor --}}
 
+                                            
+                                            {{-- check data array --}}
+                                            @if($array)
+
+                                                <a class="favouriteBtn one
+                                                @foreach($wishlists as $wishlist)
+                                                @if($wishlist->course_id == $top_course->id && Auth::id() == $wishlist->user_id)
+
+                                                    active
+
+                                                @endif 
+                                                @endforeach
+                                                mobile button--secondary float-right wishlist" data-course_id = "{{$top_course->id}}">
+                                                    <div class="btn__effect">
+                                                        <svg width="515.99" height="480.73" class="heart-stroke icon-svg icon-svg--size-4 icon-svg--color-silver" viewBox="20 18 29 28" aria-hidden="true" focusable="false"><path d="M28.3 21.1a4.3 4.3 0 0 1 4.1 2.6 2.5 2.5 0 0 0 2.3 1.7c1 0 1.7-.6 2.2-1.7a3.7 3.7 0 0 1 3.7-2.6c2.7 0 5.2 2.7 5.3 5.8.2 4-5.4 11.2-9.3 15a2.8 2.8 0 0 1-2 1 3.4 3.4 0 0 1-2.2-1c-9.6-10-9.4-13.2-9.3-15 0-1 .6-5.8 5.2-5.8m0-3c-5.3 0-7.9 4.3-8.2 8.5-.2 3.2.4 7.2 10.2 17.4a6.3 6.3 0 0 0 4.3 1.9 5.7 5.7 0 0 0 4.1-1.9c1.1-1 10.6-10.7 10.3-17.3-.2-4.6-4-8.6-8.4-8.6a7.6 7.6 0 0 0-6 2.7 8.1 8.1 0 0 0-6.2-2.7z"></path></svg>
+                                                        <svg class="heart-full icon-svg icon-svg--size-4 icon-svg--color-blue" viewBox="0 0 19.2 18.5" aria-hidden="true" focusable="false"><path d="M9.66 18.48a4.23 4.23 0 0 1-2.89-1.22C.29 10.44-.12 7.79.02 5.67.21 2.87 1.95.03 5.42.01c1.61-.07 3.16.57 4.25 1.76A5.07 5.07 0 0 1 13.6 0c2.88 0 5.43 2.66 5.59 5.74.2 4.37-6.09 10.79-6.8 11.5-.71.77-1.7 1.21-2.74 1.23z"></path></svg>
+                                                        <svg class="broken-heart" xmlns="http://www.w3.org/2000/svg" width="48" height="16" viewBox="5.707 17 48 16"><g fill="#F48FB1">
+                                                        <path class="broken-heart--left" d="M29.865 32.735V18.703a4.562 4.562 0 0 0-3.567-1.476c-2.916.017-4.378 2.403-4.538 4.756-.118 1.781.227 4.006 5.672 9.737a3.544 3.544 0 0 0 2.428 1.025l-.008-.008.013-.002z"/>
+                                                        <path class="broken-heart--right" d="M37.868 22.045c-.135-2.588-2.277-4.823-4.697-4.823a4.258 4.258 0 0 0-3.302 1.487l-.004-.003v14.035a3.215 3.215 0 0 0 2.289-1.033c.598-.596 5.882-5.99 5.714-9.663z"/></g>
+                                                        <path class="broken-heart--crack" fill="none" stroke="#FFF" stroke-miterlimit="10" d="M29.865 18.205v14.573"/></svg>
+                                                        
+                                                        <div class="effect-group">
+                                                            <span class="effect"></span>
+                                                            <span class="effect"></span>
+                                                            <span class="effect"></span>
+                                                            <span class="effect"></span>
+                                                            <span class="effect"></span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+
+                                            @endif
+                                            {{-- end check data array --}}
+                                            @endif
+                                            {{-- end check auth --}}
+                                            @endif
+                                            {{-- nyi --}}
 
 
                                             <p class="card-text fst-italic text-muted">
@@ -375,52 +466,100 @@
                                             </small>
                                             
                                             <div class="d-grid gap-2 col-6 mx-auto">
-                                                @if(Auth::user())
-                                                @foreach($top_course->instructors as $instructor)
-                                                    @if(Auth::user()->instructor)
+                                                @if(Auth::user() && Auth::user()->getRoleNames()[0] != "Business")
+
+                                            @if(Auth::user()->sales)
+                                            @if(!Auth::user()->company)
 
 
-                                                        @if($instructor->pivot->instructor_id != Auth::user()->instructor->id)
 
+                                            @php
+                                                $pending_array = array();
+                                                $purched_array = array();
+                                                $count_sale = count(Auth::user()->sales);
+                                            @endphp
 
-                                                            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
-                                                            data-id="{{$top_course->id}}" data-course_title="{{$top_course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$top_course->price}}" data-image = "{{$top_course->image}}"
-                                                                {{-- for wishlist --}}
-                                                                @foreach($wishlists as $wishlist)
-                                                                @if($wishlist->course_id == $top_course->id && Auth::id() == $wishlist->user_id)
-
-                                                                data-wishlist = "save"
-
-                                                                @endif 
-                                                                @endforeach
-                                                                
-                                                                >
-                                                            Add To Cart
-                                                            </a>
-                                                       
-                                                        @endif
-                                                        @else
-                                                            <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
-                                                            data-id="{{$top_course->id}}" data-course_title="{{$top_course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$top_course->price}}" data-image = "{{$top_course->image}}"
-                                                                {{-- for wishlist --}}
-                                                                @foreach($wishlists as $wishlist)
-                                                                @if($wishlist->course_id == $newest_course->id && Auth::id() == $wishlist->user_id)
-
-                                                                data-wishlist = "save"
-
-                                                                @endif 
-                                                                @endforeach
-                                                                
-                                                                >
-                                                            Add To Cart
-                                                            </a>
+                                                @if($count_sale > 0)
+                                                    @foreach(Auth::user()->sales as $sales)
+                                                        @foreach($sales->courses as $course_sale)
                                                         
 
-                                                    @endif
-                                                @endforeach
-                                                @else
-                                                    <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Add To Cart</button>
+                                                            @if($course_sale->pivot->course_id == $top_course->id && $course_sale->pivot->status == 0)
+
+                                                                @php
+                                                                    array_push($pending_array, 'true')
+                                                                @endphp
+
+                                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>
+
+                                                            @elseif($course_sale->pivot->course_id == $top_course->id && $course_sale->pivot->status == 1)
+                                                                @php
+                                                                    array_push($purched_array, 'true')
+                                                                @endphp
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+
+                                                        @if($purched_array)
+                                                             <a href="{{route('lecture',$top_course->id)}}" class="btn custom_primary_btnColor mt-3">Go to Course</a>
+                                                        @endif
+
+
                                                 @endif
+                                            @endif
+
+                                                
+
+                                            @foreach($top_course->instructors as $instructor)
+                                                @if(Auth::user()->instructor)
+
+
+                                                    @if($instructor->pivot->instructor_id != Auth::user()->instructor->id && !$purched_array && !$pending_array)
+
+
+                                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
+                                                        data-id="{{$top_course->id}}" data-course_title="{{$top_course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$top_course->price}}" data-image = "{{$top_course->image}}"
+                                                            {{-- for wishlist --}}
+                                                            @foreach($wishlists as $wishlist)
+                                                            @if($wishlist->course_id == $top_course->id && Auth::id() == $wishlist->user_id)
+
+                                                            data-wishlist = "save"
+
+                                                            @endif 
+                                                            @endforeach
+                                                            
+                                                            >
+                                                        Purchase
+                                                        </a>
+                                                   
+                                                    @endif
+                                                    @elseif(!$purched_array && !$pending_array)
+                                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor mt-3 addtocart"
+                                                        data-id="{{$top_course->id}}" data-course_title="{{$top_course->title}}" data-instructor = "{{$instructor}}" data-user_id = "{{Auth::id()}}" data-price = "{{$top_course->price}}" data-image = "{{$top_course->image}}"
+                                                            {{-- for wishlist --}}
+                                                            @foreach($wishlists as $wishlist)
+                                                            @if($wishlist->course_id == $top_course->id && Auth::id() == $wishlist->user_id)
+
+                                                            data-wishlist = "save"
+
+                                                            @endif 
+                                                            @endforeach
+                                                            
+                                                            >
+                                                        Purchase
+                                                        </a>
+                                                    
+
+                                                @endif
+                                            @endforeach
+
+
+
+                                            
+                                            @else
+                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>
+                                            @endif
+                                            @endif
 
 
                                             </div>
@@ -734,5 +873,19 @@
 
         </div>
     </section><!-- End Contact Section -->
+
+@section('script_content')
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.wishlist').click(function(){
+            var id = $(this).data('course_id');
+            $.post('wishlist_save',{id:id},function(res){
+                console.log(res);
+            })
+
+        })
+    })
+</script>
+@stop
 
 </x-frontend>
