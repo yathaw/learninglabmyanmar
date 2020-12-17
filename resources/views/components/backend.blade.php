@@ -103,7 +103,7 @@
 					@endif
 
 					@if($authRole == "Instructor")
-					<li class="sidebar-item">
+					<li class="sidebar-item {{ Request::segment(1) === 'instructor_studentlist' ? 'active' : '' }} {{ Request::segment(2) === 'students' ? 'active' : '' }}">
 						<a class="sidebar-link" href="{{route('instructor_studentlist',Auth::user()->id)}}">
               				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Students </span>
             			</a>
@@ -112,12 +112,12 @@
 
 
 					@if($authRole == "Business")
-					<li class="sidebar-item">
+					<li class="sidebar-item {{ Request::segment(1) === 'company_instructor' ? 'active' : '' }} {{ Request::segment(2) === 'instructors' ? 'active' : '' }}">
 						<a class="sidebar-link" href="{{route('instructor_list',Auth::user()->id)}}">
               				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Instructors </span>
             			</a>
 					</li>
-					<li class="sidebar-item">
+					<li class="sidebar-item {{ Request::segment(1) === 'company_student' ? 'active' : '' }}">
 						<a class="sidebar-link" href="{{route('student_list',Auth::user()->id)}}">
               				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Students </span>
             			</a>

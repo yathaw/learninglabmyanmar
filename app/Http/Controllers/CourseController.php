@@ -62,7 +62,6 @@ class CourseController extends Controller
             
 
         }
-       
 
         return view('course.index',compact('courses','categories','subcategories','auth_id','role','allcourses'));
         
@@ -142,9 +141,13 @@ class CourseController extends Controller
     {
         //dd($request->descriptionId.getContents());
         // dd($request->descriptionId.getText()) ;
-        //dd($request->description);
+        $datas = json_decode($request->description);
         //dd($request->situations);
-        //dd($request);
+        dd($datas);
+        foreach($datas as $data){
+            var_dump($data[0]);
+        }
+        die();
 
         // dd($request->acceptTerms);
 
@@ -176,21 +179,32 @@ class CourseController extends Controller
             $user = Auth::user();
             $role = $user->getRoleNames();
 
+        $acceptTerms = $request->acceptTerms;
+
+        if ($acceptTerms) {
+            $certificate = $acceptTerms;
+        }
+        else{
+            $certificate = "off";
+        }
+
+        $descriptions = json_decode($$request->description);
+
             $course =new Course;
             $course->title = $request->title;
             $course->subtitle=$request->subtitle;
             $course->subcategory_id=$request->subcategoryid;
             $course->level_id=$request->level;
-            $course->description = $request->description;
-            $course->requirements=json_encode($request->situations);
-            $course->situation=json_encode($request->requirements);
-            $course->certificate = $request->acceptTerms;
+            $course->description = $description;
+            $course->outline=json_encode($request->situations);
+            $course->requirements=json_encode($request->requirements);
+            $course->certificate = $certificate;
             $course->share = 0;
             $course->status =0;
             $course->price=$request->pricing;
             $course->image=$path;
             $course->video=$path1;
-            $course->usre_id = $auth_id;
+            $course->user_id = $auth_id;
            
             $course->save();
 
@@ -201,9 +215,12 @@ class CourseController extends Controller
                 $instructor = Instructor::where('user_id',$user->id)->first();
 
                 //dd($instructor->id);
+            }else{
+                $instructor = request('teachers');
+
             }
 
-            $course->instructors()->attach();
+            $course->instructors()->attach($instructor);
 
             return redirect()->route('backside.course.index');
     }
