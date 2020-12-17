@@ -18,7 +18,7 @@ use App\Models\Section;
 // NYL
 use App\Models\Collection;
 
-
+use App\Models\User;
 
 class AccountController extends Controller
 {
@@ -303,6 +303,38 @@ class AccountController extends Controller
             }
           
        return $noti_data2;
+    }
+
+
+    public function signupnoti($value='')
+    {
+        $noti_data2=array();
+        $outputdata = array();
+        /*if(Auth::check()){*/
+
+            /*$user  = Auth::user();*/
+    
+            $users = User::all();
+            foreach($users as $user){
+                $id = $user->id;
+
+                foreach($user->unreadNotifications as $sal)
+                    {
+                        
+                            array_push($noti_data2, $sal);
+
+                 
+                        
+                    }
+            }
+       return $noti_data2;
+    }
+
+    public function removesignupnoti(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->unreadNotifications()->delete();
+        echo "success";
     }
 
 }

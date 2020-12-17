@@ -131,7 +131,9 @@ Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'bac
     Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
 
     Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
+    Route::get('/signupnoti',[AccountController::class,'signupnoti'])->name('signupnoti');
 
+    Route::post('/removesignupnoti',[AccountController::class,'removesignupnoti'])->name('removesignupnoti');
 });
 
     //HH
