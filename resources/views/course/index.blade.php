@@ -5,10 +5,10 @@
         
     @endphp
 
-    @if ($courses == '')
+   {{--  @if ($courses == '')
         <img src="{{asset('externalphoto/nocourse.gif')}}">
 
-    @else
+    @else --}}
 
 
     <div class="row">
@@ -245,7 +245,7 @@
             </nav>
         </div>
    </div>
-   @endif
+   {{-- @endif --}}
    @section('script_content')
    <script type="text/javascript">
       $(document).ready(function() {
@@ -253,53 +253,53 @@
         $('#listTable').DataTable();
 
         //ajax
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        // });
 
-        $('.searchInput').keyup(function(){
-            var search_data = $(this).val();
-            var user_id = $(this).data('user_id');
-            var instructor_data = $(this).data('instructor');
-            // alert(instructor);
-            var style = "";
-            var html = "";
-            var instructor = "";
-            var heart = false;
-            var sale =  new Array();
+        // $('.searchInput').keyup(function(){
+        //     var search_data = $(this).val();
+        //     var user_id = $(this).data('user_id');
+        //     var instructor_data = $(this).data('instructor');
+        //     // alert(instructor);
+        //     var style = "";
+        //     var html = "";
+        //     var instructor = "";
+        //     var heart = false;
+        //     var sale =  new Array();
 
-            $.post("{{route('courses_search')}}",{data:search_data},function(data){
-                console.log(data);
-                if(data){
-                    $.each(data,function(i,v){
+        //     $.post("{{route('courses_search')}}",{data:search_data},function(data){
+        //         console.log(data);
+        //         if(data){
+        //             $.each(data,function(i,v){
                         
-                        html+=`<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                            <div class="card courseCard h-100 border-0">
-                                <div class="card-img-wrapper">
-                                    <a href="{{route('course',':id')}}">
-                                        <img src="${v.image}" class="card-img-top" alt="...">
-                                    </a>
-                                </div>
-                                <div class="card-body">
-                                    <div class="card-title">
-                                        <a href="{{route('course',':course_id')}}" class="text-decoration-none text-muted">
-                                            <h4 class="fontbold text-dark"> ${v.title} </h4>
-                                        </a>`;
+        //                 html+=`<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+        //                     <div class="card courseCard h-100 border-0">
+        //                         <div class="card-img-wrapper">
+        //                             <a href="{{route('course',':id')}}">
+        //                                 <img src="${v.image}" class="card-img-top" alt="...">
+        //                             </a>
+        //                         </div>
+        //                         <div class="card-body">
+        //                             <div class="card-title">
+        //                                 <a href="{{route('course',':course_id')}}" class="text-decoration-none text-muted">
+        //                                     <h4 class="fontbold text-dark"> ${v.title} </h4>
+        //                                 </a>`;
 
 
 
                                         
 
-                    });
+        //             });
                     
-                    $('.searchcourseshow').html(html);
-                }
-            })
+        //             $('.searchcourseshow').html(html);
+        //         }
+        //     })
             
             
-        })
+        // })
       
       });
       
