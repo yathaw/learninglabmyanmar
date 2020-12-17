@@ -55,9 +55,6 @@
                                         $instructor_bio = $instructor->bio;
                                         $instructor_headline = $instructor->headline;
 
-                                        
-                                        
-
                                     @endphp
 
                                     @if($instructor->user->company)
@@ -215,7 +212,7 @@
                                         @endif
 
 
-                                           @if(Auth::user())
+                                           @if(Auth::user() &&  Auth::user()->getRoleNames()[0] != "Business")
 
                                             @if(Auth::user()->instructor)
 
@@ -236,25 +233,33 @@
                                             @else
                                             @php
                                                 $purched_array = array();
+                                                $pending_array = array();
                                                 $count_sale = count(Auth::user()->sales);
+                                                // dd(Auth::user()->sales);
                                             @endphp
 
                                                 @if($count_sale > 0)
+
                                                     @foreach(Auth::user()->sales as $sales)
                                                         @foreach($sales->courses as $course_sale)
-                                                            @if($course_sale->pivot->course_id == $course->id && $course_sale->pivot->status == 0)
+                                                            @if($course_sale->pivot->course_id == $course->id && $course_sale->pivot->status == 1)
 
-                                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>
+                                                               {{--  @php
+                                                                    array_push($pending_array, "true");
+                                                                @endphp
 
-                                                            @else
+                                                            @else --}}
                                                                 @php
-                                                                    array_push($purched_array, "true")
+                                                                    array_push($purched_array, "true");
                                                                 @endphp
                                                             @endif
                                                         @endforeach
                                                     @endforeach
                                                     @if(count($purched_array) > 0)
                                                         <a href="{{route('lecture',$course->id)}}" class="btn custom_primary_btnColor mt-3">Go to Course</a>
+                                                    
+                                                    @else
+                                                        <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>
                                                     @endif
 
                                                 @else
@@ -272,7 +277,7 @@
                                                     @endforeach
                                                     
                                                     >
-                                                Add To Cart
+                                                Purchase
                                                 </a>
                                                 @endif
                                             
@@ -293,12 +298,12 @@
                                                         @endforeach
                                                         
                                                         >
-                                                    Add To Cart
+                                                    Purcahse
                                                 </a>
                                             @endif
 
                                             @else
-                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Add To Cart</button>
+                                                <button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purcahse</button>
                                             @endif
                                         </div>
 

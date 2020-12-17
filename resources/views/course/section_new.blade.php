@@ -28,7 +28,7 @@
 										</div>
 										<div class="col-7">
 											<a href="#" data-toggle="collapse" data-target="#row{{$i}}" aria-expanded="false" aria-controls="row{{$i}}">
-												<b class="fontbold"> Section <span class="sectionNo">{{$section->id}}</span> : </b>{{$section->title}}
+												<b class="fontbold"> Section <span class="sectionNo">{{$i}}</span> : </b>{{$section->title}}
 
 												<small class="d-block mt-2">{{$section->objective}}</small>
 											</a>
@@ -69,7 +69,7 @@
 
 											@foreach($contents as $content)
 											@if($content->section_id  == $section->id)
-											@if($content->contenttype_id == 1)
+											
 
 											<li class="lecture_sort" data-sid="{{$section->id}}" data-id="{{$lesson->id}}">
 												<div class="col-12 my-2">
@@ -113,7 +113,7 @@
 														</div>
 													</div>
 												</li>
-												@endif
+												
 												@endif
 												@endforeach
 											</ul>
@@ -173,217 +173,216 @@
 								</div>
 							</div>
 
-							{{-- @php 
-							var_dump($instructor->user);
-							die();
-							@endphp --}}
-                       @php
-                       $authuser=Auth::user();
+
+							@php
+							$authuser=Auth::user();
+							$role = $authuser->getRoleNames();
                        $instructor_companyid=$authuser->company_id;   //null
                        //var_dump($instructor);
                        //die();
                        @endphp
-                       @if($instructor_companyid != Null)
-						<div class="row mb-3">
-						    <label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
-						    <div class="col-sm-10">
-						    	<select class="form-control select2" name=instructor>
-						    		@foreach($instructors as $instructor)
-						    		@foreach($instructor->courses as $instructor_course)
-						    		@if($instructor_course->pivot->course_id == $course->id)
-										<option value="{{$instructor->id}}">{{$instructor->user->name}}</option>
-									@endif
-									@endforeach
-									@endforeach
-						    	</select>
-						    </div>
-						</div>
-						@endif
+                       @if($instructor_companyid != Null || $role[0]=='Admin')
 
-					</div>
+                       <div class="row mb-3">
+                       	<label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
+                       	<div class="col-sm-10">
+                       		<select class="form-control select2" name=instructor>
+                       			@foreach($instructors as $instructor)
+                       			@foreach($instructor->courses as $instructor_course)
+                       			@if($instructor_course->pivot->course_id == $course->id)
+                       			<option value="{{$instructor->id}}">{{$instructor->user->name}}</option>
+                       			@endif
+                       			@endforeach
+                       			@endforeach
+                       		</select>
+                       	</div>
+                       </div>
 
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Save changes</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+                       @endif
 
-	<!-- New Content Modal -->
-	<div class="modal fade" id="newcontentModal" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
-			<div class="modal-content ">
-				<div class="modal-header">
-					<h5 class="modal-title"> New Content </h5>
-					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<form method="post" action="{{route('backside.content.store')}}" enctype="multipart/form-data">
-					<input type="hidden" name="sectionid" id="sectionid">
-					@csrf
-					<div class="modal-body m-3">
-						<div class="row mb-3">
-							<label for="titleId" class="col-sm-2 col-form-label"> Title </label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="titleId" placeholder="Enter Title" name="content_title">
-							</div>
-						</div>
+                   </div>
 
-						<div class="row mb-3">
-							<label for="objectiveId" class="col-sm-2 col-form-label"> Description </label>
-							<div class="col-sm-10">
-								<textarea class="form-control" id="objectiveId" name="content_description"></textarea>
-								<small> What will students be able to do at the end of this section? </small>
-							</div>
-						</div>
+                   <div class="modal-footer">
+                   	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                   	<button type="submit" class="btn btn-primary">Save changes</button>
+                   </div>
+               </form>
+           </div>
+       </div>
+   </div>
 
-						<div class="row mb-3">
-							<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
-							<div class="col-sm-10">
-								<select class="form-control select2" name="contenttypeid">
-									@foreach($contenttypes as $contenttype)
-									<option value="{{$contenttype->id}}">{{$contenttype->name}}</option>
-									@endforeach
-								</select>
-							</div>
-						</div>
+   <!-- New Content Modal -->
+   <div class="modal fade" id="newcontentModal" tabindex="-1" role="dialog" aria-hidden="true">
+   	  <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+   		<div class="modal-content ">
+   			<div class="modal-header">
+   				<h5 class="modal-title"> New Content </h5>
+   				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+   			</div>
+   			<form method="post" action="{{route('backside.content.store')}}" enctype="multipart/form-data">
+   				<input type="hidden" name="sectionid" id="sectionid">
+   				@csrf
+   				<div class="modal-body m-3">
+   					<div class="row mb-3">
+   						<label for="titleId" class="col-sm-2 col-form-label"> Title </label>
+   						<div class="col-sm-10">
+   							<input type="text" class="form-control" id="titleId" placeholder="Enter Title" name="content_title">
+   						</div>
+   					</div>
 
-						<div class="row mb-3">
-							<label for="objectiveId" class="col-sm-2 col-form-label">File </label>
-							<div class="col-sm-10">
-								<input type="file" name="file">
-							</div>
-						</div>
+   					<div class="row mb-3">
+   						<label for="objectiveId" class="col-sm-2 col-form-label"> Description </label>
+   						<div class="col-sm-10">
+   							<textarea class="form-control" id="objectiveId" name="content_description"></textarea>
+   							<small> What will students be able to do at the end of this section? </small>
+   						</div>
+   					</div>
 
-						<div class="row mb-3">
-							<label for="objectiveId" class="col-sm-2 col-form-label">Upload File </label>
-							<div class="col-sm-10">
-								<input type="file" name="file_upload">
-							</div>
-						</div>
+   					<div class="row mb-3">
+   						<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
+   						<div class="col-sm-10">
+   							<select class="form-control select2" name="contenttypeid">
+   								@foreach($contenttypes as $contenttype)
+   								<option value="{{$contenttype->id}}">{{$contenttype->name}}</option>
+   								@endforeach
+   							</select>
+   						</div>
+   					</div>
 
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Save changes</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+   					<div class="row mb-3">
+   						<label for="objectiveId" class="col-sm-2 col-form-label">File </label>
+   						<div class="col-sm-10">
+   							<input type="file" name="file">
+   						</div>
+   					</div>
 
-	{{-- Edit Section Modal kyw --}}
+   					<div class="row mb-3">
+   						<label for="objectiveId" class="col-sm-2 col-form-label">Upload File </label>
+   						<div class="col-sm-10">
+   							<input type="file" name="file_upload">
+   						</div>
+   					</div>
 
-	<div class="modal fade" id="editsectionModal" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
-			<div class="modal-content ">
-				<div class="modal-header">
-					<h5 class="modal-title">Edit Section </h5>
-					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<form id="editsectionform">
-					<input type="hidden" name="courseid" id="updatecourseid" >
-					<input type="hidden" name="sectionid" id="updatesectionid">
+   				</div>
+   				<div class="modal-footer">
+   					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+   					<button type="submit" class="btn btn-primary">Save changes</button>
+   				</div>
+   			</form>
+   		</div>
+   	   </div>
+   </div>
 
-					{{-- <input type="hidden" name="instructorid" id="updateinstructorid" > --}}
+   {{-- Edit Section Modal kyw --}}
+
+   <div class="modal fade" id="editsectionModal" tabindex="-1" role="dialog" aria-hidden="true">
+   	<div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+   		<div class="modal-content ">
+   			<div class="modal-header">
+   				<h5 class="modal-title">Edit Section </h5>
+   				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+   			</div>
+   			<form id="editsectionform">
+   				<input type="hidden" name="courseid" id="updatecourseid" >
+   				<input type="hidden" name="sectionid" id="updatesectionid">
+
+   				{{-- <input type="hidden" name="instructorid" id="updateinstructorid" > --}}
 
 
-					@php
-					$authuser = Auth::user();
-					$role = $authuser->getRoleNames();
+   				@php
+   				$authuser = Auth::user();
+   				$role = $authuser->getRoleNames();
 
-	        			if ($role[0] == 'Instructor') {
-	        			$instructor = $authuser->instructor;
-	        			$instructorid= $instructor->id;
-	        		}else{
-	        			$instructorid = NULL;
-	        		}
-					@endphp
-					{{-- <input type="hidden" name="instructorid" id="updateinstructorid" value="{{$instructorid}}"> --}}
+   				if ($role[0] == 'Instructor') {
+   					$instructor = $authuser->instructor;
+   					$instructorid= $instructor->id;
+   				}else{
+   					$instructorid = NULL;
+   				}
+   				@endphp
+   				{{-- <input type="hidden" name="instructorid" id="updateinstructorid" value="{{$instructorid}}"> --}}
 					{{-- @csrf
-					@method('PUT') --}}
+						@method('PUT') --}}
 
-					<div class="modal-body m-3">
-						<div class="row mb-3">
-							<label for="titleEdit" class="col-sm-2 col-form-label"> Title </label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="titleEdit" name="title">
+						<div class="modal-body m-3">
+							<div class="row mb-3">
+								<label for="titleEdit" class="col-sm-2 col-form-label"> Title </label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" id="titleEdit" name="title">
+								</div>
 							</div>
-						</div>
 
-						<div class="row mb-3">
-							<label for="objectiveEdit" class="col-sm-2 col-form-label"> Objective </label>
-							<div class="col-sm-10">
-								<textarea class="form-control" id="objectiveEdit" name="objective"></textarea>
-								<small> What will students be able to do at the end of this section? </small>
+							<div class="row mb-3">
+								<label for="objectiveEdit" class="col-sm-2 col-form-label"> Objective </label>
+								<div class="col-sm-10">
+									<textarea class="form-control" id="objectiveEdit" name="objective"></textarea>
+									<small> What will students be able to do at the end of this section? </small>
+								</div>
 							</div>
-						</div>
 
-						<div class="row mb-3">
-							<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
-							<div class="col-sm-10">
-								<select class="form-control select2" name="contenttype" id="contenttypeEdit">
-									
-								</select>
+							<div class="row mb-3">
+								<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
+								<div class="col-sm-10">
+									<select class="form-control select2" name="contenttype" id="contenttypeEdit">
+
+									</select>
+								</div>
 							</div>
-						</div>
 
-						@php
+					   {{-- @php
                        $authuser=Auth::user();
-                       $instructor_companyid=$authuser->company_id;   //null
-                       //var_dump($instructor);
-                       //die();
+					   $role = $authuser->getRoleNames();
+                       $instructor_companyid=$authuser->company_id; 
                        @endphp
-                       @if($instructor_companyid != Null)
-						<div class="row mb-3">
-						    <label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
-						    <div class="col-sm-10">
-						    	<select class="form-control select2" name="instructor" id="instructorEdit">
+                       @if($instructor_companyid != Null || $role[0]=='Admin') --}}
 
-						    		
-						    		
-						    	</select>
-						    </div>
-						</div>
-						@endif
+                       <div class="row mb-3">
+                       	<label for="objectiveId" class="col-sm-2 col-form-label">Instructor</label>
+                       	<div class="col-sm-10">
+                       		<select class="form-control select2" name="instructor" id="instructorEdit">
 
+                       		</select>
+                       	</div>
+                       </div>
 
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary" id="sectionupdate">Update changes</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+                       {{-- @endif --}}
 
 
-	<div class="modal fade" id="editcontentModal" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
-			<div class="modal-content ">
-				<div class="modal-header">
-					<h5 class="modal-title">Edit Content </h5>
-					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<form id="editcontentform">
-					
-					<div class="modal-body m-3">
-						<div class="row mb-3">
-							<label for="content_title" class="col-sm-2 col-form-label"> Title </label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="content_title" placeholder="Enter Title" name="content_title">
-							</div>
-						</div>
+                   </div>
+                   <div class="modal-footer">
+                   	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                   	<button type="submit" class="btn btn-primary" id="sectionupdate">Update changes</button>
+                   </div>
+               </form>
+           </div>
+       </div>
+   </div>
 
-						<div class="row mb-3">
-							<label for="content_description" class="col-sm-2 col-form-label"> Description </label>
-							<div class="col-sm-10">
-								<textarea class="form-control" name="content_description" id="content_description"></textarea>
-								<small> What will students be able to do at the end of this section? </small>
-							</div>
-						</div>
+
+   <div class="modal fade" id="editcontentModal" tabindex="-1" role="dialog" aria-hidden="true">
+   	<div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+   		<div class="modal-content ">
+   			<div class="modal-header">
+   				<h5 class="modal-title">Edit Content </h5>
+   				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+   			</div>
+   			<form id="editcontentform">
+
+   				<div class="modal-body m-3">
+   					<div class="row mb-3">
+   						<label for="content_title" class="col-sm-2 col-form-label"> Title </label>
+   						<div class="col-sm-10">
+   							<input type="text" class="form-control" id="content_title" placeholder="Enter Title" name="content_title">
+   						</div>
+   					</div>
+
+   					<div class="row mb-3">
+   						<label for="content_description" class="col-sm-2 col-form-label"> Description </label>
+   						<div class="col-sm-10">
+   							<textarea class="form-control" name="content_description" id="content_description"></textarea>
+   							<small> What will students be able to do at the end of this section? </small>
+   						</div>
+   					</div>
 
 						{{-- <div class="row mb-3">
 							<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
@@ -404,52 +403,59 @@
 						</div> --}}
 
 						<div class="form-group row">
-                                <label for="photo_id" class="col-sm-2 col-form-label">File</label>
-                                <div class="col-sm-10">
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link active" id="oldPhoto-tab" data-toggle="tab" href="#oldPhotoTab" role="tab" aria-controls="oldPhotoTab" aria-selected="true"> Old Video </a>
-                                        </li>
-                                      
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" id="newPhoto-tab" data-toggle="tab" href="#newPhotoTab" role="tab" aria-controls="newPhotoTab" aria-selected="false"> New Video</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content mt-3" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="oldPhotoTab" role="tabpanel" aria-labelledby="oldPhoto-tab">
-                                            <img src="" class="img-fluid w-25" id="content_file">
-                                        </div>
-                                        
-                                        <div class="tab-pane fade" id="newPhotoTab" role="tabpanel" aria-labelledby="newPhoto-tab">
-                                            <input type="file" id="photo_id" name="photo">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+							<label for="photo_id" class="col-sm-2 col-form-label">File</label>
+							<div class="col-sm-10">
+								<ul class="nav nav-tabs" id="myTab" role="tablist">
+									<li class="nav-item" role="presentation">
+										<a class="nav-link active" id="oldPhoto-tab" data-toggle="tab" href="#oldPhotoTab" role="tab" aria-controls="oldPhotoTab" aria-selected="true"> Old Video </a>
+									</li>
 
-                            <div class="form-group row mt-2">
-                                <label for="photo_id" class="col-sm-2 col-form-label"> Upload File</label>
-                                <div class="col-sm-10">
-                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link active" id="oldPhoto-tab" data-toggle="tab" href="#oldPhotoTab" role="tab" aria-controls="oldPhotoTab" aria-selected="true"> Old File </a>
-                                        </li>
-                                      
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" id="newPhoto-tab" data-toggle="tab" href="#newPhotoTab" role="tab" aria-controls="newPhotoTab" aria-selected="false"> New File</a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content mt-3" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="oldPhotoTab" role="tabpanel" aria-labelledby="oldPhoto-tab">
-                                            <img src="" class="img-fluid w-25" id="content_file">
-                                        </div>
-                                        
-                                        <div class="tab-pane fade" id="newPhotoTab" role="tabpanel" aria-labelledby="newPhoto-tab">
-                                            <input type="file" id="photo_id" name="photo">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+									<li class="nav-item" role="presentation">
+										<a class="nav-link" id="newPhoto-tab" data-toggle="tab" href="#newPhotoTab" role="tab" aria-controls="newPhotoTab" aria-selected="false"> New Video</a>
+									</li>
+								</ul>
+								<div class="tab-content mt-3" id="myTabContent">
+									<div class="tab-pane fade show active" id="oldPhotoTab" role="tabpanel" aria-labelledby="oldPhoto-tab">
+										<video class="js-player lesson_video_play vidoe-js"width="220" height="140" controls crossorigin preload="auto" playsinline id="content_file">
+ 											 <source src=" " type="video/mp4" >
+									   </video>
+
+										{{-- <img src=" " class="img-fluid w-25" id="content_file"> --}}
+										<input type="hidden" name="hidden_file" id="hidden_file">
+									</div>
+
+									<div class="tab-pane fade" id="newPhotoTab" role="tabpanel" aria-labelledby="newPhoto-tab">
+										<input type="file" id="file" name="file">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group row mt-2">
+							<label for="photo_id" class="col-sm-2 col-form-label"> Upload File</label>
+							<div class="col-sm-10">
+								<ul class="nav nav-tabs" id="myTab" role="tablist">
+									<li class="nav-item" role="presentation">
+										<a class="nav-link active" id="oldPhoto-tab" data-toggle="tab" href="#oldPhotoTab1" role="tab" aria-controls="oldPhotoTab" aria-selected="true"> Old File </a>
+									</li>
+
+									<li class="nav-item" role="presentation">
+										<a class="nav-link" id="newPhoto-tab1" data-toggle="tab" href="#newPhotoTab1" role="tab" aria-controls="newPhotoTab" aria-selected="false"> New File</a>
+									</li>
+								</ul>
+								<div class="tab-content mt-3" id="myTabContent">
+									<div class="tab-pane fade show active" id="oldPhotoTab1" role="tabpanel" aria-labelledby="oldPhoto-tab">
+										<img src="" class="img-fluid w-105" id="content_uploadfile">
+										<div id="showpdf"></div>
+										<input type="hidden" name="hidden_uploadfile" id="hidden_uploadfile">
+									</div>
+
+									<div class="tab-pane fade" id="newPhotoTab1" role="tabpanel" aria-labelledby="newPhoto-tab">
+										<input type="file" id="file_upload" name="file_upload">
+									</div>
+								</div>
+							</div>
+						</div>
 
 
 					</div>
@@ -466,10 +472,55 @@
 
 
 	@section('script_content')
+	<link rel="stylesheet" type="text/css" href="{{ asset('plugin/plyr/demo.css') }}">
+    <script src="{{ asset('plugin/plyr/plyr_plugin.js') }}"></script>
+    <script src="{{ asset('plugin/plyr/default.js') }}"></script>
 
 	<script type="text/javascript">
 
 		$(document).ready(function() {
+
+			    const player = Plyr.setup('.js-player',{
+                // invertTime: false,
+                i18n: {
+                    rewind: 'Rewind 15s',
+                    fastForward: 'Forward 15s',
+                    seek: "Seek",
+                    start: "Start",
+                    end: "End",
+                    seekTime : 10
+                },
+                controls: [
+                    'play-large', // The large play button in the center
+                    'restart', // Restart playback
+                    'rewind', // Rewind by the seek time (default 10 seconds)
+                    'play', // Play/pause playback
+                    'fast-forward', // Fast forward by the seek time (default 10 seconds)
+                    'progress', // The progress bar and scrubber for playback and buffering
+                    'current-time', // The current time of playback
+                    'mute', // Toggle mute
+                    'volume', // Volume control
+                    'captions', // Toggle captions
+                    'settings', // Settings menu
+                    'fullscreen', // Toggle fullscreen
+                    'airplay'
+                ],
+                events: ["ended", "progress", "stalled", "playing", "waiting", "canplay", "canplaythrough", "loadstart", "loadeddata", "loadedmetadata", "timeupdate", "volumechange", "play", "pause", "error", "seeking", "seeked", "emptied", "ratechange", "cuechange", "download", "enterfullscreen", "exitfullscreen", "captionsenabled", "captionsdisabled", "languagechange", "controlshidden", "controlsshown", "ready", "statechange", "qualitychange", "adsloaded", "adscontentpause", "adscontentresume", "adstarted", "adsmidpoint", "adscomplete", "adsallcomplete", "adsimpression", "adsclick"],
+                listeners: {
+                    seek: function (e) {
+                        // return false;    // required on v3
+                    },
+                    fastForward: 100
+                },
+                
+                clickToPlay: true,
+            });
+
+
+
+
+
+
 			$.ajaxSetup({
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -569,12 +620,12 @@ $('.editbtn').click(function(){
           	 $('#objectiveEdit').text(response.objective);
           	 $('#contenttypeEdit').val(response.contenttype_id);
           	 $('#instructorEdit').val(response.instructor_id);
-          	
+
           	 var contenttypeid=response.contenttype_id;
           	 var instructorid=response.instructor_id;
           	 var courseid=response.course_id;
           	  	//console.log(contenttypeid);
-          	  	 $.post('/backside/section/getcontenttype',{contenttypeid:contenttypeid},function(res){
+          	  	$.post('/backside/section/getcontenttype',{contenttypeid:contenttypeid},function(res){
           	  		//console.log(res);
           	  		var html = "";
           	  		$.each(res,function (i,v) {
@@ -590,74 +641,114 @@ $('.editbtn').click(function(){
           	  		$('#contenttypeEdit').html(html);
           	  	})
 
-          	  	 $.post('/backside/getinstructor',{instructorid:instructorid,courseid:courseid},function(response){
+          	  	$.post('/backside/getinstructor',{instructorid:instructorid,courseid:courseid},function(response){
           	  		console.log(response);
-          	 var html = "";
-          	 		$.each(response,function (i,v) {
-          	 			html +=`<option value="${v.id}"`;
 
-          	  			if(v.id==instructorid)
-          	 				html+=`selected`;
+          	  		var html = "";
+          	  		$.each(response,function (i,v) {
+          	  			html +=`<option value="${v.instructor_id}"`;
 
-          			html+=`>${v.instructor_id}</option>`;
+          	  			if(v.instructor_id==instructorid)
+          	  				html+=`selected`;
 
-          			})
+          	  			html+=`>${v.name}</option>`;
 
-          	 		$('#instructorEdit').html(html);
+          	  		})
+
+          	  		$('#instructorEdit').html(html);
+          	  	})
+
+          	  	$('#editsectionModal').modal('show');
+
+
           	  })
 
-          	  $('#editsectionModal').modal('show');
-          	 
+          	});
 
-          	})
-
-});
-
-	$('.contentbtn').click(function(){
+$('.contentbtn').click(function(){
 	//alert('hi');
 	var id=$(this).data('id');
 	//console.log(id);
 	$.post('/backside/section/getsectionid',{id:id},function(response){
 		//console.log(response.id);
 		$('#sectionid').val(response.id);
+
 	})
 	$('#newcontentModal').modal('show');
 
 });
 
-	$('.lessoneditbtn').click(function(){
+$('.lessoneditbtn').click(function(){
 	//alert('hi');
 	var id=$(this).data('id');
 	//console.log(id);
 	$.post('/backside/content/getcontentid',{id:id},function(response){
-	//console.log(response);
+		//console.log(response.id);
 		$('#content_title').val(response.title);
 		$('#content_description').val(response.description);
-		$('#content_file').val(response);
-		//var test=response
+		var contentid=response.id;
+		$.post('/backside/content/getlesson',{contentid:contentid},function(res){
+			//console.log(res);
+			var html = "";
+          	$.each(res,function (i,v) {
+			//console.log(v.file);
+			//console.log(v.file_upload);
+			$('#hidden_file').val(v.file);
+			var videoFile = v.file;
+            $('#content_file').attr('src', videoFile);
+
+            $("#editcontentModal").on("shown.bs.modal", function(e) {
+                console.log("modal opened" + $videoFile);
+                $("#video").attr(
+                    "src",
+                    $videoFile + "?autoplay=1&showinfo=0&modestbranding=1&rel=0&mute=1"
+                );
+            });
+
+            // stop playing the youtube video when I close the modal
+            // $("#editcontentModal").on("hide.bs.modal", function(e) {
+            //     // a poor man's stop video
+            //     $("#content_file").attr("src", $videoFile);
+            // });
+            $('#hidden_uploadfile').val(v.file_upload);
+            $('#showpdf').text(v.file_upload);
+
+            var videoFileupload = v.file_upload;
+            $('#content_uploadfile').attr('src', videoFileupload);
+
+            
+		})
+			
+
+		})
+		
 
 	})
-	 $('#editcontentModal').modal('show');
+	$('#editcontentModal').modal('show');
+
 
 });
+
 
 $('#editsectionform').on('submit',function(event){
 	//alert('hi');
 	event.preventDefault();
 	var sectionid=$('#updatesectionid').val();
 	var courseid=$('#updatecourseid').val();
-	var instructorid=$('#updateinstructorid').val();
+	var instructorid=$('#instructorEdit').val();
+	console.log(instructorid);
 	var title=$('#titleEdit').val();
 	var objective=$('#objectiveEdit').val();
 	var contenttypeid=$('#contenttypeEdit').val();
+	console.log(contenttypeid);
 	$.ajax({
 		url:'/backside/sectionupdate/'+sectionid,
 		type:"POST",
 		data:$('#editsectionform').serialize(),	
 		dataType:'json',
 		headers:{
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		},
 		success:function(response){
 			$('#editsectionform').trigger("reset");
 			$('#editsectionModal').modal('hide');

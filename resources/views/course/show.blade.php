@@ -194,18 +194,10 @@
 
                                                         @php
                                                             $contentTotal_duration = 0;
-                                                            foreach ($section->contents as $contents) {
-                                                                foreach ($contents as $content) {
+                                                            foreach ($section->contents as $contents) {                         
+                                                                $duration = $content->lessons[0]->duration;
+                                                                $contentTotal_duration += $duration++;
                                                                 
-                                                                    $type = $lesson['type'];
-
-                                                                    if ($type == "MP4") {
-                                                                        $duration = $lesson['duration'];
-                                                                    }
-
-                                                                    $contentTotal_duration += $duration++;
-                                                                
-                                                                }
                                                             }
 
                                                             if ($contentTotal_duration) {

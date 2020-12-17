@@ -10,6 +10,8 @@ use App\Models\Level;
 use App\Models\Instructor;
 use App\Models\User;
 use App\Models\Section;
+use App\Models\Company;
+
 
 use Auth;
 
@@ -60,7 +62,6 @@ class CourseController extends Controller
             
 
         }
-       
 
         return view('course.index',compact('courses','categories','subcategories','auth_id','role','allcourses'));
         
@@ -78,18 +79,56 @@ class CourseController extends Controller
     {
         $users = User::all();
         $authuser = Auth::user();
-        $companyid = $authuser->company_id;
-        //dd($companyid);
-        //dd($authuser->name); 
+        $role = $authuser->getRoleNames();
 
+        if ($role[0] == 'Admin') {
+            $companies = Company::all();
+        }
+
+        else{
+            $companies = NULL;
+        }
+
+
+        if($role[0] == 'Business') {
+            $companyid = $authuser->company_id;
+
+            $instructors = User::whereHas('company', function($q) use ($companyid)
+            {
+                $q->where('company_id', '=', $companyid);
+            })
+            ->role('Instructor')
+            ->get();
+        }else{
+            $instructors = NULL;
+        }
+
+        // dd($instructors);
         $categories=Category::all();
         $subcategories=Subcategory::all();
         $levels = Level::all();
-        $instructors=Instructor::all();
+
+
+
 
 
       
-        return view('course.create',compact('categories','subcategories','levels','instructors','companyid','users','authuser'));
+        return view('course.create',compact('categories','subcategories','levels','instructors','users','authuser','companies'));
+    }
+
+    public function getinstructor(Request $request){
+        $companyid = $request->id;
+
+        // $instructors = User::where('company_id',$companyid)->get();
+
+        $instructors = User::whereHas('company', function($q) use ($companyid)
+            {
+                $q->where('company_id', '=', $companyid);
+            })
+            ->role('Instructor')
+            ->get();
+
+        return $instructors;
     }
 
     /**
@@ -102,9 +141,13 @@ class CourseController extends Controller
     {
         //dd($request->descriptionId.getContents());
         // dd($request->descriptionId.getText()) ;
-        //dd($request->description);
+        $datas = json_decode($request->description);
         //dd($request->situations);
-        //dd($request);
+        dd($datas);
+        foreach($datas as $data){
+            var_dump($data[0]);
+        }
+        die();
 
         // dd($request->acceptTerms);
 
@@ -136,21 +179,32 @@ class CourseController extends Controller
             $user = Auth::user();
             $role = $user->getRoleNames();
 
+        $acceptTerms = $request->acceptTerms;
+
+        if ($acceptTerms) {
+            $certificate = $acceptTerms;
+        }
+        else{
+            $certificate = "off";
+        }
+
+        $descriptions = json_decode($$request->description);
+
             $course =new Course;
             $course->title = $request->title;
             $course->subtitle=$request->subtitle;
             $course->subcategory_id=$request->subcategoryid;
             $course->level_id=$request->level;
-            $course->description = $request->description;
-            $course->requirements=json_encode($request->situations);
-            $course->situation=json_encode($request->requirements);
-            $course->certificate = $request->acceptTerms;
+            $course->description = $description;
+            $course->outline=json_encode($request->situations);
+            $course->requirements=json_encode($request->requirements);
+            $course->certificate = $certificate;
             $course->share = 0;
             $course->status =0;
             $course->price=$request->pricing;
             $course->image=$path;
             $course->video=$path1;
-            $course->usre_id = $auth_id;
+            $course->user_id = $auth_id;
            
             $course->save();
 
@@ -161,9 +215,12 @@ class CourseController extends Controller
                 $instructor = Instructor::where('user_id',$user->id)->first();
 
                 //dd($instructor->id);
+            }else{
+                $instructor = request('teachers');
+
             }
 
-            $course->instructors()->attach($subject_id);
+            $course->instructors()->attach($instructor);
 
             return redirect()->route('backside.course.index');
     }
@@ -286,5 +343,28 @@ class CourseController extends Controller
     {
          $course->delete();
          return redirect()->route('backside.course.index');
+    }
+
+    public function approve($id)
+    {
+        $course= Course::find($id);
+        $course->status =1;
+        $course->save();
+        return back();
+    }
+
+    public function courses_search(Request $request)
+    {
+       $data = $request->data;
+
+
+       $search_data = Course::where('title','like','%'.$data.'%')->with(array('instructors' => function($query)
+       {
+        $query->with('user');
+       }))->get();
+
+
+       // dd($search_data);
+       return response(json_decode($search_data));
     }
 }
