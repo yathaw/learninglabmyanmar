@@ -107,12 +107,12 @@ Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'bac
     Route::post('/sectionupdate/{id}',[BackendController::class,'sectionupdate'])->name('sectionupdate');
    
 
-
     Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
     
     Route::resource('/content', ContentController::class);
     Route::post('/section/getsectionid',[ContentController::class,'getsectionid'])->name('getsectionid');
     Route::post('/content/getcontentid',[ContentController::class,'getcontentid'])->name('getcontentid');
+    Route::post('/content/getlesson',[ContentController::class,'getlesson'])->name('getlesson');
 
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);
