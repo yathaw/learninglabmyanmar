@@ -43,20 +43,23 @@
                             	@php $i =1; 
                                 $student_users = array();
                                 @endphp
-                            	@foreach($user_courses as $user_course)
-                                    @php
-                                        $user_course_sales = $user_course->sales;
+
+                                @foreach($users as $user)
+                                	@foreach($user->courses as $user_course)
+                                        @php
+                                            $user_course_sales = $user_course->sales;
+                                            
+                                        @endphp
+                                    
+                                        @foreach($user_course_sales as $user_course_sale)
                                         
-                                    @endphp
-                                
-                                    @foreach($user_course_sales as $user_course_sale)
+                                        @if($user_course_sale->pivot->status == 1)
+                                        @php
+                                          array_push($student_users,$user_course_sale->user);
 
-                                    @if($user_course_sale->pivot->status == 1)
-                                    @php
-                                      array_push($student_users,$user_course_sale->user);
-
-                                    @endphp
-                                    @endif
+                                        @endphp
+                                        @endif
+                                        @endforeach
                                     @endforeach
                                 @endforeach
 

@@ -106,7 +106,7 @@
                         <div class="row form-group mb-4">
                            <div class="col-md-12">
                               <label for="requirementId" class="form-label"> Are there any course requirements or prerequisites? </label>
-                              <input type="text" class="form-control form-control-lg my-4" id="requirementId" placeholder="E.g Be able to read english 4 skills" name="requirements[]" value="{{$course->requirements}}">
+                              <input type="text" class="form-control form-control-lg my-4" id="requirementId" placeholder="E.g Be able to read english 4 skills" name="requirements[]" value="{{json_decode($course->requirements)}}">
                               <div class="requirement_morewrapperField"></div>
                               <button class="btn btn-light text-success add_requirements">  
                               <i class="align-middle mr-2" data-feather="plus"></i> Add Answer 

@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Course;
 use App\Models\Company;
-
+use Auth;
 
 class InstructorController extends Controller
 {
@@ -159,21 +159,22 @@ class InstructorController extends Controller
 
     }
 
-    public function account_remove($id)
+    public function account_remove()
     {
+        $id = Auth::user()->id;
         $user = User::find($id);
         
         $user_role_name = $user->getRoleNames();
-        //dd($user_role_name[0]);
+       
         if($user_role_name[0] == "Instructor"){
             $user->status = 1;
             $user->save();
             $instructor = Instructor::where('user_id',$id)->first();
-            //dd($instructor);
+           
             $instructor->delete();
 
             $courses = Course::where('user_id',$id)->get();
-            //dd($id,$instructor_id,$courses);
+           
             foreach ($courses as $course) {
                 $course->status = 2;
                 $course->save();
@@ -181,7 +182,7 @@ class InstructorController extends Controller
         }
         if($user_role_name[0] == "Business")
         {
-            // dd($user_role_name);
+           
             $company_id = $user->company_id;
             $company = Company::find($company_id);
             $company->delete();
@@ -209,7 +210,7 @@ class InstructorController extends Controller
 
                     $course->status = 2;
                     $course->save();
-                    # code...
+                  
                 }
                
             }
@@ -217,15 +218,21 @@ class InstructorController extends Controller
        
         
 
-        return back();
+        return 'confirm';
 
     } 
 
     public function instructor_studentlist($id)
     {
-       // dd($id);
-      $instructor = Instructor::where('user_id',$id)->get();
-      dd($instructor);
-        //return view ('instructors.student_list',compact(''));
+      
+      $user = User::find($id);
+      $user_courses = $user->courses;
+      
+      return view ('instructors.student_list',compact('user_courses'));
+    }
+
+    public function confirm_remove()
+    {
+      return view('instructors.confirm');
     }
 }
