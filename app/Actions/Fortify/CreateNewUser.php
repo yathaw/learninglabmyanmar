@@ -6,7 +6,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-
+/*use Session;*/
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SignupNotification;
 class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
@@ -44,9 +46,25 @@ class CreateNewUser implements CreatesNewUsers
                 'phone' => $input['phone'],
                
             ]);
+            /*if($input['name']!=NULL)
+            {
+                $name = $input['name'];
+                $success = Session::put('name',$name);
+            }*/
+            $signupnoti = [
+                'userid' => $user->id,
+                'name' => $input['name'],
+                'phoneno' => $input['phone'],
+                'email' => $input['email'],
+                'role' => 'Student'
+            ];
+
+            Notification::send($user,new SignupNotification($signupnoti));
 
             $user->assignRole('Student');
             return $user;
+
+
             //return redirect()->route('frontend.index');
 
         }elseif($input['role'] == 'Instructor'){
@@ -59,6 +77,16 @@ class CreateNewUser implements CreatesNewUsers
                 
 
             ]);
+            $signupnoti = [
+                'userid' => $user->id,
+                'name' => $input['name'],
+                'phoneno' => $input['phone'],
+                'email' => $input['email'],
+                'role' => 'Instructor'
+            ];
+
+            Notification::send($user,new SignupNotification($signupnoti));
+
             $user->assignRole('Instructor');
             return $user;
 
@@ -73,6 +101,16 @@ class CreateNewUser implements CreatesNewUsers
                 
                 
             ]);
+            $signupnoti = [
+                'userid' => $user->id,
+                'name' => $input['name'],
+                'phoneno' => $input['phone'],
+                'email' => $input['email'],
+                'role' => 'Business'
+            ];
+
+            Notification::send($user,new SignupNotification($signupnoti));
+
             $user->assignRole('Business');
             return $user;
             // return redirect()->route('business_info');
