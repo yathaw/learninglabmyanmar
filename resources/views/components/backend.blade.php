@@ -567,7 +567,7 @@ function showNoti(){
          /* let url = '/backside/sale/'+v.data.saleid;*/
          //console.log(v.data.name);
          var id = v.data.userid;
-          var message = v.data.name;
+          var message = v.data.name +'('+v.data.role+') account created';
           var type = "success";
           var duration = 2500;
           var ripple = "With ripple";
@@ -598,7 +598,7 @@ function showNoti(){
                console.log(result);
             }
         });
-                }, 2000);
+                }, 2500);
         });
        
         
@@ -610,6 +610,7 @@ function showNoti(){
     });
 
 }
+
 
     </script>
 
