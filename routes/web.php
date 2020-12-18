@@ -141,6 +141,7 @@ Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'a
     Route::get('/signupnoti',[AccountController::class,'signupnoti'])->name('signupnoti');
 
     Route::post('/removesignupnoti',[AccountController::class,'removesignupnoti'])->name('removesignupnoti');
+    Route::post('/coursefilter',[SaleController::class,'coursefilter'])->name('coursefilter');
 });
 
 //HH

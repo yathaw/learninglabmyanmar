@@ -558,10 +558,19 @@
    showNoti(); 		
   var notyf = new Notyf();
 function showNoti(){
-  $.get("/backside/signupnoti",function(response){
+	$.ajax({
+            url: "/backside/signupnoti",
+            type: "GET",
+            dataType: 'json',  
+            success: function (response) {
+ 
       var count = response.length;
+     
+
       if(count > 0)
       {
+
+
        $.each(response,function(i,v){
 
          /* let url = '/backside/sale/'+v.data.saleid;*/
@@ -607,9 +616,12 @@ function showNoti(){
         
         
       }
+    }
     });
 
 }
+
+
 
 
     </script>

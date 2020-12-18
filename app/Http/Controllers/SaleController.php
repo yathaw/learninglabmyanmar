@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sale;
 use Illuminate\Http\Request;
-
+use App\Models\Course;
 class SaleController extends Controller
 {
     /**
@@ -106,7 +106,8 @@ class SaleController extends Controller
             $q->where('course_sale.status',1);
         })->where('sales.status',1)->orderBy('created_at','desc')->limit(8)->get();
 
-        return view('account.enrollment',compact('enrolls'));
+        $courses = Course::all();
+        return view('account.enrollment',compact('enrolls','courses'));
     }
 
     public function enrollmentsearch(Request $request)
@@ -119,5 +120,15 @@ class SaleController extends Controller
             })->where('sales.status',1)->whereDate('sales.created_at', '>=', $startdate)->whereDate('sales.created_at', '<=', $enddate)->with('user','courses')->get();
 
         return response()->json(['sales'=>$sale]);        
+    }
+
+    public function coursefilter(Request $request)
+    {
+        $id = $request->id;
+        $sale = Sale::whereHas('courses',function($q) use ($id){
+            $q->where('course_sale.status',1)->where('course_sale.course_id',$id);
+        })->where('sales.status',1)->with('user','courses')->get();
+        $course = Course::find($id);
+        return response()->json(['sales'=>$sale,'course'=>$course]);
     }
 }
