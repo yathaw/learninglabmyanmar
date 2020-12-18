@@ -346,7 +346,7 @@ class CourseController extends Controller
         $course= Course::find($id);
         $course->status =1;
         $course->save();
-        return back();
+        return redirect()->route('backside.course.index');
     }
 
     public function courses_search(Request $request)
