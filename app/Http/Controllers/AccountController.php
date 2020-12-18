@@ -24,7 +24,6 @@ use App\Models\Instructor;
 // NYL
 use App\Models\Collection;
 
-use App\Models\User;
 
 class AccountController extends Controller
 {
