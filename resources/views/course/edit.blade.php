@@ -83,7 +83,7 @@
                            <div class="col-md-12">
                               <label for="descriptionId" class="form-label"> Course Description </label>
                               <div id="descriptionId"></div>
-                              <textarea class="form-control d-none" id="hiddenArea" name="description" value="{{$course->description}}"></textarea>
+                              <textarea class="form-control d-none" id="hiddenArea" name="description" value="{{$course->descriptionId}}"></textarea>
                            </div>
                         </div>
                      </section>
@@ -92,7 +92,7 @@
                         <div class="row form-group mb-4">
                            <div class="col-md-12">
                               <label for="situationId" class="form-label"> What will students learn in your course? </label>
-                              <input type="text" class="form-control form-control-lg my-4" id="situationId" placeholder="E.g Learn Digital Marketing" name="situations[]" value="{{$course->situations}}">
+                              <input type="text" class="form-control form-control-lg my-4" id="situationId" placeholder="E.g Learn Digital Marketing" name="situations[]" value="{{old('situations')}}">
                               <div class="situation_morewrapperField"></div>
                               <button class="btn btn-light text-success add_situations">  
                               <i class="align-middle mr-2" data-feather="plus"></i> Add Answer 
@@ -106,7 +106,7 @@
                         <div class="row form-group mb-4">
                            <div class="col-md-12">
                               <label for="requirementId" class="form-label"> Are there any course requirements or prerequisites? </label>
-                              <input type="text" class="form-control form-control-lg my-4" id="requirementId" placeholder="E.g Be able to read english 4 skills" name="requirements[]" value="{{json_decode($course->requirements)}}">
+                              <input type="text" class="form-control form-control-lg my-4" id="requirementId" placeholder="E.g Be able to read english 4 skills" name="requirements[]" value="{{old('requirements')}}">
                               <div class="requirement_morewrapperField"></div>
                               <button class="btn btn-light text-success add_requirements">  
                               <i class="align-middle mr-2" data-feather="plus"></i> Add Answer 
@@ -141,7 +141,7 @@
                            <div class="tab-content mt-3" id="myTabContent">
                               <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                  <img src="{{asset($course->photo)}}" class="img-fluid" alt="">
-                                 <input type="hidden" name="oldphoto" value="{{$course->photo}}">
+                                 {{-- <input type="hidden" name="oldphoto" value="{{$course->photo}}"> --}}
                               </div>
                               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                  <input type="file" name="photo" class="form-control-file @error('photo') is-invalid @enderror">
@@ -167,7 +167,7 @@
                            <div class="tab-content my-3" id="myTabContent1">
                               <div class="tab-pane fade show active" id="h" role="tabpanel1" aria-labelledby="home-tab1">
                                  <img src="{{asset($course->video)}}" class="img-fluid" alt="">
-                                 <input type="hidden" name="oldvideo" value="{{$course->video}}">
+                                 {{-- <input type="hidden" name="oldvideo" value="{{$course->video}}"> --}}
                               </div>
                               <div class="tab-pane fade" id="p" role="tabpanel" aria-labelledby="profile-tab">
                                  <input type="file" name="video" class="form-control-file @error('video') is-invalid @enderror">

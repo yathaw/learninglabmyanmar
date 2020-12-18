@@ -94,8 +94,9 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/category',CategoryController::class);
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
-    Route::post('approve',[CourseController::class,'approve'])->name('course.approve');
+    Route::post('approve/{id}',[CourseController::class,'approve'])->name('course.approve');
     Route::post('courses_search',[CourseController::class, 'courses_search'])->name('courses_search');
+
 
 //NYL 
     Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
