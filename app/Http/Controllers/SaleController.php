@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Sale;
 use Illuminate\Http\Request;
 use App\Models\Course;
+use Auth;
+use App\Models\User;
 class SaleController extends Controller
 {
     /**
@@ -14,9 +16,37 @@ class SaleController extends Controller
      */
     public function index()
     {
-        $sales = Sale::orderBy('id','DESC')->get();
+        $role = Auth::user()->getRoleNames();
+        $user_id = Auth::id();
 
-        return view('sale.index',compact('sales'));
+        if($role[0] == 'Admin'){
+            $sales = Sale::orderBy('id','DESC')->get();
+            return view('sale.index',compact('sales'));
+        }
+        elseif($role[0] == 'Instructor'){
+            $enrolls = Sale::whereHas('courses',function($q){
+                        $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->where('instructors.user_id',Auth::id());
+                    })->where('sales.status',1)->orderBy('created_at','desc')->limit(8)->get();
+
+            $courses = Course::whereHas('instructors',function($q){
+                            $q->where('instructors.user_id',Auth::id());
+                        })->get();
+
+            return view('sale.index',compact('enrolls','courses'));
+        }elseif($role[0] == 'Business'){
+            $user = User::find(Auth::id());
+            $company = $user->company->id;
+            $enrolls = Sale::whereHas('courses',function($q) use ($company){
+                        $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->leftjoin('users','instructors.user_id','=','users.id')->where('users.company_id',$company);
+                    })->where('sales.status',1)->orderBy('created_at','desc')->limit(8)->get();
+
+            $courses = Course::whereHas('instructors',function($q) use ($company){
+                            $q->leftjoin('users','users.id','=','instructors.user_id')->where('users.company_id',$company);
+                        })->get();
+
+            return view('sale.index',compact('enrolls','courses'));
+        }
+        
     }
 
     /**
@@ -101,13 +131,16 @@ class SaleController extends Controller
        /* $enrolls = Sale::whereHas('courses',function($q){
             $q->where('course_sale.status',1);
         })->where('sales.status',1)->get();*/
-        
+        $role = Auth::user()->getRoleNames();
+        $user_id = Auth::id();
+       
         $enrolls = Sale::whereHas('courses',function($q){
             $q->where('course_sale.status',1);
         })->where('sales.status',1)->orderBy('created_at','desc')->limit(8)->get();
 
         $courses = Course::all();
         return view('account.enrollment',compact('enrolls','courses'));
+       
     }
 
     public function enrollmentsearch(Request $request)
@@ -115,11 +148,30 @@ class SaleController extends Controller
         $startdate = $request->startdate;
         $enddate = $request->enddate;
 
-        $sale = Sale::whereHas('courses',function($q){
+        $role = Auth::user()->getRoleNames();
+        $user_id = Auth::id();
+
+        if($role[0] == 'Admin'){
+            $sale = Sale::whereHas('courses',function($q){
                 $q->where('course_sale.status',1);
             })->where('sales.status',1)->whereDate('sales.created_at', '>=', $startdate)->whereDate('sales.created_at', '<=', $enddate)->with('user','courses')->get();
 
-        return response()->json(['sales'=>$sale]);        
+            return response()->json(['sales'=>$sale]);
+        }elseif($role[0] == 'Instructor'){
+            $sale = Sale::whereHas('courses',function($q){
+                $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->where('instructors.user_id',Auth::id());
+            })->where('sales.status',1)->whereDate('sales.created_at', '>=', $startdate)->whereDate('sales.created_at', '<=', $enddate)->with('user','courses')->get();
+
+            return response()->json(['sales'=>$sale]);
+        }elseif($role[0] == 'Business'){
+            $user = User::find(Auth::id());
+            $company = $user->company->id;
+            $sale = Sale::whereHas('courses',function($q) use ($company){
+                $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->leftjoin('users','instructors.user_id','=','users.id')->where('users.company_id',$company);
+            })->where('sales.status',1)->whereDate('sales.created_at', '>=', $startdate)->whereDate('sales.created_at', '<=', $enddate)->with('user','courses')->get();
+
+            return response()->json(['sales'=>$sale]);
+        }           
     }
 
     public function coursefilter(Request $request)

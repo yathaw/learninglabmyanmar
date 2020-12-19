@@ -546,7 +546,16 @@
     <script src="{{ asset('plugin/admincheckoutnoti.js') }}"></script>
     <script src="{{ asset('plugin/anime.min.js') }}"></script>
    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-  
+  	<script type="text/javascript">
+  		$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+            $('[data-toggle="tooltip"]').tooltip();
+  	</script>
+  	@role('Admin')
     <script type="text/javascript">
     	$.ajaxSetup({
             headers: {
@@ -554,7 +563,6 @@
             }
         });
 
-            $('[data-toggle="tooltip"]').tooltip();
    showNoti(); 		
   var notyf = new Notyf();
 function showNoti(){
@@ -625,7 +633,7 @@ function showNoti(){
 
 
     </script>
-
+@endrole
 
     @yield("script_content")
 

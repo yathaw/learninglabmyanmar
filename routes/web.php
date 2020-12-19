@@ -122,6 +122,13 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/attachment', AttachmentController::class);
 //KYW
 
+    //ALS
+    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
+
+    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
+
+    Route::post('/coursefilter',[SaleController::class,'coursefilter'])->name('coursefilter');
+
 });
 //KKS
 Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'as' => 'backside.'], function(){
@@ -135,14 +142,13 @@ Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'a
     
     // NYL
     Route::resource('installments',InstallmentController::class);
+    
+});
 
-    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
-
-    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
+Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::get('/signupnoti',[AccountController::class,'signupnoti'])->name('signupnoti');
 
     Route::post('/removesignupnoti',[AccountController::class,'removesignupnoti'])->name('removesignupnoti');
-    Route::post('/coursefilter',[SaleController::class,'coursefilter'])->name('coursefilter');
 });
 
 //HH
