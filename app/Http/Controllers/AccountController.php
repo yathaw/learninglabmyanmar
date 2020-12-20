@@ -435,7 +435,12 @@ class AccountController extends Controller
         // dd($completeLessons);
         // $contents=Content::all();
         // $lesson=Lesson::find($id);
-        $questions = Question::all();
+
+        $questions = Question::with(['user','answers','course'])
+            ->where('course_id', $course->id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
         $answers = Answer::all();
 
         return view('account.lecturevideo',compact('questions','answers', 'course', 'sections','user_id','completeLessons','instructors'));
@@ -569,6 +574,8 @@ class AccountController extends Controller
             'summary' => 'required',
             'comment' => 'required'
         ]);
+
+        // dd(request('comment'));
 
         $question = new Question();
         $question->title = request('summary');

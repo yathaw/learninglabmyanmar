@@ -69,7 +69,10 @@ class AnswerController extends Controller
      */
     public function update(Request $request, Answer $answer)
     {
-        //
+        $answer->description = $request->edit_description;
+        $answer->save();
+
+        return redirect()->back();
     }
 
     /**
@@ -80,6 +83,9 @@ class AnswerController extends Controller
      */
     public function destroy(Answer $answer)
     {
-        //
+        $answer->delete();
+
+        return redirect()->back();
+        
     }
 }

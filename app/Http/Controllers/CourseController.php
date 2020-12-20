@@ -126,6 +126,7 @@ class CourseController extends Controller
                 $q->where('company_id', '=', $companyid);
             })
             ->role('Instructor')
+            ->with('instructor')
             ->get();
 
         return $instructors;
@@ -139,15 +140,10 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
+        
         //dd($request->descriptionId.getContents());
         // dd($request->descriptionId.getText()) ;
-        $datas = json_decode($request->description);
-        //dd($request->situations);
-        dd($datas);
-        foreach($datas as $data){
-            var_dump($data[0]);
-        }
-        die();
+
 
         // dd($request->acceptTerms);
 
@@ -188,14 +184,12 @@ class CourseController extends Controller
             $certificate = "off";
         }
 
-        $descriptions = json_decode($$request->description);
-
             $course =new Course;
             $course->title = $request->title;
             $course->subtitle=$request->subtitle;
             $course->subcategory_id=$request->subcategoryid;
             $course->level_id=$request->level;
-            $course->description = $description;
+            $course->description = $request->description;
             $course->outline=json_encode($request->situations);
             $course->requirements=json_encode($request->requirements);
             $course->certificate = $certificate;
@@ -248,12 +242,41 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
+        $authuser = Auth::user();
+        $role = $authuser->getRoleNames();
+
+        if ($course->instructors[0]->user->company_id) {
+            $companyid = $course->instructors[0]->user->company_id;
+
+            $company = Company::find($companyid);
+        }else{
+            $company = NULL;
+        }
+
+        if($company) {
+            $companyid = $course->instructors[0]->user->company_id;
+
+            $instructors = User::whereHas('company', function($q) use ($companyid)
+            {
+                $q->where('company_id', '=', $companyid);
+            })
+            ->role('Instructor')
+            ->get();
+        }else{
+            $instructors = NULL;
+        }
+
+
+
         $categories=Category::all();
         $subcategories=Subcategory::all();
         $levels = Level::all();
-        $instructors=Instructor::all();
+
+
+
+        // $instructors=Instructor::all();
       
-        return view('course.edit',compact('course','categories','subcategories','levels','instructors'));
+        return view('course.edit',compact('course','categories','subcategories','levels','company', 'instructors'));
     }
 
     /**
@@ -300,35 +323,46 @@ class CourseController extends Controller
 
             $user = Auth::user();
             $role = $user->getRoleNames();
+
+            $acceptTerms = $request->acceptTerms;
+
+            if ($acceptTerms) {
+                $certificate = $acceptTerms;
+            }
+            else{
+                $certificate = "off";
+            }
          
             $course->title = $request->title;
             $course->subtitle=$request->subtitle;
             $course->subcategory_id=$request->subcategoryid;
             $course->level_id=$request->level;
             $course->description = $request->description;
-            $course->requirements=json_encode($request->situations);
-            $course->situation=json_encode($request->requirements);
-            $course->certificate = $request->acceptTerms;
-            $course->share = 0;
-            $course->status =0;
+            $course->outline=json_encode($request->situations);
+            $course->requirements=json_encode($request->requirements);
+            $course->certificate = $certificate;
             $course->price=$request->pricing;
             $course->image=$path;
             $course->video=$path1;
 
-            $course->usre_id = $auth_id;
+            $course->user_id = $auth_id;
            
             $course->save();
 
-
+            // detach to pivot
+            $course->instructors()->detach();
            
 
             if ($role[0] == 'Instructor') {
                 $instructor = Instructor::where('user_id',$user->id)->first();
 
                 //dd($instructor->id);
+            }else{
+                $instructor = request('teachers');
+
             }
 
-            $course->instructors()->attach($subject_id);
+            $course->instructors()->attach($instructor);
 
             return redirect()->route('backside.course.index');
     }

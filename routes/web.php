@@ -16,6 +16,8 @@ use App\Http\Controllers\CoursecountController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\AnswerController;
 
 
 //KYW
@@ -29,6 +31,8 @@ use App\Http\Controllers\InstallmentController;
 //HH
 use App\Http\Controllers\Auth\LoginController;
 
+// YTMN
+use App\Http\Controllers\Auth\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +84,8 @@ Route::get('instructor_info',[FrontendController::class,'instructor_info'])->nam
 Route::post('instructor_store',[FrontendController::class,'instructor_store'])->name('instructor.store');
 Route::post('login_data',[LoginController::class,'login_store'])->name('frontend_login');
 
+Route::post('signup',[RegisterController::class,'process_signup'])->name('signup');
+Route::get('reg_step',[RegisterController::class,'reg_step'])->name('reg_step');
 // ------------------------------------------------------------------------
 
 /*
@@ -119,7 +125,15 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);
     Route::resource('/attachment', AttachmentController::class);
-//KYW
+
+    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
+
+    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
+    
+    //YTMN
+    Route::resource('/questions',QuestionController::class);
+    Route::resource('/answer',AnswerController::class);
+
 
 });
 //KKS
@@ -135,9 +149,7 @@ Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'a
     // NYL
     Route::resource('installments',InstallmentController::class);
 
-    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
-
-    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
+    
 
 });
 
@@ -238,6 +250,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 // YTMN
 Route::post('getinstructor_bycompanyid',[CourseController::class, 'getinstructor'])->name('getinstructor_bycompanyid');
+Route::post('getquestion_bycourseid',[QuestionController::class, 'getquestion'])->name('getquestion_bycourseid');
 
 
 

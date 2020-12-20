@@ -34,7 +34,7 @@
                     @endif
 
                     
-                    <form action="{{ route('register') }}" method="post" role="form" class="registerForm" enctype="multipart/form-data">
+                    <form action="{{ route('signup') }}" method="post" role="form" class="registerForm" enctype="multipart/form-data">
                         @csrf
                         <div class="row form-group">
                             <label> Which Type of user are you ? </label>

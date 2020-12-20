@@ -33,7 +33,8 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('frontend/css/style.css') }}" rel="stylesheet">
 
-    
+    <!-- Quill -->
+    <link href="{{ asset('plugin/quill/quill.snow.css') }}" rel="stylesheet">
 
 </head>
 
@@ -306,6 +307,7 @@
 
     {{-- localstorage --}}
     <script src="{{ asset('plugin/localstorage.js') }}"></script>
+    <script src="{{ asset('plugin/quill/quill.js') }}"></script>
 
      @yield("script_content")
 
