@@ -80,4 +80,8 @@ class Course extends Model
     {
     	return $this->belongsToMany('App\Models\Collection')->withPivot('sorting')->withTimestamps();
     }
+
+    public function questions(){
+    	return $this->hasMany('App\Models\Question');
+    }
 }

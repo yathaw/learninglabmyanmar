@@ -1,0 +1,144 @@
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+.eduPart{
+	position: relative;
+}
+
+.delete {
+  cursor: pointer;
+  float: right;
+  display: inline-block;
+  margin: 12px 1em;
+  width: 14px;
+  height: 14px;
+  opacity: .12;
+  background: url(data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJkZWxldGUtaWNvbiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9Ii0yNTIuNSAzNDggNzQuOSA3NC45IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IC0yNTIuNSAzNDggNzQuOSA3NC45OyI+PHBhdGggZD0iTS0yMTUsMzQ4Yy0yMC43LDAtMzcuNSwxNi44LTM3LjUsMzcuNWMwLDIwLjcsMTYuOCwzNy41LDM3LjUsMzcuNXMzNy41LTE2LjgsMzcuNS0zNy41Qy0xNzcuNSwzNjQuOC0xOTQuMywzNDgtMjE1LDM0OHogTS0yMTUsNDE2LjFjLTE2LjksMC0zMC42LTEzLjctMzAuNi0zMC42YzAtMTYuOSwxMy43LTMwLjYsMzAuNi0zMC42YzE2LjksMCwzMC42LDEzLjcsMzAuNiwzMC42Qy0xODQuNCw0MDIuNC0xOTguMSw0MTYuMS0yMTUsNDE2LjF6Ii8+PHBhdGggZD0iTS0yMDQuNiwzNzEuNWMtMy41LDMuNS02LjksNi45LTEwLjQsMTAuNGMtMy40LTMuNC02LjktNi45LTEwLjMtMTAuM2MtMy4xLTMuMS04LDEuNy00LjksNC45YzMuNCwzLjUsNi45LDYuOSwxMC4zLDEwLjNjLTMuNCwzLjQtNi45LDYuOS0xMC4zLDEwLjNjLTMuMSwzLjEsMS43LDgsNC45LDQuOWMzLjQtMy40LDYuOS02LjksMTAuMy0xMC4zYzMuNSwzLjUsNi45LDYuOSwxMC40LDEwLjRjMy4xLDMuMSw4LTEuNyw0LjktNC45Yy0zLjUtMy41LTYuOS02LjktMTAuNC0xMC40YzMuNS0zLjUsNi45LTYuOSwxMC40LTEwLjRDLTE5Ni42LDM3My4yLTIwMS41LDM2OC40LTIwNC42LDM3MS41eiIvPjwvc3ZnPg==) no-repeat;
+  transition: opacity .15s;
+  position: absolute;
+}
+
+.delete:hover {
+  opacity: .5;
+}
+.profileCard{
+  position:  relative;
+}
+
+ .profileCard:hover {
+   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+
+}
+
+ .radio {
+   font-size: inherit;
+   margin: 0;
+   position: absolute;
+   right: calc(1em + 2px);
+   top: calc(1em + 2px);
+}
+ @supports (-webkit-appearance: none) or (-moz-appearance: none) {
+   .radio {
+     -webkit-appearance: none;
+     -moz-appearance: none;
+     background: #fff;
+     border: 2px solid #e2ebf6;
+     border-radius: 50%;
+     cursor: pointer;
+     height: 1.5em;
+     outline: none;
+     transition: background 0.2s ease-out, border-color 0.2s ease-out;
+     width: 1.5em;
+  }
+   .radio::after {
+     border: 2px solid #fff;
+     border-top: 0;
+     border-left: 0;
+     content: '';
+     display: block;
+     height: 0.75rem;
+     left: 25%;
+     position: absolute;
+     top: 50%;
+     transform: rotate(45deg) translate(-50%, -50%);
+     width: 0.375rem;
+  }
+   .radio:checked {
+     background: #558309;
+     border-color: #558309;
+  }
+   .profileCard:hover .radio {
+     border-color: #c4d1e1;
+  }
+   .profileCard:hover .radio:checked {
+     border-color: #558309;
+  }
+}
+
+.profileCard:hover .plan-details {
+   border-color: #c4d1e1;
+}
+ .radio:checked ~ .plan-details {
+   border-color: #558309;
+}
+ .radio:focus ~ .plan-details {
+   box-shadow: 0 0 0 2px #c4d1e1;
+}
+ .radio:disabled ~ .plan-details {
+   color: #c4d1e1;
+   cursor: default;
+}
+ .radio:disabled ~ .plan-details .plan-type {
+   color: #c4d1e1;
+}
+ .profileCard:hover .radio:disabled ~ .plan-details {
+   border-color: #e2ebf6;
+   box-shadow: none;
+}
+ .profileCard:hover .radio:disabled {
+   border-color: #e2ebf6;
+}
+ .plan-type {
+   color: #558309;
+   font-size: 1.5rem;
+   font-weight: bold;
+   line-height: 1em;
+}
+ .plan-cost {
+   font-size: 2.5rem;
+   font-weight: bold;
+   padding: 0.5rem 0;
+}
+ .slash {
+   font-weight: normal;
+}
+ .plan-cycle {
+   font-size: 2rem;
+   font-variant: none;
+   border-bottom: none;
+   cursor: inherit;
+   text-decoration: none;
+}
+ .hidden-visually {
+   border: 0;
+   clip: rect(0, 0, 0, 0);
+   height: 1px;
+   margin: -1px;
+   overflow: hidden;
+   padding: 0;
+   position: absolute;
+   white-space: nowrap;
+   width: 1px;
+}
+
+.termsCard{
+  flex-grow: 1;
+  overflow-y: scroll;
+  height: 150px;
+}
