@@ -302,8 +302,6 @@ class CourseController extends Controller
             //categoryimg/78748785858_bella.jpg
             $filepath =$request->file('photo')->storeAs('courseimg',$fileName,'public');
             $path ='/storage/'.$filepath;
-        }else{
-            $path=$request->oldphoto;
         }
         //dd($path);
 
@@ -316,8 +314,6 @@ class CourseController extends Controller
             //categoryimg/78748785858_bella.jpg
             $filepath1 =$request->file('video')->storeAs('coursevideo',$fileName1,'public');
             $path1 ='/storage/'.$filepath1;
-        }else{
-            $path1=$request->oldvideo;
         }
             $auth_id = Auth::id();
 
@@ -384,7 +380,7 @@ class CourseController extends Controller
         $course= Course::find($id);
         $course->status =1;
         $course->save();
-        return back();
+        return redirect()->route('backside.course.index');
     }
 
     public function courses_search(Request $request)

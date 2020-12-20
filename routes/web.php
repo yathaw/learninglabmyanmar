@@ -100,8 +100,9 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/category',CategoryController::class);
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
-    Route::post('approve',[CourseController::class,'approve'])->name('course.approve');
+    Route::post('approve/{id}',[CourseController::class,'approve'])->name('course.approve');
     Route::post('courses_search',[CourseController::class, 'courses_search'])->name('courses_search');
+
 
 //NYL 
     Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
@@ -115,12 +116,12 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/instructors', InstructorController::class);
    
 
-
     Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
     
     Route::resource('/content', ContentController::class);
     Route::post('/section/getsectionid',[ContentController::class,'getsectionid'])->name('getsectionid');
     Route::post('/content/getcontentid',[ContentController::class,'getcontentid'])->name('getcontentid');
+    Route::post('/content/getlesson',[ContentController::class,'getlesson'])->name('getlesson');
 
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);
@@ -135,6 +136,13 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/answer',AnswerController::class);
 
 
+    //ALS
+    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
+
+    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
+
+    Route::post('/coursefilter',[SaleController::class,'coursefilter'])->name('coursefilter');
+
 });
 //KKS
 Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'as' => 'backside.'], function(){
@@ -148,9 +156,13 @@ Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'a
     
     // NYL
     Route::resource('installments',InstallmentController::class);
+    
+});
 
     
-
+Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'backside.'], function(){
+    Route::get('/signupnoti',[AccountController::class,'signupnoti'])->name('signupnoti');
+    Route::post('/removesignupnoti',[AccountController::class,'removesignupnoti'])->name('removesignupnoti');
 });
 
 //HH

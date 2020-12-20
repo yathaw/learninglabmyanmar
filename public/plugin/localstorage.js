@@ -39,6 +39,19 @@ $(document).ready(function(){
 		data_add(id,course_title,instructor,image,price,wishlist,user_id);
 	})
 
+	// add to cart from wishlist jq
+	$('.searchwishlistshow').on('click','.cart',function(){
+		var id = $(this).data('id');
+		var course_title = $(this).data('course_title');
+		var instructor = $(this).data('instructor');
+		var image = $(this).data('image');
+		var price = $(this).data('price');
+		var wishlist = $(this).data('wishlist');
+		var user_id = $(this).data('user_id');
+
+		data_add(id,course_title,instructor,image,price,wishlist,user_id);
+	})
+
 
 	function data_add(id,course_title,instructor,image,price,wishlist,user_id) {
 		var localstorage = localStorage.getItem('course_buy');

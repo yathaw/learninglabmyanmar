@@ -81,6 +81,7 @@
 
 							      		{{-- check auth --}}
 							      		@if(Auth::user())
+							      		@if(!Auth::user()->company)
 
 							      		{{-- check role business --}}
 							      		
@@ -178,6 +179,7 @@
 											</a>
 
 					        			@endif
+					        			@endif
 					        			{{-- end check data array --}}
 					        			@endif
 					        			{{-- end check auth --}}
@@ -229,6 +231,7 @@
 							            	@if(Auth::user() && Auth::user()->getRoleNames()[0] != "Business")
 
 							            	@if(Auth::user()->sales)
+							            	@if(!Auth::user()->company)
 
 
 
@@ -288,7 +291,7 @@
 															@endforeach
 															
 															>
-										            	Purchase
+															Purchase
 										            	</a>
 										           
 										            @endif
@@ -308,15 +311,18 @@
 										            	Purchase
 										            	</a>
 										            
-
+										            	@php
+										            	 break;
+										            	@endphp
 								            	@endif
 								            @endforeach
 
 
 
 								            
-								            @else
+								            @else()
 								            	<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>
+								            @endif
 								            @endif
 
 
@@ -375,11 +381,13 @@
 			var instructor = "";
 			var heart = false;
 			var sale =  new Array();
+			var subtitle;
 
 			$.post("{{route('courses_search')}}",{data:search_data},function(data){
 				
 				if(data.length > 0){
 					$.each(data,function(i,v){
+						subtitle = v.subtitle.slice(0,60);
 						
 						html+=`<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
 			        		<div class="card courseCard h-100 border-0">
@@ -408,14 +416,16 @@
 						        		}
 
 						        		$.each(v.sales,function(c,d){
-						        			// console.log(d);
-						        			if(d.pivot.status == 1){
-						        				sale = "true";
-						        			}else {
-						        				sale = "false";
-						        			}
+						        			
+							        			if(d.pivot.status == 1 && d.user_id == user_id){
+							        				sale = "true";
+							        			}else if(d.pivot.status == 0 && d.user_id == user_id) {
+							        				sale = "false";
+							        			}
+						        			
 						        		})
-
+						        		console.log(v.sales);
+						        		console.log(user_id);
 
 
 						        		if(heart == true){
@@ -481,7 +491,7 @@
 
 						        	<div class="card-content">
 							            <small class="card-text text-muted">
-							            	${v.subtitle}
+							            	${subtitle}
 							            </small>
 							            <div class="d-grid gap-2 col-6 mx-auto">`;
 
@@ -507,6 +517,9 @@
 								          	html += `<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Pending</button>`;
 								          }
 
+								          // else if(heart == true && sale == "incorrect"){
+								          // 	html += `<button  class="btn custom_primary_btnColor mt-3">Purchase</button>`;
+								          // }
 
 								          else{
 								          	html+=`<button disabled="disabled" class="btn custom_primary_btnColor mt-3">Purchase</button>`

@@ -25,7 +25,6 @@ use App\Models\Instructor;
 use App\Models\Collection;
 
 
-
 class AccountController extends Controller
 {
 
@@ -114,7 +113,7 @@ class AccountController extends Controller
 
     public function wishlist(){
         $tabs = 2;
-        $wishlists = Wishlist::paginate(8);
+        $wishlists = Wishlist::where('user_id',Auth::id())->paginate(8);
         $user_id = Auth::id();
 
         $sales = Sale::where('user_id',$user_id)->with(array('courses'=>function($q){
@@ -549,17 +548,19 @@ class AccountController extends Controller
 
             return view('account.instructorpanel',compact('sales','courses','recentcourses'));
         }elseif($role[0] == 'Business'){
-
-            $sales = Sale::whereHas('courses',function($q){
-                        $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id')->where('instructors.user_id',Auth::id());
+            $user = User::find(Auth::id());
+            $company = $user->company->id;
+            $sales = Sale::whereHas('courses',function($q) use ($company){
+                        $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->leftjoin('users','instructors.user_id','=','users.id')->where('users.company_id',$company);
                     })->where('sales.status',1)->get();
+
             
-              $courses = Course::whereHas('instructors',function($q){
-                            $q->where('instructors.user_id',Auth::id())->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id');
+              $courses = Course::whereHas('instructors',function($q) use ($company){
+                            $q->leftjoin('users','users.id','=','instructors.user_id')->where('users.company_id',$company);
                         })->get();
 
-            $recentcourses = Course::whereHas('instructors',function($q){
-                            $q->where('instructors.user_id',Auth::id())->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id');
+            $recentcourses = Course::whereHas('instructors',function($q) use ($company){
+                            $q->leftjoin('users','users.id','=','instructors.user_id')->where('users.company_id',$company);
                         })->orderBy('id','desc')->limit(8)->get();
             
             return view('account.instructorpanel',compact('sales','courses','recentcourses'));
@@ -735,6 +736,38 @@ class AccountController extends Controller
             }
           
        return $noti_data2;
+    }
+
+
+    public function signupnoti($value='')
+    {
+        $noti_data2=array();
+        $outputdata = array();
+        /*if(Auth::check()){*/
+
+            /*$user  = Auth::user();*/
+    
+            $users = User::all();
+            foreach($users as $user){
+                $id = $user->id;
+
+                foreach($user->unreadNotifications as $sal)
+                    {
+                        
+                            array_push($noti_data2, $sal);
+
+                 
+                        
+                    }
+            }
+       return $noti_data2;
+    }
+
+    public function removesignupnoti(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->unreadNotifications()->delete();
+        echo "success";
     }
 
 }

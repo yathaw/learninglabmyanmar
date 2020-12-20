@@ -56,21 +56,20 @@ class ContentController extends Controller
         $content->section_id=$request->sectionid;
         $content->sorting=1;
 
-        // $contentsorting= Content::where('section_id', $request->sectionid)->get();
-        // //dd($contentsorting);
+        // $hasCourses_inSection = Section::where('course_id', $request->courseid)->get();
 
-        // foreach($contentsorting as $contentsorting){
-        //     $sorting = $contentsorting->sorting;
+        // foreach($hasCourses_inSection as $hasCourse_inSection){
+        //     $sorting = $hasCourse_inSection->sorting;
         //     $sorting_data = ++$sorting;
         // }
 
         // /*insert sorting*/
-        // if($contentsorting->isEmpty()){
-        // $content->sorting = 1;
+        // if($hasCourses_inSection->isEmpty()){
+        // $section->sorting = 1;
         // }else{
-        //     $content->sorting = $sorting_data;
+        //     $section->sorting = $sorting_data;
         // }
-        /*insert sorting*/
+
 
        //$section->instructor_id=1;
         $content->contenttype_id=$request->contenttypeid;
@@ -135,11 +134,8 @@ class ContentController extends Controller
             $assignment->save();
 
         }
-
-        
-
-       //return redirect()->route('backside.sectionlist',$request->sectionid);
-      return redirect()->route('backside.section.index');
+       //return redirect()->route('backside.sectionlist');
+      return view('course.section_new');
         
     }
 
@@ -203,6 +199,14 @@ class ContentController extends Controller
         $id = $request->id;
         $content =Content::find($id);
         return $content;
+
+    }
+
+    public function getlesson(Request $request){
+        
+        $contentid = $request->contentid;
+        $lesson =Lesson::where('content_id',$contentid)->get();
+        return $lesson;
 
     }
 }

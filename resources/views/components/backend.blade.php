@@ -27,7 +27,7 @@
 	<!-- Datatable CSS -->
     <link rel="stylesheet" type="text/css" href="{{ asset('plugin/datatable/dataTables.bootstrap4.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugin/datatable/responsive.dataTables.min.css') }}">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     <!-- Sweet Alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -548,7 +548,8 @@
 			</footer>
 		</div>
 	</div>
-
+	<div class="a"></div>
+	 
 	<script src="{{ asset('plugin/jquery-3.5.1.min.js') }}"></script>	
 
 
@@ -575,11 +576,22 @@
     <script src="{{ asset('plugin/sortable/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('plugin/pusher.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('backend/js/noti.js')}}"></script>
+    
     <script src="{{ asset('plugin/admincheckoutnoti.js') }}"></script>
     <script src="{{ asset('plugin/anime.min.js') }}"></script>
     <script src="{{ asset('plugin/moment.js') }}"></script>
 
+   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  	<script type="text/javascript">
+  		$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
+            $('[data-toggle="tooltip"]').tooltip();
+  	</script>
+  	@role('Admin')
     <script type="text/javascript">
     	$.ajaxSetup({
             headers: {
@@ -587,13 +599,81 @@
             }
         });
 
-            $('[data-toggle="tooltip"]').tooltip();
-    	
+   showNoti(); 		
+  var notyf = new Notyf();
+function showNoti(){
+	$.ajax({
+            url: "/backside/signupnoti",
+            type: "GET",
+            dataType: 'json',  
+            success: function (response) {
+ 
+      var count = response.length;
+     
+
+      if(count > 0)
+      {
+
+
+       $.each(response,function(i,v){
+
+         /* let url = '/backside/sale/'+v.data.saleid;*/
+         //console.log(v.data.name);
+         var id = v.data.userid;
+          var message = v.data.name +'('+v.data.role+') account created';
+          var type = "success";
+          var duration = 2500;
+          var ripple = "With ripple";
+          //var dismissible = "Dismissible";
+          var positionX = "right";
+          var positionY = "top";
+
+          window.notyf.open({
+            type,
+              message,
+              duration,
+              ripple,
+             
+              position: {
+                x: positionX,
+                y: positionY
+              },
+
+          });
+          setTimeout(function() {
+          	var dataid = v.data.userid;
+                    $.ajax({
+            url: "/backside/removesignupnoti",
+            type: "POST",
+            data: {id:dataid},
+            dataType: 'json',  
+            success: function (result) {
+               console.log(result);
+            }
+        });
+                }, 2500);
+        });
+       
+        
+      }else 
+      {
+        
+        
+      }
+    }
+    });
+
+}
+
+
+
 
     </script>
-
+@endrole
 
     @yield("script_content")
+
+
 
 </body>
 
