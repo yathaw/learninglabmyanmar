@@ -57,7 +57,11 @@
     <script src="{{ asset('frontend/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('frontend/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
     <script src="{{ asset('frontend/vendor/venobox/venobox.min.js') }}"></script>
+    <script src="{{ asset('plugin/jquery.validate.js') }}"></script>
+    
     <script src="{{ asset('plugin/jquery.steps.min.js') }}"></script>
+
+    
 
 
     <!-- Template Main JS File -->

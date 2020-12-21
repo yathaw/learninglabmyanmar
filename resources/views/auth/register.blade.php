@@ -57,7 +57,7 @@
 
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12" data-description="You are Business with us">
                                 <label class="rad-label" data-toggle="tooltip" data-placement="top" title="Your Organizations access to their description for employee learning">
-                                    <input type="radio" class="rad-input" name="role" value="Company">
+                                    <input type="radio" class="rad-input" name="role" value="Business">
                                     <div class="rad-design"></div>
                                     <div class="rad-text"> For Business </div>
                                 </label>
