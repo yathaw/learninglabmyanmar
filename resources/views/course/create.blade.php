@@ -100,9 +100,7 @@
                                                 <label for="companyInstructor" class="form-label"> Select Instructors </label>
 
                                                 <select name="teachers[]" class="form-select select2" id="companyInstructor" multiple="multiple" disabled>
-                                                    <option> aa </option>
-                                                    <option> aa </option>                                                
-                                                    <option> aa </option>                                                
+                                                    <option>  </option>                       
 
 
                                                 </select> 
@@ -303,11 +301,13 @@
                 onFinished: function (event, currentIndex)
                 {
                     var about = document.querySelector('textarea[name=description]');
-                    var value = JSON.stringify(quill.getContents());
-                    console.log(value);
-                    console.log(Object.values(value));
-                    // about.value
-                    // form.submit();
+
+                    var quillData = quill.getContents();
+                    var quillText = quill.getText();
+                    var quillHtml = quill.root.innerHTML.trim();
+
+                    about.value =  quillHtml;
+                    form.submit();
 
                 }
             });
@@ -357,7 +357,7 @@
 
 
                     $.each(res,function (i,v) {
-                        html +=`<option value="${v.id}">
+                        html +=`<option value="${v.instructor.id}">
                                 ${v.name}
                             </option>`;
                     });

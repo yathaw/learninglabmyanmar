@@ -1,18 +1,29 @@
 <x-backend>
    <div class="row mb-2 mb-xl-3">
-      <div class="col-auto d-none d-sm-block">
-         <h3><strong> Edit Course </strong> </h3>
-      </div>
-      <div class="col-auto ml-auto text-right mt-n1">
-         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb bg-transparent p-0 mt-1 mb-0">
-               <li class="breadcrumb-item"><a href="{{ route('panel') }}">Dashboard</a></li>
-               <li class="breadcrumb-item"><a href="{{ route('backside.category.index') }}">List</a></li>
-               <li class="breadcrumb-item active" aria-current="page"> New </li>
-            </ol>
-         </nav>
-      </div>
+        <div class="col-auto d-none d-sm-block">
+            <h3><strong> Edit Course </strong> </h3>
+        </div>
+        <div class="col-auto ml-auto text-right mt-n1">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent p-0 mt-1 mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('panel') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('backside.category.index') }}">List</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> Edit </li>
+                </ol>
+            </nav>
+        </div>
    </div>
+
+   @php
+        $outlines = json_decode($course->outline,true);
+        $outline_count = count($outlines);
+
+        $requirements = json_decode( $course->requirements, true);
+        $requirement_count = count($requirements);
+
+    @endphp
+
+
    <div class="row">
       <div class="col-12">
          <div class="card">
@@ -188,83 +199,166 @@
       </div>
    </div>
    @section('script_content')
-   <script type="text/javascript">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugin/plyr/demo.css') }}">
+    <script src="{{ asset('plugin/plyr/plyr_plugin.js') }}"></script>
+    <script src="{{ asset('plugin/plyr/default.js') }}"></script>
+    <script type="text/javascript">
       $(document).ready(function() {
+
+            $("#videoSourceWrapper").hide();
+
+            $('#example-form').on('change','#uploadVideoFile',function(){
+                    var fileInput = document.getElementById("uploadVideoFile");
+                    console.log('Trying to upload the video file: %O', fileInput);
+
+                    if ('files' in fileInput) {
+                        if (fileInput.files.length === 0) {
+                            alert("Select a file to upload");
+                        } else {
+                            var $source = $('#videoSource');
+                            $source[0].src = URL.createObjectURL(this.files[0]);
+                            $source.parent()[0].load();
+                            $("#videoSourceWrapper").show();
+                        }
+                    } else {
+                        console.log('No found "files" property');
+                    }
+                }
+            );
+
+
+            readURL = function(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#blah')
+                            .attr('src', e.target.result);
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
       
+            var form = $("#example-form");
       
-          var form = $("#example-form");
+            form.steps({
+                headerTag: "h6",
+                bodyTag: "section",
+                transitionEffect: "fade",
+                titleTemplate: '<span class="step">#index#</span> #title#',
+                onFinished: function (event, currentIndex)
+                {
+                    var about = document.querySelector('textarea[name=description]');
+
+                    var quillData = quill.getContents();
+                    var quillText = quill.getText();
+                    var quillHtml = quill.root.innerHTML.trim();
+
+                    about.value =  quillHtml;
+                    form.submit();
       
-          form.steps({
-              headerTag: "h6",
-              bodyTag: "section",
-              transitionEffect: "fade",
-              titleTemplate: '<span class="step">#index#</span> #title#',
-              onFinished: function (event, currentIndex)
-              {
-                  $("#hiddenArea").val($("#descriptionId").html());
-                  form.submit();
+                }
+            });
       
-              }
-          });
+            var toolbarOptions = [
+                [{ 'font': [] }],
+                [{ 'header': [1, 2, 3, 4, 5, 6] }],
+                ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                ['link', 'image'],
+                ['blockquote', 'code-block'],
       
-          var toolbarOptions = [
-              [{ 'font': [] }],
-              [{ 'header': [1, 2, 3, 4, 5, 6] }],
-              ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-              ['link', 'image'],
-              ['blockquote', 'code-block'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+                [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
       
-              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-              [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-              [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-      
-              [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
               
       
-              [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
               
-              [{ 'align': [] }],
+                [{ 'align': [] }],
       
       
-          ];
+            ];
       
-          var quill = new Quill('#descriptionId', {
+            var quill = new Quill('#descriptionId', {
               modules: {
                   toolbar: toolbarOptions
                 },
               theme: 'snow'
-          });
+            });
+            
+            quill.clipboard.dangerouslyPasteHTML(`{!! $course->description !!}`);
+
       
-      
-          $('.select2').select2({
-              theme: 'bootstrap4',
-          });
+            $('.select2').select2({
+                theme: 'bootstrap4',
+            });
+
           
-          var max_fields = 10; //Maximum allowed input fields 
-          var situation_wrapper    = $(".situation_morewrapperField"); //Input fields wrapper
-          var requirement_wrapper    = $(".requirement_morewrapperField"); //Input fields wrapper
+            var max_fields = 10; //Maximum allowed input fields 
+            var situation_wrapper    = $(".situation_morewrapperField"); //Input fields wrapper
+            var requirement_wrapper    = $(".requirement_morewrapperField"); //Input fields wrapper
       
-          var add_answerBtn = $(".add_situations"); //Add button class or ID
-          var add_requirementBtn = $(".add_requirements"); //Add button class or ID
+            var add_answerBtn = $(".add_situations"); //Add button class or ID
+            var add_requirementBtn = $(".add_requirements"); //Add button class or ID
       
-          var x = 1; //Initial input field is set to 1
-          var y =1;
-      
-          $(add_answerBtn).click(function(e) {
-      
-              e.preventDefault();
-              //Check maximum allowed input fields
-                  if(x < max_fields){ 
-                  x++; //input field increment
-                  //add input field
-                  $(situation_wrapper).append(`<div class="input-group mb-3">
-                                      <input type="text" class="form-control form-control-lg" placeholder="E.g Learn Digital Marketing" name="situations[]">
-                                      <button class="btn btn-danger remove_situationfield" type="button" id="button-addon2"> X
+            var x = {!! $outline_count !!}; //Initial input field is set to 1
+            var y ={{ $requirement_count }};
+
+            var outlines = JSON.parse(`{!! $course->outline !!}`);
+            var requirements = JSON.parse(`{!! $course->requirements !!}`);
+
+            console.log(outlines);
+
+            append_situation_wrapper(x);
+            append_requirement_wrapper(y);
+
+            function append_situation_wrapper(x){
+                $.each(outlines,function(i,v){
+                    if(i > 0){
+                        $(situation_wrapper).append(`<div class="input-group mb-3">
+                                  <input type="text" class="form-control form-control-lg" placeholder="E.g Learn Digital Marketing" name="situations[]" value="${v}">
+                                  <button class="btn btn-danger remove_situationfield" type="button" id="button-addon2"> X
+                                  </button>
+                              </div>`);
+                    }
+                })
+
+                
+            }
+
+            function append_requirement_wrapper(y){
+                $.each(requirements,function(i,v){
+                    if(i > 0){
+                        $(requirement_wrapper).append(`<div class="input-group mb-3">
+                                      <input type="text" class="form-control form-control-lg" placeholder="E.g Be able to read english 4 skills" name="requirements[]" value="${v}">
+                                      <button class="btn btn-danger remove_requirementfield" type="button" id="button-addon2"> X
                                       </button>
                                   </div>`);
-                  }
+                    }
+                })
+            }
+
       
-              });
+            $(add_answerBtn).click(function(e) {
+      
+                e.preventDefault();
+                //Check maximum allowed input fields
+                if(x < max_fields){ 
+                x++; //input field increment
+                //add input field
+                $(situation_wrapper).append(`<div class="input-group mb-3">
+                                  <input type="text" class="form-control form-control-lg" placeholder="E.g Learn Digital Marketing" name="situations[]">
+                                  <button class="btn btn-danger remove_situationfield" type="button" id="button-addon2"> X
+                                  </button>
+                              </div>`);
+                }
+      
+            });
+
+            
       
               
                
@@ -303,7 +397,41 @@
       
           });
       
-          
+            const player = Plyr.setup('.js-player',{
+                // invertTime: false,
+                i18n: {
+                    rewind: 'Rewind 15s',
+                    fastForward: 'Forward 15s',
+                    seek: "Seek",
+                    start: "Start",
+                    end: "End",
+                    seekTime : 10
+                },
+                controls: [
+                    'play-large', // The large play button in the center
+                    'restart', // Restart playback
+                    'rewind', // Rewind by the seek time (default 10 seconds)
+                    'play', // Play/pause playback
+                    'fast-forward', // Fast forward by the seek time (default 10 seconds)
+                    'progress', // The progress bar and scrubber for playback and buffering
+                    'current-time', // The current time of playback
+                    'mute', // Toggle mute
+                    'volume', // Volume control
+                    'captions', // Toggle captions
+                    'settings', // Settings menu
+                    'fullscreen', // Toggle fullscreen
+                    'airplay'
+                ],
+                events: ["ended", "progress", "stalled", "playing", "waiting", "canplay", "canplaythrough", "loadstart", "loadeddata", "loadedmetadata", "timeupdate", "volumechange", "play", "pause", "error", "seeking", "seeked", "emptied", "ratechange", "cuechange", "download", "enterfullscreen", "exitfullscreen", "captionsenabled", "captionsdisabled", "languagechange", "controlshidden", "controlsshown", "ready", "statechange", "qualitychange", "adsloaded", "adscontentpause", "adscontentresume", "adstarted", "adsmidpoint", "adscomplete", "adsallcomplete", "adsimpression", "adsclick"],
+                listeners: {
+                    seek: function (e) {
+                        // return false;    // required on v3
+                    },
+                    fastForward: 100
+                },
+                
+                clickToPlay: true,
+            });
           
       });
       

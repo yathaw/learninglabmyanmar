@@ -35,7 +35,22 @@
 		</div>
 	</div>
 
+	<div class="row my-5">
+		<div class="offset-md-10 col-xl-2 offset-md-3">
+			<select class="form-select">
+				<option selected disabled>Choose Course:</option>
+				@foreach($courses as $course)
+				<option data-id="{{$course->id}}">{{$course->title}}</option>
+				@endforeach
+			</select>
+		</div>
+	</div>
+
 	<div class="row outputshow">
+		
+	</div>
+
+	<div class="row filtershow">
 		
 	</div>
 
@@ -58,7 +73,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						@php $i=1; @endphp
+						@php $i=1;  $alltotal=0;@endphp
 						@foreach($enrolls as $enroll)
 						<tr>
 							<td>{{$i++}}</td>
@@ -77,7 +92,15 @@
 							</td>
 							<td class="d-none d-md-table-cell">{{$enroll->total}}</td>
 						</tr>
+						@php 
+							$subtotal=$enroll->total;
+							$alltotal+=$subtotal; 
+						@endphp
 						@endforeach
+						<tr>
+							<th colspan="5" class="text-center">Total Price</th>
+							<td>{{$alltotal}}</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -164,6 +187,7 @@
               }
           });
         	$('.outputshow').hide();
+        	$('.filtershow').hide();
         	$(".clickableRow").click(function() {
 		        window.location = $(this).data("href");
 		    	});
@@ -200,7 +224,8 @@
 																</tr>
 															</thead>
 															<tbody>`;
-								if(result.sales.length>0){			
+								if(result.sales.length>0){
+								var alltotal = 0;		
                  $.each(result.sales,function(i,v){
                  		
                  		var date = new Date(v.created_at);
@@ -210,6 +235,90 @@
 									  var year = date.getFullYear();
 										 
 										var fullday = day+'/'+month+'/'+year;
+										var subtotal = v.total;
+										
+                 		html+=`<tr class='clickableRow'>
+																	<td>${j++}</td>
+																	<td>${v.user.name}</td>
+																	<td class="d-none d-xl-table-cell">${fullday}</td>
+																	<td>${v.invoiceno}</td>
+																	<td>`;
+																	$.each(v.courses,function(k,r){
+																		html+=`<span class="badge bg-success">${r.title}</span>`;
+																	});
+																	html+=`</td>
+																	<td class="d-none d-md-table-cell">${v.total}</td>
+																</tr>`;
+											alltotal+=subtotal++;
+                 })
+                 html+=`<tr>
+													<th colspan="5" class="text-center">Total Price</th>
+													<td>${alltotal}</td>
+												</tr>
+												</tbody>
+												</table>
+												</div>
+												</div>`;
+									$('.outputshow').html(html);
+									$('.outputshow').show();
+									$('.limitshow').hide();
+									$('.filtershow').hide();
+								}else{
+									html+=`<tr class='clickableRow'>
+														<td colspan='6' class='text-center'>Your Search Data Not Found</td>
+													</tr></tbody></table></div></div>`;
+									$('.outputshow').html(html);
+									$('.outputshow').show();
+									$('.limitshow').hide();
+									$('.filtershow').hide();
+								}
+              }
+            });
+		    	})
+
+
+
+		    	$('select').change(function() {
+		    		var id = $(this).find(':selected').data('id');
+		    		$.ajax({
+              url: "/backside/coursefilter",
+              method: 'post',
+              data: {
+                 id: id
+              },
+              success: function(result){
+              	var html=''; var j=1;
+                 html+=`<div class="col-12 col-lg-12 col-xxl-12 d-flex">
+													<div class="card flex-fill">
+														<div class="card-header">
+
+															<h5 class="card-title mb-0">Enrollment (${result.course.title})</h5>
+														</div>
+														<table class="table table-hover my-0">
+															<thead>
+																<tr>
+																	<th>No</th>
+																	<th>Student Name</th>
+																	<th class="d-none d-xl-table-cell">Start Date</th>
+																	<th>Invoice No</th>
+																	<th>Course Title</th>
+																	<th class="d-none d-md-table-cell"> Price </th>
+																</tr>
+															</thead>
+															<tbody>`;
+								if(result.sales.length>0){	
+								var alltotal = 0;		
+                 $.each(result.sales,function(i,v){
+                 		
+                 		var date = new Date(v.created_at);
+
+										var day = date.getDate();
+									  var month = date.getMonth();
+									  var year = date.getFullYear();
+										 
+										var fullday = day+'/'+month+'/'+year;
+										var subtotal = v.total;
+										alltotal+=subtotal++;
                  		html+=`<tr class='clickableRow'>
 																	<td>${j++}</td>
 																	<td>${v.user.name}</td>
@@ -223,23 +332,30 @@
 																	<td class="d-none d-md-table-cell">${v.total}</td>
 																</tr>`;
                  })
-                 html+=`</tbody>
-														</table>
-													</div>
-												</div>`;
-									$('.outputshow').html(html);
-									$('.outputshow').show();
+
+                 html+=`<tr>
+													<th colspan="5" class="text-center">Total Price</th>
+													<td>${alltotal}</td>
+												</tr>
+												</tbody>
+												</table>
+												</div>
+											</div>`;
+									$('.filtershow').html(html);
+									$('.filtershow').show();
 									$('.limitshow').hide();
+									$('.outputshow').hide();
 								}else{
 									html+=`<tr class='clickableRow'>
 														<td colspan='6' class='text-center'>Your Search Data Not Found</td>
 													</tr></tbody></table></div></div>`;
-									$('.outputshow').html(html);
-									$('.outputshow').show();
+									$('.filtershow').html(html);
+									$('.filtershow').show();
 									$('.limitshow').hide();
+									$('.outputshow').hide();
 								}
               }
-            });
+            })
 		    	})
 
         });

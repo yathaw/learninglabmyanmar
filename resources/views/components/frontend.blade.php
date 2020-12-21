@@ -33,7 +33,8 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('frontend/css/style.css') }}" rel="stylesheet">
 
-    
+    <!-- Quill -->
+    <link href="{{ asset('plugin/quill/quill.snow.css') }}" rel="stylesheet">
 
 </head>
 
@@ -270,7 +271,7 @@
 
             <div class="mr-md-auto text-center text-md-left">
                 <div class="copyright">
-                    &copy; Copyright <strong><span>Baker</span></strong>. All Rights Reserved
+                    &copy; Copyright <strong><span> Learning Lab Myanmar </span></strong>. All Rights Reserved
                 </div>
                 <div class="credits">
               
@@ -309,6 +310,7 @@
      
     {{-- localstorage --}}
     <script src="{{ asset('plugin/localstorage.js') }}"></script>
+    <script src="{{ asset('plugin/quill/quill.js') }}"></script>
 
      @yield("script_content")
 
