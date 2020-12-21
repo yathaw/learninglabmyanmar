@@ -109,7 +109,7 @@ class RegisterController extends Controller
 
     public function process_instructor_reg(Request $request){
 
-
+        // dd($request);
         $userid = $request->userid;
         $headline = $request->headline;
         $jobtitleid = $request->jobtitleid;
@@ -146,11 +146,12 @@ class RegisterController extends Controller
         $instructor->education = $json_str_edu;
 
         $instructor->save();
-        if($user != null){
             MailController::sendSignupEmail($user->name, $user->email);
-            return redirect()->back()->with(session()->flash('alert-success','Your account has been created. Please check email for verification link.'));
-        }
-         return redirect()->back()->with(session()->flash('alert-danger','Something went wrong!'));
+        
+        // if($user != null){
+        //     return redirect()->back()->with(session()->flash('alert-success','Your account has been created. Please check email for verification link.'));
+        // }
+         // return redirect()->back()->with(session()->flash('alert-danger','Something went wrong!'));
 
 
     }
