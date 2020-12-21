@@ -19,6 +19,7 @@ use App\Models\User;
 use App\Models\Lesson;
 use App\Models\Instructor;
 
+use Illuminate\Support\Facades\Mail;
 
 
 // NYL
@@ -570,6 +571,7 @@ class AccountController extends Controller
 
     public function questionstore(Request $request)
     {
+
         $request->validate([
             'contentid' => 'required',
             'summary' => 'required',
@@ -577,12 +579,14 @@ class AccountController extends Controller
         ]);
 
         // dd(request('comment'));
+        
 
         $question = new Question();
         $question->title = request('summary');
         $question->description = request('comment');
         $question->course_id = request('contentid');
         $question->user_id = Auth::id();
+
         if($question->save()){
             $questionnoti = [
                 'id' => $question->id,
@@ -595,16 +599,35 @@ class AccountController extends Controller
             Notification::send($question,new QuestionNotification($questionnoti));
             event(new NotiEvent($question));
 
+            $user=User::find(Auth::id());
+            $fromemail = $user->email;
+            $course = Course::find(request('contentid'));
+            $coursename = $course->title;
+            $to_name = 'Aye Lwin Soe';
+            $to_email = 'ayelwinsoe.it2018@gmail.com';
+            $data = array('coursetitle'=>$coursename, "title" => request('summary'),"comment"=>request('comment'));
+                
+            Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email,$fromemail,$user) {
+                $message->to($to_email, $to_name)
+                        ->subject('Learning Lab Myanmar Student Question Mail');
+                $message->from($fromemail,$user->name);
+            });
         }
         return redirect()->back();
     }
 
     public function questionnoti(){
+        $user = User::find(Auth::id());
+        
+        $questions = Question::with('course')->whereHas('course.instructors',function($q){
+            $q->where('instructors.user_id',Auth::id());
+        })->get();
+        
         $noti_data=array();
         $bb = array();
         /*if(Auth::check()){*/
 
-        $questions =  Question::all();
+        //$questions =  Question::all();
            
             foreach($questions as $quest){
 
@@ -628,6 +651,7 @@ class AccountController extends Controller
     }
 
     public function questionshownoti(){
+
         $noti_data=array();
         $bdata = array();
             $questions =  Question::all();

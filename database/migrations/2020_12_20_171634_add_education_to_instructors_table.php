@@ -14,7 +14,7 @@ class AddEducationToInstructorsTable extends Migration
     public function up()
     {
         Schema::table('instructors', function (Blueprint $table) {
-            $table->longText('education');
+            $table->longText('education')->nullable();
             $table->string('website')->nullable()->change();
             $table->string('twitter')->nullable()->change();
             $table->string('facebook')->nullable()->change();
