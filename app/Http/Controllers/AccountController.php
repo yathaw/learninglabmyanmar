@@ -617,11 +617,17 @@ class AccountController extends Controller
     }
 
     public function questionnoti(){
+        $user = User::find(Auth::id());
+        
+        $questions = Question::with('course')->whereHas('course.instructors',function($q){
+            $q->where('instructors.user_id',Auth::id());
+        })->get();
+        
         $noti_data=array();
         $bb = array();
         /*if(Auth::check()){*/
 
-        $questions =  Question::all();
+        //$questions =  Question::all();
            
             foreach($questions as $quest){
 
@@ -645,6 +651,7 @@ class AccountController extends Controller
     }
 
     public function questionshownoti(){
+
         $noti_data=array();
         $bdata = array();
             $questions =  Question::all();
