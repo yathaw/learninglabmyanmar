@@ -86,6 +86,9 @@ Route::post('login_data',[LoginController::class,'login_store'])->name('frontend
 
 Route::post('signup',[RegisterController::class,'process_signup'])->name('signup');
 Route::get('reg_step',[RegisterController::class,'reg_step'])->name('reg_step');
+Route::post('instructor_reg',[RegisterController::class,'process_instructor_reg'])->name('instructor_reg');
+Route::post('company_reg',[RegisterController::class,'process_company_reg'])->name('company_reg');
+
 // ------------------------------------------------------------------------
 
 /*
