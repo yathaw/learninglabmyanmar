@@ -16,7 +16,8 @@ use Auth;
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SignupNotification;
 
 class RegisterController extends Controller
 {
@@ -39,6 +40,17 @@ class RegisterController extends Controller
             'password' => Hash::make($input['password']),
             'phone' => $input['phone'],
         ]);
+
+        $signupnoti = [
+                'userid' => $user->id,
+                'name' => $input['name'],
+                'phoneno' => $input['phone'],
+                'email' => $input['email'],
+                'role' => $role
+            ];
+
+        Notification::send($user,new SignupNotification($signupnoti));
+        
         $user->assignRole($role);
 
         $jobtitles = Jobtitle::orderBy('name')->get();
