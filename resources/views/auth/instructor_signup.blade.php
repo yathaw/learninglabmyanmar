@@ -1,5 +1,11 @@
 <x-auth_step>
-	
+	<div class="flash-message">
+              @foreach(['danger','warning','success','info'] as $msg)
+                @if(Session::has('alert'.$msg))
+                <p class="alert-{{$msg}}">{{Session::get('alert-'.$msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">$times;</a></p>
+                @endif
+              @endforeach
+            </div>
 	<div class="container">
 		<div class="row justify-content-center">
 		    <div class="col-xs-12 col-md-8 col-lg-8">
@@ -366,21 +372,21 @@
 
         	var form = $("#example-form");
 
-        	form.validate({
+        	/*form.validate({
 			    errorPlacement: function errorPlacement(error, element) { element.before(error); },
 			    rules: {
 			        confirm: {
 			            equalTo: "#password"
 			        }
 			    }
-			});
+			});*/
 
             form.steps({
                 headerTag: "h6",
                 bodyTag: "section",
                 transitionEffect: "fade",
                 titleTemplate: '<span class="step">#index#</span> #title#',
-                onStepChanging: function (event, currentIndex, newIndex)
+                /*onStepChanging: function (event, currentIndex, newIndex)
 			    {
 			        form.validate().settings.ignore = ":disabled,:hidden";
 			        return form.valid();
@@ -389,7 +395,7 @@
 				{
 				    form.validate().settings.ignore = ":disabled";
 				    return form.valid();
-				},
+				},*/
                 onFinished: function (event, currentIndex)
                 {
                     var about = document.querySelector('textarea[name=description]');
