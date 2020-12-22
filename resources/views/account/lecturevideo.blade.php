@@ -641,7 +641,7 @@
                 </div>
                 <form action="{{route('questionstore')}}" method="post" id="example-form">
                     @csrf
-                    <input type="text" name="contentid" value="{{ $course->id }}" id="contentids">
+                    <input type="hidden" name="contentid" value="{{ $course->id }}" id="contentids">
                     <div class="modal-body">
 
                         <div class="form-floating mb-3 col-md-12">

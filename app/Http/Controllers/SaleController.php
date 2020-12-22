@@ -124,8 +124,37 @@ class SaleController extends Controller
         $course_id = $request->course_id;
         $sale = Sale::find($sale_id);
         $sale->courses()->detach($course_id);
-        return "ok";
+        $sale_coures=array();
+
+        foreach ($sale->courses as $course) {
+
+            if($course->pivot->status == 1){
+                array_push($sale_coures, $course->id);
+            }
+        }
+        // dd( count($sale->courses.'++++'. count($sale_coures) ));
+
+
+       
+            if(count($sale->courses) == 0){
+
+                $sale->delete();
+                return 'delete';
+
+            }
+            if(count($sale->courses) == count($sale_coures)){
+                $sale->status = 1;
+                $sale->save();
+            }
+
+                
+                return "ok";
+            
+
+            
+
     }
+
     public function enrollment()
     {
        /* $enrolls = Sale::whereHas('courses',function($q){

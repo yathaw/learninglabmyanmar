@@ -198,7 +198,8 @@
          </div>
       </div>
    </div>
-   <div class="row row-cols-1 row-cols-md-3 g-4">
+
+   <div class="row row-cols-1 row-cols-md-3 g-4 searchcourseshow">
       @foreach($courses as $course)
       @php
       $totalDuration = 0;
@@ -228,7 +229,7 @@
       }
       $userRole = $course->user->getRoleNames();
       @endphp
-      <div class="col-12 col-md-6 col-lg-3 searchcourseshow">
+      <div class="col-12 col-md-6 col-lg-3 ">
          <div class="card h-100">
             {{-- <img class="card-img-top backendCoursecard" src="{{asset($course->image)}}" alt="Unsplash"> --}}
             <div class="card-header px-4 pt-4">
@@ -413,7 +414,7 @@
                     $.each(data,function(i,v){
       
                         subtitle = v.subtitle.slice(0,60);
-                        html+=`
+                        html+=`<div class="col-12 col-md-6 col-lg-3 ">
                                 <div class="card h-100">
                                     <div class="card-header px-4 pt-4">
                                         <div class="card-actions float-right">

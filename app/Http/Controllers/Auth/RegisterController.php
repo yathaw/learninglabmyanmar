@@ -12,11 +12,13 @@ use App\Models\Company;
 use Redirect;
 use Auth;
 
+use App\Http\Controllers\MailController;
 
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SignupNotification;
 
 class RegisterController extends Controller
 {
@@ -39,6 +41,17 @@ class RegisterController extends Controller
             'password' => Hash::make($input['password']),
             'phone' => $input['phone'],
         ]);
+
+        $signupnoti = [
+                'userid' => $user->id,
+                'name' => $input['name'],
+                'phoneno' => $input['phone'],
+                'email' => $input['email'],
+                'role' => $role
+            ];
+
+        Notification::send($user,new SignupNotification($signupnoti));
+        
         $user->assignRole($role);
 
         $jobtitles = Jobtitle::orderBy('name')->get();
@@ -96,6 +109,7 @@ class RegisterController extends Controller
 
     public function process_instructor_reg(Request $request){
 
+        // dd($request);
         $userid = $request->userid;
         $headline = $request->headline;
         $jobtitleid = $request->jobtitleid;
@@ -134,6 +148,13 @@ class RegisterController extends Controller
         $instructor->education = $json_str_edu;
 
         $instructor->save();
+            MailController::sendSignupEmail($user->name, $user->email);
+        
+        // if($user != null){
+        //     return redirect()->back()->with(session()->flash('alert-success','Your account has been created. Please check email for verification link.'));
+        // }
+         // return redirect()->back()->with(session()->flash('alert-danger','Something went wrong!'));
+
 
 
 
