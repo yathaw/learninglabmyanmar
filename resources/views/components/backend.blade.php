@@ -148,14 +148,8 @@
             			</a>
 					</li>
 
-					<li class="sidebar-item {{ Request::segment(2) === 'course' ? 'active' : '' }}">
-						<a class="sidebar-link" href="{{route('backside.course.create')}}" data-toggle="tooltip" data-placement="left" title="ကျောင်းသားများ၏ Assignment တင်ထားသည့် စာရင်းများကြည့်မည်">
-              				<i class="align-middle" data-feather="file-text"></i> <span class="align-middle"> Assignment </span>
-            			</a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="" data-toggle="tooltip" data-placement="left" title="ကျောင်းသားများ၏ Quiz အဖြေများကြည့်မည်">
+					<li class="sidebar-item {{ Request::segment(2) === 'quiz' && Request::segment(3) ==='index' ? 'active' : '' }}">
+						<a class="sidebar-link" href="{{route('backside.quiz.index')}}" data-toggle="tooltip" data-placement="left" title="Quiz ထည့်သွင်းမည်​">
               				<i class="align-middle" data-feather="check-circle"></i> <span class="align-middle"> Quiz </span>
             			</a>
 					</li>

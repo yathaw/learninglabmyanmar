@@ -28,6 +28,10 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\InstallmentController;
 
+// YTMN
+use App\Http\Controllers\QuizController;
+
+
 //HH
 use App\Http\Controllers\Auth\LoginController;
 
@@ -137,6 +141,8 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     //YTMN
     Route::resource('/questions',QuestionController::class);
     Route::resource('/answer',AnswerController::class);
+    Route::resource('/quiz',QuizController::class);
+
 
 
     //ALS

@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Quiz extends Model
+class Test extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['question','type','timer','test_id'];
+    protected $fillable=['title','description','content_id'];
+
 }

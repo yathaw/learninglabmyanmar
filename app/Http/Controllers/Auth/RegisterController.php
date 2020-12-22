@@ -112,6 +112,8 @@ class RegisterController extends Controller
         $edu_array    = array($education);
         $json_str_edu = json_encode($edu_array);
 
+        dd($json_str_edu);
+
         $user = User::find($userid);
         $user->jobtitle_id = $jobtitleid;
         $user->profile_photo_path = $profile;
@@ -132,6 +134,8 @@ class RegisterController extends Controller
         $instructor->education = $json_str_edu;
 
         $instructor->save();
+
+
 
     }
 
