@@ -31,13 +31,16 @@
     <link href="{{ asset('frontend/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/vendor/owl.carousel/assets/owl.carousel.min.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/vendor/venobox/venobox.css') }}" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     <!-- Template Main CSS File -->
     <link href="{{ asset('frontend/css/style.css') }}" rel="stylesheet">
 
     <!-- Select 2 -->
     <link rel="stylesheet" type="text/css" href="{{ asset('plugin/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugin/select2_bootstrap4/dist/select2-bootstrap4.min.css') }}">
+    <!-- Quill -->
+    <link href="{{ asset('plugin/quill/quill.snow.css') }}" rel="stylesheet">
+
 
 </head>
 
@@ -274,7 +277,7 @@
 
             <div class="mr-md-auto text-center text-md-left">
                 <div class="copyright">
-                    &copy; Copyright <strong><span>Baker</span></strong>. All Rights Reserved
+                    &copy; Copyright <strong><span> Learning Lab Myanmar </span></strong>. All Rights Reserved
                 </div>
                 <div class="credits">
               
@@ -307,9 +310,13 @@
     <script src="{{ asset('plugin/pusher.min.js')}}"></script>
    <!--  <script src="https://js.pusher.com/7.0/pusher.min.js"></script> -->
     <script type="text/javascript" src="{{asset('frontend/js/notification.js')}}"></script>
-
+     <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <!-- <script src="{{asset('plugin/scripts/script-test.js')}}" type="text/javascript"></script>
+      <script src="{{asset('plugin/scripts/script-demo.js')}}" type="text/javascript"></script> -->
+     
     {{-- localstorage --}}
     <script src="{{ asset('plugin/localstorage.js') }}"></script>
+    <script src="{{ asset('plugin/quill/quill.js') }}"></script>
 
     <!-- Select 2 -->
     <script src="{{asset('plugin/select2/dist/js/select2.min.js')}}"></script>
@@ -319,7 +326,30 @@
 
      @yield("script_content")
 
-
+     <script type="text/javascript">
+         //var da = "<?php echo Session::get('name') ?>";
+           // console.log(da);
+           /*var da = "A";
+            var message = da || getMessage();
+        var type = "success";
+        var duration = 2500;
+        var ripple = "With ripple";
+        var dismissible = "Dismissible";
+        var positionX = "right";
+        var positionY = "top";
+        window.notyf.open({
+          type,
+          message,
+          duration,
+          ripple,
+          dismissible,
+          position: {
+            x: positionX,
+            y: positionY
+          }
+      })*/
+     </script>
+      
 </body>
 
 </html>

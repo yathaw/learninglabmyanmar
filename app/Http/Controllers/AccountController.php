@@ -19,11 +19,11 @@ use App\Models\User;
 use App\Models\Lesson;
 use App\Models\Instructor;
 
+use Illuminate\Support\Facades\Mail;
 
 
 // NYL
 use App\Models\Collection;
-
 
 
 class AccountController extends Controller
@@ -505,7 +505,12 @@ class AccountController extends Controller
         // dd($completeLessons);
         // $contents=Content::all();
         // $lesson=Lesson::find($id);
-        $questions = Question::all();
+
+        $questions = Question::with(['user','answers','course'])
+            ->where('course_id', $course->id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
         $answers = Answer::all();
 
         return view('account.lecturevideo',compact('questions','answers', 'course', 'sections','user_id','completeLessons','instructors'));
@@ -614,17 +619,19 @@ class AccountController extends Controller
 
             return view('account.instructorpanel',compact('sales','courses','recentcourses'));
         }elseif($role[0] == 'Business'){
-
-            $sales = Sale::whereHas('courses',function($q){
-                        $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id')->where('instructors.user_id',Auth::id());
+            $user = User::find(Auth::id());
+            $company = $user->company->id;
+            $sales = Sale::whereHas('courses',function($q) use ($company){
+                        $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->leftjoin('users','instructors.user_id','=','users.id')->where('users.company_id',$company);
                     })->where('sales.status',1)->get();
+
             
-              $courses = Course::whereHas('instructors',function($q){
-                            $q->where('instructors.user_id',Auth::id())->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id');
+              $courses = Course::whereHas('instructors',function($q) use ($company){
+                            $q->leftjoin('users','users.id','=','instructors.user_id')->where('users.company_id',$company);
                         })->get();
 
-            $recentcourses = Course::whereHas('instructors',function($q){
-                            $q->where('instructors.user_id',Auth::id())->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id');
+            $recentcourses = Course::whereHas('instructors',function($q) use ($company){
+                            $q->leftjoin('users','users.id','=','instructors.user_id')->where('users.company_id',$company);
                         })->orderBy('id','desc')->limit(8)->get();
             
             return view('account.instructorpanel',compact('sales','courses','recentcourses'));
@@ -634,17 +641,22 @@ class AccountController extends Controller
 
     public function questionstore(Request $request)
     {
+
         $request->validate([
             'contentid' => 'required',
             'summary' => 'required',
             'comment' => 'required'
         ]);
 
+        // dd(request('comment'));
+        
+
         $question = new Question();
         $question->title = request('summary');
         $question->description = request('comment');
         $question->course_id = request('contentid');
         $question->user_id = Auth::id();
+
         if($question->save()){
             $questionnoti = [
                 'id' => $question->id,
@@ -657,16 +669,35 @@ class AccountController extends Controller
             Notification::send($question,new QuestionNotification($questionnoti));
             event(new NotiEvent($question));
 
+            $user=User::find(Auth::id());
+            $fromemail = $user->email;
+            $course = Course::find(request('contentid'));
+            $coursename = $course->title;
+            $to_name = 'Aye Lwin Soe';
+            $to_email = 'ayelwinsoe.it2018@gmail.com';
+            $data = array('coursetitle'=>$coursename, "title" => request('summary'),"comment"=>request('comment'));
+                
+            Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email,$fromemail,$user) {
+                $message->to($to_email, $to_name)
+                        ->subject('Learning Lab Myanmar Student Question Mail');
+                $message->from($fromemail,$user->name);
+            });
         }
         return redirect()->back();
     }
 
     public function questionnoti(){
+        $user = User::find(Auth::id());
+        
+        $questions = Question::with('course')->whereHas('course.instructors',function($q){
+            $q->where('instructors.user_id',Auth::id());
+        })->get();
+        
         $noti_data=array();
         $bb = array();
         /*if(Auth::check()){*/
 
-        $questions =  Question::all();
+        //$questions =  Question::all();
            
             foreach($questions as $quest){
 
@@ -690,6 +721,7 @@ class AccountController extends Controller
     }
 
     public function questionshownoti(){
+
         $noti_data=array();
         $bdata = array();
             $questions =  Question::all();
@@ -798,6 +830,38 @@ class AccountController extends Controller
             }
           
        return $noti_data2;
+    }
+
+
+    public function signupnoti($value='')
+    {
+        $noti_data2=array();
+        $outputdata = array();
+        /*if(Auth::check()){*/
+
+            /*$user  = Auth::user();*/
+    
+            $users = User::all();
+            foreach($users as $user){
+                $id = $user->id;
+
+                foreach($user->unreadNotifications as $sal)
+                    {
+                        
+                            array_push($noti_data2, $sal);
+
+                 
+                        
+                    }
+            }
+       return $noti_data2;
+    }
+
+    public function removesignupnoti(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->unreadNotifications()->delete();
+        echo "success";
     }
 
 }

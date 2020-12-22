@@ -38,8 +38,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Company Name</th>
-                                    <th>Address</th>
-                                    
+                                 
                                     <th> Action </th>
                                 </tr>
                             </thead>
@@ -49,21 +48,20 @@
 
 
 
-                            	<tr>
-                            		<td>{{$i++}}</td>
+                            
+                            		
                                     @foreach($company->user as $company_user)
                                     @php 
                                         $role_name = $company_user->getRoleNames();
                                     @endphp
                                     @if($role_name[0] == "Business" && $company_user->status == '0')
-                               
+                                <tr>
+                                    <td>{{$i}}</td>
                                     <td>
                                         {{$company_user->name}}</td>
                                     <td>{{$company_user->email}}</td>
                                     <td>{{$company_user->phone}}</td>
                             		<td>{{$company->name}}</td>
-                            		
-                            		<td>{{$company->address}}</td>
                             		
                             		<td>
                                         <button class="btn btn-primary" id="business_detail" data-user_name="{{$company_user->name}}" data-email="{{$company_user->email}}" data-phone="{{$company_user->phone}}" data-company_name="{{$company->name}}" data-logo="{{$company->logo}}" data-address="{{$company->address}}" data-description="{{$company->description}}"><i class="fas fa-info-circle"></i></button>
@@ -75,9 +73,14 @@
                                             
                                         </form>
                             		</td>
+                                    @php
+                                    $i++;
+                                    @endphp
                                     @endif
-                                    @endforeach
-                            	</tr>
+                                </tr>
+                                @endforeach 
+                                    
+                            
                             	@endforeach
                             </tbody>
                             <tfoot>
@@ -87,8 +90,7 @@
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>Company Name</th>
-                                    <th>Address</th>
-                                        
+                                   
                                     <th> Action </th>
                                 </tr>
                             </tfoot>
@@ -190,7 +192,7 @@
         	$('#listTable').DataTable();
 
             $('tbody').on('click','#business_detail',function(){
-                alert('honey');
+               
                 var user_name = $(this).data('user_name');
                 var email = $(this).data('email');
                 var phone = $(this).data('phone');
