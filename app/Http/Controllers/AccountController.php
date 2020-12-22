@@ -265,119 +265,189 @@ class AccountController extends Controller
 
             }
         }
-        $collections = Collection::all();
+        $collections = Collection::where('user_id',Auth::id())->get();
         return view('account.mystudyings',compact('tabs','wishlists','sales','collections','completelessons'));
 
     }
 
 
-    public function add_course_collection($id)
+    public function add_course_collection(Request $request)
     {
         
-        $collection = Collection::find($id);
+        // $collection = Collection::find($request->id);
+        // $user_id = Auth::id();
+        // $sales = Sale::where('user_id',$user_id)->with(array('courses'=>function($q){
+        //     $q->wherePivot('status',1)->with('collections');
+        // }))->get();
+
+
+        $collection = Collection::find($request->id);
         $user_id = Auth::id();
-        $sales = Sale::where('user_id',$user_id)->paginate(8);
-        return view('account.add_course_collection',compact('sales','collection'));
+
+        $sales = Sale::where('user_id',$user_id)->with(array('courses'=>function($q)use($collection){
+            $q->wherePivot('status',1)->with(array('collections'=>function($query)use($collection){
+                $query->where('collections'.'.id',$collection->id)->get();
+            }))->get();
+        }))->get();
+
+        return response()->json($sales);
+
+        
+        return response()->json($sales);
     }
 
-    public function store_course_collection(Request $request)
-    {
-        // dd($request);
-        $courses_id = $request->course_collect_id;
 
-        $collection_id = $request->collection_id;
-        $collection = Collection::find($collection_id);
-        $collection_data = array();
-        $course_array = array();
-        $data_false = true;
-        if(count($collection->courses)>0){
 
-            foreach ($collection->courses as $course) {
-                // dd($course);
-                foreach ($courses_id as $value) {
-                   
-                    if($course->pivot->course_id == $value){
+    public function store_course_collection(Request $request){
 
-                        array_push($collection_data , 'true');
+        $collection = Collection::find($request->id);
 
-                    }else{
-                        
-                        array_push($collection_data , 'false');
-                        array_push($course_array, $value);
+        $course_array = $request->course_id;
+       
 
-                    }
-                    
-                }
-            }
-        }else{
+        // if(count($collection->courses())>0){
+        $sorting_collection = $collection->courses()->orderByRaw("CAST(sorting as Integer) ASC")->get();
+        // }
 
-                array_push($collection_data , 'false');
-                foreach ($courses_id as $value) { 
-                    array_push($course_array, $value);
-                }
-
-        }
-        dd($collection_data);
-        
-        foreach($collection_data as $colleciton_condition){
+        foreach ($sorting_collection as $value) {
                 
-
-            if($colleciton_condition == 'false'){
-                $data_false = false;
-
+                $sorting = ++$value->pivot->sorting;
             }
-        }
 
-            if($data_false == false){
-                $sorting_collection = $collection->courses()->orderByRaw("CAST(sorting as Integer) ASC")->get();
+
+            $data =[];
+            if($sorting_collection->isEmpty()){
+                $sorting = 1;
+
+                for ($i=0; $i < count($course_array) ; $i++) { 
+               
+                
+                    
+                    $data[$i]['sorting']=$sorting++;
+                    $data[$i]['course_id']=$course_array[$i];
+                    $data[$i]['collection_id']=$request->id;
+                    
+
+                }
+                $collection->courses()->attach($data);
+
+            }else{
+                for ($i=0; $i < count($course_array) ; $i++) {
+                    // dd($sorting);
+                    $data[$i]['sorting']=$sorting++;
+                    $data[$i]['course_id']=$course_array[$i];
+                    $data[$i]['collection_id']=$request->id;
+                }
+                $collection->courses()->attach($data);
+                    
+            }
+
+            return redirect()->route('collection');
+            
+
+    }
+
+    public function edit_course_collection(Request $request)
+    {
+        $collection = Collection::find($request->id);
+        $user_id = Auth::id();
+
+        $sales = Sale::where('user_id',$user_id)->with(array('courses'=>function($q)use($collection){
+            $q->wherePivot('status',1)->with(array('collections'=>function($query)use($collection){
+                $query->where('collections'.'.id',$collection->id)->get();
+            }))->get();
+        }))->get();
+
+        return response()->json($sales);
+    }
+
+    public function update_course_collection(Request $request)
+    {   
         
+        $collection = Collection::find($request->id);
+        if($request->course_id){
+        $course_array = $request->course_id;
+        sort($course_array);
+        $count_course_array = count($course_array);
+        }else{
+        $count_course_array = 0;
 
-                foreach ($sorting_collection as $value) {
+        }
+        $sorting_collection = $collection->courses()->orderByRaw('course_id','ASC')->get();
+        $array_id=array();
+        
+        $data=[];
+
+        // foreach ($sorting_collection as $value) {
+        //     $sorting = ++$value->pivot->sorting;
+        //     // dd($value->pivot);
+        // }
+
+
+        if($count_course_array > count($collection->courses)){
+            // attach data
+            dd('hey');
+
+        }elseif($count_course_array < count($sorting_collection)){
+            
+            for ($i=0; $i < count($sorting_collection) ; $i++) { 
+                if(empty($course_array[$i])){
+                    $course_array[$i]= '' ;
+                    if($course_array[$i] != $sorting_collection[$i]->pivot->course_id){
+                        // dd($course_array[$i] .'!='. $sorting_collection[$i]->pivot->course_id.'/'.$i);
+
+                        $data[$i]['sorting']=$sorting_collection[$i]->pivot->sorting;
+                        $data[$i]['course_id']=$sorting_collection[$i]->pivot->course_id;
+                        $data[$i]['collection_id']=$request->id;
+                        array_push($array_id,$sorting_collection[$i]->pivot->course_id);
+                    }
                     
-                    $sorting = ++$value->pivot->sorting;
+                    
                 }
 
-
-                $data =[];
-                if($sorting_collection->isEmpty()){
-                    $sorting = 1;
-
-                    for ($i=0; $i < count($course_array) ; $i++) { 
-                   
-                    
-                        
-                        $data[$i]['sorting']=$sorting++;
-                        $data[$i]['course_id']=$course_array[$i];
-                        $data[$i]['collection_id']=$collection_id;
-                        
-
-                    }
-                    $collection->courses()->attach($data);
-
-                }else{
-                    for ($i=0; $i < count($course_array) ; $i++) {
-                        // dd($sorting);
-                        $data[$i]['sorting']=$sorting++;
-                        $data[$i]['course_id']=$course_array[$i];
-                        $data[$i]['collection_id']=$collection_id;
-                    }
-                    $collection->courses()->attach($data);
-                        
-                }
+               
+            }
+            // dd($data);
+            foreach ($data as $value) {
+                // dd($value['course_id']);
+                $collection->courses()->where('course_id',$value['course_id'])->delete();
             }
             
 
-        // return redirect()->route('collection');
+            
+            return redirect()->route('collection');
+                
+
+        }elseif(count($course_array) == count($collection->courses)){
+            // detach and attach data
+            dd('hello');
+        }
+
+
+          
+
+                // for ($i=0; $i < count($course_array) ; $i++) { 
+                    
+                //     $data[$i]['sorting']=$sorting++;
+                //     $data[$i]['course_id']=$course_array[$i];
+                //     $data[$i]['collection_id']=$request->id;
+                    
+
+                // }
+                // dd($data);
+                // $collection->courses()->updateExistingPivot($data);
+
+
+
 
 
     }
-
-
 
 
     public function purchase_history()
     {
         $sales = Sale::where("user_id",Auth::id())->get();
+        // dd($sales);
         return view('account.purchase_history',compact('sales'));
     }
     

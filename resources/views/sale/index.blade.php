@@ -10,7 +10,7 @@
           <h5 class="card-title mb-0"> All Lists </h5>
         </div>
         <div class="card-body">
-
+          
           <div class="alert alert-success alert-dismissible fade show d-none" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>

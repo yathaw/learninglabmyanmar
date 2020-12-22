@@ -87,7 +87,17 @@ class CollectionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+                    'edit_title'=>'required',
+                    'edit_description'=>'required',
+                ]);
+        $title = $request->edit_title;
+        $description = $request->edit_description;
+        $collection = Collection::find($id);
+        $collection->title=$title;
+        $collection->description = $description;
+        $collection->save();
+        return response()->json($collection);
     }
 
     /**
@@ -98,7 +108,10 @@ class CollectionController extends Controller
      */
     public function destroy($id)
     {
-        dd($id);
+        $collection = Collection::find($id);
+        $collection->courses()->detach();
+        $collection->delete();
+        return back();
     }
 
     

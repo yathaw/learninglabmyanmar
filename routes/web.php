@@ -199,7 +199,13 @@ Route::get('/checkoutnoti',[AccountController::class,'checkoutnoti'])->name('che
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');
 
-Route::get('course_collection/{id}',[AccountController::class,'add_course_collection'])->name('add_course_collection');
+Route::post('add_course_collection',[AccountController::class,'add_course_collection'])->name('add_course_collection');
+
+Route::post('edit_course_collection',[AccountController::class,'edit_course_collection'])->name('edit_course_collection');
+
+Route::post('update_course_collection',[AccountController::class,'update_course_collection'])->name('update_course_collection');
+
+
 
 Route::post('store_course_collection',[AccountController::class,'store_course_collection'])->name('store_course_collection');
 

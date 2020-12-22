@@ -13,7 +13,9 @@
     <meta name="keywords" content="Learning Lab, Learning Lab Myanmar, Myanmar IT Consulting, Open Source Academy">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-
+    {{-- sort --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugin/sortable/jquery-ui.css') }}">
+    
     <link rel="shortcut icon" href="{{ asset('logo/favicon.ico') }}" />
 
     <title> Learning Lab Myanmar </title>
@@ -33,7 +35,9 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('frontend/css/style.css') }}" rel="stylesheet">
 
-    
+    <!-- Select 2 -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugin/select2/dist/css/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugin/select2_bootstrap4/dist/select2-bootstrap4.min.css') }}">
 
 </head>
 
@@ -306,6 +310,12 @@
 
     {{-- localstorage --}}
     <script src="{{ asset('plugin/localstorage.js') }}"></script>
+
+    <!-- Select 2 -->
+    <script src="{{asset('plugin/select2/dist/js/select2.min.js')}}"></script>
+
+    {{-- sort --}}
+    <script src="{{ asset('plugin/sortable/jquery-ui.min.js') }}"></script>
 
      @yield("script_content")
 
