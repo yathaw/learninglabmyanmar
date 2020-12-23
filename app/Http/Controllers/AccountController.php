@@ -608,7 +608,7 @@ class AccountController extends Controller
            $sales = Sale::whereHas('courses',function($q){
                         $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->where('instructors.user_id',Auth::id());
                     })->where('sales.status',1)->get();
-            
+           
             $courses = Course::whereHas('instructors',function($q){
                             $q->where('instructors.user_id',Auth::id());
                         })->get();
@@ -740,27 +740,27 @@ class AccountController extends Controller
     public function answerquestion(Request $request)
     {
         $request->validate([
-            'question' => 'required',
+            'questionid' => 'required',
             'description' => 'required'
         ]);
 
         $answer = new Answer();
         $answer->description = request('description');
-        $answer->question_id = request('question');
+        $answer->question_id = request('questionid');
         $answer->user_id = 2;
         if($answer->save()){
             $answernoti = [
                 'id' => $answer->id,
                 'description' => request('description'),
                 'user_id' => 2,
-                'question_id' => request('question')
+                'question_id' => request('questionid')
             ];
 
             Notification::send($answer,new AnswerNotification($answernoti));
             event(new AnswerEvent($answer));
 
         }
-        $question = Question::find(request('question'));
+        $question = Question::find(request('questionid'));
         $question->unreadNotifications()->update(['read_at' => now()]);
         return redirect()->back();
     }

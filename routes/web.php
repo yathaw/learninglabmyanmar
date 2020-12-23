@@ -134,10 +134,10 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/assignment', AssignmentController::class);
     Route::resource('/attachment', AttachmentController::class);
 
-    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
+    /*Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
 
     Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
-    
+    */
     //YTMN
     Route::resource('/questions',QuestionController::class);
     Route::resource('/answer',AnswerController::class);

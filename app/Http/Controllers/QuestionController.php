@@ -100,6 +100,8 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
+        $question->unreadNotifications()->delete();
+        
         $answer = Answer::where('question_id',$question->id)->get();
 
 

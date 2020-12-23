@@ -129,7 +129,7 @@
 					<tbody>
 						
 							@foreach($recentcourses as $recentcourse)
-							<tr class='clickableRow' data-href='{{ route('backside.course.show',$recentcourse->id) }}'>
+							<tr class='clickableRow' data-href="{{ route('backside.course.show',$recentcourse->id) }}">
 								<td>{{$recentcourse->title}}</td>
 								<td class="d-none d-xl-table-cell">{{$recentcourse->created_at->format('d/m/Y')}}</td>
 								<td><span class="badge bg-success">Done</span></td>
