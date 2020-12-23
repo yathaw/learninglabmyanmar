@@ -641,7 +641,6 @@ class AccountController extends Controller
 
     public function questionstore(Request $request)
     {
-
         $request->validate([
             'contentid' => 'required',
             'summary' => 'required',
@@ -673,15 +672,22 @@ class AccountController extends Controller
             $fromemail = $user->email;
             $course = Course::find(request('contentid'));
             $coursename = $course->title;
-            $to_name = 'Aye Lwin Soe';
-            $to_email = 'ayelwinsoe.it2018@gmail.com';
-            $data = array('coursetitle'=>$coursename, "title" => request('summary'),"comment"=>request('comment'));
+
+            foreach ($course->instructors as $key => $value) {
+               $to_name  = $value->user->name;
+               $to_email = $value->user->email;
+               $data = array('coursetitle'=>$coursename, "title" => request('summary'),"comment"=>request('comment'));
                 
-            Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email,$fromemail,$user) {
-                $message->to($to_email, $to_name)
-                        ->subject('Learning Lab Myanmar Student Question Mail');
-                $message->from($fromemail,$user->name);
-            });
+                Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email,$fromemail,$user) {
+                    $message->to($to_email, $to_name)
+                            ->subject('Learning Lab Myanmar Student Question Mail');
+                    $message->from($fromemail,$user->name);
+                });
+            }
+        
+            /*$to_name = 'Aye Lwin Soe';
+            $to_email = 'ayelwinsoe.it2018@gmail.com';*/
+            
         }
         return redirect()->back();
     }

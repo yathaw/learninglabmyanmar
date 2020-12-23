@@ -418,21 +418,23 @@
                                                 <h4 class="fontbold"> What you'll Learn </h4>
 
                                                 @php
-                                                    $outlines = json_decode($course->outline);
+                                                    $outlines = json_decode( $course->outline);
                                                     $requirements = json_decode( $course->requirements);
 
                                                 @endphp
-
+                                                @if($outlines != NULL)
                                                 <ul type="none" class="lh-lg">
                                                     @foreach($outlines as $outline)
                                                         <li> <i class="icofont-check-alt"></i> {{$outline}} </li>
                                                     @endforeach
                                                 </ul>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
 
                                     {{-- Requirement --}}
+                                    @if($requirements != NULL)
                                     <div class="col-12 mt-3">
                                         <div class="card">
                                             <div class="card-body">
@@ -446,6 +448,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
 
                                     {{-- Description --}}
                                     <div class="col-12 mt-5">

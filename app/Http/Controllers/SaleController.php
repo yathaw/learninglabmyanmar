@@ -78,7 +78,7 @@ class SaleController extends Controller
      */
     public function show(Sale $sale)
     {
-       
+       $sale->unreadNotifications()->delete();
         return view('sale.show',compact('sale'));
     }
 
