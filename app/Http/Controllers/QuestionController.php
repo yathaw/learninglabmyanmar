@@ -190,7 +190,7 @@ class QuestionController extends Controller
                     array_push($courses_id, $course->id);
                 }
 
-                $questions = Question::whereIn('course_id', [$courses_id])->orderBy('created_at', 'DESC')->get();
+                $questions = Question::with(['user'])->whereIn('course_id', [$courses_id])->orderBy('created_at', 'DESC')->get();
 
             }
 
