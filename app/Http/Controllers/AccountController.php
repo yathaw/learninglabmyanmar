@@ -601,7 +601,98 @@ class AccountController extends Controller
             $courses = Course::all();
             $recentcourses = Course::orderBy( 'id' , 'desc' )->limit(8)->get();
 
-            return view('account.instructorpanel',compact('sales','courses','recentcourses'));
+
+            $totals = Course::join('course_sale','course_sale.course_id','=','courses.id')->join('sales','course_sale.sale_id','=','sales.id')->where('sales.status',1)->where('course_sale.status',1)->get();
+            
+            $totalprices;
+            $prices = 0;
+                $price=$price1=$price2=$price3=$price4=$price5=$price6=$price7=$price8=$price9=$price10=$price11 = 0;
+            foreach ($totals as $total) {
+                $m = $total->created_at->format('M');
+                $y = $total->created_at->format('Y');
+                $current = date('Y');
+                
+                if($current == $y){
+                    switch ($m) {
+                    case 'Jan':
+                        $price += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Feb':
+                        $price1 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Mar':
+                        $price2 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Apr':
+                        $price3 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'May':
+                        $price4 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jun':
+                        $price5 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jul':
+                        $price6 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Aug':
+                        $price7 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Sep':
+                        $price8 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Oct':
+                        $price9 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Nov':
+                        $price10 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Dec':
+                        $price11 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        
+                        break;
+                    
+                    default:
+                        # code...
+                        break;
+                    }
+
+                }
+                
+               
+            }
+            if($prices > 0){
+            $totalprices = implode(',', $prices);
+            }else{
+                $prices = [0,0,0,0,0,0,0,0,0,0,0,0];
+                $totalprices = implode(',', $prices);
+                
+            }
+
+            return view('account.instructorpanel',compact('sales','courses','recentcourses','totalprices'));
         }elseif($role[0] == 'Instructor'){
             // Instructor
     
@@ -617,7 +708,98 @@ class AccountController extends Controller
                             $q->where('instructors.user_id',Auth::id());
                         })->orderBy('id','desc')->limit(8)->get();
 
-            return view('account.instructorpanel',compact('sales','courses','recentcourses'));
+            $totals = Course::whereHas('instructors',function($q){
+                $q->where('instructors.user_id',Auth::id());
+            })->join('course_sale','course_sale.course_id','=','courses.id')->join('sales','course_sale.sale_id','=','sales.id')->where('sales.status',1)->where('course_sale.status',1)->get();
+            
+            $totalprices;
+            $prices = 0;
+                $price=$price1=$price2=$price3=$price4=$price5=$price6=$price7=$price8=$price9=$price10=$price11 = 0;
+            foreach ($totals as $total) {
+                $m = $total->created_at->format('M');
+                $y = $total->created_at->format('Y');
+                $current = date('Y');
+                
+                if($current == $y){
+                    switch ($m) {
+                    case 'Jan':
+                        $price += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Feb':
+                        $price1 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Mar':
+                        $price2 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Apr':
+                        $price3 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'May':
+                        $price4 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jun':
+                        $price5 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jul':
+                        $price6 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Aug':
+                        $price7 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Sep':
+                        $price8 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Oct':
+                        $price9 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Nov':
+                        $price10 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Dec':
+                        $price11 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        
+                        break;
+                    
+                    default:
+                        # code...
+                        break;
+                    }
+
+                }
+                
+               
+            }
+            if($prices > 0){
+            $totalprices = implode(',', $prices);
+            }else{
+                $prices = [0,0,0,0,0,0,0,0,0,0,0,0];
+                $totalprices = implode(',', $prices);
+                
+            }
+            return view('account.instructorpanel',compact('sales','courses','recentcourses','totalprices'));
         }elseif($role[0] == 'Business'){
             $user = User::find(Auth::id());
             $company = $user->company->id;
@@ -634,7 +816,98 @@ class AccountController extends Controller
                             $q->leftjoin('users','users.id','=','instructors.user_id')->where('users.company_id',$company);
                         })->orderBy('id','desc')->limit(8)->get();
             
-            return view('account.instructorpanel',compact('sales','courses','recentcourses'));
+            $totals = Course::whereHas('instructors',function($q) use ($company){
+                $q->leftjoin('users','users.id','=','instructors.user_id')->where('users.company_id',$company);
+            })->join('course_sale','course_sale.course_id','=','courses.id')->join('sales','course_sale.sale_id','=','sales.id')->where('sales.status',1)->where('course_sale.status',1)->get();
+            
+            $totalprices;
+            $prices = 0;
+                $price=$price1=$price2=$price3=$price4=$price5=$price6=$price7=$price8=$price9=$price10=$price11 = 0;
+            foreach ($totals as $total) {
+                $m = $total->created_at->format('M');
+                $y = $total->created_at->format('Y');
+                $current = date('Y');
+                
+                if($current == $y){
+                    switch ($m) {
+                    case 'Jan':
+                        $price += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Feb':
+                        $price1 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Mar':
+                        $price2 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Apr':
+                        $price3 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'May':
+                        $price4 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jun':
+                        $price5 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jul':
+                        $price6 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Aug':
+                        $price7 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Sep':
+                        $price8 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Oct':
+                        $price9 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Nov':
+                        $price10 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Dec':
+                        $price11 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        
+                        break;
+                    
+                    default:
+                        # code...
+                        break;
+                    }
+
+                }
+                
+               
+            }
+            if($prices > 0){
+            $totalprices = implode(',', $prices);
+            }else{
+                $prices = [0,0,0,0,0,0,0,0,0,0,0,0];
+                $totalprices = implode(',', $prices);
+                
+            }
+            return view('account.instructorpanel',compact('sales','courses','recentcourses','totalprices'));
         }
     }
 
@@ -780,13 +1053,20 @@ class AccountController extends Controller
             /*$user  = Auth::user();*/
     
             $answers = Answer::all();
+            
+
             foreach($answers as $ans){
                 $id = $ans->id;
-
+                $user = Auth::id();
                 foreach($ans->unreadNotifications as $answer)
                     {
-                        if($answer->data['answer_id'] == $id){
+                        $quest = $answer->data['question_id'];
+                        $questionuser = Question::find($quest);
+                        $userid = $questionuser->user->id;
+
+                        if($answer->data['answer_id'] == $id && $userid == $user){
                             $data =$answer->where('read_at','=',NULL)->orderBy('created_at','desc')->get();
+        
                             array_push($cdata, $data);
 
                         }
@@ -798,14 +1078,30 @@ class AccountController extends Controller
         
           array_push($noti_data1, $value);
        }
-      
-       return $noti_data1;
+      return $noti_data1;
     }
 
 
     public function questionreply(Request $request)
     {
         $questionid = $request->quesid;
+        $userid = Auth::id();
+        
+        $answeruserid = Answer::where('question_id',$questionid)->with('user')->get();
+        foreach($answeruserid as $ans){
+            foreach($ans->unreadNotifications as $answer)
+                    {
+                        $quest = $answer->data['question_id'];
+                        $questionuser = Question::find($questionid);
+                        $user = $questionuser->user->id;
+
+                        if($answer->data['answer_id'] == $ans->id && $userid == $user){
+                            $ans->unreadNotifications()->delete();
+                            echo "success";
+                        }
+                    }
+        }
+
         $answer = Answer::where('question_id',$questionid)->with('user')->get();
         $question = Question::where('id',$questionid)->with('user')->get();
         return response()->json(['answer'=>$answer,'question'=>$question]);
