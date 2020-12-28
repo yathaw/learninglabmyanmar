@@ -295,9 +295,9 @@
 
                             $('.wizard-content').hide();
                             $('#regStep_msg').hide();
-                            
-                            $('.verifyDiv').show();
-                            $('#activateCompany_msg').show();
+                            window.location.href="http://localhost:8000/login";
+                            // $('.verifyDiv').show();
+                            // $('#activateCompany_msg').show();
                             
                         },
                         error: function(error){

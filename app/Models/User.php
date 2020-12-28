@@ -35,7 +35,8 @@ class User extends Authenticatable
         'company_id',
         'jobtitle_id',
         'current_team_id',
-        'profile_photo_path'
+        'profile_photo_path',
+        'verification_code'
     ];
 
     /**

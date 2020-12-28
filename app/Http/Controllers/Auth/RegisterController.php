@@ -31,16 +31,29 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => 'required',
-            'phone' => 'required'
+            'phone' => ['required','unique:users'],
         ])->validate();
 
+        $verification_code = sha1(time());
 
-        $user =User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => Hash::make($input['password']),
-            'phone' => $input['phone'],
-        ]);
+        if($role == 'Student'){
+            $user =User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+                'phone' => $input['phone'],
+            ]);
+        
+
+        }else{
+            $user =User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+                'phone' => $input['phone'],
+                'verification_code' => $verification_code,
+            ]);
+        }
 
         $signupnoti = [
                 'userid' => $user->id,
@@ -54,19 +67,7 @@ class RegisterController extends Controller
         
         $user->assignRole($role);
 
-        $jobtitles = Jobtitle::orderBy('name')->get();
-
-        $profiles = array(
-            "profiles/profile_1.png", "profiles/profile_2.png", "profiles/profile_3.png", "profiles/profile_4.png",
-            "profiles/profile_5.png", "profiles/profile_6.png", "profiles/profile_7.png", "profiles/profile_8.png",
-            "profiles/profile_9.png", "profiles/profile_10.png", "profiles/profile_11.png", "profiles/profile_12.png",
-            "profiles/profile_13.png", "profiles/profile_14.png", "profiles/profile_15.png", "profiles/profile_16.png",
-            "profiles/profile_17.png", "profiles/profile_18.png", "profiles/profile_19.png", "profiles/profile_20.png",
-            "profiles/profile_21.png", "profiles/profile_22.png", "profiles/profile_23.png", "profiles/profile_24.png",
-            "profiles/profile_25.png", "profiles/profile_26.png", "profiles/profile_27.png", "profiles/profile_28.png",
-            "profiles/profile_29.png", "profiles/profile_30.png", "profiles/profile_31.png", "profiles/profile_32.png",
-            "profiles/profile_33.png", "profiles/profile_34.png", "profiles/profile_35.png", "profiles/profile_36.png",
-        );
+        
 
         if ($role == 'Student') {
             $credentials = $input->only('phone', 'password');
@@ -75,9 +76,16 @@ class RegisterController extends Controller
 
         }
         elseif ($role == 'Instructor') {
-            return view('auth.instructor_signup',compact('user','jobtitles','profiles')); 
+            
+            MailController::sendSignupEmail($user->name, $user->email, $user->verification_code);
+
+            return view('auth.instructor_verify',compact('user')); 
         }else{
-            return view('auth.company_signup',compact('user','jobtitles','profiles'));
+
+            MailController::sendSignupEmail($user->name, $user->email, $user->verification_code);
+            return view('auth.company_verify',compact('user')); 
+
+            
         }
     }
     	
@@ -109,7 +117,7 @@ class RegisterController extends Controller
 
     public function process_instructor_reg(Request $request){
 
-        // dd($request);
+       
         $userid = $request->userid;
         $headline = $request->headline;
         $jobtitleid = $request->jobtitleid;
@@ -126,11 +134,11 @@ class RegisterController extends Controller
         $edu_array    = array($education);
         $json_str_edu = json_encode($edu_array);
 
-        dd($json_str_edu);
 
         $user = User::find($userid);
         $user->jobtitle_id = $jobtitleid;
         $user->profile_photo_path = $profile;
+       
 
         $user->save();
 
@@ -148,13 +156,7 @@ class RegisterController extends Controller
         $instructor->education = $json_str_edu;
 
         $instructor->save();
-            MailController::sendSignupEmail($user->name, $user->email);
         
-        // if($user != null){
-        //     return redirect()->back()->with(session()->flash('alert-success','Your account has been created. Please check email for verification link.'));
-        // }
-         // return redirect()->back()->with(session()->flash('alert-danger','Something went wrong!'));
-
 
 
 
@@ -192,9 +194,42 @@ class RegisterController extends Controller
         $user->jobtitle_id = $jobtitleid;
         $user->profile_photo_path = $profile;
         $user->save();
-
     }
 
+    public function verify_user()
+    {
+        $verification_code = $_GET['code'];
+        // dd($verification_code);
+        $user = User::where('verification_code',$verification_code)->first();
+        // dd($user);
+        $user_role = $user->getRoleNames();
 
+        if($user != null){
+            $user->status = 2;
+            $user->save();
+          
+        }
+        $jobtitles = Jobtitle::orderBy('name')->get();
+
+        $profiles = array(
+            "profiles/profile_1.png", "profiles/profile_2.png", "profiles/profile_3.png", "profiles/profile_4.png",
+            "profiles/profile_5.png", "profiles/profile_6.png", "profiles/profile_7.png", "profiles/profile_8.png",
+            "profiles/profile_9.png", "profiles/profile_10.png", "profiles/profile_11.png", "profiles/profile_12.png",
+            "profiles/profile_13.png", "profiles/profile_14.png", "profiles/profile_15.png", "profiles/profile_16.png",
+            "profiles/profile_17.png", "profiles/profile_18.png", "profiles/profile_19.png", "profiles/profile_20.png",
+            "profiles/profile_21.png", "profiles/profile_22.png", "profiles/profile_23.png", "profiles/profile_24.png",
+            "profiles/profile_25.png", "profiles/profile_26.png", "profiles/profile_27.png", "profiles/profile_28.png",
+            "profiles/profile_29.png", "profiles/profile_30.png", "profiles/profile_31.png", "profiles/profile_32.png",
+            "profiles/profile_33.png", "profiles/profile_34.png", "profiles/profile_35.png", "profiles/profile_36.png",
+        );
+        
+        if($user_role[0] == 'Instructor'){
+            return view('auth.instructor_signup',compact('user','jobtitles','profiles')); 
+        }else{
+            return view('auth.company_signup',compact('user','jobtitles','profiles'));
+        }
+      
+
+    }
 
 }
