@@ -16,6 +16,8 @@ use App\Http\Controllers\CoursecountController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
+use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\AnswerController;
 
 
 //KYW
@@ -26,9 +28,15 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\InstallmentController;
 
+// YTMN
+use App\Http\Controllers\QuizController;
+
+
 //HH
 use App\Http\Controllers\Auth\LoginController;
 
+// YTMN
+use App\Http\Controllers\Auth\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +88,11 @@ Route::get('instructor_info',[FrontendController::class,'instructor_info'])->nam
 Route::post('instructor_store',[FrontendController::class,'instructor_store'])->name('instructor.store');
 Route::post('login_data',[LoginController::class,'login_store'])->name('frontend_login');
 
+Route::post('signup',[RegisterController::class,'process_signup'])->name('signup');
+Route::get('reg_step',[RegisterController::class,'reg_step'])->name('reg_step');
+Route::post('instructor_reg',[RegisterController::class,'process_instructor_reg'])->name('instructor_reg');
+Route::post('company_reg',[RegisterController::class,'process_company_reg'])->name('company_reg');
+
 // ------------------------------------------------------------------------
 
 /*
@@ -94,8 +107,9 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/category',CategoryController::class);
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
-    Route::post('approve',[CourseController::class,'approve'])->name('course.approve');
+    Route::post('approve/{id}',[CourseController::class,'approve'])->name('course.approve');
     Route::post('courses_search',[CourseController::class, 'courses_search'])->name('courses_search');
+
 
 //NYL 
     Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
@@ -124,6 +138,25 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/attachment', AttachmentController::class);
 
 
+
+    /*Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
+
+    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
+    */
+    //YTMN
+    Route::resource('/questions',QuestionController::class);
+    Route::resource('/answer',AnswerController::class);
+    Route::resource('/quiz',QuizController::class);
+
+
+
+    //ALS
+    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
+
+    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
+
+    Route::post('/coursefilter',[SaleController::class,'coursefilter'])->name('coursefilter');
+
 });
 //KKS
 Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'as' => 'backside.'], function(){
@@ -137,11 +170,13 @@ Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'a
     
     // NYL
     Route::resource('installments',InstallmentController::class);
+    
+});
 
-    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
-
-    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
-
+    
+Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'backside.'], function(){
+    Route::get('/signupnoti',[AccountController::class,'signupnoti'])->name('signupnoti');
+    Route::post('/removesignupnoti',[AccountController::class,'removesignupnoti'])->name('removesignupnoti');
 });
 
 //HH
@@ -202,7 +237,13 @@ Route::get('/checkoutnoti',[AccountController::class,'checkoutnoti'])->name('che
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');
 
-Route::get('course_collection/{id}',[AccountController::class,'add_course_collection'])->name('add_course_collection');
+Route::post('add_course_collection',[AccountController::class,'add_course_collection'])->name('add_course_collection');
+
+Route::post('edit_course_collection',[AccountController::class,'edit_course_collection'])->name('edit_course_collection');
+
+Route::post('update_course_collection',[AccountController::class,'update_course_collection'])->name('update_course_collection');
+
+
 
 Route::post('store_course_collection',[AccountController::class,'store_course_collection'])->name('store_course_collection');
 
@@ -241,6 +282,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 // YTMN
 Route::post('getinstructor_bycompanyid',[CourseController::class, 'getinstructor'])->name('getinstructor_bycompanyid');
+Route::post('getquestion_bycourseid',[QuestionController::class, 'getquestion'])->name('getquestion_bycourseid');
 
 
 

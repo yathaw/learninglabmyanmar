@@ -378,7 +378,11 @@
                   method : 'post',
                   data : {course_id : course_id , sale_id : sale_id},
                   success:function(res){
-                     location.reload();
+                    if(res == 'ok'){
+                      location.reload();
+                    }else{
+                      location.href = '{{route('backside.sale.index')}}';
+                    }
                   }
                })
              }

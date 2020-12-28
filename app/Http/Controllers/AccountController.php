@@ -19,11 +19,11 @@ use App\Models\User;
 use App\Models\Lesson;
 use App\Models\Instructor;
 
+use Illuminate\Support\Facades\Mail;
 
 
 // NYL
 use App\Models\Collection;
-
 
 
 class AccountController extends Controller
@@ -265,119 +265,189 @@ class AccountController extends Controller
 
             }
         }
-        $collections = Collection::all();
+        $collections = Collection::where('user_id',Auth::id())->get();
         return view('account.mystudyings',compact('tabs','wishlists','sales','collections','completelessons'));
 
     }
 
 
-    public function add_course_collection($id)
+    public function add_course_collection(Request $request)
     {
         
-        $collection = Collection::find($id);
+        // $collection = Collection::find($request->id);
+        // $user_id = Auth::id();
+        // $sales = Sale::where('user_id',$user_id)->with(array('courses'=>function($q){
+        //     $q->wherePivot('status',1)->with('collections');
+        // }))->get();
+
+
+        $collection = Collection::find($request->id);
         $user_id = Auth::id();
-        $sales = Sale::where('user_id',$user_id)->paginate(8);
-        return view('account.add_course_collection',compact('sales','collection'));
+
+        $sales = Sale::where('user_id',$user_id)->with(array('courses'=>function($q)use($collection){
+            $q->wherePivot('status',1)->with(array('collections'=>function($query)use($collection){
+                $query->where('collections'.'.id',$collection->id)->get();
+            }))->get();
+        }))->get();
+
+        return response()->json($sales);
+
+        
+        return response()->json($sales);
     }
 
-    public function store_course_collection(Request $request)
-    {
-        // dd($request);
-        $courses_id = $request->course_collect_id;
 
-        $collection_id = $request->collection_id;
-        $collection = Collection::find($collection_id);
-        $collection_data = array();
-        $course_array = array();
-        $data_false = true;
-        if(count($collection->courses)>0){
 
-            foreach ($collection->courses as $course) {
-                // dd($course);
-                foreach ($courses_id as $value) {
-                   
-                    if($course->pivot->course_id == $value){
+    public function store_course_collection(Request $request){
 
-                        array_push($collection_data , 'true');
+        $collection = Collection::find($request->id);
 
-                    }else{
-                        
-                        array_push($collection_data , 'false');
-                        array_push($course_array, $value);
+        $course_array = $request->course_id;
+       
 
-                    }
-                    
-                }
-            }
-        }else{
+        // if(count($collection->courses())>0){
+        $sorting_collection = $collection->courses()->orderByRaw("CAST(sorting as Integer) ASC")->get();
+        // }
 
-                array_push($collection_data , 'false');
-                foreach ($courses_id as $value) { 
-                    array_push($course_array, $value);
-                }
-
-        }
-        dd($collection_data);
-        
-        foreach($collection_data as $colleciton_condition){
+        foreach ($sorting_collection as $value) {
                 
-
-            if($colleciton_condition == 'false'){
-                $data_false = false;
-
+                $sorting = ++$value->pivot->sorting;
             }
-        }
 
-            if($data_false == false){
-                $sorting_collection = $collection->courses()->orderByRaw("CAST(sorting as Integer) ASC")->get();
+
+            $data =[];
+            if($sorting_collection->isEmpty()){
+                $sorting = 1;
+
+                for ($i=0; $i < count($course_array) ; $i++) { 
+               
+                
+                    
+                    $data[$i]['sorting']=$sorting++;
+                    $data[$i]['course_id']=$course_array[$i];
+                    $data[$i]['collection_id']=$request->id;
+                    
+
+                }
+                $collection->courses()->attach($data);
+
+            }else{
+                for ($i=0; $i < count($course_array) ; $i++) {
+                    // dd($sorting);
+                    $data[$i]['sorting']=$sorting++;
+                    $data[$i]['course_id']=$course_array[$i];
+                    $data[$i]['collection_id']=$request->id;
+                }
+                $collection->courses()->attach($data);
+                    
+            }
+
+            return redirect()->route('collection');
+            
+
+    }
+
+    public function edit_course_collection(Request $request)
+    {
+        $collection = Collection::find($request->id);
+        $user_id = Auth::id();
+
+        $sales = Sale::where('user_id',$user_id)->with(array('courses'=>function($q)use($collection){
+            $q->wherePivot('status',1)->with(array('collections'=>function($query)use($collection){
+                $query->where('collections'.'.id',$collection->id)->get();
+            }))->get();
+        }))->get();
+
+        return response()->json($sales);
+    }
+
+    public function update_course_collection(Request $request)
+    {   
         
+        $collection = Collection::find($request->id);
+        if($request->course_id){
+        $course_array = $request->course_id;
+        sort($course_array);
+        $count_course_array = count($course_array);
+        }else{
+        $count_course_array = 0;
 
-                foreach ($sorting_collection as $value) {
+        }
+        $sorting_collection = $collection->courses()->orderByRaw('course_id','ASC')->get();
+        $array_id=array();
+        
+        $data=[];
+
+        // foreach ($sorting_collection as $value) {
+        //     $sorting = ++$value->pivot->sorting;
+        //     // dd($value->pivot);
+        // }
+
+
+        if($count_course_array > count($collection->courses)){
+            // attach data
+            dd('hey');
+
+        }elseif($count_course_array < count($sorting_collection)){
+            
+            for ($i=0; $i < count($sorting_collection) ; $i++) { 
+                if(empty($course_array[$i])){
+                    $course_array[$i]= '' ;
+                    if($course_array[$i] != $sorting_collection[$i]->pivot->course_id){
+                        // dd($course_array[$i] .'!='. $sorting_collection[$i]->pivot->course_id.'/'.$i);
+
+                        $data[$i]['sorting']=$sorting_collection[$i]->pivot->sorting;
+                        $data[$i]['course_id']=$sorting_collection[$i]->pivot->course_id;
+                        $data[$i]['collection_id']=$request->id;
+                        array_push($array_id,$sorting_collection[$i]->pivot->course_id);
+                    }
                     
-                    $sorting = ++$value->pivot->sorting;
+                    
                 }
 
-
-                $data =[];
-                if($sorting_collection->isEmpty()){
-                    $sorting = 1;
-
-                    for ($i=0; $i < count($course_array) ; $i++) { 
-                   
-                    
-                        
-                        $data[$i]['sorting']=$sorting++;
-                        $data[$i]['course_id']=$course_array[$i];
-                        $data[$i]['collection_id']=$collection_id;
-                        
-
-                    }
-                    $collection->courses()->attach($data);
-
-                }else{
-                    for ($i=0; $i < count($course_array) ; $i++) {
-                        // dd($sorting);
-                        $data[$i]['sorting']=$sorting++;
-                        $data[$i]['course_id']=$course_array[$i];
-                        $data[$i]['collection_id']=$collection_id;
-                    }
-                    $collection->courses()->attach($data);
-                        
-                }
+               
+            }
+            // dd($data);
+            foreach ($data as $value) {
+                // dd($value['course_id']);
+                $collection->courses()->where('course_id',$value['course_id'])->delete();
             }
             
 
-        // return redirect()->route('collection');
+            
+            return redirect()->route('collection');
+                
+
+        }elseif(count($course_array) == count($collection->courses)){
+            // detach and attach data
+            dd('hello');
+        }
+
+
+          
+
+                // for ($i=0; $i < count($course_array) ; $i++) { 
+                    
+                //     $data[$i]['sorting']=$sorting++;
+                //     $data[$i]['course_id']=$course_array[$i];
+                //     $data[$i]['collection_id']=$request->id;
+                    
+
+                // }
+                // dd($data);
+                // $collection->courses()->updateExistingPivot($data);
+
+
+
 
 
     }
-
-
 
 
     public function purchase_history()
     {
         $sales = Sale::where("user_id",Auth::id())->get();
+        // dd($sales);
         return view('account.purchase_history',compact('sales'));
     }
     
@@ -435,7 +505,12 @@ class AccountController extends Controller
         // dd($completeLessons);
         // $contents=Content::all();
         // $lesson=Lesson::find($id);
-        $questions = Question::all();
+
+        $questions = Question::with(['user','answers','course'])
+            ->where('course_id', $course->id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+
         $answers = Answer::all();
 
         return view('account.lecturevideo',compact('questions','answers', 'course', 'sections','user_id','completeLessons','instructors'));
@@ -533,7 +608,7 @@ class AccountController extends Controller
            $sales = Sale::whereHas('courses',function($q){
                         $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->where('instructors.user_id',Auth::id());
                     })->where('sales.status',1)->get();
-            
+           
             $courses = Course::whereHas('instructors',function($q){
                             $q->where('instructors.user_id',Auth::id());
                         })->get();
@@ -544,17 +619,19 @@ class AccountController extends Controller
 
             return view('account.instructorpanel',compact('sales','courses','recentcourses'));
         }elseif($role[0] == 'Business'){
-
-            $sales = Sale::whereHas('courses',function($q){
-                        $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id')->where('instructors.user_id',Auth::id());
+            $user = User::find(Auth::id());
+            $company = $user->company->id;
+            $sales = Sale::whereHas('courses',function($q) use ($company){
+                        $q->where('course_sale.status',1)->leftjoin('course_instructor','course_instructor.course_id','=','course_sale.course_id')->leftjoin('instructors','course_instructor.instructor_id','=','instructors.id')->leftjoin('users','instructors.user_id','=','users.id')->where('users.company_id',$company);
                     })->where('sales.status',1)->get();
+
             
-              $courses = Course::whereHas('instructors',function($q){
-                            $q->where('instructors.user_id',Auth::id())->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id');
+              $courses = Course::whereHas('instructors',function($q) use ($company){
+                            $q->leftjoin('users','users.id','=','instructors.user_id')->where('users.company_id',$company);
                         })->get();
 
-            $recentcourses = Course::whereHas('instructors',function($q){
-                            $q->where('instructors.user_id',Auth::id())->leftjoin('users','users.id','=','instructors.user_id')->leftjoin('companies','companies.id','=','users.company_id');
+            $recentcourses = Course::whereHas('instructors',function($q) use ($company){
+                            $q->leftjoin('users','users.id','=','instructors.user_id')->where('users.company_id',$company);
                         })->orderBy('id','desc')->limit(8)->get();
             
             return view('account.instructorpanel',compact('sales','courses','recentcourses'));
@@ -570,11 +647,15 @@ class AccountController extends Controller
             'comment' => 'required'
         ]);
 
+        // dd(request('comment'));
+        
+
         $question = new Question();
         $question->title = request('summary');
         $question->description = request('comment');
         $question->course_id = request('contentid');
         $question->user_id = Auth::id();
+
         if($question->save()){
             $questionnoti = [
                 'id' => $question->id,
@@ -587,16 +668,42 @@ class AccountController extends Controller
             Notification::send($question,new QuestionNotification($questionnoti));
             event(new NotiEvent($question));
 
+            $user=User::find(Auth::id());
+            $fromemail = $user->email;
+            $course = Course::find(request('contentid'));
+            $coursename = $course->title;
+
+            foreach ($course->instructors as $key => $value) {
+               $to_name  = $value->user->name;
+               $to_email = $value->user->email;
+               $data = array('coursetitle'=>$coursename, "title" => request('summary'),"comment"=>request('comment'));
+                
+                Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email,$fromemail,$user) {
+                    $message->to($to_email, $to_name)
+                            ->subject('Learning Lab Myanmar Student Question Mail');
+                    $message->from($fromemail,$user->name);
+                });
+            }
+        
+            /*$to_name = 'Aye Lwin Soe';
+            $to_email = 'ayelwinsoe.it2018@gmail.com';*/
+            
         }
         return redirect()->back();
     }
 
     public function questionnoti(){
+        $user = User::find(Auth::id());
+        
+        $questions = Question::with('course')->whereHas('course.instructors',function($q){
+            $q->where('instructors.user_id',Auth::id());
+        })->get();
+        
         $noti_data=array();
         $bb = array();
         /*if(Auth::check()){*/
 
-        $questions =  Question::all();
+        //$questions =  Question::all();
            
             foreach($questions as $quest){
 
@@ -620,6 +727,7 @@ class AccountController extends Controller
     }
 
     public function questionshownoti(){
+
         $noti_data=array();
         $bdata = array();
             $questions =  Question::all();
@@ -638,27 +746,27 @@ class AccountController extends Controller
     public function answerquestion(Request $request)
     {
         $request->validate([
-            'question' => 'required',
+            'questionid' => 'required',
             'description' => 'required'
         ]);
 
         $answer = new Answer();
         $answer->description = request('description');
-        $answer->question_id = request('question');
+        $answer->question_id = request('questionid');
         $answer->user_id = 2;
         if($answer->save()){
             $answernoti = [
                 'id' => $answer->id,
                 'description' => request('description'),
                 'user_id' => 2,
-                'question_id' => request('question')
+                'question_id' => request('questionid')
             ];
 
             Notification::send($answer,new AnswerNotification($answernoti));
             event(new AnswerEvent($answer));
 
         }
-        $question = Question::find(request('question'));
+        $question = Question::find(request('questionid'));
         $question->unreadNotifications()->update(['read_at' => now()]);
         return redirect()->back();
     }
@@ -728,6 +836,38 @@ class AccountController extends Controller
             }
           
        return $noti_data2;
+    }
+
+
+    public function signupnoti($value='')
+    {
+        $noti_data2=array();
+        $outputdata = array();
+        /*if(Auth::check()){*/
+
+            /*$user  = Auth::user();*/
+    
+            $users = User::all();
+            foreach($users as $user){
+                $id = $user->id;
+
+                foreach($user->unreadNotifications as $sal)
+                    {
+                        
+                            array_push($noti_data2, $sal);
+
+                 
+                        
+                    }
+            }
+       return $noti_data2;
+    }
+
+    public function removesignupnoti(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->unreadNotifications()->delete();
+        echo "success";
     }
 
 }

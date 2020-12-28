@@ -11,5 +11,5 @@ class Quiz extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['question','type','timer','content_id'];
+    protected $fillable=['question','type','timer','test_id'];
 }

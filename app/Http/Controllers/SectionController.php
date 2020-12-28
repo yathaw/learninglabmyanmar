@@ -27,7 +27,8 @@ class SectionController extends Controller
     public function index($id)
     {      
         $course = Course::find($id);
-        $sections=Section::orderBy('sorting')->get();
+        $sections=Section::where('course_id',$id)
+                    ->orderBy('sorting')->get();
 
         
         $contents=Content::all();
@@ -42,7 +43,6 @@ class SectionController extends Controller
         // }
 
         $instructors=Instructor::all();
-        //$instructors=
         return view('course.section_new',compact('sections','contenttypes', 'course','contents','lesson','instructors'));
     }
 

@@ -21,12 +21,30 @@
 					<div class="col-sm-6">
 						<div class="card">
 							@if(count($sales) > 0)
+							@role('Admin')
 							<a href="{{route('backside.enrollment')}}">
 								<div class="card-body">
 									<h5 class="card-title mb-4"> Enrollments </h5>
 									<h1 class="mt-1 mb-3">{{count($sales)}}</h1>
 								</div>
 							</a>
+							@endrole
+							@role('Instructor')
+							<a href="{{route('backside.sale.index')}}">
+								<div class="card-body">
+									<h5 class="card-title mb-4"> Enrollments </h5>
+									<h1 class="mt-1 mb-3">{{count($sales)}}</h1>
+								</div>
+							</a>
+							@endrole
+							@role('Business')
+							<a href="{{route('backside.sale.index')}}">
+								<div class="card-body">
+									<h5 class="card-title mb-4"> Enrollments </h5>
+									<h1 class="mt-1 mb-3">{{count($sales)}}</h1>
+								</div>
+							</a>
+							@endrole
 							@else
 							<a href="#">
 								<div class="card-body">
@@ -111,7 +129,7 @@
 					<tbody>
 						
 							@foreach($recentcourses as $recentcourse)
-							<tr class='clickableRow' data-href='{{ route('backside.course.show',$recentcourse->id) }}'>
+							<tr class='clickableRow' data-href="{{ route('backside.course.show',$recentcourse->id) }}">
 								<td>{{$recentcourse->title}}</td>
 								<td class="d-none d-xl-table-cell">{{$recentcourse->created_at->format('d/m/Y')}}</td>
 								<td><span class="badge bg-success">Done</span></td>

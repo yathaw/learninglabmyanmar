@@ -24,4 +24,9 @@ class Question extends Model
     {
       return $this->hasMany('App\Models\Answer');
     }
+
+    public function course()
+    {
+      return $this->belongsTo('App\Models\Course');
+    }
 }

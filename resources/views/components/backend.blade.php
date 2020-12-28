@@ -27,7 +27,7 @@
 	<!-- Datatable CSS -->
     <link rel="stylesheet" type="text/css" href="{{ asset('plugin/datatable/dataTables.bootstrap4.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugin/datatable/responsive.dataTables.min.css') }}">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     <!-- Sweet Alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -85,15 +85,27 @@
               				<i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle"> Revenue </span>
             			</a>
 					</li>
-					@endif
+					
 
-					{{-- Admin, Company --}}
+					{{-- Admin --}}
 
 					<li class="sidebar-item {{ Request::segment(2) === 'sale' ? 'active' : '' }}">
 						<a class="sidebar-link" href="{{route('backside.sale.index')}}">
               				<i class="align-middle" data-feather="credit-card"></i> <span class="align-middle">Sale</span>
             			</a>
 					</li>
+					@endif
+
+					{{-- Company, Instructor --}}
+					@if(in_array($authRole, array('Instructor','Business'), true ))
+
+					<li class="sidebar-item {{ Request::segment(2) === 'enrollment' ? 'active' : '' }}">
+						<a class="sidebar-link" href="{{route('backside.sale.index')}}" data-toggle="tooltip" data-placement="left" title="ရောင်းထားသည့် Course စာရင်းများကြည့်မည်">
+              				<i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle"> Revenue </span>
+            			</a>
+					</li>
+					@endif
+
 					@if(!in_array($authRole, array('Admin','Developer'), true ))
 					<!-- <li class="sidebar-item">
 						<a class="sidebar-link" href="{{route('backside.course.index')}}">
@@ -104,7 +116,7 @@
 
 					@if($authRole == "Instructor")
 					<li class="sidebar-item {{ Request::segment(1) === 'instructor_studentlist' ? 'active' : '' }} {{ Request::segment(2) === 'students' ? 'active' : '' }}">
-						<a class="sidebar-link" href="{{route('instructor_studentlist',Auth::user()->id)}}">
+						<a class="sidebar-link" href="{{route('instructor_studentlist',Auth::user()->id)}}" data-toggle="tooltip" data-placement="left" title="Course ၀ယ်ထားသော ကျောင်းသားစာရင်းများ ကြည့်မည်">
               				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Students </span>
             			</a>
 					</li>
@@ -113,28 +125,43 @@
 
 					@if($authRole == "Business")
 					<li class="sidebar-item {{ Request::segment(1) === 'company_instructor' ? 'active' : '' }} {{ Request::segment(2) === 'instructors' ? 'active' : '' }}">
-						<a class="sidebar-link" href="{{route('instructor_list',Auth::user()->id)}}">
+						<a class="sidebar-link" href="{{route('instructor_list',Auth::user()->id)}}" data-toggle="tooltip" data-placement="left" title="စာရင်းရှိ ဆရာ ဆရာမများ ကြည့်မည်">
               				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Instructors </span>
             			</a>
 					</li>
-					<li class="sidebar-item {{ Request::segment(1) === 'company_student' ? 'active' : '' }}">
-						<a class="sidebar-link" href="{{route('student_list',Auth::user()->id)}}">
+					<li class="sidebar-item {{ Request::segment(1) === 'company_student' ? 'active' : '' }}" >
+						<a class="sidebar-link" href="{{route('student_list',Auth::user()->id)}}" data-toggle="tooltip" data-placement="left" title="Course ၀ယ်ထားသော ကျောင်းသားစာရင်းများ ကြည့်မည်">
               				<i class="align-middle" data-feather="user"></i>  <span class="align-middle"> Students </span>
             			</a>
 					</li>
 					@endif
 
-					<li class="sidebar-item {{ Request::segment(2) === 'course' && Request::segment(3) != 'create' ? 'active' : '' }}">
-						<a class="sidebar-link" href="{{route('backside.course.index')}}">
+					<li class="sidebar-item {{ Request::segment(2) === 'course' && Request::segment(3) != 'create' ? 'active' : '' }}" >
+						<a class="sidebar-link" href="{{route('backside.course.index')}}" data-toggle="tooltip" data-placement="left" title="စာရင်းသွင်းထားသည့် Course များကြည့်မည်">
               				<i class="align-middle" data-feather="tag"></i> <span class="align-middle"> Courses </span>
             			</a>
 					</li>
 
 					<li class="sidebar-item {{ Request::segment(2) === 'course' && Request::segment(3) ==='create' ? 'active' : '' }}">
-						<a class="sidebar-link" href="{{route('backside.course.create')}}">
+						<a class="sidebar-link" href="{{route('backside.course.create')}}" data-toggle="tooltip" data-placement="left" title="Course အသစ် စာရင်းသွင်းမည်">
               				<i class="align-middle" data-feather="file-plus"></i> <span class="align-middle"> New Courses </span>
             			</a>
 					</li>
+
+					<li class="sidebar-item {{ Request::segment(2) === 'quiz' && Request::segment(3) ==='index' ? 'active' : '' }}">
+						<a class="sidebar-link" href="{{route('backside.quiz.index')}}" data-toggle="tooltip" data-placement="left" title="Quiz ထည့်သွင်းမည်​">
+              				<i class="align-middle" data-feather="check-circle"></i> <span class="align-middle"> Quiz </span>
+            			</a>
+					</li>
+
+					<li class="sidebar-item {{ Request::segment(2) === 'questions' ? 'active' : '' }}">
+						<a class="sidebar-link" href="{{route('backside.questions.index')}}" data-toggle="tooltip" data-placement="left" title="ကျောင်းသားနဲ့ အမေးအဖြေစာရင်းများ ကြည့်မည်​">
+              				<i class="align-middle" data-feather="help-circle"></i> <span class="align-middle"> Q&A </span>
+            			</a>
+					</li>
+
+					
+
 					@php
 						$usersNav = Request::segment(2) === 'companies' ||  Request::segment(2) === 'instructors' ||  Request::segment(2) === 'students';
 					@endphp
@@ -163,11 +190,13 @@
 
 
 					<li class="sidebar-item">
-						<a class="sidebar-link" href="">
+						<a class="sidebar-link" href="" data-toggle="tooltip" data-placement="left" title="ကျောင်းသားများမှ Course အပေါ် မှတ်ချက်ပေးထားသည်များ ကြည့်မည်">
               				<i class="align-middle" data-feather="book-open"></i> <span class="align-middle">Reviews</span>
             			</a>
 					</li>
 
+					{{-- Admin --}}
+					@if($authRole=="Admin" || $authRole=="Developer")
 
 					<li class="sidebar-item">
 						<a class="sidebar-link" href="">
@@ -180,7 +209,6 @@
 					<li class="sidebar-header">
 						Addons
 					</li>
-					@if($authRole=="Admin" || $authRole=="Developer")
 					<li class="sidebar-item">
 						<a data-target="#components" data-toggle="collapse" class="sidebar-link collapsed">
 			              	<i class="align-middle" data-feather="briefcase"></i> <span class="align-middle"> Components </span>
@@ -357,7 +385,7 @@
 									</a> -->
 								</div>
 								<div class="dropdown-menu-footer">
-									<a href="{{route('questionshownoti')}}" class="text-muted">Show all notifications</a>
+									<a href="{{route('backside.questions.index')}}" class="text-muted">Show all notifications</a>
 								</div>
 							</div>
 						</li>
@@ -514,7 +542,8 @@
 			</footer>
 		</div>
 	</div>
-
+	<div class="a"></div>
+	 
 	<script src="{{ asset('plugin/jquery-3.5.1.min.js') }}"></script>	
 
 
@@ -541,9 +570,22 @@
     <script src="{{ asset('plugin/sortable/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('plugin/pusher.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('backend/js/noti.js')}}"></script>
+    
     <script src="{{ asset('plugin/admincheckoutnoti.js') }}"></script>
     <script src="{{ asset('plugin/anime.min.js') }}"></script>
+    <script src="{{ asset('plugin/moment.js') }}"></script>
 
+   <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  	<script type="text/javascript">
+  		$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+            $('[data-toggle="tooltip"]').tooltip();
+  	</script>
+  	@role('Admin')
     <script type="text/javascript">
     	$.ajaxSetup({
             headers: {
@@ -551,13 +593,81 @@
             }
         });
 
-            $('[data-toggle="tooltip"]').tooltip();
-    	
+   showNoti(); 		
+  var notyf = new Notyf();
+function showNoti(){
+	$.ajax({
+            url: "/backside/signupnoti",
+            type: "GET",
+            dataType: 'json',  
+            success: function (response) {
+ 
+      var count = response.length;
+     
+
+      if(count > 0)
+      {
+
+
+       $.each(response,function(i,v){
+
+         /* let url = '/backside/sale/'+v.data.saleid;*/
+         //console.log(v.data.name);
+         var id = v.data.userid;
+          var message = v.data.name +'('+v.data.role+') account created';
+          var type = "success";
+          var duration = 2500;
+          var ripple = "With ripple";
+          //var dismissible = "Dismissible";
+          var positionX = "right";
+          var positionY = "top";
+
+          window.notyf.open({
+            type,
+              message,
+              duration,
+              ripple,
+             
+              position: {
+                x: positionX,
+                y: positionY
+              },
+
+          });
+          setTimeout(function() {
+          	var dataid = v.data.userid;
+                    $.ajax({
+            url: "/backside/removesignupnoti",
+            type: "POST",
+            data: {id:dataid},
+            dataType: 'json',  
+            success: function (result) {
+               console.log(result);
+            }
+        });
+                }, 2500);
+        });
+       
+        
+      }else 
+      {
+        
+        
+      }
+    }
+    });
+
+}
+
+
+
 
     </script>
-
+@endrole
 
     @yield("script_content")
+
+
 
 </body>
 

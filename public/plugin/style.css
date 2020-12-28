@@ -1921,4 +1921,97 @@ ul#playlist{
     right: 0px;
 }
 
+<<<<<<< HEAD
 
+=======
+.ribbon {
+position: relative;
+}
+.ribbon1,  .ribbon2 {
+  position: absolute;
+  top: -22px;
+  right: 10px;
+}
+.ribbon1:after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 45px solid transparent;
+  border-right: 45px solid transparent;
+  border-top: 10px solid #F8463F;
+}
+
+.ribbon2:after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 45px solid transparent;
+  border-right: 45px solid transparent;
+  border-top: 10px solid #00873E;
+}
+
+.ribbon1 span {
+  position: relative;
+  display: block;
+  text-align: center;
+  background: #F8463F;
+  font-size: 13px;
+  color: white;
+  line-height: 1;
+  padding: 12px 8px 10px;
+  border-top-right-radius: 8px;
+  width: 90px;
+}
+
+.ribbon2 span {
+  position: relative;
+  display: block;
+  text-align: center;
+  background: #00873E;
+  font-size: 13px;
+  color: white;
+  line-height: 1;
+  padding: 12px 8px 10px;
+  border-top-right-radius: 8px;
+  width: 90px;
+}
+
+.ribbon1 span:before, .ribbon1 span:after,
+.ribbon2 span:before, .ribbon2 span:after {
+  position: absolute;
+  content: "";
+}
+.ribbon1 span:before {
+ height: 6px;
+ width: 6px;
+ left: -6px;
+ top: 0;
+ background: #F8463F;
+}
+
+.ribbon2 span:before {
+ height: 6px;
+ width: 6px;
+ left: -6px;
+ top: 0;
+ background: #00873E;
+}
+.ribbon1 span:after {
+ height: 6px;
+ width: 8px;
+ left: -8px;
+ top: 0;
+ border-radius: 8px 8px 0 0;
+ background: #C02031;
+}
+
+.ribbon2 span:after {
+ height: 6px;
+ width: 8px;
+ left: -8px;
+ top: 0;
+ border-radius: 8px 8px 0 0;
+ background: #00873E;
+}
