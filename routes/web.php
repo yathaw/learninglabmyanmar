@@ -61,6 +61,8 @@ Route::get('/',[FrontendController::class, 'index'])->name('frontend.index');
 Route::get('courses',[FrontendController::class, 'courses'])->name('courses');
 
 Route::post('courses_search',[FrontendController::class, 'courses_search'])->name('courses_search');
+Route::post('searchcourse_bysubcategoryid',[FrontendController::class, 'searchcourse_bysubcategoryid'])->name('searchcourse_bysubcategoryid');
+
 
 Route::post('searchmystudying',[FrontendController::class, 'searchmystudying'])->name('searchmystudying');
 
@@ -80,6 +82,10 @@ Route::post('course_sale',[FrontendController::class, 'course_sale'])->name('cou
 Route::get('instructors',[FrontendController::class, 'instructors'])->name('instructors');
 
 Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->name('instructor');
+Route::get('/cours/catégorie/{id}',[FrontendController::class, 'coursebyCategory'])->name('cours/catégorie');
+Route::get('/cours/sous-catégorie/{id}',[FrontendController::class, 'coursebySubcategory'])->name('cours/sous-catégorie');
+
+
 
 
 
