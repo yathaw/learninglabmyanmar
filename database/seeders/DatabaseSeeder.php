@@ -32,9 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SectionSeeder::class);
         $this->call(ContentSeeder::class);
         $this->call(LessonSeeder::class);
-        
-        $this->call(AssignmentSeeder::class);
-        
+                
 
 
     }

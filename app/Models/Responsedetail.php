@@ -12,5 +12,19 @@ class Responsedetail extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=['check_id','quiz_id','response_id'];
+    protected $fillable=['check_id','quiz_id','response_id','status'];
+
+    public function check(){
+    	return $this->belongsTo('App\Models\Check');
+    }
+
+    public function quiz(){
+    	return $this->belongsTo('App\Models\Quiz');
+    }
+
+    public function response(){
+    	return $this->belongsTo('App\Models\Response');
+    }
+
+    
 }

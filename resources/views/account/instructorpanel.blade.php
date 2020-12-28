@@ -101,8 +101,9 @@
 					<h5 class="card-title mb-0">Total Revenue </h5>
 				</div>
 				<div class="card-body py-3">
+
 					<div class="chart chart-sm">
-						<canvas id="chartjs-dashboard-line"></canvas>
+						<canvas id="chartjs-dashboard-line" data-price="{{$totalprices}}"></canvas>
 					</div>
 				</div>
 			</div>
@@ -129,7 +130,7 @@
 					<tbody>
 						
 							@foreach($recentcourses as $recentcourse)
-							<tr class='clickableRow' data-href='{{ route('backside.course.show',$recentcourse->id) }}'>
+							<tr class='clickableRow' data-href="{{ route('backside.course.show',$recentcourse->id) }}">
 								<td>{{$recentcourse->title}}</td>
 								<td class="d-none d-xl-table-cell">{{$recentcourse->created_at->format('d/m/Y')}}</td>
 								<td><span class="badge bg-success">Done</span></td>
@@ -197,6 +198,10 @@
 
     	document.addEventListener("DOMContentLoaded", function() {
 			var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
+			
+			var totalprices = ctx.canvas.dataset.price;
+			var price = totalprices.split(',');
+			
 			var gradient = ctx.createLinearGradient(0, 0, 0, 225);
 			gradient.addColorStop(0, "rgba(215, 227, 244, 1)");
 			gradient.addColorStop(1, "rgba(215, 227, 244, 0)");
@@ -211,18 +216,19 @@
 						backgroundColor: gradient,
 						borderColor: window.theme.primary,
 						data: [
-							2115,
-							1562,
-							1584,
-							1892,
-							1587,
-							1923,
-							2566,
-							2448,
-							2805,
-							3438,
-							2917,
-							3327
+							price[0],
+							price[1],
+							price[2],
+							price[3],
+							price[4],
+							price[5],
+							price[6],
+							price[7],
+							price[8],
+							price[9],
+							price[10],
+							price[11],
+							price[12]
 						]
 					}]
 				},

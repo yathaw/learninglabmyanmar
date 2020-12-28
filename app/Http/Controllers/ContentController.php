@@ -75,8 +75,8 @@ class ContentController extends Controller
         $content->contenttype_id=$request->contenttypeid;
         $content->save();
 
-        if($content->contenttype_id == 1){
-            if($request->file()){
+        if($content->contenttype_id == 1 || $content->contenttype_id == 3){
+        if($request->hasfile('file')){
 
         $track = new GetId3(request()->file('file'));
         //get all info
@@ -91,9 +91,17 @@ class ContentController extends Controller
             $fileName=time().'_'.$request->file->getClientOriginalName();
             $path = $request->file('file')->storeAs('lesson', $fileName, 'public');
             $filepath='/storage/'.$path;
+            $fileExtension =$file->extension();
+
+            }
+            else{
+                $filepath = 'NULL';
+                $fileExtension = 'NULL';
+                $duration_sec = 'NULL';
+
             }
 
-            if($request->file()){
+            if($request->hasfile('file_upload')){
             $fileName1=time().'_'.$request->file_upload->getClientOriginalName();
             $path1 = $request->file('file_upload')->storeAs('lessonfile', $fileName1, 'public');
             $filepath1='/storage/'.$path1;
@@ -105,7 +113,7 @@ class ContentController extends Controller
 
             $lesson->file=$filepath;
             $file = $request->file;
-            $fileExtension =$file->extension();
+            $fileExtension =$fileExtension;
             //dd($fileExtension);
             $lesson->type=$fileExtension;
             $lesson->duration= $duration_sec;
@@ -113,29 +121,31 @@ class ContentController extends Controller
             $lesson->file_upload=$filepath1;
             $lesson->save();
 
+     
 
-        }else if($content->contenttype_id == 3){
+       //return redirect()->route('backside.sectionlist');
+        // }else if($content->contenttype_id == 3){
 
-            if($request->file()){
-            $fileName=time().'_'.$request->file->getClientOriginalName();
-            $path = $request->file('file')->storeAs('assignment', $fileName, 'public');
-            $filepath='/storage/'.$path;
-            }
+        //     if($request->file()){
+        //     $fileName=time().'_'.$request->file->getClientOriginalName();
+        //     $path = $request->file('file')->storeAs('assignment', $fileName, 'public');
+        //     $filepath='/storage/'.$path;
+        //     }
 
-            $assignment=new Assignment;
-            $assignment->file=$filepath;
+        //     $assignment=new Assignment;
+        //     $assignment->file=$filepath;
 
-            $file = $request->file;
-            $fileExtension =$file->extension();
-            //dd($fileExtension);
-            $assignment->type=$fileExtension;
+        //     $file = $request->file;
+        //     $fileExtension =$file->extension();
+        //     //dd($fileExtension);
+        //     $assignment->type=$fileExtension;
 
-            $assignment->content_id=$content->id;
-            $assignment->save();
+        //     $assignment->content_id=$content->id;
+        //     $assignment->save();
 
         }
-       //return redirect()->route('backside.sectionlist');
-      return view('course.section_new');
+       return redirect()->route('backside.section.index');
+      // return view('course.section_new');
         
     }
 

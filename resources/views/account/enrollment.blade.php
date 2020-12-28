@@ -97,10 +97,13 @@
 							$alltotal+=$subtotal; 
 						@endphp
 						@endforeach
+						@if($alltotal != 0)
 						<tr>
 							<th colspan="5" class="text-center">Total Price</th>
 							<td>{{$alltotal}}</td>
 						</tr>
+						@else
+						@endif
 					</tbody>
 				</table>
 			</div>

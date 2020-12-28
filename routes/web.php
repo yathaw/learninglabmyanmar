@@ -28,6 +28,11 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\InstallmentController;
 
+// YTMN
+use App\Http\Controllers\QuizController;
+use App\Http\Controllers\TestController;
+
+
 //HH
 use App\Http\Controllers\Auth\LoginController;
 
@@ -76,6 +81,9 @@ Route::get('instructors',[FrontendController::class, 'instructors'])->name('inst
 
 Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->name('instructor');
 
+
+
+
 //Honey
 Route::get('business_info',[FrontendController::class,'business_info'])->name('business_info');
 Route::post('business_store',[FrontendController::class,'business_store'])->name('business.store');
@@ -113,11 +121,14 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
 
     Route::resource('/section', SectionController::class);
-
+    //KYW
     Route::get('/section/{section}/edit',[SectionController::class,'edit'])->name('sectionedit');
     Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
     Route::post('/getinstructor',[SectionController::class,'getinstructor'])->name('getinstructor');
     Route::post('/sectionupdate/{id}',[BackendController::class,'sectionupdate'])->name('sectionupdate');
+
+
+
     Route::resource('/instructors', InstructorController::class);
    
 
@@ -132,13 +143,20 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/assignment', AssignmentController::class);
     Route::resource('/attachment', AttachmentController::class);
 
-    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
+
+
+    /*Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
 
     Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
-    
+    */
     //YTMN
     Route::resource('/questions',QuestionController::class);
     Route::resource('/answer',AnswerController::class);
+    Route::resource('/quiz',QuizController::class);
+    Route::resource('/test',TestController::class);
+    Route::post('/test/update/{id}',[TestController::class, 'update'])->name('test.update');
+    Route::post('/quiz/update/{id}',[QuizController::class, 'update'])->name('quiz.update');
+
 
 
     //ALS
@@ -228,7 +246,13 @@ Route::get('/checkoutnoti',[AccountController::class,'checkoutnoti'])->name('che
 // NYL
 Route::get('collection',[AccountController::class, 'collection'])->name('collection');
 
-Route::get('course_collection/{id}',[AccountController::class,'add_course_collection'])->name('add_course_collection');
+Route::post('add_course_collection',[AccountController::class,'add_course_collection'])->name('add_course_collection');
+
+Route::post('edit_course_collection',[AccountController::class,'edit_course_collection'])->name('edit_course_collection');
+
+Route::post('update_course_collection',[AccountController::class,'update_course_collection'])->name('update_course_collection');
+
+
 
 Route::post('store_course_collection',[AccountController::class,'store_course_collection'])->name('store_course_collection');
 
@@ -242,7 +266,8 @@ Route::get('purchase_history',[AccountController::class, 'purchase_history'])->n
 Route::get('history_detial/{id}',[AccountController::class, 'history_detial'])->name('history_detial');
 
 
-
+// Start Quiz 
+Route::get('/startquiz/{id}',[AccountController::class, 'startquiz'])->name('startquiz');
 
 // ------------------------------------------------------------------------
 
@@ -268,6 +293,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 // YTMN
 Route::post('getinstructor_bycompanyid',[CourseController::class, 'getinstructor'])->name('getinstructor_bycompanyid');
 Route::post('getquestion_bycourseid',[QuestionController::class, 'getquestion'])->name('getquestion_bycourseid');
+
+Route::post('getsection_bycourseid',[QuizController::class, 'getsection'])->name('getsection_bycourseid');
+
+Route::post('getquizzes_bytestid',[AccountController::class, 'getquiz'])->name('getquizzes_bytestid');
+Route::post('storequiz',[AccountController::class, 'storequiz'])->name('storequiz');
+Route::post('getscore_byresponseid',[AccountController::class, 'getscore'])->name('getscore_byresponseid');
 
 
 

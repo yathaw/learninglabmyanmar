@@ -100,7 +100,7 @@
 					@if(in_array($authRole, array('Instructor','Business'), true ))
 
 					<li class="sidebar-item {{ Request::segment(2) === 'enrollment' ? 'active' : '' }}">
-						<a class="sidebar-link" href="{{route('backside.enrollment')}}" data-toggle="tooltip" data-placement="left" title="ရောင်းထားသည့် Course စာရင်းများကြည့်မည်">
+						<a class="sidebar-link" href="{{route('backside.sale.index')}}" data-toggle="tooltip" data-placement="left" title="ရောင်းထားသည့် Course စာရင်းများကြည့်မည်">
               				<i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle"> Revenue </span>
             			</a>
 					</li>
@@ -148,14 +148,8 @@
             			</a>
 					</li>
 
-					<li class="sidebar-item {{ Request::segment(2) === 'course' ? 'active' : '' }}">
-						<a class="sidebar-link" href="{{route('backside.course.create')}}" data-toggle="tooltip" data-placement="left" title="ကျောင်းသားများ၏ Assignment တင်ထားသည့် စာရင်းများကြည့်မည်">
-              				<i class="align-middle" data-feather="file-text"></i> <span class="align-middle"> Assignment </span>
-            			</a>
-					</li>
-
-					<li class="sidebar-item">
-						<a class="sidebar-link" href="" data-toggle="tooltip" data-placement="left" title="ကျောင်းသားများ၏ Quiz အဖြေများကြည့်မည်">
+					<li class="sidebar-item {{ Request::segment(2) === 'quiz' ? 'active' : '' }}">
+						<a class="sidebar-link" href="{{route('backside.quiz.index')}}" data-toggle="tooltip" data-placement="left" title="Quiz ထည့်သွင်းမည်​">
               				<i class="align-middle" data-feather="check-circle"></i> <span class="align-middle"> Quiz </span>
             			</a>
 					</li>
@@ -391,7 +385,7 @@
 									</a> -->
 								</div>
 								<div class="dropdown-menu-footer">
-									<a href="{{route('questionshownoti')}}" class="text-muted">Show all notifications</a>
+									<a href="{{route('backside.questions.index')}}" class="text-muted">Show all notifications</a>
 								</div>
 							</div>
 						</li>

@@ -35,14 +35,16 @@
 						@php
 							$installment = '';
 							$amount=0;
+							$no_amount = 0;
                       		$course_count = array();
 						@endphp
-						@if(count($sale->installments) > 0)
 							@foreach($sale->courses as $course)
 								@php
 									if($course->pivot->status == 1){
 										$amount+=$course->price;
                             			array_push($course_count, $course);
+									}else{
+										$no_amount+=$course->price;
 									}
 								@endphp
 							@endforeach
@@ -55,8 +57,15 @@
 		        			@endforeach
 
 		        				@php
-									$date = strtotime($installment->paiddate);
-									$data = date('M d, Y',$date);
+		        					if(count($sale->installments) > 0){
+
+										$date = strtotime($installment->paiddate);
+										$data = date('M d, Y',$date);
+
+									}else{
+										$date = strtotime($sale->created_at);
+										$data = date('M d, Y',$date);
+									}
 
 								@endphp
 	        					<div class="row px-xl-5 px-lg-5">
@@ -69,21 +78,30 @@
 	        						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
 	        							{{$data}}
 	        						</div>
+	        						@if(count($sale->installments) > 0)
 	        						<div class="col-xl-2 col-lg-2 offset-xl-0 offset-lg-0 offset-md-8 offset-sm-0 offset-0 col-md-2 col-sm-12 col-12"> {{ number_format($amount) }} KS</div>
-	        						<div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 col-12 justify-content-center">{{$installment->type}}</div>
+	        						
+	        							<div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 col-12 justify-content-center">{{$installment->type}}</div>
+	        						@else
 
+	        							<div class="col-xl-2 col-lg-2 offset-xl-0 offset-lg-0 offset-md-8 offset-sm-0 offset-0 col-md-2 col-sm-12 col-12"> {{ number_format($no_amount) }} KS</div>
+
+	        							<div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 col-12 justify-content-center">None</div>
+
+	        						@endif
+	        						@if($sale->status == 1)
 	        						<div class="col-xl-1 col-lg-1 col-md-12 col-sm-12 col-12 mt-3">
 	        							<div class="d-grid gap-2 col-6 mx-auto">
 		        							<a href="{{route('history_detial',$sale->id)}}" class="btn btn-warning btn-sm">Invoice </a>
 		        						</div>
 	        						</div>
+	        						@endif
 
 	        					</div>
 	        					<hr>
 
 
 	        			
-        				@endif
 					@endforeach
 
 	        		@else

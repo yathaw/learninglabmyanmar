@@ -4,7 +4,6 @@
         $totalDuration = 0;
         $countVideo = 0;
         $countlesson = 0;
-        $countassignment = 0;
 
         foreach ($course->contents as $content) {
             foreach ($content->lessons as $lesson) {
@@ -22,9 +21,6 @@
 
                 $totalDuration += $duration++;
 
-            }
-            foreach ($content->assignments as $assignment) {
-                $countassignment++;
             }
 
         }
@@ -118,10 +114,6 @@
                             <p> 
                                 <i class="align-middle mr-2" data-feather="file"></i>
                                 <small class="pl-3"> {{ $countlesson }} Articles </small>
-                            </p>
-                            <p> 
-                                <i class="align-middle mr-2" data-feather="check-square"></i>
-                                <small class="pl-3"> {{ $countassignment }} Assignments </small>
                             </p>
                             @if($course->certificate == "on")
                             <p> 
@@ -233,24 +225,10 @@
                                                                             @foreach($course->contents as $content)
 
                                                                             @php
-                                                                                # Lesson
-                                                                                if ($content->contenttype_id == 1) {
                                                                                     $fileLink = asset($content->lessons[0]->file);
                                                                                     $fileType = $content->lessons[0]->type;
                                                                                     $duration = $content->lessons[0]->duration;
-                                                                                }
-                                                                                # Assignment
-                                                                                else if ($content->contenttype_id == 3) {
-                                                                                    $fileLink = asset($content->assignments[0]->file);
-                                                                                    $fileType = $content->assignments[0]->type;
-
-                                                                                }
-                                                                                # Quizz
-                                                                                else{
-                                                                                    $fileLink = '';
-                                                                                    $fileType = '';
-
-                                                                                }
+                                                                                
                                                                                 $imgallowedTypes = array(IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_GIF);
                                                                                 $videoallowedTypes = array('mp4', 'avi', 'mov', 'MP4');
 

@@ -280,19 +280,26 @@
 											  	</button>
 											  	<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 												    <li>
-												    	<a class="dropdown-item" href="#">
-												    		<i class='bx bx-edit-alt custom_primary_Color' ></i> 
+												    	<a class="dropdown-item btn_edit_collection" href="javascript:void(0)" data-id="{{$collection->id}}" data-title="{{$collection->title}}" data-description="{{$collection->description}}" >
+												    		<i class='bx bx-edit-alt custom_primary_Color'></i> 
 												    		Edit Collection
 												    	</a>
 												    </li>
+
 												    <li>
-												    	<a class="dropdown-item" href="{{route('add_course_collection',$collection->id)}}">
+												    	<a class="dropdown-item btn_edit_collection_course" data-courses='{{$collection->courses}}' data-id="{{$collection->id}}" data-title="{{$collection->title}}" data-description="{{$collection->description}}" href="javascript:void(0)" >
+												    		<i class='bx bx-edit-alt custom_primary_Color' ></i> 
+												    		Edit Collection Course
+												    	</a>
+												    </li>
+												    <li>
+												    	<a href="javascript:void(0)" class="dropdown-item add_collection"  data-title = "{{$collection->title}}" data-id ="{{$collection->id}}" data-description="{{$collection->description}}" data-courses='{{$collection->courses}}' data-user_id = '{{Auth::id()}}' data-count_course = "{{count($collection->courses)}}">
 												    		<i class='bx bx-add-to-queue text-primary' ></i>
 												    		Add Collection
 												    	</a>
 												    </li>
 												    <li>
-												    	<a class="dropdown-item" href="#">
+												    	<a class="dropdown-item btn_sort_collection" href="#" data-id="{{$collection->id}}" data-course='{{$collection->courses}}'>
 												    		<i class='bx bx-sort text-success' ></i>
 												    		Sorting Collection
 												    	</a>
@@ -300,9 +307,15 @@
 
 												    <li><hr class="dropdown-divider"></li>
   													<li>
-  														<a class="dropdown-item" href="#"> 
-  															<i class='bx bx-x text-danger' ></i> Delete Collection 
-  														</a>
+  														<form action="{{route('collections.destroy',$collection->id)}}" method="post">
+  															@csrf
+  															@method('DELETE')
+  															{{-- <input type="hidden" name="id" value="{{$collection->id}}"> --}}
+  															<button type="submit" class="dropdown-item delete_data" data-id="{{$collection->id}}" onclick="return confirm('Do you want to delete this collection?')"> 
+	  															<i class='bx bx-x text-danger' ></i> Delete Collection 
+	  														</button>
+  														</form>
+  														
   													</li>
 												</ul>
 											</div>
@@ -313,10 +326,10 @@
 						        		$instructor_array = array();
 						        		$data = $collection->courses()->orderByRaw("CAST(sorting as Integer) ASC")->get();
 						        	@endphp
-							        @foreach($data as $collection_course)
 
 
 							        <div class="owl-carousel testimonials-carousel">
+							        @foreach($data as $collection_course)
 							        	
 							        	<div class="testimonial-item px-4">
 
@@ -401,10 +414,10 @@
 										    </div>
 								        </div>
 								        
+									@endforeach
 
 							        </div>
 							        
-									@endforeach
 
 
 							    </div>
@@ -738,7 +751,174 @@
             </div>
         </div>
     </div> 
-  
+
+
+    <!-- EditCollection Modal -->
+    <div class="modal fade" id="edit_collection_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Edit Collection </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="edit_collection">
+                	@method('PUT')
+                    <div class="modal-body">
+                    	<input type="hidden" name="id" class="edit_id">
+                        <div class="form-floating mb-3 col-md-12" id="form-group-title">
+                            <input type="text" class="form-control edit_title" id="subject" name="edit_title">
+                            <label for="subject"> Title </label>
+                            <div class="validate"></div>
+                            <span class="text-danger show-error"></span>
+
+                        </div>
+
+                        <div class="form-floating my-2" id="form-group-description">
+                            <textarea class="form-control edit_description" placeholder="Leave a descriptison here" name="edit_description" id="floatingTextarea2" style="height: 100px"></textarea>
+                            <label for="floatingTextarea2"> Description </label>
+                            <span class="text-danger show-error"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div> 
+
+    {{-- create collection courses modal --}}
+  	<div class="modal fade" id="create_collection_course" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Choose Courses </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{{route('store_course_collection')}}">
+                	@csrf
+                    <div class="modal-body">
+
+                    	<input type="hidden" name="id" class="id">
+
+                        <div class="form-group row mb-3 col-md-10 mx-auto">
+                           <label class="col-md-4 form-label">Title :</label>
+                           <div class="col-md-8">
+                           		<h5 class="title"></h5>
+                           </div>
+            
+                        </div>
+
+                        <div class="form-group row my-2 col-md-10 mx-auto">
+                            <label class="col-md-4 form-label">Description :</label>
+                            <div class="col-md-8">
+                           		<h5 class="description"></h5>
+                            </div>
+                        </div>
+
+                        <div class="form-group row my-2 col-md-10 mx-auto">
+                            <label class="col-md-4 form-label">Courses :</label>
+                            <div class="col-md-8">
+                           		<select class="form-select select2 course_option" name="course_id[]" multiple="multiple">
+                         
+                           			
+                           		</select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div> 
+
+
+
+    {{-- edit collection courses modal --}}
+  	<div class="modal fade" id="edit_collection_course" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Edit Existing Courses </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{{route('update_course_collection')}}">
+                	@csrf
+                    <div class="modal-body">
+
+                    	<input type="hidden" name="id" class="id">
+
+                        <div class="form-group row mb-3 col-md-10 mx-auto">
+                           <label class="col-md-4 form-label">Title :</label>
+                           <div class="col-md-8">
+                           		<h5 class="title"></h5>
+                           </div>
+            
+                        </div>
+
+                        <div class="form-group row my-2 col-md-10 mx-auto">
+                            <label class="col-md-4 form-label">Description :</label>
+                            <div class="col-md-8">
+                           		<h5 class="description"></h5>
+                            </div>
+                        </div>
+
+                        <div class="form-group row my-2 col-md-10 mx-auto">
+                            <label class="col-md-4 form-label">Courses :</label>
+                            <div class="col-md-8">
+                           		<select class="form-select select2 course_option" name="course_id[]" multiple="multiple">
+                         
+                           			
+                           		</select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div> 
+
+
+    <!-- sortingCollection Modal -->
+    <div class="modal fade" id="sortingcollectionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> Sort By Course </h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="sort_collection">
+                    <div class="modal-body sorting_show">
+
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
 
 @section('script_content')
   	<script type="text/javascript">
@@ -1138,7 +1318,7 @@
           });
 
 
-
+          // collection title and description create
           $('#store_collection').submit(function(event){
             event.preventDefault();
             var collection_data = new FormData(this);
@@ -1164,12 +1344,241 @@
                       $.each(data,function(i,v){
                           showValidationErrors(i,v);
                       })
-                      $('.newcollectionModal').modal('show');
+                      $('#newcollectionModal').modal('show');
                   }
               }
 
             })
         })
+
+        	// edit collection tilte and description
+	        $('.btn_edit_collection').click(function(){
+	        	var id = $(this).data('id');
+	        	var title = $(this).data('title');
+	        	var description = $(this).data('description');
+	        	$('.edit_id').val(id);
+	        	$('.edit_title').val(title);
+	        	$('.edit_description').val(description);
+	        	$('#edit_collection_modal').modal('show');
+	        });
+
+	        // Update colleciton
+	        $('#edit_collection').submit(function(event) {
+	        	event.preventDefault();
+	        	var id = $('.edit_id').val();
+	        	// alert(id);
+				var route = "{{route('collections.update',':id')}}";  
+				route = route.replace(':id',id);  
+				// console.log(route);  	
+	        	var edit_collection_data = new FormData(this);
+	        	// console.log(edit_collection_data);
+	        	$.ajax({
+	        		url : route,
+	        		data:edit_collection_data,
+	        		processData : false,
+              		contentType: false,
+	        		type : 'post',
+	        		
+
+	        		success:function(res){
+	        			if(res){
+	        				location.reload();
+	        			}
+
+	        		},error:function(error) {
+
+	        			 if(error.status == 422){
+		                      var errors = error.responseJSON;
+		                      var data = errors.errors;
+		          
+		                      $.each(data,function(i,v){
+		                          showValidationErrors(i,v);
+		                      })
+		                      $('#edit_collection_modal').modal('show');
+		                  }
+	        		}
+
+	        	})
+
+	        });
+
+
+          $('.select2').select2({
+                placeholder: "Courses",
+                theme: 'bootstrap4',
+            });
+
+
+           // collection course modal
+          $('.add_collection').click(function() {
+          	var id = $(this).data('id');
+          	var title = $(this).data('title');
+          	var description = $(this).data('description');
+          	var courses = $(this).data('courses');
+          	var user_id = $(this).data('user_id');
+          	$('.id').val(id);
+          	$('.title').html(title);
+          	$('.description').html(description);
+
+          	// console.log(courses.length);
+          	var html='';
+          	var array = false;
+          	$.post('add_course_collection',{id:id},function(res){
+          		console.log('add');
+          		if(res){
+          			$.each(res,function(i,v) {
+          				
+          				if(v.courses){
+          					$.each(v.courses,function(a,b) {
+          						console.log(b.collections);
+
+          						if(b.collections.length == 0){
+          							html+=`<option value='${b.id}'>${b.title}</option>`
+          						}
+
+          						// if(b.collections.length == 0){
+          						// 	html+=`<option value='${b.id}'>${b.title}</option>`;
+          						// }else if(b.collections.length > 0){
+          							
+          						// 	$.each(b.collections,function(c,d){
+          						// 		$.each(courses,function(e,f){
+          									
+          						// 		if(f.pivot.collection_id == id  && d.user_id == user_id){
+          									
+          						// 			if(f.pivot.course_id != b.id ){
+          						// 				// console.log('hello');
+		          				// 				array=true;
+          						// 				}
+		          				// 			}
+		          				// 		})
+          						// 	})
+          							
+          						// }
+          						// console.log(array);
+
+          						// if(array==true){
+          						// html+=`<option value='${b.id}'>${b.title}</option>`;
+          						// }else if(courses.length == 0){
+          						// 	html+=`<option value='${b.id}'>${b.title}</option>`;
+          						// }
+
+          					})
+          				}
+          			})
+
+          			$('.course_option').html(html);
+
+          		}
+          	 })
+
+          	 $('#create_collection_course').modal('show');
+           })
+
+
+         
+         // edit collection course
+         $('.btn_edit_collection_course').click(function(){
+
+         	var id = $(this).data('id');
+         	var courses = $(this).data('courses');
+         	console.log(courses);
+         	var title = $(this).data('title');
+          	var description = $(this).data('description');
+          	$('.id').val(id);
+          	$('.title').html(title);
+          	$('.description').html(description);
+         	var html='';
+         	$.post('edit_course_collection',{id:id},function(res){
+         		// console.log('res');
+         		if(res){
+         			$.each(res,function(i,v){
+         				if(v.courses){
+         					$.each(v.courses,function(a,b){
+         						// console.log(b.collections.length);
+         						if(b.collections.length > 0){
+         							html+=`<option value='${b.id}'`;
+	         						$.each(courses,function(c,d){
+	         							if(d.id == b.id){
+	         								html+=`selected`;
+	         							}
+	         						})
+	         						html+=`>${b.title}</option>`;
+         						}else if(b.collections.length == 0){
+         							html+=`<option value='${b.id}'>${b.title}</option>`;
+         						}
+         					})
+         				}
+         			})
+
+         			$('.course_option').html(html);
+         			$('#edit_collection_course').modal('show');
+         		}
+         	})
+         })
+
+
+         // sorting
+         $('.btn_sort_collection').click(function() {
+         	var id = $(this).data('id');
+         	var courses = $(this).data('course');
+         	var html = '';
+         	if(courses.length > 0){
+	         	$.each(courses,function(i,v) {
+	         		html+=`<div class="row col-md-10 mb-4 mx-auto">
+	                        	<div class="card">
+	                        		<ul class="list-unstyled section_sortable">
+	                        			<li class="section_sort" value="${v.id}">${v.title}</li>
+                    				</ul>
+	                        	</div>
+	                        </div>`;
+	         	});
+	         }else{
+	         	html += `<div class="row col-md-10 mb-4 mx-auto">
+	                        	
+	                        	<h6 class="py-2 text-center">No Data</h6>
+	                        	
+	                        </div>`;
+	         }
+         	$('.sorting_show').html(html);
+         	$('#sortingcollectionModal').modal('show');
+         })
+
+
+         // sorting collection course
+         $(" .section_sortable").sortable({
+			containerSelector: "ul.section_sortable",
+			itemSelector: "li.section_sort",
+			handle: ".handle",
+			placeholder:
+			'<li><div class="card bg-primary text-white mb-1"><div class="card-header">Drop Here</div></div></li>',
+			distance: 0,
+
+			update: function(event, ui) {
+				
+				$('.section_sort').each(function(i) { 
+					var id = $(this).data('id');
+
+					var increaseId = $(this).index()+1;
+		           	$(this).data('sorting', increaseId); // updates the data object
+		           	$(this).attr('data-sorting', increaseId); // updates the attribute
+		           	$(this).find('.sectionNo').html(increaseId);
+
+		           	$.post("/sectionsorting_modernize",{id:id, sorting:increaseId},function (res) {
+
+		           	});
+
+		           });
+
+
+			},
+
+
+			onDrop: function($item, container, _super) {
+				// console.log(id);
+				$item.attr("style", null).removeClass("dragged");
+				$("body").removeClass("dragging");
+			}
+		});
 
 			
 

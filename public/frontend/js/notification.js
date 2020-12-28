@@ -38,8 +38,11 @@ $(document).ready(function(){
   function showNoti(){
     $.get("/answernoti",function(response){
       var count = response.length;
-
+      if(count > 0){
         notificationsToggle.find('span').html('+'+count);
+      }else{
+        notificationsToggle.find('span').html(0);
+      }
       
     });
   }

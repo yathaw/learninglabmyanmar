@@ -31,7 +31,6 @@ class CourseController extends Controller
         $authuser = Auth::user();
         $auth_id = Auth::id();
         $role = $authuser->getRoleNames();
-        $allcourses = Course::all();
 
         if ($role[0] == 'Instructor') {
             $instructor = $authuser->instructor;
@@ -42,6 +41,10 @@ class CourseController extends Controller
                 $q->where('instructor_id', '=', $instructorid);
                 
             })->paginate(8);
+
+            $allcourses = Course::whereHas('instructors', function($q) use ($instructorid)
+            { $q->where('instructor_id', '=', $instructorid);})->count();
+
 
         }
         elseif ($role[0] == 'Business') {
@@ -55,10 +58,20 @@ class CourseController extends Controller
                     $q1->where('company_id', '=', $companyid);
                 });
             })->paginate(8);
+
+            $allcourses = Course::whereHas('instructors', function($q) use ($companyid)
+            {
+                $q->whereHas('user', function($q1) use ($companyid)
+                {
+                    $q1->where('company_id', '=', $companyid);
+                });
+            })->count();
         }
         else{
             
             $courses=Course::orderBy('status')->paginate(8);
+
+            $allcourses = Course::orderBy('status')->count();
             
 
         }
@@ -302,6 +315,8 @@ class CourseController extends Controller
             //categoryimg/78748785858_bella.jpg
             $filepath =$request->file('photo')->storeAs('courseimg',$fileName,'public');
             $path ='/storage/'.$filepath;
+        }else{
+            $path = $request->oldphoto;
         }
         //dd($path);
 
@@ -314,6 +329,8 @@ class CourseController extends Controller
             //categoryimg/78748785858_bella.jpg
             $filepath1 =$request->file('video')->storeAs('coursevideo',$fileName1,'public');
             $path1 ='/storage/'.$filepath1;
+        }else{
+            $path1 = $request->oldvideo;
         }
             $auth_id = Auth::id();
 

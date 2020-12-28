@@ -1,12 +1,11 @@
 <x-backend>
    @php 
    $count = count($courses);
-   $total = count($allcourses);
    @endphp
    <div class="row">
       <div class="col-auto d-none d-sm-block">
          <h3 class="d-inline-block"><strong> Course List </strong> </h3>
-         <p class="@if($courses->isEmpty()) {{'d-none'}} @endif"> Showing {{$count}} of {{$total}} Results  </p>
+         <p class="@if($courses->isEmpty()) {{'d-none'}} @endif"> Showing {{$count}} of {{$allcourses}} Results  </p>
       </div>
       <div class="col-auto ml-auto text-right mt-n1 @if($courses->isEmpty()) {{'d-none'}} @endif">
          <a href="{{ route('backside.course.create') }}" class="btn custom_primary_btnColor float-right" ><i class="align-middle fas fa-plus"></i> Add New Course </a>
@@ -205,17 +204,16 @@
       $totalDuration = 0;
       $countVideo = 0;
       $countlesson = 0;
-      $countassignment = 0;
       foreach ($course->contents as $content) {
-      foreach ($content->lessons as $lesson) {
-      $duration = $lesson['duration'];
-      $type = $lesson['type'];
-      $countVideo++;
-      $totalDuration += $duration++;
-      }
-      foreach ($content->assignments as $assignment) {
-      $countassignment++;
-      }
+         if($content->contenttype_id == 1)
+         {
+            foreach ($content->lessons as $lesson) {
+               $duration = $lesson['duration'];
+               $type = $lesson['type'];
+               $countVideo++;
+               $totalDuration += $duration++;
+            }
+         }
       }
       if ($totalDuration) {
       $dt = Carbon\Carbon::now();
@@ -300,10 +298,7 @@
                   <i class="align-middle mr-2" data-feather="play-circle"></i>
                   <small class="pl-3"> {{ $countVideo }}  Videos </small>
                </p>
-               <p> 
-                  <i class="align-middle mr-2" data-feather="check-square"></i>
-                  <small class="pl-3"> {{ $countassignment }} Assignments </small>
-               </p>
+               
                @if($course->certificate == "on")
                <p> 
                   <i class="align-middle mr-2" data-feather="award"></i> 
@@ -484,10 +479,6 @@
                 <p> 
                     <i class="align-middle mr-2" data-feather="play-circle"></i>
                     <small class="pl-3"> {{ $countVideo }}  Videos </small>
-                </p>
-                <p> 
-                    <i class="align-middle mr-2" data-feather="check-square"></i>
-                    <small class="pl-3"> {{ $countassignment }} Assignments </small>
                 </p>
                 @if($course->certificate == "on")
                 <p> 

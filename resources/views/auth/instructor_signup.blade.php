@@ -54,7 +54,7 @@
 
                                             <div id="descriptionId"></div>
 
-                                            <textarea class="form-control d-none required" id="hiddenArea" name="description"></textarea>
+                                            <textarea class="form-control d-none" id="hiddenArea" name="description"></textarea>
                                         </div>
                                     </div>
 
@@ -134,26 +134,26 @@
 				                        	<label for="universityId" class="form-label"> University or Institution </label>
 				                            <small class="mmfont text-muted" style="font-size: 12px;"> ( တက္ကသိုလ် သို့ ပညာရေးအဖွဲ့အစည်း ) </small>
 
-				                            <input type="text" class="form-control" id="universityId" placeholder="University of Computer Studies, Yangon" name="education[]">
+				                            <input type="text" class="form-control required" id="universityId" placeholder="University of Computer Studies, Yangon" name="education[0]">
 				                        </div>
 
 				                        <div class="col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12 my-2">
 				                        	<label for="degreeId" class="form-label"> Degree or Certification </label>
 				                            <small class="mmfont text-muted"> ( ဘွဲ့ သို့ အသိအမှတ်ပြုလွှာ ) </small>
 
-				                            <input type="text" class="form-control required" id="degreeId" placeholder="B.C.Sc. (Business Information Systems)" name="education[]">
+				                            <input type="text" class="form-control required" id="degreeId" placeholder="B.C.Sc. (Business Information Systems)" name="education[1]">
 				                        </div>
 
 				                        <div class="col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12 my-2">
 				                        	<label for="fromId" class="form-label"> From </label>
 
-				                            <input type="date" class="form-control required" id="fromId" name="education[]">
+				                            <input type="date" class="form-control required" id="fromId" name="education[2]">
 				                        </div>
 
 				                        <div class="col-xl-6 col-lg-6 col-md-6 col-12 col-sm-12 my-2">
 				                        	<label for="toId" class="form-label"> To </label>
 
-				                            <input type="date" class="form-control required" id="toId" name="education[]">
+				                            <input type="date" class="form-control required" id="toId" name="education[3]">
 				                        </div>
 
 
@@ -369,11 +369,23 @@
         	/*form.validate({
 			    errorPlacement: function errorPlacement(error, element) { element.before(error); },
 			    rules: {
-			        confirm: {
-			            equalTo: "#password"
-			        }
+			        headline: "required",
+			        'education[]': {
+				      required: true
+				    }
+
 			    }
 			});*/
+
+			// $("[name='education']").each(function(){
+			// 	console.log('edu');
+		 //        $(this).rules("add", {
+		 //            required: true,
+		 //            messages: {
+		 //                required: "This Field is required",
+		 //            }
+		 //        } );            
+		 //    });
 
             form.steps({
                 headerTag: "h6",

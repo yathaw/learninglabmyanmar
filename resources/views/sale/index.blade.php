@@ -9,7 +9,7 @@
           <h5 class="card-title mb-0"> All Lists </h5>
         </div>
         <div class="card-body">
-
+          
           <div class="alert alert-success alert-dismissible fade show d-none" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
@@ -339,6 +339,7 @@
   </div>
 
   <div class="row limitshow">
+    @if(count($enrolls) > 0)
     <div class="col-12 col-lg-12 col-xxl-12 d-flex">
       <div class="card flex-fill">
         <div class="card-header">
@@ -358,6 +359,7 @@
           </thead>
           <tbody>
             @php $i=1;  $alltotal=0;@endphp
+            
             @foreach($enrolls as $enroll)
             <tr>
               <td>{{$i++}}</td>
@@ -378,17 +380,24 @@
             </tr>
             @php 
               $subtotal=$enroll->total;
-              $alltotal+=$subtotal; 
+              $alltotal+=$subtotal;
+
             @endphp
             @endforeach
-            <tr>
+              <tr>
               <th colspan="5" class="text-center">Total Price</th>
               <td>{{$alltotal}}</td>
             </tr>
+
           </tbody>
         </table>
       </div>
     </div>
+    @else
+    <div class="text-center">
+      <img src="{{asset('externalphoto/nocourse.gif')}}">
+    </div>
+    @endif
   </div>
   @endrole
 
@@ -448,6 +457,7 @@
   </div>
 
   <div class="row limitshow">
+    @if(count($enrolls) > 0)
     <div class="col-12 col-lg-12 col-xxl-12 d-flex">
       <div class="card flex-fill">
         <div class="card-header">
@@ -490,7 +500,7 @@
               $alltotal+=$subtotal; 
             @endphp
             @endforeach
-            <tr>
+              <tr>
               <th colspan="5" class="text-center">Total Price</th>
               <td>{{$alltotal}}</td>
             </tr>
@@ -498,6 +508,11 @@
         </table>
       </div>
     </div>
+    @else
+    <div class="text-center">
+      <img src="{{asset('externalphoto/nocourse.gif')}}">
+    </div>
+    @endif
   </div>
   @endrole
 

@@ -23,12 +23,88 @@
             <div class="row">
                 <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
                    
-                    <div class="video-player">
+                    <div class="video-player" id="videoplayerDiv">
                         <video class="js-player lesson_video_play vidoe-js" controls crossorigin preload="auto" playsinline id="videoarea" style="--plyr-color-main: #f09819;">
                             <source type="video/mp4"/ >
 
                         </video>
                     </div>
+
+                    <div class="card" id="quizDiv">
+                        <div class="card-body text-center py-5">
+                            <h1 class="quizHeader display-4"> Quiz Time! </h1>
+                            <hr>
+                            
+                            <h3 class="card-title text-dark fontbold mt-5"> Welcome to <span class="text-success fontbold fs-2 quizTitle"> </span> Quiz Game! </h3>
+                            <p class="card-text my-3"> <span class="quizDescription"></span> The game consists of answering the questions that will apppear as your answer, once you have finished answering, you will get your results. </p>
+
+                            <h3 class="card-title text-dark fontbold my-5 text-uppercase"> Are you Ready ? </h3>
+                            
+
+                            <a  class="card-link play-button"> Play Now <i class='bx bxs-chevron-right'></i> </a>
+                            
+                        </div>
+
+                    </div>
+
+                    <div class="card" id="finishquizDiv">
+                        <div class="card-body text-center py-5">
+                            <h1 class="quizHeader display-4"> Quiz Time! </h1>
+                            <hr>
+                            
+                            <h3 class="card-title text-dark fontbold mt-5"> You've completed the <span class="text-success fontbold fs-2 quizTitle"> </span> Quiz Game! </h3>
+                            <p class="card-text my-5"> You got only <span id="userScoreNo"> </span> out of <span class="totalquestionsNo"> </span> </p>
+
+                            <h3 class="card-title text-dark fontbold my-5 text-uppercase"> You are <span class="fontbold text-success userScore"> </span> right. </h3>
+                            
+
+                            <a href="javascript:void(0)" class="card-link viewscore-button"> View Score </a>
+
+                            <a  class="card-link play-button"> Play Again <i class='bx bxs-chevron-right'></i> </a>
+
+                            
+                        </div>
+                    </div>
+
+                    <div class="card" id="viewscoreDiv">
+                        <div class="card-header">
+                            <div class="card-title"> 
+                                <div class="d-inline-flex p-2 bd-highlight fs-5"> 
+                                    <h4 class="fontbold questionTitle"> </h4>
+                                </div>
+                                <div class="alert alert-warning float-right fs-6 py-1 timeoffwarningDiv" role="alert">
+                                    Time Off
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            
+                            <div class="choiceList"></div>
+
+
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-12 col-12">
+                                    <p> <span id="currentquestionNo"></span> of <span class="totalquestionsNo"></span> Questions </p>
+                                    
+                                </div>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end col-md-6 col-sm-12 col-12">
+
+                                    <a href="javascript:void(0)" class="btn btn-outline-secondary prevButton">
+                                        <i class='bx bxs-chevrons-left' ></i> Prev 
+                                    </a>
+                                    
+                                    <a href="javascript:void(0)" class="btn btn-warning nextButton">
+                                        <i class='bx bxs-chevrons-right' ></i> Next 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
 
                     <div class="alert alert-warning my-3" role="alert" id="notedownloadDiv">
                         Take Notes
@@ -43,11 +119,15 @@
                         @foreach($sections as $section_key => $section)
 
                         @php
-                            $totalDuration = 0;
+                            $totalDuration = 0; $exercise;
 
                             foreach ($section->contents as $key => $content) {
-                                $duration = $content->lessons[0]->duration;
-                                $totalDuration += $duration++;
+                                if($content->contenttype_id == 1)
+                                {
+                                    $duration = $content->lessons[0]->duration;
+                                    $totalDuration += $duration++;
+                                }
+
                             }
 
                             if ($totalDuration) {
@@ -63,25 +143,37 @@
                                 $contenttotaltimes = '0 Second';
                             }
 
+
                         @endphp
 
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="heading{{ $section->id }}">
-                                <button class="accordion-button {{ $section_key != 0 ? 'collapsed' : '' }}" type="button" data-toggle="collapse" data-target="#collapse{{ $section->id }}" aria-expanded="true" aria-controls="collapse{{ $section->id }}"> {{ $section->title }}
+                            <div class="accordion-header" id="heading{{ $section->id }}">
+                                <button class="accordion-button {{ $section_key != 0 ? 'collapsed' : '' }} px-2" type="button" data-toggle="collapse" data-target="#collapse{{ $section->id }}" aria-expanded="true" aria-controls="collapse{{ $section->id }}">
+                                <div class="d-flex flex-column">
+                                    <p class="text-left fontbold"> {{$section->title}} </p>
+                                    <small class="text-left "> ( {{ count($section->contents) }} Lectures • {{ $contenttotaltimes }} ) </small>
+                                </div>
 
-                                    <small class="fst-italic ml-4"> ( {{ count($section->contents) }} Lectures • {{ $contenttotaltimes }} ) </small>
                                 </button>
-                            </h2>
+                            </div>
                             <div id="collapse{{ $section->id }}" class="accordion-collapse collapse {{ $section_key == 0 ? 'show' : '' }}" aria-labelledby="heading{{ $section->id }}" data-parent="#accordionExample">
                                 <div class="accordion-body">
-
                                     <ul id="playlist" class="lh-lg list-group list-group-flush text-left">
-
+                                        <li class="list-group-item list-group-item-info">
+                                            Lecture Video
+                                        </li>
+                                        @php $i=1; $exercise=0; @endphp
                                         @foreach($section->contents  as $content_key => $content)
+                                            @php
+                                            if ($content->contenttype_id ==3) {
+                                                $exercise =1;
+                                            }
+                                            @endphp
 
+                                        @if($content->contenttype_id == 1)
                                         @php
                                             # Lesson
-                                            if ($content->contenttype_id == 1) {
+                                            
 
                                                 $fileId = $content->lessons[0]->id;
                                                 $fileLink = asset($content->lessons[0]->file);
@@ -90,33 +182,12 @@
                                                 $lessonId = $content->lessons[0]->id;
                                                 $notefileLink = asset($content->lessons[0]->file_upload);
 
-                                                // dd($content->lessons[0]);
-
-                                            }
-                                            # Assignment
-                                            else if ($content->contenttype_id == 3) {
-                                                $fileId = $content->assignments[0]->id;
-                                                $fileLink = asset($content->assignments[0]->file);
-                                                $duration = '';
-                                                $notefileLink = '';
-                                            }
-                                            # Quizz
-                                            else{
-                                                $fileLink = '';
-                                                $duration = '';
-                                                $notefileLink = '';
-                                            }
-
+                                            
                                             // Learning Video
 
                                             if ($duration) {
                                 
-                                                $dt = Carbon\Carbon::now();
-                                                $days = $dt->diffInDays($dt->copy()->addSeconds($duration));
-                                                $hours = $dt->diffInHours($dt->copy()->addSeconds($duration)->subDays($days));
-                                                $minutes = $dt->diffInMinutes($dt->copy()->addSeconds($duration)->subDays($days)->subHours($hours));
-
-                                                $lessontotaltimes = Carbon\CarbonInterval::days($days)->hours($hours)->minutes($minutes)->forHumans();
+                                                $lessontotaltimes = Carbon\CarbonInterval::seconds($duration)->cascade()->forHumans();
                                             }
                                             else{
                                                 $lessontotaltimes = '0 Second';
@@ -130,35 +201,89 @@
                                             }
                                         @endphp
 
-                                        <li fileLink="{{ $fileLink }}" contentId="{{ $content->id }}" fileId="{{ $fileId
-                                         }}" videoDuration="{{ $duration }}" userId="{{ $user_id }}" notefileLink="{{ $notefileLink }}" class="list-group-item px-0 {{ $content_key == 0 ? 'li_active' : '' }}">
+                                        <li fileLink="{{ $fileLink }}" contentId="{{ $content->id }}" fileId="{{ $fileId }}" videoDuration="{{ $duration }}" userId="{{ $user_id }}" notefileLink="{{ $notefileLink }}" contentType="{{ $content->contenttype_id }}" class="list-group-item px-0 {{ $content_key == 0 ? 'li_active' : '' }}">
 
+                                            <div class="row">
+                                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                                    @if($lesson_status == 0)
+                                                        <i class='bx bxs-checkbox-checked fs-2 text-success'></i>
+                                                    @else
+                                                        <i class='bx bx-square-rounded fs-5'></i>
+
+                                                    @endif
+                                                </div>
+
+                                                <div class="col-10">
+                                                    <p class="mb-0 chapter{{ $content->id }} {{ $content_key == 0 ? 'text-primary' : '' }}  d-inline-block"> 
+                                                        <strong class="fontbold"> Lesson {{ $i++ }} </strong> : {{ $content->title }}   
+                                                    </p>
+                                                    @if($content->description)
+                                                        <p class="text-secondary text-justify lh-sm fst-italic"> {{ $content->description }} </p>
+                                                    @endif
+                                                </div>
+                                            </div>
                                            
-                                                @if($lesson_status == 0)
-                                                    <i class='bx bxs-checkbox-checked fs-4 text-success'></i>
-                                                @else
-                                                    <i class='bx bx-checkbox-checked fs-4' ></i>
-
-                                                @endif
-
-
-                                            <p class="mb-0 chapter{{ $content->id }} {{ $content_key == 0 ? 'text-primary' : '' }}  d-inline-block">  
-
-
-                                                {{ $content->title }}
-                                                
-                                            </p>
                                             @if($duration)
-                                            <span class="float-right"> {{ $lessontotaltimes }}</span>
+                                            <small class="d-block text-muted float-right"> {{ $lessontotaltimes }}</small>
                                             @endif
                                         </li>
 
+                                        @endif
                                         @endforeach
 
-                                    </ul>
-                                    
-                                    
+                                        @php 
+                                         @endphp
 
+                                        @if($exercise == 1)
+                                        <li class="list-group-item list-group-item-info">
+                                            Exercises
+                                        </li>
+
+                                        @foreach($section->contents  as $content_key => $content)
+                                            @if($content->contenttype_id == 3)
+                                            @php
+                                                $fileId = $content->lessons[0]->id;
+                                                $fileLink = asset($content->lessons[0]->file);
+                                                $duration = $content->lessons[0]->duration;
+
+                                                $lessonId = $content->lessons[0]->id;
+                                                $notefileLink = asset($content->lessons[0]->file_upload);
+
+
+                                            @endphp
+                                                <li fileLink="{{ $fileLink }}" contentId="{{ $content->id }}" fileId="{{ $fileId }}" videoDuration="{{ $duration }}" userId="{{ $user_id }}" notefileLink="{{ $notefileLink }}" contentType="{{ $content->contenttype_id }}" class="list-group-item {{ $content_key == 0 ? 'li_active' : '' }}">
+
+                                                    {{ $content->title }}
+                                                    
+                                                </li>
+                                            @endif
+                                        @endforeach
+
+                                        @endif
+
+
+                                        @if(count($course->tests) > 0)
+                                            <li class="list-group-item list-group-item-info">
+                                                Quiz Time
+                                            </li>
+
+                                            @foreach($course->tests as $content_key => $test)
+                                            @if($test->section_id == $section->id)
+
+                                            @php
+                                                if ($test->response) {
+                                                    $response = $test->response->id;
+                                                }else{
+                                                    $response = 0;
+                                                }
+                                            @endphp
+                                            <li contentType="2" testId="{{ $test->id }}" testTitle="{{ $test->title }}" testDescription="{{ $test->description }}" responseId="{{ $response }}"  class="list-group-item {{ $content_key == 0 ? 'li_active' : '' }}">
+                                                {{ $test->title }}
+                                            </li>
+                                            @endif
+                                            @endforeach
+                                        @endif
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -418,21 +543,23 @@
                                                 <h4 class="fontbold"> What you'll Learn </h4>
 
                                                 @php
-                                                    $outlines = json_decode($course->outline);
+                                                    $outlines = json_decode( $course->outline);
                                                     $requirements = json_decode( $course->requirements);
 
                                                 @endphp
-
+                                                @if($outlines != NULL)
                                                 <ul type="none" class="lh-lg">
                                                     @foreach($outlines as $outline)
                                                         <li> <i class="icofont-check-alt"></i> {{$outline}} </li>
                                                     @endforeach
                                                 </ul>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
 
                                     {{-- Requirement --}}
+                                    @if($requirements != NULL)
                                     <div class="col-12 mt-3">
                                         <div class="card">
                                             <div class="card-body">
@@ -446,6 +573,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
 
                                     {{-- Description --}}
                                     <div class="col-12 mt-5">
@@ -681,12 +809,16 @@
     </style>
 
     <script type="text/javascript">
+        var currentQuestion=0; var quizNo=1;
+        var questions; var response; var responsedetails;
+
         $(document).ready(function(){
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
 
             var currentplayVideo;
 
@@ -891,43 +1023,62 @@
 
                 function videoplay_currentActiveclass(){
                     if($('#playlist li').hasClass('li_active')){
-                        var fileLink = $('ul#playlist').find('li.li_active').attr('fileLink');
-                        var contentId = $('ul#playlist').find('li.li_active').attr('contentId');
-                        var videoDuration = $('ul#playlist').find('li.li_active').attr('videoDuration');
-                        var userId = $('ul#playlist').find('li.li_active').attr('userId');
-                        var fileId = $('ul#playlist').find('li.li_active').attr("fileId");
-                        var notefileLink = $('ul#playlist').find('li.li_active').attr("notefileLink");
                         
-                        if (notefileLink) {
-                            $('#notedownloadDiv').show();
-                            $('#notedownloadBtn').attr({'href' : notefileLink});
-                        }else{
+                        var contentType = $('ul#playlist').find('li.li_active').attr("contentType");
+
+                        if(contentType == 2){
+                            $('#videoplayerDiv').hide();
                             $('#notedownloadDiv').hide();
+                            $('#quizDiv').show();
+
+                            
+                        }else{
+
+                            $('#videoplayerDiv').show();
+                            $('#notedownloadDiv').show();
+                            $('#quizDiv').hide();
+                            $('#finishquizDiv').hide();
+                            $('#viewscoreDiv').hide();
+
+                            var fileLink = $('ul#playlist').find('li.li_active').attr('fileLink');
+                            var contentId = $('ul#playlist').find('li.li_active').attr('contentId');
+                            var videoDuration = $('ul#playlist').find('li.li_active').attr('videoDuration');
+                            var userId = $('ul#playlist').find('li.li_active').attr('userId');
+                            var fileId = $('ul#playlist').find('li.li_active').attr("fileId");
+                            var notefileLink = $('ul#playlist').find('li.li_active').attr("notefileLink");
+
+
+                            if (notefileLink) {
+                                $('#notedownloadDiv').show();
+                                $('#notedownloadBtn').attr({'href' : notefileLink});
+                            }else{
+                                $('#notedownloadDiv').hide();
+
+                            }
+
+                            currentplayVideo = {
+                                "duration" : videoDuration,
+                                "userid" : userId,
+                                "fileid" : parseInt(fileId)
+                            };
+
+
+                            $("#videoarea").attr({
+                                "src": fileLink,
+                                "poster": "",
+                                "autoplay": "autoplay",
+                                "data-id":contentId,
+                                "data-duration" : videoDuration,
+                                "data-userid" : userId,
+                                "data-fileid" : fileId
+
+                                      });
+
+                            currentvideoState(fileId, userId);
+
+                            starttime = $(this).attr('startt');
 
                         }
-
-                        currentplayVideo = {
-                            "duration" : videoDuration,
-                            "userid" : userId,
-                            "fileid" : parseInt(fileId)
-                        };
-
-
-                        $("#videoarea").attr({
-                            "src": fileLink,
-                            "poster": "",
-                            "autoplay": "autoplay",
-                            "data-id":contentId,
-                            "data-duration" : videoDuration,
-                            "data-userid" : userId,
-                            "data-fileid" : fileId
-
-                                  });
-
-                        currentvideoState(fileId, userId);
-
-                        starttime = $(this).attr('startt');
-
                     }
 
                         // console.log("fileLink");
@@ -936,56 +1087,292 @@
 
                 $("#playlist li").on("click", function() {
 
-                    var fileLink = $(this).attr("fileLink");
-                    var contentId = $(this).attr("contentId");
-                    var videoDuration = $(this).attr("videoDuration");
-                    var userId = $(this).attr("userId");
-                    var fileId = $(this).attr("fileId");
-                    var notefileLink = $(this).attr("notefileLink");
+                    
+                    var contentType = $(this).attr("contentType");
 
-                    var askid = $("#askquestion").attr("data-id",contentId);
+                    if (contentType == 2) {
+                        $('#videoplayerDiv').hide();
+                        $('#notedownloadDiv').hide();
 
-                    currentplayVideo = {
-                        "duration" : videoDuration,
-                        "userid" : userId,
-                        "fileid" : parseInt(fileId)
-                    };
 
-                    $("#videoarea").attr({
-                        "src": $(this).attr("fileLink"),
-                        "poster": "",
-                        "autoplay": "autoplay",
-                        "data-id":contentId,
-                        "data-duration" : videoDuration,
-                        "data-userid" : userId,
-                        "data-fileid" : parseInt(fileId)
 
-                              });
+                        var testId = $(this).attr("testId");
+                        var testTitle = $(this).attr("testTitle");
+                        var testDescription = $(this).attr("testDescription");
+                        var responseId = $(this).attr("responseId");
 
-                    if (notefileLink) {
-                            $('#notedownloadDiv').show();
-                            $('#notedownloadBtn').attr({'href' : notefileLink});
+                        if (responseId > 0) {
+
+                            $('#viewscoreDiv').hide();
+                            $('#quizDiv').hide();
+
+                            $.when(getQuestions(responseId)).done(function(a1){
+                                $('#finishquizDiv').show();
+
+                                var score = response.score;
+                                var ans_count =0;
+                                $.each(responsedetails,function(a,b){
+
+                                    var status = b.status;
+
+                                    if (b.check_id > 0) {
+                                        ans_count++;
+                                    }
+
+                                });
+
+                                console.log(ans_count);
+                                $('.userScore').text(score+'% ');
+                                $('.totalquestionsNo').text(questions.length);
+
+                                $('#userScoreNo').text(ans_count);
+                                
+                            });
+
+                            $('a.viewscore-button').attr('responseId',responseId);
+
+
                         }else{
-                            $('#notedownloadDiv').hide();
+                            $('#finishquizDiv').hide();
+                            $('#viewscoreDiv').hide();
+
+                            $('#quizDiv').show();
 
                         }
+                        var url="{{route('startquiz',':id')}}";
+                        url=url.replace(':id',testId);
+
+                        $('.quizTitle').html(testTitle);
+                        $('.quizDescription').html(testDescription);
+                        $('a.play-button').attr('href',url);
+
+                        
+
+                    }else{
+
+                        var fileLink = $(this).attr("fileLink");
+                        var contentId = $(this).attr("contentId");
+                        var videoDuration = $(this).attr("videoDuration");
+                        var userId = $(this).attr("userId");
+                        var fileId = $(this).attr("fileId");
+                        var notefileLink = $(this).attr("notefileLink");
                     
-                    currentvideoState(fileId, userId);
+                        $('#videoplayerDiv').show();
+                        $('#notedownloadDiv').show();
+                        $('#quizDiv').hide();
+                        $('#finishquizDiv').hide();
+                        $('#viewscoreDiv').hide();
 
-                    starttime = $(this).attr('startt');
+                        currentplayVideo = {
+                            "duration" : videoDuration,
+                            "userid" : userId,
+                            "fileid" : parseInt(fileId)
+                        };
+
+                        $("#videoarea").attr({
+                            "src": $(this).attr("fileLink"),
+                            "poster": "",
+                            "autoplay": "autoplay",
+                            "data-id":contentId,
+                            "data-duration" : videoDuration,
+                            "data-userid" : userId,
+                            "data-fileid" : parseInt(fileId)
+
+                                  });
+
+                        if (notefileLink) {
+                                $('#notedownloadDiv').show();
+                                $('#notedownloadBtn').attr({'href' : notefileLink});
+                            }else{
+                                $('#notedownloadDiv').hide();
+
+                            }
+                        
+                        currentvideoState(fileId, userId);
+
+                        starttime = $(this).attr('startt');
 
 
-                    $("#playlist li p").removeClass("text-primary");
-                    $("p.chapter"+contentId).addClass("text-primary");
-                    
+                        $("#playlist li p").removeClass("text-primary");
+                        $("p.chapter"+contentId).addClass("text-primary");
 
+                    }
                 });
 
             })
 
-            // document.getElementById("videoarea").addEventListener("loadedmetadata", function() {
-            //      this.currentTime = starttime;
-            // }, false);
+            $('#finishquizDiv').on('click','.viewscore-button', function()
+            {
+                var responseId = $(this).attr('responseId');
+
+                viewScore(responseId);
+
+                
+            });
+
+            function viewScore(responseId){
+                $('#videoplayerDiv').hide();
+                $('#notedownloadDiv').hide();
+                $('#finishquizDiv').hide();
+                $('#quizDiv').hide();
+
+
+                $.when(getQuestions(responseId)).done(function(a1){
+                    $('#viewscoreDiv').show();
+
+
+                    displayCurrentQuestion();
+                });
+            }
+
+            function displayCurrentQuestion(){
+
+                if (currentQuestion ==0) {
+                    $('.prevButton').hide();
+                }else{
+                    $('.prevButton').show();
+                }
+                var question = questions[currentQuestion].question;
+
+                $('.questionTitle').text(quizNo+'. '+question);
+                $('#currentquestionNo').text(quizNo);
+                $('.totalquestionsNo').text(questions.length);
+
+                var html=''; var response_answers=[];
+
+                var answers = questions[currentQuestion].checks;
+
+                $.each(answers,function (i,v) {                 
+                    response_answers.push(v.answer);
+                    var checkid = v.id;
+                    var mark = v.mark;
+                    var rightanswer = v.rightanswer;
+                    var quizid = v.quiz_id;
+
+                    var svar; var ans_status;
+                    $.each(responsedetails,function(a,b){
+                        var response_checkid = b.check_id;
+                        var response_quizid = b.quiz_id;
+
+                        var status = b.status;
+
+                        console.log(response_checkid)
+
+                        if (response_checkid == checkid && rightanswer == 'true') {
+                            svar = true;
+                        }
+
+                        else if (response_checkid == checkid && rightanswer == 'false') {
+                            svar = false;
+                        }
+
+                        if (response_checkid == 0 && quizid == response_quizid && status == 'timeoff') {
+                            ans_status = status;
+                        }
+
+                    });
+                    
+
+                    if (svar == true) {
+                        html += `<div class="rightAns px-2 fs-6 py-3 my-3 border-2 rounded">
+                                <span class="ansOption${i}"></span>
+                                <i class='bx bx-check-circle float-right fs-3'></i>
+                            </div>`;
+                    }
+                    else if (rightanswer == 'true') {
+                        html += `<div class="rightAns px-2 fs-6 py-3 my-3 border-2 rounded">
+                            <span class="ansOption${i}"></span>
+                            <i class='bx bx-check-circle float-right fs-3'></i>
+                        </div>`;
+                    }
+
+                    else if (svar == false) {
+
+
+                        html += `<div class="wrongAns px-2 fs-6 py-3 my-3 border-2 rounded">
+                                    <span class="ansOption${i}"></span>
+                                    <i class='bx bx-x-circle float-right fs-3'></i>
+                                </div> `;
+                    }
+                    else{
+                        html+=`<div class="bg-light px-2 fs-6 py-3 my-3 border-2 rounded">
+                            <span class="ansOption${i}"></span>
+                        </div>`;
+                    }
+                    console.log(ans_status);
+                    if(ans_status == 'timeoff'){
+                        $('.timeoffwarningDiv').show();
+
+                    }else{
+                        $('.timeoffwarningDiv').hide();
+
+                    }
+
+                });
+
+                $('.choiceList').html(html);
+
+                $.each(response_answers,function (i,v) {
+                    $('span.ansOption'+i).text(v);
+
+                });
+            }
+
+            function getQuestions(responseId){
+                return  $.ajax({
+                    type:'POST',
+                    url: "/getscore_byresponseid",
+                    data: {responseId:responseId},
+                    dataType: 'json',
+                    success: (data) => {  
+                        questions = data.questions;
+                        response = data.response;
+                        responsedetails = response.responsedetails;
+
+                    }
+                });
+
+            }
+
+            $(this).find(".nextButton").on("click", function () 
+            {
+                currentQuestion++;
+                quizNo++;
+
+                if(currentQuestion >= 1) {
+                    $(".prevButton").show();
+                }else{
+                    $(".prevButton").hide();
+                }
+
+                if(currentQuestion == (questions.length)-1) {
+                    $(".nextButton").hide();
+                }else{
+                    $(".nextButton").show();
+                }
+
+                if (currentQuestion < questions.length) 
+                {
+                    displayCurrentQuestion();
+                }   
+            });
+
+            $(this).find(".prevButton").on("click", function () 
+            {
+                currentQuestion--;
+                quizNo--;
+
+                if(currentQuestion >= 1) {
+                    $(".prevButton").show();
+                }else{
+                    $(".prevButton").hide();
+                }
+
+                if (currentQuestion < questions.length) 
+                {
+                    displayCurrentQuestion();
+                }   
+            });
 
             function currentvideoState(fileId, userId){
                 $.post('/lesson_state',{lesson_id:fileId, user_id:userId},function(res){
@@ -998,19 +1385,6 @@
                     }
                 });
             }
-
-            $('#askquestion').click(function(){
-                var vid = $(this).data('id');
-                if(vid){
-                    // $('#contentid').val(vid);
-                    $('#askquestionModal').modal();
-                }else{
-
-                    var vid = $('#playlist li').attr('contentId');
-                    // $('#contentid').val(vid);
-                    $('#askquestionModal').modal();
-                }
-            })
 
             $('.replyquestions').hide();
 

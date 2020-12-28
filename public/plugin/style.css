@@ -6,6 +6,10 @@
     font-family: Unicode;
 }
 
+.quizHeader{
+    font-family: BungeeShade_Regular;
+}
+
 .tooltip {
     font-family: Unicode !important;
 }
@@ -1921,6 +1925,9 @@ ul#playlist{
     right: 0px;
 }
 
+<<<<<<< HEAD
+
+=======
 .ribbon {
 position: relative;
 }
@@ -2013,4 +2020,44 @@ position: relative;
  background: #00873E;
 }
 
+.play-button {
+  padding: 10px 30px 10px 30px;
+  background-color: transparent;
+  border: 1px solid #f09819;
+  color: #f09819;
+  margin-top: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.5s;
+  transform: scale(1);
+}
+.play-button:hover {
+  background-color: #f09819;
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.viewscore-button{
+    padding: 10px 30px 10px 30px;
+    background-color: #aaa;
+    /*border: 1px solid #f09819;*/
+    color: #fff;
+    margin-top: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.5s;
+    transform: scale(1);
+}
+
+.viewscore-button:hover {
+    background-color: transparent;
+    border: 1px solid #aaa;
+
+    color: #464646;
+    transform: scale(1.1);
+}
+
+.play-button i, {
+  padding-left: 10px;
+}
  
