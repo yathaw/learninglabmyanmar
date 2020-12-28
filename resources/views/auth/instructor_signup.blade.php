@@ -1,11 +1,5 @@
 <x-auth_step>
-	<div class="flash-message">
-              @foreach(['danger','warning','success','info'] as $msg)
-                @if(Session::has('alert'.$msg))
-                <p class="alert-{{$msg}}">{{Session::get('alert-'.$msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">$times;</a></p>
-                @endif
-              @endforeach
-            </div>
+	
 	<div class="container">
 		<div class="row justify-content-center">
 		    <div class="col-xs-12 col-md-8 col-lg-8">
@@ -421,8 +415,9 @@
 	                       	$('.wizard-content').hide();
 				        	$('#regStep_msg').hide();
 	                        
-				        	$('.verifyDiv').show();
-				        	$('#activateInstructor_msg').show();
+				        	// $('.verifyDiv').show();
+				        	window.location.href = "http://localhost:8000/login";
+				        	//$('#activateInstructor_msg').show();
 	                        
 	                    },
 	                    error: function(error){
