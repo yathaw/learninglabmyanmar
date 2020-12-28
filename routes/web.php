@@ -119,11 +119,14 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
 
     Route::resource('/section', SectionController::class);
-
+    //KYW
     Route::get('/section/{section}/edit',[SectionController::class,'edit'])->name('sectionedit');
     Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
     Route::post('/getinstructor',[SectionController::class,'getinstructor'])->name('getinstructor');
     Route::post('/sectionupdate/{id}',[BackendController::class,'sectionupdate'])->name('sectionupdate');
+
+
+
     Route::resource('/instructors', InstructorController::class);
    
 
@@ -138,10 +141,12 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/assignment', AssignmentController::class);
     Route::resource('/attachment', AttachmentController::class);
 
-    Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
+
+
+    /*Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
 
     Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
-    
+    */
     //YTMN
     Route::resource('/questions',QuestionController::class);
     Route::resource('/answer',AnswerController::class);

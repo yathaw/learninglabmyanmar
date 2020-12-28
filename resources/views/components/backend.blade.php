@@ -100,7 +100,7 @@
 					@if(in_array($authRole, array('Instructor','Business'), true ))
 
 					<li class="sidebar-item {{ Request::segment(2) === 'enrollment' ? 'active' : '' }}">
-						<a class="sidebar-link" href="{{route('backside.enrollment')}}" data-toggle="tooltip" data-placement="left" title="ရောင်းထားသည့် Course စာရင်းများကြည့်မည်">
+						<a class="sidebar-link" href="{{route('backside.sale.index')}}" data-toggle="tooltip" data-placement="left" title="ရောင်းထားသည့် Course စာရင်းများကြည့်မည်">
               				<i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle"> Revenue </span>
             			</a>
 					</li>
@@ -385,7 +385,7 @@
 									</a> -->
 								</div>
 								<div class="dropdown-menu-footer">
-									<a href="{{route('questionshownoti')}}" class="text-muted">Show all notifications</a>
+									<a href="{{route('backside.questions.index')}}" class="text-muted">Show all notifications</a>
 								</div>
 							</div>
 						</li>

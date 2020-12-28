@@ -99,7 +99,7 @@
 
                         <textarea class="form-control d-none" id="hiddenArea" name="description"></textarea>
 
-                        <input type="button" value="Post Your Answer" class="btn btn-warning mt-3 saveBtn">
+                        <input type="submit" value="Post Your Answer" class="btn btn-warning mt-3 saveBtn">
                     </form>
 
                     @endif
@@ -115,7 +115,7 @@
 
                             <textarea class="form-control d-none" id="edit_hiddenArea" name="edit_description"></textarea>
 
-                            <input type="button" value="Post Your Answer" class="btn btn-warning mt-3 updateBtn">
+                            <input type="submit" value="Post Your Answer" class="btn btn-warning mt-3 updateBtn">
                         </form>
                     </div>
                     @endif

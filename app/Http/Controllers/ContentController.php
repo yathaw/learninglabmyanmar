@@ -75,7 +75,8 @@ class ContentController extends Controller
         $content->contenttype_id=$request->contenttypeid;
         $content->save();
 
-            if($request->hasfile('file')){
+        if($content->contenttype_id == 1 || $content->contenttype_id == 3){
+        if($request->hasfile('file')){
 
         $track = new GetId3(request()->file('file'));
         //get all info
@@ -120,9 +121,31 @@ class ContentController extends Controller
             $lesson->file_upload=$filepath1;
             $lesson->save();
 
+     
 
        //return redirect()->route('backside.sectionlist');
-      return view('course.section_new');
+        // }else if($content->contenttype_id == 3){
+
+        //     if($request->file()){
+        //     $fileName=time().'_'.$request->file->getClientOriginalName();
+        //     $path = $request->file('file')->storeAs('assignment', $fileName, 'public');
+        //     $filepath='/storage/'.$path;
+        //     }
+
+        //     $assignment=new Assignment;
+        //     $assignment->file=$filepath;
+
+        //     $file = $request->file;
+        //     $fileExtension =$file->extension();
+        //     //dd($fileExtension);
+        //     $assignment->type=$fileExtension;
+
+        //     $assignment->content_id=$content->id;
+        //     $assignment->save();
+
+        }
+       return redirect()->route('backside.section.index');
+      // return view('course.section_new');
         
     }
 
