@@ -250,16 +250,16 @@
    					</div>
 
    					<div class="row mb-3">
-   						<label for="objectiveId" class="col-sm-2 col-form-label">File </label>
+   						<label for="objectiveId" class="col-sm-2 col-form-label">Video(<small class="text-danger">mp4</small>)</label>
    						<div class="col-sm-10">
-   							<input type="file" name="file">
+   							<input type="file" name="file" accept="video/*">
    						</div>
    					</div>
 
    					<div class="row mb-3">
-   						<label for="objectiveId" class="col-sm-2 col-form-label">Upload File </label>
+   						<label for="objectiveId" class="col-sm-2 col-form-label">File </label>
    						<div class="col-sm-10">
-   							<input type="file" name="file_upload">
+   							<input type="file" name="file_upload" accept=".xlsx,.xls,image/*,.doc, .docx,.ppt,.pptx,.txt,.pdf">
    						</div>
    					</div>
 
@@ -403,7 +403,7 @@
 						</div> --}}
 
 						<div class="form-group row">
-							<label for="photo_id" class="col-sm-2 col-form-label">File</label>
+							<label for="photo_id" class="col-sm-2 col-form-label">Video(<small class="text-danger">mp4</small>)</label>
 							<div class="col-sm-10">
 								<ul class="nav nav-tabs" id="myTab" role="tablist">
 									<li class="nav-item" role="presentation">
@@ -416,7 +416,7 @@
 								</ul>
 								<div class="tab-content mt-3" id="myTabContent">
 									<div class="tab-pane fade show active" id="oldPhotoTab" role="tabpanel" aria-labelledby="oldPhoto-tab">
-										<video class="js-player lesson_video_play vidoe-js"width="220" height="140" controls crossorigin preload="auto" playsinline id="content_file">
+										<video class="js-player lesson_video_play vidoe-js" width="220" height="140" controls crossorigin preload="auto" playsinline id="content_file">
  											 <source src=" " type="video/mp4" >
 									   </video>
 
@@ -425,14 +425,14 @@
 									</div>
 
 									<div class="tab-pane fade" id="newPhotoTab" role="tabpanel" aria-labelledby="newPhoto-tab">
-										<input type="file" id="file" name="file">
+										<input type="file" id="file" name="file" >
 									</div>
 								</div>
 							</div>
 						</div>
 
 						<div class="form-group row mt-2">
-							<label for="photo_id" class="col-sm-2 col-form-label"> Upload File</label>
+							<label for="photo_id" class="col-sm-2 col-form-label">File</label>
 							<div class="col-sm-10">
 								<ul class="nav nav-tabs" id="myTab" role="tablist">
 									<li class="nav-item" role="presentation">
@@ -515,10 +515,6 @@
                 
                 clickToPlay: true,
             });
-
-
-
-
 
 
 			$.ajaxSetup({
@@ -711,7 +707,7 @@ $('.lessoneditbtn').click(function(){
             //     $("#content_file").attr("src", $videoFile);
             // });
             $('#hidden_uploadfile').val(v.file_upload);
-            $('#showpdf').text(v.file_upload);
+            $('#viewport').text(v.file_upload);
 
             var videoFileupload = v.file_upload;
             $('#content_uploadfile').attr('src', videoFileupload);
