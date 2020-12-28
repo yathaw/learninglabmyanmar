@@ -30,6 +30,7 @@ use App\Http\Controllers\InstallmentController;
 
 // YTMN
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\TestController;
 
 
 //HH
@@ -79,6 +80,9 @@ Route::post('course_sale',[FrontendController::class, 'course_sale'])->name('cou
 Route::get('instructors',[FrontendController::class, 'instructors'])->name('instructors');
 
 Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->name('instructor');
+
+
+
 
 //Honey
 Route::get('business_info',[FrontendController::class,'business_info'])->name('business_info');
@@ -142,6 +146,9 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/questions',QuestionController::class);
     Route::resource('/answer',AnswerController::class);
     Route::resource('/quiz',QuizController::class);
+    Route::resource('/test',TestController::class);
+    Route::post('/test/update/{id}',[TestController::class, 'update'])->name('test.update');
+    Route::post('/quiz/update/{id}',[QuizController::class, 'update'])->name('quiz.update');
 
 
 
@@ -252,7 +259,8 @@ Route::get('purchase_history',[AccountController::class, 'purchase_history'])->n
 Route::get('history_detial/{id}',[AccountController::class, 'history_detial'])->name('history_detial');
 
 
-
+// Start Quiz 
+Route::get('/startquiz/{id}',[AccountController::class, 'startquiz'])->name('startquiz');
 
 // ------------------------------------------------------------------------
 
@@ -278,6 +286,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 // YTMN
 Route::post('getinstructor_bycompanyid',[CourseController::class, 'getinstructor'])->name('getinstructor_bycompanyid');
 Route::post('getquestion_bycourseid',[QuestionController::class, 'getquestion'])->name('getquestion_bycourseid');
+
+Route::post('getsection_bycourseid',[QuizController::class, 'getsection'])->name('getsection_bycourseid');
+
+Route::post('getquizzes_bytestid',[AccountController::class, 'getquiz'])->name('getquizzes_bytestid');
+Route::post('storequiz',[AccountController::class, 'storequiz'])->name('storequiz');
+Route::post('getscore_byresponseid',[AccountController::class, 'getscore'])->name('getscore_byresponseid');
 
 
 

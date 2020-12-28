@@ -61,3 +61,19 @@ textarea:focus,
     border-color: #f09819 !important;
     color: #fff !important;
 }
+
+.whiteless{
+	color: #f5f0f0;
+}
+
+.rightAns{
+	background: #d4edda;
+	color: #155724;
+	border: 1px solid #c3e6cb;
+}
+
+.wrongAns{
+	color: #721c24;
+	background: #f8d7da;
+	border: 1px solid #f5c6cb;
+}

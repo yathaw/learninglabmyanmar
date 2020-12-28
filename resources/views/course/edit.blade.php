@@ -47,49 +47,75 @@
                            </div>
                         </div>
                         <div class="row form-group my-4">
-                           <div class="col-md-6">
-                              <label for="titleId" class="form-label"> Choose Category </label>
-                              <select class="form-select select2" name="subcategoryid">
-                                 @foreach($categories as $category)
-                                 <optgroup class="bg-dark" label="{{ $category->name }}">
-                                    @foreach($category->subcategories as $subcategory)
-                                    <option value="{{$subcategory->id}}">{{$subcategory->name}}</option>
+                            <div class="col-md-6">
+                                <label for="titleId" class="form-label"> Choose Category </label>
+                                <select class="form-select select2" name="subcategoryid">
+                                    @foreach($categories as $category)
+                                    <optgroup class="bg-dark" label="{{ $category->name }}">
+                                        @foreach($category->subcategories as $subcategory)
+                                            <option value="{{$subcategory->id}}" @if($subcategory->id == $course->subcategory_id) selected @endif>{{$subcategory->name}}</option>
+                                        @endforeach
+                                    </optgroup>
                                     @endforeach
-                                 </optgroup>
-                                 @endforeach
-                              </select>
-                           </div>
+                                </select>
+                            </div>
                            <div class="col-md-6">
-                              <label for="titleId" class="form-label"> Choose Level </label>
-                              <select class="form-select select2" name="level">
-                                 @foreach($levels as $level)
-                                 <option value="{{$level->id}}">{{$level->name}}</option>
-                                 @endforeach
-                              </select>
-                           </div>
+                                <label for="titleId" class="form-label"> Choose Level </label>
+                                <select class="form-select select2" name="level">
+                                    @foreach($levels as $level)
+                                        <option value="{{$level->id}}" @if($level->id == $course->level_id) selected @endif>{{$level->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
+                        @if(isset($companies))
+                            <div class="row form-group my-4">
+
+                                <div class="col-md-12" >
+                                    <label for="companyId" class="form-label"> Choose Company </label>
+
+                                    
+                                    <select class="form-select select2" name="subcategoryid" id="companyId" data-placeholder="Select one company">
+                                        <option></option>
+                                        @foreach($companies as $company)
+                                            <option value="{{$company->id}}" data-id="{{$company->id}}">{{$company->name}}</option>
+                                        @endforeach
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row form-group my-4">
+
+                                <div class="col-md-12">
+                                    <label for="companyInstructor" class="form-label"> Select Instructors </label>
+
+                                    <select name="teachers[]" class="form-select select2" id="companyInstructor" multiple="multiple" disabled>
+                                        <option>  </option>                       
+
+
+                                    </select> 
+                                </div>
+                            </div>
+                        @endif
+
+                        @if(isset($instructors))
                         <div class="row form-group my-4">
-                           <div class="col-md-12">
-                              <label for="instructorId" class="form-label"> Select Instructors </label>
-                              <select name="teachers[]" class="form-select select2 teacher" id="inputTeacher" multiple="multiple">
-                                 <option value="1">One</option>
-                                 <option value="2">Two</option>
-                                 <option value="3">Three</option>
-                              </select>
-                           </div>
+
+                            <div class="col-md-12">
+                                <label for="instructorId" class="form-label"> Select Instructors </label>
+
+                                <select name="teachers[]" class="form-select select2 teacher" id="inputTeachers" multiple="multiple">
+                                    
+                                    @foreach($instructors as $instructor)
+                                        <option value="{{$instructor->id}}">{{$instructor->name}}</option>
+                                    @endforeach
+                                   
+                                    
+                                </select> 
+                            </div>
                         </div>
-                        {{-- 
-                        <div class="row form-group my-4">
-                           <div class="col-md-12">
-                              <label for="instructorId" class="form-label"> Select Instructors </label>
-                              <select name="teachers[]" class="form-select select2 teacher" id="inputTeacher" multiple="multiple">
-                                 @foreach($instructors as $instructor)
-                                 <option value="{{$instructor->id}}">{{$instructor->name}}</option>
-                                 @endforeach
-                              </select>
-                           </div>
-                        </div>
-                        --}}
+                        @endif
                         <div class="row form-group my-4 vh-50">
                            <div class="col-md-12">
                               <label for="descriptionId" class="form-label"> Course Description </label>
@@ -103,7 +129,7 @@
                         <div class="row form-group mb-4">
                            <div class="col-md-12">
                               <label for="situationId" class="form-label"> What will students learn in your course? </label>
-                              <input type="text" class="form-control form-control-lg my-4" id="situationId" placeholder="E.g Learn Digital Marketing" name="situations[]" value="{{old('situations')}}">
+                              <input type="text" class="form-control form-control-lg my-4" id="situationId" placeholder="E.g Learn Digital Marketing" name="situations[]" value="{{ $outlines[0] }}">
                               <div class="situation_morewrapperField"></div>
                               <button class="btn btn-light text-success add_situations">  
                               <i class="align-middle mr-2" data-feather="plus"></i> Add Answer 
@@ -117,7 +143,7 @@
                         <div class="row form-group mb-4">
                            <div class="col-md-12">
                               <label for="requirementId" class="form-label"> Are there any course requirements or prerequisites? </label>
-                              <input type="text" class="form-control form-control-lg my-4" id="requirementId" placeholder="E.g Be able to read english 4 skills" name="requirements[]" value="{{old('requirements')}}">
+                              <input type="text" class="form-control form-control-lg my-4" id="requirementId" placeholder="E.g Be able to read english 4 skills" name="requirements[]" value="{{ $requirements[0] }}">
                               <div class="requirement_morewrapperField"></div>
                               <button class="btn btn-light text-success add_requirements">  
                               <i class="align-middle mr-2" data-feather="plus"></i> Add Answer 
@@ -125,72 +151,69 @@
                            </div>
                         </div>
                      </section>
-                     <h6> Pricing </h6>
-                     <section>
+                    
+                    <h6> Pricing </h6>
+                    <section>
                         <div class="row form-group mb-4">
                            <div class="col-md-12">
                               <label for="priceId" class="form-label"> Pricing </label>
-                              <input type="number" class="form-control form-control-lg" id="priceId" placeholder="Course Amount" name="pricing" value="{{$course->pricing}}">
+                              <input type="number" class="form-control form-control-lg" id="priceId" placeholder="Course Amount" name="pricing" value="{{$course->price}}">
                            </div>
                         </div>
-                        <input id="acceptTerms-2" name="acceptTerms" type="checkbox" class=""> <label for="acceptTerms-2"> Give a certificate for completing courses </label>
+                        <input id="acceptTerms-2" name="acceptTerms" type="checkbox" class="" @if($course->certificate== 'on') checked @endif> <label for="acceptTerms-2" > Give a certificate for completing courses </label>
                         <small class="d-block"> If you give certificate to students, please check,   </small>
-                     </section>
-                     <h6> Photo / Video </h6>
-                     <section>
-                        <div class="form-group">
-                           <label>Photo:</label>
-                           <label>Photo: (<small class="text-danger">* jpeg|bmp|png</small>)</label>
-                           <ul class="nav nav-tabs" id="myTab" role="tablist">
-                              <li class="nav-item" role="presentation">
-                                 <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Old</a>
-                              </li>
-                              <li class="nav-item" role="presentation">
-                                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">New</a>
-                              </li>
-                           </ul>
-                           <div class="tab-content mt-3" id="myTabContent">
-                              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                 <img src="{{asset($course->photo)}}" class="img-fluid" alt="">
-                                 {{-- <input type="hidden" name="oldphoto" value="{{$course->photo}}"> --}}
-                              </div>
-                              <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                 <input type="file" name="photo" class="form-control-file @error('photo') is-invalid @enderror">
-                                 @error('photo')
-                                 <span class="invalid-feedback" role="alert">
-                                 <strong>{{ $message }}</strong>
-                                 </span>
-                                 @enderror
-                              </div>
-                           </div>
+                    </section>
+                    
+                    <h6> Photo / Video </h6>
+                    <section>
+
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="tab">
+                                    <ul class="nav nav-tabs mb-4 nav-fill" role="tablist">
+                                        <li class="nav-item"><a class="nav-link active bg-transparent" href="#tab-1" data-toggle="tab" role="tab"> Old Course Trailer </a></li>
+                                        <li class="nav-item"><a class="nav-link bg-transparent" href="#tab-2" data-toggle="tab" role="tab"> New Coursse Trailer </a></li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="tab-1" role="tabpanel">
+                                            <input type="hidden" name="oldphoto" value="{{ $course->image }}">
+                                            <input type="hidden" name="oldvideo" value="{{ $course->video }}">
+
+                                            <div class="video-player card-img-top">
+                                                <video class="js-player lesson_video_play vidoe-js" data-poster="{{ asset($course->image) }}" controls crossorigin preload="auto" playsinline id="videoarea" style="--plyr-color-main: #f09819;">
+                                                    <source src="{{ asset($course->video) }}" type="video/mp4"/ >
+                                                </video>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="tab-2" role="tabpanel">
+                                            <label>Photo(<small class="text-danger">jpeg|bmp|png</small>)</label>
+                                    
+                                            <img id="blah" src="http://placehold.it/180" alt="your image" class="img-fluid d-block" />
+
+                                            <input type='file' name="photo" onchange="readURL(this);" />
+
+                                            @error('photo')
+                                            <span class="invalid-feedback" role="alert">
+                                            <strong>{{$message}}</strong>
+                                            </span>
+                                            @enderror
+
+                                            <div class="my-5"> 
+                                            <label>Video(<small class="text-danger">mp4</small>)</label>
+                                            <input type="file" name="video" class="form-control-file @error('video') is-invalid @enderror" >
+                                            @error('video')
+                                            <span class="invalid-feedback" role="alert">
+                                            <strong>{{$message}}</strong>
+                                            </span>
+                                            @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group ">
-                           <label>Video:</label>
-                           <label>Video: (<small class="text-danger">* mp4</small>)</label>
-                           <ul class="nav nav-tabs" id="myTab1" role="tablist">
-                              <li class="nav-item" role="presentation">
-                                 <a class="nav-link active" id="h-tab" data-toggle="tab" href="#h" role="tab" aria-controls="home" aria-selected="true">Old Video</a>
-                              </li>
-                              <li class="nav-item" role="presentation">
-                                 <a class="nav-link" id="p-tab" data-toggle="tab" href="#p" role="tab" aria-controls="profile" aria-selected="false">New Video</a>
-                              </li>
-                           </ul>
-                           <div class="tab-content my-3" id="myTabContent1">
-                              <div class="tab-pane fade show active" id="h" role="tabpanel1" aria-labelledby="home-tab1">
-                                 <img src="{{asset($course->video)}}" class="img-fluid" alt="">
-                                 {{-- <input type="hidden" name="oldvideo" value="{{$course->video}}"> --}}
-                              </div>
-                              <div class="tab-pane fade" id="p" role="tabpanel" aria-labelledby="profile-tab">
-                                 <input type="file" name="video" class="form-control-file @error('video') is-invalid @enderror">
-                                 @error('video')
-                                 <span class="invalid-feedback" role="alert">
-                                 <strong>{{ $message }}</strong>
-                                 </span>
-                                 @enderror
-                              </div>
-                           </div>
-                        </div>
-                        <input id="acceptTerms-2" name="acceptTerms" type="checkbox" class="my-3"> <label for="acceptTerms-2">I agree with the Terms and Conditions.</label>
+
+                        
                      </section>
                   </form>
                </div>
@@ -202,6 +225,13 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('plugin/plyr/demo.css') }}">
     <script src="{{ asset('plugin/plyr/plyr_plugin.js') }}"></script>
     <script src="{{ asset('plugin/plyr/default.js') }}"></script>
+    <style type="text/css">
+        .select2-results__group
+        {
+            background-color: #FFEBEE !important;
+            /*color: white !important;*/
+        }
+    </style>
     <script type="text/javascript">
       $(document).ready(function() {
 

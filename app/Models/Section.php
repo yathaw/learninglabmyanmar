@@ -21,4 +21,8 @@ class Section extends Model
     {
         return $this->hasMany('App\Models\Content');
     }
+
+    public function test(){
+        return $this->hasOne('App\Models\Test');
+    }
 }
