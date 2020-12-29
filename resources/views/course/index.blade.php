@@ -197,8 +197,9 @@
          </div>
       </div>
    </div>
-
    <div class="row row-cols-1 row-cols-md-3 g-4 searchcourseshow">
+   </div>
+   <div class="row row-cols-1 row-cols-md-3 g-4 courseshow">
       @foreach($courses as $course)
       @php
       $totalDuration = 0;
@@ -226,6 +227,7 @@
       $totaltimes = '0 Second';
       }
       $userRole = $course->user->getRoleNames();
+
       @endphp
       <div class="col-12 col-md-6 col-lg-3 ">
          <div class="card h-100">
@@ -250,15 +252,17 @@
                         @endif
                         @if($course->status == 0)
                         @if(in_array($role[0], array('Admin','Developer'), true ) && $userRole[0] != 'Admin')
-                        {{-- 
-                        <a class="dropdown-item text-success fw-bolder" href="{{ route('backside.sectionlist',$course->id) }}" data-toggle="tooltip" data-placement="top" title="Course ကို Public ချပြရန် ခွင့်ပြုပါမည်">
-                           --}}
-                           <form method="post" action="{{ route('backside.course.approve',$course->id) }}" class="d-inline-block dropdown-item-success fw-bolder" data-toggle="tooltip" data-placement="top" title="Course ကို Public ချပြရန် ခွင့်ပြုပါမည်">
+                         
+                        <a class="dropdown-item text-success fw-bolder" href="{{ route('backside.course.approve',$course->id) }}" data-toggle="tooltip" data-placement="top" title="Course ကို Public ချပြရန် ခွင့်ပြုပါမည်">
+                           <i class="align-middle mr-2" data-feather="check"></i> 
+                              Approve
+                           {{--<form method="post" action="{{ route('backside.course.approve',$course->id) }}" class="d-inline-block dropdown-item-success fw-bolder" data-toggle="tooltip" data-placement="top" title="Course ကို Public ချပြရန် ခွင့်ပြုပါမည်">
                               @csrf
                               <i class="align-middle mr-2" data-feather="check"></i> 
                               Approve
+                           </form>--}}
                         </a>
-                        </form>
+                        
                         @endif
                         @endif
                         <a class="dropdown-item text-info fw-bolder" href="{{ route('backside.course.show',$course->id) }}" data-toggle="tooltip" data-placement="top" title="အသေးစိတ်ကြည့်ရန်"> 
@@ -393,8 +397,10 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        $('.courseshow').show();
+        $('.searchcourseshow').hide();
         $('.searchInput').keyup(function(){
-      
+     
             var search_data = $(this).val();
             var user_id = $(this).val();
             var instructor_data = $(this).data(instructor);
@@ -403,12 +409,14 @@
             var instructor="";
             var subtitle;
       
-            $.post("{{route('courses_search')}}",{data:search_data},function(data){
-                //console.log(data);
-                if (data.length>0) {
-                    $.each(data,function(i,v){
+            $.post("{{route('courses_search')}}",{data:search_data},function(result){
+                
+                if (result.length>0) {
+                    $.each(result,function(i,v){
       
-                        subtitle = v.subtitle.slice(0,60);
+                        var subtitle = v.subtitle.slice(0,60);
+                        console.log(subtitle);
+                        <?php $userRole = Auth::user()->getRoleNames(); ?>
                         html+=`<div class="col-12 col-md-6 col-lg-3 ">
                                 <div class="card h-100">
                                     <div class="card-header px-4 pt-4">
@@ -423,36 +431,38 @@
                                             <i class="align-middle mr-2" data-feather="file-plus"></i> 
                                                 Add Course Content 
                                             </a>
-                                            @elseif(!in_array($role[0], array('Admin','Developer'), true ))
-                                            <a class="dropdown-item text-success fw-bolder" href="{{ route('backside.sectionlist',$course->id) }}" data-toggle="tooltip" data-placement="top" title="Course မှာပါမည့် Lesson တွေထည့်သိမ်းရန်"> 
+                                            @elseif(!in_array($userRole[0], array('Admin','Developer'), true ))
+                                            
+                                            <a class="dropdown-item text-success fw-bolder" href="" data-toggle="tooltip" data-placement="top" title="Course မှာပါမည့် Lesson တွေထည့်သိမ်းရန်"> 
                                             <i class="align-middle mr-2" data-feather="file-plus"></i> 
                                             Add Course Content 
                                             </a>
+                                           
                                             @endif
-      
-                            @if($course->status == 0)
+                          
+                            
                                 @if(in_array($role[0], array('Admin','Developer'), true ) && $userRole[0] != 'Admin')
-                                    <a class="dropdown-item text-success fw-bolder" href="{{ route('backside.sectionlist',$course->id) }}" data-toggle="tooltip" data-placement="top" title="Course ကို Public ချပြရန် ခွင့်ပြုပါမည်"> 
+                                    <a class="dropdown-item text-success fw-bolder" href="{{ route('backside.sectionlist') }}" data-toggle="tooltip" data-placement="top" title="Course ကို Public ချပြရန် ခွင့်ပြုပါမည်"> 
                                     <i class="align-middle mr-2" data-feather="check"></i> 
                                     Approve
                                     </a>
                                 @endif
-                            @endif
-      
-                            <a class="dropdown-item text-info fw-bolder" href="{{ route('backside.course.show',$course->id) }}" data-toggle="tooltip" data-placement="top" title="အသေးစိတ်ကြည့်ရန်"> 
+                            
+                          
+                            <a class="dropdown-item text-info fw-bolder" href="{{ route('backside.course.show',1) }}" data-toggle="tooltip" data-placement="top" title="အသေးစိတ်ကြည့်ရန်"> 
                             <i class="align-middle mr-2" data-feather="info"></i> Detail 
                             </a>
                             @if($userRole[0] == 'Admin')
-                                <a class="dropdown-item text-warning fw-bolder" href="{{ route('backside.course.edit',$course->id) }}" data-toggle="tooltip" data-placement="top" title="ပြန်လည်ပြင်ဆင်မည်"> 
+                                <a class="dropdown-item text-warning fw-bolder" href="{{ route('backside.course.edit',1) }}" data-toggle="tooltip" data-placement="top" title="ပြန်လည်ပြင်ဆင်မည်"> 
                                     <i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
                                 </a>
                             @elseif(!in_array($role[0], array('Admin','Developer'), true ))
-                                <a class="dropdown-item text-warning fw-bolder" href="{{ route('backside.course.edit',$course->id) }}" data-toggle="tooltip" data-placement="top" title="ပြန်လည်ပြင်ဆင်မည်"> 
+                                <a class="dropdown-item text-warning fw-bolder" href="{{ route('backside.course.edit',1) }}" data-toggle="tooltip" data-placement="top" title="ပြန်လည်ပြင်ဆင်မည်"> 
                                     <i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
                                 </a>
                             @endif
                           
-                            <form method="post" action="{{ route('backside.course.destroy',$course->id) }}" class="" onsubmit="return confirm('Are you Sure want to Delete?')">
+                            <form method="post" action="{{ route('backside.course.destroy',1) }}" class="" onsubmit="return confirm('Are you Sure want to Delete?')">
                                 @csrf
                                 @method('DELETE')
       
@@ -464,7 +474,7 @@
                     </div>
                 </div>
                <h5 class="card-title mb-0 fontbold"> ${v.title} </h5>`;
-      
+         <?php $countVideo = 0; $certificate = "off"; $status=0;?>
              html+=`   @if($countVideo <= 0 )
                     <div class="badge bg-danger my-2">On Hold</div>
                 @elseif($course->status > 0)
@@ -480,7 +490,7 @@
                     <i class="align-middle mr-2" data-feather="play-circle"></i>
                     <small class="pl-3"> {{ $countVideo }}  Videos </small>
                 </p>
-                @if($course->certificate == "on")
+                @if($certificate == "on")
                 <p> 
                     <i class="align-middle mr-2" data-feather="award"></i> 
                     <small class="pl-3"> Certificate of completion </small>
@@ -488,31 +498,31 @@
                 @endif
                 <p> 
                     <i class="align-middle mr-2" data-feather="dollar-sign"></i> 
-                    <small class="pl-3"> {{ $course->price }} Ks </small>
+                    <small class="pl-3"> 1000 Ks </small>
                 </p>
       
                 @php
-                    $instructors = $course->instructors;
+                    $instructors = 0;
                 @endphp
       
-                @if(count($instructors) > 1 )
+                @if($instructors > 1 )
                     <p> 
                         <i class="align-middle mr-2" data-feather="users"></i> 
                         @foreach($instructors as $instructor)
                             {{ $loop->first ? '' : ', ' }}
-                            <small class="pl-3"> {{ $instructor->user->name }} </small>
+                            <small class="pl-3"> bb</small>
                         @endforeach 
                     </p>
       
                     <p> 
                         <i class="align-middle mr-2" data-feather="briefcase"></i> 
                         
-                        <small class="pl-3"> {{ $instructors[0]->user->company->name }} </small>
+                        <small class="pl-3"> jjk </small>
                     </p>
                 @else
                 <p> 
                     <i class="align-middle mr-2" data-feather="user"></i> 
-                    <small class="pl-3"> {{ $instructors[0]->user->name }} </small>
+                    <small class="pl-3"> jkkj </small>
                 </p>
       
                 @endif
@@ -520,7 +530,7 @@
                 <hr>
       
                 <p class="text-muted mt-2 font-italic"> 
-                    Created By : {{ $course->user->name }}
+                    Created By : ss
                 </p>
             </div>
             <ul class="list-group list-group-flush">
@@ -544,7 +554,7 @@
                         </div>
                     </div>
       
-                    @elseif($course->status > 0)
+                    @elseif($status > 0)
       
                     <p class="mb-2 font-weight-bold">Progress <span class="float-right">100%</span></p>
                     <div class="progress progress-sm">
@@ -573,6 +583,8 @@
       
       
                     $('.searchcourseshow').html(html);
+                    $('.paginate').hide();
+                    $('.courseshow').hide();
                 }else{
                     
                     html+=`<div class="text-center">
@@ -580,6 +592,7 @@
                             </div>`;
                     $('.searchcourseshow').html(html);
                     $('.paginate').hide();
+                    $('.courseshow').hide();
                 }
             })
       

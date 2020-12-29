@@ -165,23 +165,54 @@
 
 
 <!-- change password modal -->
+<div class="modal fade" id="newsectionModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+          <div class="modal-content ">
+            <div class="modal-header">
+              <h5 class="modal-title"> New Section </h5>
+              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form>
+              
+              @csrf
+              <div class="modal-body m-3">
+                
 
-<div class="modal" tabindex="-1" role="dialog" id="changepassword">
+                         <div class="row mb-3">
+                          <label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
+                          <div class="col-sm-10">
+                            <select class="form-control select2" name=instructor>
+                              
+                            </select>
+                          </div>
+                         </div>
+
+                  
+
+                     </div>
+
+                     <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Save changes</button>
+                     </div>
+                 </form>
+             </div>
+         </div>
+     </div>
+<div class="modal fade" tabindex="-1" role="dialog" id="changepassword">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Change Password</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form action="" method="post">
+            <form action="{{route('instructorchangepassword',Auth::id())}}" method="post">
                 @csrf
                 
-                <div class="modal-body">
+                <div class="modal-body m-3">
                     <div class="form-group row">
-                        <div class="col-sm-10 offset-1 input-group">
+                        <div class="col-sm-12 input-group">
                             <input type="password" class="form-control" id="password" name="password" aria-describedby="basic-addon1">
                             <div class="input-group-prepend">
                                 <button type="button" class="btn btn-light circle" onclick="showpassword()"><i class="fas fa-eye"></i></button>
@@ -191,8 +222,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
 
             </form>
@@ -200,5 +231,19 @@
         </div>
     </div>
 </div>
+@section('script_content')
+<script type="text/javascript">
+  function showpassword()
+    {
+        var password = document.getElementById('password');
+        if(password.type=="password"){
+            password.type="text";
+        }
+        else{
+            password.type="password";
+        }
+    }
+</script>
+@endsection
 
 </x-backend>

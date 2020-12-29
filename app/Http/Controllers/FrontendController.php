@@ -19,7 +19,7 @@ use App\Models\Jobtitle;
 use App\Events\CheckoutEvent;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\CheckoutNotification;
-
+use Illuminate\Support\Facades\Hash;
 class FrontendController extends Controller
 {
     public function index(){
@@ -105,9 +105,7 @@ class FrontendController extends Controller
        {
         $q->where('user_id',Auth::id())->get();
        }))->get();
-
-
-       // dd($search_data);
+       //dd($search_data);
        return response(json_decode($search_data));
     }
 
@@ -484,4 +482,53 @@ class FrontendController extends Controller
      
         return redirect()->route('instructorprofile',$id);
     }
+
+    public function instructorchangepassword($id,Request $request)
+    {
+      $password = Hash::make($request->password);
+
+      $user = User::find($id);
+      $user->password = $password;
+      $user->save();
+
+      return redirect()->route('instructorprofile',$id);
+
+    }
+
+    public function changepassword($id)
+    {
+      $user = User::find($id);
+      return view('auth.changepassword',compact('user'));
+    }
+
+    public function updatepassword(Request $request,$id)
+  {
+    // dd($request);
+    $request->validate([
+      'email' => 'required',
+      'changepassword' => 'required|confirmed|min:5',
+      'changepassword_confirmation' => 'required'
+    ]);
+    $email = $request->email;
+    $changepassword = $request->changepassword;
+    $confirmpassword = $request->changepassword_confirmation;
+    $currentpassword = $request->currentpassword;
+
+    $user = User::find($id);
+
+    if(Hash::check($changepassword,$user->password)){
+      
+      return back()->with('msg','You current password are same match in our record.
+        And New Password Change');
+        
+    }else{
+     $user->password = Hash::make($changepassword);
+      $user->email = $email;
+      $user->save();
+
+      return redirect()->route('login')->with('success','Successfully change Password!');
+      
+    }
+
+  }
 }

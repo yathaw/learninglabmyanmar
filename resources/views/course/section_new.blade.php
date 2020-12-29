@@ -3,9 +3,9 @@
 		<div class="col-auto d-none d-sm-block">
 			<h3><strong> {{ $course->title }} </strong> </h3>
 		</div>
-		@if(!$sections->isEmpty())
+		@if($sections->isEmpty())
 		<div class="col-auto ml-auto text-right mt-n1">
-			<a href="javascript:void(0)" class="btn custom_primary_btnColor float-right" data-toggle="modal" data-target="#newsectionModal" ><i class="align-middle fas fa-plus"></i> Add New Section </a>
+			<a href="javascript:void(0)" class="btn custom_primary_btnColor float-right new" data-toggle="modal" data-target="#newsectionModal" data-id="{{$course->id}}"><i class="align-middle fas fa-plus"></i> Add New Section </a>
 		</div>
 		@endif
 	</div>
@@ -28,14 +28,87 @@
 						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-10 col-10">
 							<h3 class="mt-5"> No Video Lecture in this course. </h3>
 							<p class="my-4 text-muted"> Before you create a video, you must configure at least one sections. </p>
-							<a href="javascript:void(0)" class="btn custom_primary_btnColor emptystateBtn"><i class="align-middle fas fa-plus"></i> Add New Section </a>
+							<a href="javascript:void(0)" class="btn custom_primary_btnColor emptystateBtn" data-id="{{$course->id}}"><i class="align-middle fas fa-plus"></i> Add New Content </a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+<div class="modal fade" id="newsectionModal" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+					<div class="modal-content ">
+						<div class="modal-header">
+							<h5 class="modal-title"> New Section </h5>
+							<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<form method="post" action="{{route('backside.section.store')}}" enctype="multipart/form-data">
+							<input type="hidden" name="courseid" value="{{ $course->id }}">
+							@csrf
+							<div class="modal-body m-3">
+								<div class="row mb-3">
+									<label for="titleId" class="col-sm-2 col-form-label"> Title </label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="titleId" placeholder="Enter Title" name="title">
+									</div>
+								</div>
 
+								<div class="row mb-3">
+									<label for="objectiveId" class="col-sm-2 col-form-label"> Objective </label>
+									<div class="col-sm-10">
+										<textarea class="form-control" id="objectiveId" name="objective"></textarea>
+										<small> What will students be able to do at the end of this section? </small>
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
+									<div class="col-sm-10">
+										<select class="form-control select2" name="contenttype">
+											@foreach($contenttypes as $contenttype)
+											<option value="{{$contenttype->id}}">{{$contenttype->name}}</option>
+											@endforeach
+										</select>
+									</div>
+								</div>
+
+
+								@php
+								$authuser=Auth::user();
+								$role = $authuser->getRoleNames();
+	                       $instructor_companyid=$authuser->company_id;   //null
+	                       //var_dump($instructor);
+	                       //die();
+	                       @endphp
+	                       @if($instructor_companyid != Null || $role[0]=='Admin')
+
+	                       <div class="row mb-3">
+	                       	<label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
+	                       	<div class="col-sm-10">
+	                       		<select class="form-control select2" name=instructor>
+	                       			@foreach($instructors as $instructor)
+	                       			@foreach($instructor->courses as $instructor_course)
+	                       			@if($instructor_course->pivot->course_id == $course->id)
+	                       			<option value="{{$instructor->id}}">{{$instructor->user->name}}</option>
+	                       			@endif
+	                       			@endforeach
+	                       			@endforeach
+	                       		</select>
+	                       	</div>
+	                       </div>
+
+	                       @endif
+
+	                   </div>
+
+	                   <div class="modal-footer">
+	                   	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	                   	<button type="submit" class="btn btn-primary">Save changes</button>
+	                   </div>
+	               </form>
+	           </div>
+	       </div>
+	   </div>
 	@else
 	<div class="row">
 		<div class="col-12">
@@ -164,80 +237,7 @@
 			</div>
 
 			<!-- New Section Modal -->
-			<div class="modal fade" id="newsectionModal" tabindex="-1" role="dialog" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
-					<div class="modal-content ">
-						<div class="modal-header">
-							<h5 class="modal-title"> New Section </h5>
-							<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<form method="post" action="{{route('backside.section.store')}}" enctype="multipart/form-data">
-							<input type="hidden" name="courseid" value="{{ $course->id }}">
-							@csrf
-							<div class="modal-body m-3">
-								<div class="row mb-3">
-									<label for="titleId" class="col-sm-2 col-form-label"> Title </label>
-									<div class="col-sm-10">
-										<input type="text" class="form-control" id="titleId" placeholder="Enter Title" name="title">
-									</div>
-								</div>
-
-								<div class="row mb-3">
-									<label for="objectiveId" class="col-sm-2 col-form-label"> Objective </label>
-									<div class="col-sm-10">
-										<textarea class="form-control" id="objectiveId" name="objective"></textarea>
-										<small> What will students be able to do at the end of this section? </small>
-									</div>
-								</div>
-
-								<div class="row mb-3">
-									<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
-									<div class="col-sm-10">
-										<select class="form-control select2" name="contenttype">
-											@foreach($contenttypes as $contenttype)
-											<option value="{{$contenttype->id}}">{{$contenttype->name}}</option>
-											@endforeach
-										</select>
-									</div>
-								</div>
-
-
-								@php
-								$authuser=Auth::user();
-								$role = $authuser->getRoleNames();
-	                       $instructor_companyid=$authuser->company_id;   //null
-	                       //var_dump($instructor);
-	                       //die();
-	                       @endphp
-	                       @if($instructor_companyid != Null || $role[0]=='Admin')
-
-	                       <div class="row mb-3">
-	                       	<label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
-	                       	<div class="col-sm-10">
-	                       		<select class="form-control select2" name=instructor>
-	                       			@foreach($instructors as $instructor)
-	                       			@foreach($instructor->courses as $instructor_course)
-	                       			@if($instructor_course->pivot->course_id == $course->id)
-	                       			<option value="{{$instructor->id}}">{{$instructor->user->name}}</option>
-	                       			@endif
-	                       			@endforeach
-	                       			@endforeach
-	                       		</select>
-	                       	</div>
-	                       </div>
-
-	                       @endif
-
-	                   </div>
-
-	                   <div class="modal-footer">
-	                   	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	                   	<button type="submit" class="btn btn-primary">Save changes</button>
-	                   </div>
-	               </form>
-	           </div>
-	       </div>
-	   </div>
+			
 
 	   @endif
 
@@ -554,6 +554,8 @@
 				});
 
 				$('.emptystateBtn').click(function(){
+					var id = $(this).data('id');
+					$('#sectionid').val(id);
 					$('#newcontentModal').modal('show');
 
 				})
@@ -697,8 +699,9 @@ $('.editbtn').click(function(){
           	});
 
 $('.contentbtn').click(function(){
-	//alert('hi');
+	
 	var id=$(this).data('id');
+	
 	//console.log(id);
 	$.post('/backside/section/getsectionid',{id:id},function(response){
 		//console.log(response.id);
@@ -708,6 +711,8 @@ $('.contentbtn').click(function(){
 	$('#newcontentModal').modal('show');
 
 });
+
+
 
 $('.lessoneditbtn').click(function(){
 	//alert('hi');
