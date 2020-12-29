@@ -25,6 +25,14 @@ use Illuminate\Support\Facades\Mail;
 // NYL
 use App\Models\Collection;
 
+// YTMN
+use App\Models\Test;
+use App\Models\Quiz;
+use App\Models\Response;
+use App\Models\Responsedetail;
+
+
+
 
 class AccountController extends Controller
 {
@@ -466,7 +474,8 @@ class AccountController extends Controller
 
         $unorderedsections=Section::where('course_id', $courseid)->get();
         
-        $sections = $unorderedsections->sort();
+        $sections = $unorderedsections->sortBy('sorting');
+        // dd($sections);
         $user = User::find($user_id);
 
         $completeLessons = array();
@@ -1165,5 +1174,163 @@ class AccountController extends Controller
         $user->unreadNotifications()->delete();
         echo "success";
     }
+
+    public function startquiz($testid){
+
+        $test = Test::find($testid);
+        $questions = Quiz::where('test_id',$testid)->get();
+
+        $totalQuiz = count($questions);
+        $totalTimer = 0;
+        $timers = array();
+
+        $marks = 0; $totalmark = 0;
+
+        foreach ($questions as $question) {
+            $timer = $question->timer;
+
+            if (!in_array($timer, $timers)) {
+                array_push($timers, $timer);
+            }
+
+            foreach ($question->checks as $check) {
+                $mark = (int)$check->mark;
+                
+                if ($mark > 0) {
+                    $totalmark += $marks + $mark;
+                }
+                if($mark < 0){
+                    $totalmark += $marks - abs($mark); 
+                }
+            }
+
+            $totalTimer += $timer++;
+        }
+
+        return view('account.quiz',compact('test','totalQuiz', 'totalTimer', 'timers', 'questions', 'totalmark'));
+    }
+
+    public function getquiz(Request $request){
+        $questions = Quiz::with('checks')
+                    ->where('test_id',$request->testId)->get();
+
+        return response()->json(['data'=>$questions]);
+    }
+
+
+
+    public function storequiz(Request $request){
+        $testId = $request->testId;
+        $correctMark = $request->correctMark;
+        $datas = $request->cart;
+
+        $auth_userid = Auth::user()->id;
+
+        $existingResponse = Response::where('user_id',$auth_userid)
+                            ->where('test_id','=',$testId)
+                            ->first();
+
+
+        if($existingResponse == NULL){
+            $response = new Response;
+            $response->score = $correctMark;
+            $response->status = 0;
+            $response->user_id = Auth::user()->id;
+            $response->test_id = $testId;
+            $response->save();
+
+            foreach ($datas as $data) {
+                // dd($data);
+                if ($data['checkid'] != 'null') {
+                    $checkid = $data['checkid'];
+                }else{
+                    $checkid = 0;
+                }
+                $responsedetail = new Responsedetail;
+                $responsedetail->check_id = $checkid;
+                $responsedetail->quiz_id = $data['quizid'];
+                $responsedetail->response_id = $response->id;
+                $responsedetail->status = $data['status'];
+
+                $responsedetail->save();
+            }
+            
+        }else{
+            $responseid = $existingResponse->id;
+
+            $response = Response::find($responseid);
+            $response->score = $correctMark;
+            $response->status = 0;
+            $response->user_id = Auth::user()->id;
+            $response->test_id = $testId;
+            $response->save();
+
+            $responsedetails = Responsedetail::where('response_id',$responseid)->get();
+            foreach ($responsedetails as $responsedetail) {
+                $responsedetail->delete();
+            }
+
+            foreach ($datas as $data) {
+                // dd($data);
+                if ($data['checkid'] != 'null') {
+                    $checkid = $data['checkid'];
+                }else{
+                    $checkid = 0;
+                }
+                $responsedetail = new Responsedetail;
+                $responsedetail->check_id = $checkid;
+                $responsedetail->quiz_id = $data['quizid'];
+                $responsedetail->response_id = $responseid;
+                $responsedetail->status = $data['status'];
+
+                $responsedetail->save();
+            }
+
+            
+        }
+
+        return response()->json(['data'=>'ok']);
+        
+    }
+
+
+
+    public function getscore(Request $request){
+        $responseid = $request->responseId;
+
+        $response = Response::with('responsedetails')
+                    ->find($responseid);
+
+        $questions = Quiz::with('checks')
+                    ->where('test_id',$response->test_id)->get();  
+
+
+        return response()->json(['response'=>$response, 'questions'=>$questions]);
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

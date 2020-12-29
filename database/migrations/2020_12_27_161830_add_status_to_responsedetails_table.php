@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddStatusToUsersTable extends Migration
+class AddStatusToResponsedetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class AddStatusToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('responsedetails', function (Blueprint $table) {
+            $table->string('status')->nullable();
             //
-            $table->integer('status')->default(0);
-
         });
     }
 
@@ -27,9 +26,8 @@ class AddStatusToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('responsedetails', function (Blueprint $table) {
             //
-            $table->dropColmn('status');
         });
     }
 }

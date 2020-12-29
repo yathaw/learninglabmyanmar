@@ -148,7 +148,7 @@
             			</a>
 					</li>
 
-					<li class="sidebar-item {{ Request::segment(2) === 'quiz' && Request::segment(3) ==='index' ? 'active' : '' }}">
+					<li class="sidebar-item {{ Request::segment(2) === 'quiz' ? 'active' : '' }}">
 						<a class="sidebar-link" href="{{route('backside.quiz.index')}}" data-toggle="tooltip" data-placement="left" title="Quiz ထည့်သွင်းမည်​">
               				<i class="align-middle" data-feather="check-circle"></i> <span class="align-middle"> Quiz </span>
             			</a>

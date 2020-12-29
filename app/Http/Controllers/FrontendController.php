@@ -15,6 +15,7 @@ use App\Models\Company;
 use App\Models\Instructor;
 use App\Models\User;
 
+
 use App\Events\CheckoutEvent;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\CheckoutNotification;
@@ -41,6 +42,33 @@ class FrontendController extends Controller
     	return view('frontend.courses',compact('courses','allcourses','wishlists'));
     }
 
+    public function coursebyCategory($categoryid){
+      
+      $courses = Course::whereHas('subcategory', function($q) use ($categoryid)
+      {
+          $q->where('category_id', $categoryid);
+          
+      })->paginate(8);
+
+      $category = Category::find($categoryid);
+
+
+      return view('frontend.coursesbycategory',compact('courses','category'));
+
+      
+    }
+
+    public function coursebySubcategory($subcategoryid){
+      $courses = Course::where('subcategory_id',$subcategoryid)->paginate(8);
+      $allcourses = Course::where('subcategory_id',$subcategoryid)->get();
+      $wishlists = Wishlist::all();
+
+
+      $subcategory = Subcategory::find($subcategoryid);
+
+      return view('frontend.coursesbysubcategory',compact('courses','subcategory','allcourses','wishlists'));
+    }
+
     public function coursedetail($id){
         $course = Course::find($id);
         $sections = Section::where('course_id',$id)->orderByRaw("CAST(sorting as Integer) ASC")->get();
@@ -48,6 +76,8 @@ class FrontendController extends Controller
 
     	  return view('frontend.coursedetail',compact('course','wishlists','sections'));
     }
+
+
 
     public function addtocart(){
     	return view('frontend.addtocart');
@@ -81,7 +111,26 @@ class FrontendController extends Controller
        return response(json_decode($search_data));
     }
 
+    public function searchcourse_bysubcategoryid(Request $request){
+      $subcategoryid = $request->subcategoryid;
 
+        $data = $request->data;
+
+
+       $search_data = Course::where('title','like','%'.$data.'%')
+                      ->where('subcategory_id',$subcategoryid)
+                      ->with(array('instructors' => function($query)
+       {
+        $query->with('user');
+       }))->with('wishlists')->with(array('sales'=>function($q)
+       {
+        $q->where('user_id',Auth::id())->get();
+       }))->get();
+
+       return response(json_decode($search_data));
+       
+
+    }
 
 
     public function wishlist_save(Request $request)

@@ -84,4 +84,9 @@ class Course extends Model
     public function questions(){
     	return $this->hasMany('App\Models\Question');
     }
+
+    public function tests()
+    {
+        return $this->hasManyThrough(Test::class, Section::class);
+    }
 }

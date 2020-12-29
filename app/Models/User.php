@@ -35,7 +35,8 @@ class User extends Authenticatable
         'company_id',
         'jobtitle_id',
         'current_team_id',
-        'profile_photo_path'
+        'profile_photo_path',
+        'verification_code'
     ];
 
     /**
@@ -101,6 +102,11 @@ class User extends Authenticatable
     public function lessons()
     {
         return $this->belongsToMany('App\Models\Lesson')->withPivot('status','timeline')->withTimestamps();
+    }
+
+    public function response()
+    {
+        return $this->hasMany('App\Models\Response');
     }
 
 }
