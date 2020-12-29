@@ -23,7 +23,7 @@
                     @if(Auth::user() && $user->id==Auth::user()->id)
                         <div class="row mt-4">
                             <div class="col-md-12">
-                                <a href="" class="btn btn-outline-warning btn-block">Edit Profile</a>
+                                <a href="{{route('instructorprofileedit',$user->id)}}" class="btn btn-outline-warning btn-block">Edit Profile</a>
                                 <button class="btn btn-outline-secondary btn-block" data-target="#changepassword" data-toggle="modal">Change Password</button>
                         
                             </div>
@@ -97,36 +97,56 @@
                 <div class="col-10 offset-1 mt-4">
                     
                     <div class="row mt-2">
-                        <label class="col-sm-4">Twitter</label>
+                        <label class="col-sm-4">Twitter:</label>
                         <div class="col-md-8">
+                          @if($user->instructor->twitter)
                             {{$user->instructor->twitter}}
+                          @else
+                           ---
+                          @endif
                         </div>
                     </div>
 
                     <div class="row mt-2">
-                        <label class="col-sm-4">Facebook</label>
+                        <label class="col-sm-4">Facebook:</label>
                         <div class="col-md-8">
+                          @if($user->instructor->facebook)
                             {{$user->instructor->facebook}}
+                            @else
+                            ---
+                            @endif
                         </div>
                     </div>
 
                         <div class="row mt-2">
                             <label class="col-sm-4">LinkedIn:</label>
                             <div class="col-md-8">
+                              @if($user->instructor->linkedin)
                                 {{$user->instructor->linkedin}}
+                                @else
+                                ---
+                                @endif
                             </div>
                         </div>
                         <div class="row mt-2">
                             <label class="col-sm-4">Youtube:</label>
                             <div class="col-md-8">
+                              @if($user->instructor->youtube)
                                 {{$user->instructor->youtube}}
+                                @else
+                                ---
+                                @endif
                             </div>
                         </div>
 
                         <div class="row mt-2">
                             <label class="col-sm-4">Instragram:</label>
                             <div class="col-md-8">
-                                {{$user->instructor->instragram}}
+                              @if($user->instructor->instagram)
+                                {{$user->instructor->instagram}}
+                                @else
+                                ---
+                                @endif
                             </div>
                         </div>
                 

@@ -14,7 +14,7 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\Instructor;
 use App\Models\User;
-
+use App\Models\Jobtitle;
 
 use App\Events\CheckoutEvent;
 use Illuminate\Support\Facades\Notification;
@@ -424,5 +424,64 @@ class FrontendController extends Controller
     {
       $user = User::find($id);
       return view('auth.instructorprofileinfo',compact('user'));
+    }
+
+    public function instructorprofileedit($id)
+    {
+      $user = User::find($id);
+      $jobtitles = Jobtitle::all();
+      return view('auth.instructorprofileupdate',compact('user','jobtitles'));
+    }
+
+    public function instructorprofileupdate(Request $request,$id)
+    {
+      $request->validate([
+            'name' => 'required',
+            'newphoto' => 'sometimes|mimes:jpeg,jpg,png,gif|max:100000',
+            'email'=>'required',
+            'phone' => 'required',
+            'headline' => 'required',
+            'bio' => 'required',
+            'jobtitleid'=>'required',
+            'website' => 'required',
+            'twitter' => 'required',
+            'facebook' => 'required',
+            'linkedin' => 'required',
+            'youtube' => 'required',
+            'instagram' => 'required',
+        ]);
+        $user = User::find($id);
+
+        if($request->hasfile('newphoto')){
+              $newphoto = $request->file('newphoto');
+              $upload_dir = public_path().'/userprofile/';
+              $name = time().'.'.$newphoto->getClientOriginalExtension();
+              $newphoto->move($upload_dir,$name);
+              $path = '/userprofile/'.$name;
+        }else{
+            $path = request('oldphoto');
+        }
+
+        $user->name = request('name');
+        $user->email = request('email');
+        $user->phone  = request('phone');
+        $user->profile_photo_path = $path;
+        $user->jobtitle_id = request('jobtitleid');
+        $user->save();
+
+        $instructor = Instructor::where('user_id',$id)->first();
+        $instructor->headline = request('headline');
+        $instructor->bio = request('bio');
+        $instructor->website = request('website');
+        $instructor->twitter = request('twitter');
+        $instructor->facebook = request('facebook');
+        $instructor->linkedin = request('linkedin');
+        $instructor->youtube = request('youtube');
+        $instructor->instagram = request('instagram');
+        $instructor->user_id = $user->id;
+        $instructor->status = 0;
+        $instructor->save();
+     
+        return redirect()->route('instructorprofile',$id);
     }
 }
