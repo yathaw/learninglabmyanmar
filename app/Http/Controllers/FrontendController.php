@@ -332,4 +332,41 @@ class FrontendController extends Controller
 
 
     }
+
+
+    public function profile($id)
+    {
+      $user = User::find($id);
+
+      return view('frontend.profileupdate',compact('user'));
+    }
+
+    public function profileupdate(Request $request,$id)
+    {
+      $request->validate([
+            'name' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
+            'photo' => 'sometimes|mimes:jpeg,jpg,png,gif|max:100000'
+        ]);
+
+      if($request->hasfile('photo')){
+              $photo = $request->file('photo');
+              $upload_dir = public_path().'/userprofile/';
+              $name = time().'.'.$photo->getClientOriginalExtension();
+              $photo->move($upload_dir,$name);
+              $path = '/userprofile/'.$name;
+        }else{
+            $path = '';
+        }
+
+      $user = User::find($id);
+      $user->name = request('name');
+      $user->email = request('email');
+      $user->phone = request('phone');
+      $user->profile_photo_path = $path;
+      $user->save();
+
+      return redirect()->back();
+    }
 }

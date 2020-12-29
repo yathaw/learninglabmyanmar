@@ -285,8 +285,8 @@ Route::post('getinstructor_bycompanyid',[CourseController::class, 'getinstructor
 Route::post('getquestion_bycourseid',[QuestionController::class, 'getquestion'])->name('getquestion_bycourseid');
 
 
-
-
+Route::get('profile/{id}',[FrontendController::class,'profile'])->name('profile');
+Route::post('profileupdate/{id}',[FrontendController::class,'profileupdate'])->name('profileupdate');
 // //ALS
 // Route::get('coursecount','CoursecountController@coursecount')->name('coursecount');
 Route::get('coursecount',[CoursecountController::class, 'coursecount'])->name('coursecount');
