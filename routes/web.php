@@ -309,6 +309,8 @@ Route::post('getscore_byresponseid',[AccountController::class, 'getscore'])->nam
 
 Route::get('profile/{id}',[FrontendController::class,'profile'])->name('profile');
 Route::post('profileupdate/{id}',[FrontendController::class,'profileupdate'])->name('profileupdate');
+
+Route::get('instructorprofile/{id}',[FrontendController::class,'instructorprofile'])->name('instructorprofile');
 // //ALS
 // Route::get('coursecount','CoursecountController@coursecount')->name('coursecount');
 Route::get('coursecount',[CoursecountController::class, 'coursecount'])->name('coursecount');

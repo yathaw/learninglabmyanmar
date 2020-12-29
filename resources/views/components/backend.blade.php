@@ -491,8 +491,9 @@
 								</a>
 
 								<div class="dropdown-divider"></div>
-
-								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile </a>
+								@role('Instructor')
+								<a class="dropdown-item" href="{{route('instructorprofile',Auth::id())}}"><i class="align-middle mr-1" data-feather="user"></i> Profile </a>
+								@endrole
 								<a class="dropdown-item" href="#">
 									<i class="align-middle mr-1" data-feather="lock"></i> Change Password 
 								</a>

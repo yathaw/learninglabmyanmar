@@ -418,4 +418,11 @@ class FrontendController extends Controller
 
       return redirect()->back();
     }
+
+
+    public function instructorprofile($id)
+    {
+      $user = User::find($id);
+      return view('auth.instructorprofileinfo',compact('user'));
+    }
 }
