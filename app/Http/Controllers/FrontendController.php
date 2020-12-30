@@ -14,12 +14,12 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\Instructor;
 use App\Models\User;
-
+use App\Models\Jobtitle;
 
 use App\Events\CheckoutEvent;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\CheckoutNotification;
-
+use Illuminate\Support\Facades\Hash;
 class FrontendController extends Controller
 {
     public function index(){
@@ -105,9 +105,7 @@ class FrontendController extends Controller
        {
         $q->where('user_id',Auth::id())->get();
        }))->get();
-
-
-       // dd($search_data);
+       //dd($search_data);
        return response(json_decode($search_data));
     }
 
@@ -381,4 +379,156 @@ class FrontendController extends Controller
 
 
     }
+
+
+    public function profile($id)
+    {
+      $user = User::find($id);
+
+      return view('frontend.profileupdate',compact('user'));
+    }
+
+    public function profileupdate(Request $request,$id)
+    {
+      $request->validate([
+            'name' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
+            'photo' => 'sometimes|mimes:jpeg,jpg,png,gif|max:100000'
+        ]);
+
+      if($request->hasfile('photo')){
+              $photo = $request->file('photo');
+              $upload_dir = public_path().'/userprofile/';
+              $name = time().'.'.$photo->getClientOriginalExtension();
+              $photo->move($upload_dir,$name);
+              $path = '/userprofile/'.$name;
+        }else{
+            $path = '';
+        }
+
+      $user = User::find($id);
+      $user->name = request('name');
+      $user->email = request('email');
+      $user->phone = request('phone');
+      $user->profile_photo_path = $path;
+      $user->save();
+
+      return redirect()->back();
+    }
+
+
+    public function instructorprofile($id)
+    {
+      $user = User::find($id);
+      return view('auth.instructorprofileinfo',compact('user'));
+    }
+
+    public function instructorprofileedit($id)
+    {
+      $user = User::find($id);
+      $jobtitles = Jobtitle::all();
+      return view('auth.instructorprofileupdate',compact('user','jobtitles'));
+    }
+
+    public function instructorprofileupdate(Request $request,$id)
+    {
+      $request->validate([
+            'name' => 'required',
+            'newphoto' => 'sometimes|mimes:jpeg,jpg,png,gif|max:100000',
+            'email'=>'required',
+            'phone' => 'required',
+            'headline' => 'required',
+            'bio' => 'required',
+            'jobtitleid'=>'required',
+            'website' => 'required',
+            'twitter' => 'required',
+            'facebook' => 'required',
+            'linkedin' => 'required',
+            'youtube' => 'required',
+            'instagram' => 'required',
+        ]);
+        $user = User::find($id);
+
+        if($request->hasfile('newphoto')){
+              $newphoto = $request->file('newphoto');
+              $upload_dir = public_path().'/userprofile/';
+              $name = time().'.'.$newphoto->getClientOriginalExtension();
+              $newphoto->move($upload_dir,$name);
+              $path = '/userprofile/'.$name;
+        }else{
+            $path = request('oldphoto');
+        }
+
+        $user->name = request('name');
+        $user->email = request('email');
+        $user->phone  = request('phone');
+        $user->profile_photo_path = $path;
+        $user->jobtitle_id = request('jobtitleid');
+        $user->save();
+
+        $instructor = Instructor::where('user_id',$id)->first();
+        $instructor->headline = request('headline');
+        $instructor->bio = request('bio');
+        $instructor->website = request('website');
+        $instructor->twitter = request('twitter');
+        $instructor->facebook = request('facebook');
+        $instructor->linkedin = request('linkedin');
+        $instructor->youtube = request('youtube');
+        $instructor->instagram = request('instagram');
+        $instructor->user_id = $user->id;
+        $instructor->status = 0;
+        $instructor->save();
+     
+        return redirect()->route('instructorprofile',$id);
+    }
+
+    public function instructorchangepassword($id,Request $request)
+    {
+      $password = Hash::make($request->password);
+
+      $user = User::find($id);
+      $user->password = $password;
+      $user->save();
+
+      return redirect()->route('instructorprofile',$id);
+
+    }
+
+    public function changepassword($id)
+    {
+      $user = User::find($id);
+      return view('auth.changepassword',compact('user'));
+    }
+
+    public function updatepassword(Request $request,$id)
+  {
+    // dd($request);
+    $request->validate([
+      'email' => 'required',
+      'changepassword' => 'required|confirmed|min:5',
+      'changepassword_confirmation' => 'required'
+    ]);
+    $email = $request->email;
+    $changepassword = $request->changepassword;
+    $confirmpassword = $request->changepassword_confirmation;
+    $currentpassword = $request->currentpassword;
+
+    $user = User::find($id);
+
+    if(Hash::check($changepassword,$user->password)){
+      
+      return back()->with('msg','You current password are same match in our record.
+        And New Password Change');
+        
+    }else{
+     $user->password = Hash::make($changepassword);
+      $user->email = $email;
+      $user->save();
+
+      return redirect()->route('login')->with('success','Successfully change Password!');
+      
+    }
+
+  }
 }

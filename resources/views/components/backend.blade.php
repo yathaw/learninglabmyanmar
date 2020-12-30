@@ -491,11 +491,14 @@
 								</a>
 
 								<div class="dropdown-divider"></div>
+								@role('Instructor')
+								<a class="dropdown-item" href="{{route('instructorprofile',Auth::id())}}"><i class="align-middle mr-1" data-feather="user"></i> Profile </a>
 
-								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile </a>
-								<a class="dropdown-item" href="#">
+								<a class="dropdown-item" href="{{route('changepassword',Auth::id())}}">
 									<i class="align-middle mr-1" data-feather="lock"></i> Change Password 
 								</a>
+								@endrole
+								
 
 								<!-- HH -->
 								@if($authRole == "Instructor" || $authRole == "Business")

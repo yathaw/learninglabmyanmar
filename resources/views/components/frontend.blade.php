@@ -132,7 +132,7 @@
 
                     <li class="drop-down mr-5"><a href=""> Account </a>
                         <ul>
-                            <li><a href="#"> My Profile </a></li>
+                            <li><a href="{{route('profile',Auth::id())}}"> My Profile </a></li>
                             <li><a href="{{ route('mystudyings') }}"> My Studying </a></li>
                             <li><a href="{{ route('wishlist') }}"> Wishlist </a></li>
                             <li><a href="{{ route('collection') }}"> Collection </a></li>

@@ -208,4 +208,27 @@ class SectionController extends Controller
         Section::where('id', $id)->update(array('sorting' => $sorting));
     }
 
+    public function sectionshow($id)
+    {
+
+        $course = Course::find($id);
+
+        $sections=Section::where('course_id',$id)
+                    ->orderBy('sorting')->get();
+    
+        $contents=Content::all();
+        // $contents=Content::paginate(8);
+
+        $lesson=Lesson::find($id);
+
+        $contenttypes=Contenttype::all();
+
+        // if($course->id == $instructor->course_id){
+        //     $instructors=Instructor::all();
+        // }
+
+        $instructors=Instructor::all();
+        return view('course.section_new',compact('sections','contenttypes', 'course','contents','lesson','instructors'));
+    }
+
 }
