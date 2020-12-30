@@ -17,27 +17,64 @@ class LoginController extends Controller
     	
 
     	$user= User::where('phone',$phone)->first();
-    	if($user != null && $user->status == "0"){
-    		$user_phone = $user->phone;
-	    	$user_password = $user->password;
-	    	//dd($user_password,$user_phone);
-            $credentials = $request->only('phone', 'password');
 
-            if (Auth::attempt($credentials)) {
-                // if success login
+    	if($user != null ){
+            $user_role = $user->getRoleNames();
 
-                $role = $user->getRoleNames();
-                if ($role[0] == "Business") {
-                    return redirect('panel');
-                }
-                else{
+            if($user_role[0] == "Student" && $user->status == "0"){
+
+            
+        		$user_phone = $user->phone;
+    	    	$user_password = $user->password;
+    	    	//dd($user_password,$user_phone);
+                $credentials = $request->only('phone', 'password');
+
+                if (Auth::attempt($credentials)) {
+                    // if success login
+
+                    /*$role = $user->getRoleNames();
+                    if ($role[0] == "Business") {
+                        return redirect('panel');
+                    }
+                    else{
+                        return redirect('/');
+                    }*/
                     return redirect('/');
-                }
 
-                
+                    
+                }
+                 // if failed login
+                 return redirect()->back()->with('status','Your phone and password is invalid our record !');
             }
-            // if failed login
-            return redirect()->back()->with('status','Your phone and password is invalid our record !');
+
+            if($user->status == "2"){
+
+            
+                $user_phone = $user->phone;
+                $user_password = $user->password;
+                //dd($user_password,$user_phone);
+                $credentials = $request->only('phone', 'password');
+
+                if (Auth::attempt($credentials)) {
+                    // if success login
+
+                    $role = $user->getRoleNames();
+                    if ($role[0] == "Business") {
+                        return redirect('panel');
+                    }
+                    else{
+                        return redirect('/');
+                    }
+                   
+                    
+                }
+                 // if failed login
+                 return redirect()->back()->with('status','Your phone and password is invalid our record !');
+            }else{
+                 // if failed login
+                return redirect()->back()->with('status','Your account is not verified !');
+            }
+           
 
 	    	
     	}else{
@@ -47,6 +84,7 @@ class LoginController extends Controller
 
 
     }
+
 
     public function backsidelogin_store(Request $request)
     {

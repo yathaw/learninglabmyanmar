@@ -25,6 +25,14 @@ use Illuminate\Support\Facades\Mail;
 // NYL
 use App\Models\Collection;
 
+// YTMN
+use App\Models\Test;
+use App\Models\Quiz;
+use App\Models\Response;
+use App\Models\Responsedetail;
+
+
+
 
 class AccountController extends Controller
 {
@@ -466,7 +474,8 @@ class AccountController extends Controller
 
         $unorderedsections=Section::where('course_id', $courseid)->get();
         
-        $sections = $unorderedsections->sort();
+        $sections = $unorderedsections->sortBy('sorting');
+        // dd($sections);
         $user = User::find($user_id);
 
         $completeLessons = array();
@@ -601,7 +610,98 @@ class AccountController extends Controller
             $courses = Course::all();
             $recentcourses = Course::orderBy( 'id' , 'desc' )->limit(8)->get();
 
-            return view('account.instructorpanel',compact('sales','courses','recentcourses'));
+
+            $totals = Course::join('course_sale','course_sale.course_id','=','courses.id')->join('sales','course_sale.sale_id','=','sales.id')->where('sales.status',1)->where('course_sale.status',1)->get();
+            
+            $totalprices;
+            $prices = 0;
+                $price=$price1=$price2=$price3=$price4=$price5=$price6=$price7=$price8=$price9=$price10=$price11 = 0;
+            foreach ($totals as $total) {
+                $m = $total->created_at->format('M');
+                $y = $total->created_at->format('Y');
+                $current = date('Y');
+                
+                if($current == $y){
+                    switch ($m) {
+                    case 'Jan':
+                        $price += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Feb':
+                        $price1 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Mar':
+                        $price2 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Apr':
+                        $price3 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'May':
+                        $price4 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jun':
+                        $price5 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jul':
+                        $price6 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Aug':
+                        $price7 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Sep':
+                        $price8 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Oct':
+                        $price9 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Nov':
+                        $price10 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Dec':
+                        $price11 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        
+                        break;
+                    
+                    default:
+                        # code...
+                        break;
+                    }
+
+                }
+                
+               
+            }
+            if($prices > 0){
+            $totalprices = implode(',', $prices);
+            }else{
+                $prices = [0,0,0,0,0,0,0,0,0,0,0,0];
+                $totalprices = implode(',', $prices);
+                
+            }
+
+            return view('account.instructorpanel',compact('sales','courses','recentcourses','totalprices'));
         }elseif($role[0] == 'Instructor'){
             // Instructor
     
@@ -617,7 +717,98 @@ class AccountController extends Controller
                             $q->where('instructors.user_id',Auth::id());
                         })->orderBy('id','desc')->limit(8)->get();
 
-            return view('account.instructorpanel',compact('sales','courses','recentcourses'));
+            $totals = Course::whereHas('instructors',function($q){
+                $q->where('instructors.user_id',Auth::id());
+            })->join('course_sale','course_sale.course_id','=','courses.id')->join('sales','course_sale.sale_id','=','sales.id')->where('sales.status',1)->where('course_sale.status',1)->get();
+            
+            $totalprices;
+            $prices = 0;
+                $price=$price1=$price2=$price3=$price4=$price5=$price6=$price7=$price8=$price9=$price10=$price11 = 0;
+            foreach ($totals as $total) {
+                $m = $total->created_at->format('M');
+                $y = $total->created_at->format('Y');
+                $current = date('Y');
+                
+                if($current == $y){
+                    switch ($m) {
+                    case 'Jan':
+                        $price += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Feb':
+                        $price1 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Mar':
+                        $price2 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Apr':
+                        $price3 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'May':
+                        $price4 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jun':
+                        $price5 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jul':
+                        $price6 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Aug':
+                        $price7 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Sep':
+                        $price8 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Oct':
+                        $price9 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Nov':
+                        $price10 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Dec':
+                        $price11 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        
+                        break;
+                    
+                    default:
+                        # code...
+                        break;
+                    }
+
+                }
+                
+               
+            }
+            if($prices > 0){
+            $totalprices = implode(',', $prices);
+            }else{
+                $prices = [0,0,0,0,0,0,0,0,0,0,0,0];
+                $totalprices = implode(',', $prices);
+                
+            }
+            return view('account.instructorpanel',compact('sales','courses','recentcourses','totalprices'));
         }elseif($role[0] == 'Business'){
             $user = User::find(Auth::id());
             $company = $user->company->id;
@@ -634,7 +825,98 @@ class AccountController extends Controller
                             $q->leftjoin('users','users.id','=','instructors.user_id')->where('users.company_id',$company);
                         })->orderBy('id','desc')->limit(8)->get();
             
-            return view('account.instructorpanel',compact('sales','courses','recentcourses'));
+            $totals = Course::whereHas('instructors',function($q) use ($company){
+                $q->leftjoin('users','users.id','=','instructors.user_id')->where('users.company_id',$company);
+            })->join('course_sale','course_sale.course_id','=','courses.id')->join('sales','course_sale.sale_id','=','sales.id')->where('sales.status',1)->where('course_sale.status',1)->get();
+            
+            $totalprices;
+            $prices = 0;
+                $price=$price1=$price2=$price3=$price4=$price5=$price6=$price7=$price8=$price9=$price10=$price11 = 0;
+            foreach ($totals as $total) {
+                $m = $total->created_at->format('M');
+                $y = $total->created_at->format('Y');
+                $current = date('Y');
+                
+                if($current == $y){
+                    switch ($m) {
+                    case 'Jan':
+                        $price += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Feb':
+                        $price1 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Mar':
+                        $price2 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Apr':
+                        $price3 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'May':
+                        $price4 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jun':
+                        $price5 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Jul':
+                        $price6 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Aug':
+                        $price7 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Sep':
+                        $price8 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Oct':
+                        $price9 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Nov':
+                        $price10 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        break;
+
+                    case 'Dec':
+                        $price11 += $total->price;
+                        $prices = [$price,$price1,$price2,$price3,$price4,$price5,$price6,$price7,$price8,$price9,$price10,$price11];
+                        
+                        break;
+                    
+                    default:
+                        # code...
+                        break;
+                    }
+
+                }
+                
+               
+            }
+            if($prices > 0){
+            $totalprices = implode(',', $prices);
+            }else{
+                $prices = [0,0,0,0,0,0,0,0,0,0,0,0];
+                $totalprices = implode(',', $prices);
+                
+            }
+            return view('account.instructorpanel',compact('sales','courses','recentcourses','totalprices'));
         }
     }
 
@@ -780,13 +1062,20 @@ class AccountController extends Controller
             /*$user  = Auth::user();*/
     
             $answers = Answer::all();
+            
+
             foreach($answers as $ans){
                 $id = $ans->id;
-
+                $user = Auth::id();
                 foreach($ans->unreadNotifications as $answer)
                     {
-                        if($answer->data['answer_id'] == $id){
+                        $quest = $answer->data['question_id'];
+                        $questionuser = Question::find($quest);
+                        $userid = $questionuser->user->id;
+
+                        if($answer->data['answer_id'] == $id && $userid == $user){
                             $data =$answer->where('read_at','=',NULL)->orderBy('created_at','desc')->get();
+        
                             array_push($cdata, $data);
 
                         }
@@ -798,14 +1087,30 @@ class AccountController extends Controller
         
           array_push($noti_data1, $value);
        }
-      
-       return $noti_data1;
+      return $noti_data1;
     }
 
 
     public function questionreply(Request $request)
     {
         $questionid = $request->quesid;
+        $userid = Auth::id();
+        
+        $answeruserid = Answer::where('question_id',$questionid)->with('user')->get();
+        foreach($answeruserid as $ans){
+            foreach($ans->unreadNotifications as $answer)
+                    {
+                        $quest = $answer->data['question_id'];
+                        $questionuser = Question::find($questionid);
+                        $user = $questionuser->user->id;
+
+                        if($answer->data['answer_id'] == $ans->id && $userid == $user){
+                            $ans->unreadNotifications()->delete();
+                            echo "success";
+                        }
+                    }
+        }
+
         $answer = Answer::where('question_id',$questionid)->with('user')->get();
         $question = Question::where('id',$questionid)->with('user')->get();
         return response()->json(['answer'=>$answer,'question'=>$question]);
@@ -869,5 +1174,163 @@ class AccountController extends Controller
         $user->unreadNotifications()->delete();
         echo "success";
     }
+
+    public function startquiz($testid){
+
+        $test = Test::find($testid);
+        $questions = Quiz::where('test_id',$testid)->get();
+
+        $totalQuiz = count($questions);
+        $totalTimer = 0;
+        $timers = array();
+
+        $marks = 0; $totalmark = 0;
+
+        foreach ($questions as $question) {
+            $timer = $question->timer;
+
+            if (!in_array($timer, $timers)) {
+                array_push($timers, $timer);
+            }
+
+            foreach ($question->checks as $check) {
+                $mark = (int)$check->mark;
+                
+                if ($mark > 0) {
+                    $totalmark += $marks + $mark;
+                }
+                if($mark < 0){
+                    $totalmark += $marks - abs($mark); 
+                }
+            }
+
+            $totalTimer += $timer++;
+        }
+
+        return view('account.quiz',compact('test','totalQuiz', 'totalTimer', 'timers', 'questions', 'totalmark'));
+    }
+
+    public function getquiz(Request $request){
+        $questions = Quiz::with('checks')
+                    ->where('test_id',$request->testId)->get();
+
+        return response()->json(['data'=>$questions]);
+    }
+
+
+
+    public function storequiz(Request $request){
+        $testId = $request->testId;
+        $correctMark = $request->correctMark;
+        $datas = $request->cart;
+
+        $auth_userid = Auth::user()->id;
+
+        $existingResponse = Response::where('user_id',$auth_userid)
+                            ->where('test_id','=',$testId)
+                            ->first();
+
+
+        if($existingResponse == NULL){
+            $response = new Response;
+            $response->score = $correctMark;
+            $response->status = 0;
+            $response->user_id = Auth::user()->id;
+            $response->test_id = $testId;
+            $response->save();
+
+            foreach ($datas as $data) {
+                // dd($data);
+                if ($data['checkid'] != 'null') {
+                    $checkid = $data['checkid'];
+                }else{
+                    $checkid = 0;
+                }
+                $responsedetail = new Responsedetail;
+                $responsedetail->check_id = $checkid;
+                $responsedetail->quiz_id = $data['quizid'];
+                $responsedetail->response_id = $response->id;
+                $responsedetail->status = $data['status'];
+
+                $responsedetail->save();
+            }
+            
+        }else{
+            $responseid = $existingResponse->id;
+
+            $response = Response::find($responseid);
+            $response->score = $correctMark;
+            $response->status = 0;
+            $response->user_id = Auth::user()->id;
+            $response->test_id = $testId;
+            $response->save();
+
+            $responsedetails = Responsedetail::where('response_id',$responseid)->get();
+            foreach ($responsedetails as $responsedetail) {
+                $responsedetail->delete();
+            }
+
+            foreach ($datas as $data) {
+                // dd($data);
+                if ($data['checkid'] != 'null') {
+                    $checkid = $data['checkid'];
+                }else{
+                    $checkid = 0;
+                }
+                $responsedetail = new Responsedetail;
+                $responsedetail->check_id = $checkid;
+                $responsedetail->quiz_id = $data['quizid'];
+                $responsedetail->response_id = $responseid;
+                $responsedetail->status = $data['status'];
+
+                $responsedetail->save();
+            }
+
+            
+        }
+
+        return response()->json(['data'=>'ok']);
+        
+    }
+
+
+
+    public function getscore(Request $request){
+        $responseid = $request->responseId;
+
+        $response = Response::with('responsedetails')
+                    ->find($responseid);
+
+        $questions = Quiz::with('checks')
+                    ->where('test_id',$response->test_id)->get();  
+
+
+        return response()->json(['response'=>$response, 'questions'=>$questions]);
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

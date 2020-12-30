@@ -30,6 +30,7 @@ use App\Http\Controllers\InstallmentController;
 
 // YTMN
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\TestController;
 
 
 //HH
@@ -60,6 +61,8 @@ Route::get('/',[FrontendController::class, 'index'])->name('frontend.index');
 Route::get('courses',[FrontendController::class, 'courses'])->name('courses');
 
 Route::post('courses_search',[FrontendController::class, 'courses_search'])->name('courses_search');
+Route::post('searchcourse_bysubcategoryid',[FrontendController::class, 'searchcourse_bysubcategoryid'])->name('searchcourse_bysubcategoryid');
+
 
 Route::post('searchmystudying',[FrontendController::class, 'searchmystudying'])->name('searchmystudying');
 
@@ -79,6 +82,13 @@ Route::post('course_sale',[FrontendController::class, 'course_sale'])->name('cou
 Route::get('instructors',[FrontendController::class, 'instructors'])->name('instructors');
 
 Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->name('instructor');
+Route::get('/cours/catégorie/{id}',[FrontendController::class, 'coursebyCategory'])->name('cours/catégorie');
+Route::get('/cours/sous-catégorie/{id}',[FrontendController::class, 'coursebySubcategory'])->name('cours/sous-catégorie');
+
+
+
+
+
 
 //Honey
 Route::get('business_info',[FrontendController::class,'business_info'])->name('business_info');
@@ -92,6 +102,8 @@ Route::post('signup',[RegisterController::class,'process_signup'])->name('signup
 Route::get('reg_step',[RegisterController::class,'reg_step'])->name('reg_step');
 Route::post('instructor_reg',[RegisterController::class,'process_instructor_reg'])->name('instructor_reg');
 Route::post('company_reg',[RegisterController::class,'process_company_reg'])->name('company_reg');
+
+Route::get('verify',[RegisterController::class,'verify_user'])->name('verify.user');
 
 // ------------------------------------------------------------------------
 
@@ -107,7 +119,7 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/category',CategoryController::class);
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
-    Route::post('approve/{id}',[CourseController::class,'approve'])->name('course.approve');
+    Route::get('approve/{id}',[CourseController::class,'approve'])->name('course.approve');
     Route::post('courses_search',[CourseController::class, 'courses_search'])->name('courses_search');
 
 
@@ -115,6 +127,7 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::post('remove_sale_course',[SaleController::class,'remove_sale_course'])->name('remove_sale_course');
 
     Route::resource('/section', SectionController::class);
+    Route::get('sectionshow/{id}',[SectionController::class,'sectionshow'])->name('sectionshow');
     //KYW
     Route::get('/section/{section}/edit',[SectionController::class,'edit'])->name('sectionedit');
     Route::post('/section/getcontenttype',[SectionController::class,'getcontenttype'])->name('getcontenttype');
@@ -147,6 +160,9 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/questions',QuestionController::class);
     Route::resource('/answer',AnswerController::class);
     Route::resource('/quiz',QuizController::class);
+    Route::resource('/test',TestController::class);
+    Route::post('/test/update/{id}',[TestController::class, 'update'])->name('test.update');
+    Route::post('/quiz/update/{id}',[QuizController::class, 'update'])->name('quiz.update');
 
 
 
@@ -257,7 +273,8 @@ Route::get('purchase_history',[AccountController::class, 'purchase_history'])->n
 Route::get('history_detial/{id}',[AccountController::class, 'history_detial'])->name('history_detial');
 
 
-
+// Start Quiz 
+Route::get('/startquiz/{id}',[AccountController::class, 'startquiz'])->name('startquiz');
 
 // ------------------------------------------------------------------------
 
@@ -284,9 +301,24 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::post('getinstructor_bycompanyid',[CourseController::class, 'getinstructor'])->name('getinstructor_bycompanyid');
 Route::post('getquestion_bycourseid',[QuestionController::class, 'getquestion'])->name('getquestion_bycourseid');
 
+Route::post('getsection_bycourseid',[QuizController::class, 'getsection'])->name('getsection_bycourseid');
+
+Route::post('getquizzes_bytestid',[AccountController::class, 'getquiz'])->name('getquizzes_bytestid');
+Route::post('storequiz',[AccountController::class, 'storequiz'])->name('storequiz');
+Route::post('getscore_byresponseid',[AccountController::class, 'getscore'])->name('getscore_byresponseid');
 
 
+Route::get('profile/{id}',[FrontendController::class,'profile'])->name('profile');
+Route::post('profileupdate/{id}',[FrontendController::class,'profileupdate'])->name('profileupdate');
 
+Route::get('instructorprofile/{id}',[FrontendController::class,'instructorprofile'])->name('instructorprofile');
+Route::get('instructorprofileedit/{id}',[FrontendController::class,'instructorprofileedit'])->name('instructorprofileedit');
+Route::post('instructorprofileupdate/{id}',[FrontendController::class,'instructorprofileupdate'])->name('instructorprofileupdate');
+
+Route::post('instructorchangepassword/{id}',[FrontendController::class,'instructorchangepassword'])->name('instructorchangepassword');
+
+Route::get('changepassword/{id}',[FrontendController::class,'changepassword'])->name('changepassword');
+Route::post('updatepassword/{id}',[FrontendController::class,'updatepassword'])->name('updatepassword');
 // //ALS
 // Route::get('coursecount','CoursecountController@coursecount')->name('coursecount');
 Route::get('coursecount',[CoursecountController::class, 'coursecount'])->name('coursecount');

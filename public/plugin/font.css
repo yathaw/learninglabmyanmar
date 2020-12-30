@@ -38,3 +38,9 @@
   	font-family:'Unicode';
   	src: url('../fonts/mon3.woff') format('woff');
 }
+
+@font-face 
+{
+  	font-family:'BungeeShade_Regular';
+  	src: url('../fonts/BungeeShade-Regular.ttf');
+}

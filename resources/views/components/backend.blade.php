@@ -148,7 +148,7 @@
             			</a>
 					</li>
 
-					<li class="sidebar-item {{ Request::segment(2) === 'quiz' && Request::segment(3) ==='index' ? 'active' : '' }}">
+					<li class="sidebar-item {{ Request::segment(2) === 'quiz' ? 'active' : '' }}">
 						<a class="sidebar-link" href="{{route('backside.quiz.index')}}" data-toggle="tooltip" data-placement="left" title="Quiz ထည့်သွင်းမည်​">
               				<i class="align-middle" data-feather="check-circle"></i> <span class="align-middle"> Quiz </span>
             			</a>
@@ -491,11 +491,14 @@
 								</a>
 
 								<div class="dropdown-divider"></div>
+								@role('Instructor')
+								<a class="dropdown-item" href="{{route('instructorprofile',Auth::id())}}"><i class="align-middle mr-1" data-feather="user"></i> Profile </a>
 
-								<a class="dropdown-item" href="pages-profile.html"><i class="align-middle mr-1" data-feather="user"></i> Profile </a>
-								<a class="dropdown-item" href="#">
+								<a class="dropdown-item" href="{{route('changepassword',Auth::id())}}">
 									<i class="align-middle mr-1" data-feather="lock"></i> Change Password 
 								</a>
+								@endrole
+								
 
 								<!-- HH -->
 								@if($authRole == "Instructor" || $authRole == "Business")

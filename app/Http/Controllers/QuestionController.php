@@ -26,6 +26,7 @@ class QuestionController extends Controller
 
         if (in_array($role[0], array('Admin','Developer'), true )) {
             $courses = Course::all();
+            
             $questions = Question::orderBy('created_at', 'DESC')->get();
         }elseif($role[0] == 'Business'){
             $companyid = $authuser->company_id;
@@ -44,8 +45,11 @@ class QuestionController extends Controller
                 array_push($courses_id, $course->id);
             }
 
-
-            $questions = Question::whereIn('course_id', [$courses_id])->orderBy('created_at', 'DESC')->get();            
+            if(count($courses_id) > 0){
+            $questions = Question::whereIn('course_id', [$courses_id])->orderBy('created_at', 'DESC')->get(); 
+            }else{
+                $questions = [];
+            }           
 
         }else{
             
@@ -63,12 +67,20 @@ class QuestionController extends Controller
             foreach ($courses as $course) {
                 array_push($courses_id, $course->id);
             }
-
+            if(count($courses_id) > 0){
             $questions = Question::whereIn('course_id', [$courses_id])->orderBy('created_at', 'DESC')->get();
-
+        }else{
+            $questions = [];
         }
 
-        return view('question.list',compact('questions','courses'));
+        }
+        if($questions != NULL && $courses != NULL){
+            return view('question.list',compact('questions','courses'));
+        }else{
+            return redirect()->back();
+        }
+
+        
     }
 
     /**
