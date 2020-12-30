@@ -618,8 +618,8 @@
                     $('.courseshow').hide();
                 }else{
                     
-                    html+=`<div class="offset-md-3 text-center">
-                                <img src="{{asset('externalphoto/empty_result.gif')}}" class="img-fluid" width="40%" height="60%">
+                    html+=`<div class="offset-md-3 my-5 text-center">
+                                <img src="{{asset('externalphoto/empty_result.gif')}}" class="img-fluid" width="60%" height="60%">
                             </div>`;
                             
                     $('.searchcourseshow').html(html);

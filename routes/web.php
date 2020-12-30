@@ -307,18 +307,24 @@ Route::post('getquizzes_bytestid',[AccountController::class, 'getquiz'])->name('
 Route::post('storequiz',[AccountController::class, 'storequiz'])->name('storequiz');
 Route::post('getscore_byresponseid',[AccountController::class, 'getscore'])->name('getscore_byresponseid');
 
+Route::group(['middleware' => 'role:Student'], function(){
+    Route::get('profile/{id}',[FrontendController::class,'profile'])->name('profile');
+    Route::post('profileupdate',[FrontendController::class,'profileupdate'])->name('profileupdate');
+});
 
-Route::get('profile/{id}',[FrontendController::class,'profile'])->name('profile');
-Route::post('profileupdate/{id}',[FrontendController::class,'profileupdate'])->name('profileupdate');
+Route::group(['middleware' => 'role:Instructor'], function(){
+    Route::get('instructorprofile/{id}',[FrontendController::class,'instructorprofile'])->name('instructorprofile');
+    Route::get('instructorprofileedit/{id}',[FrontendController::class,'instructorprofileedit'])->name('instructorprofileedit');
+    Route::post('instructorprofileupdate/{id}',[FrontendController::class,'instructorprofileupdate'])->name('instructorprofileupdate');
 
-Route::get('instructorprofile/{id}',[FrontendController::class,'instructorprofile'])->name('instructorprofile');
-Route::get('instructorprofileedit/{id}',[FrontendController::class,'instructorprofileedit'])->name('instructorprofileedit');
-Route::post('instructorprofileupdate/{id}',[FrontendController::class,'instructorprofileupdate'])->name('instructorprofileupdate');
+    Route::post('instructorchangepassword/{id}',[FrontendController::class,'instructorchangepassword'])->name('instructorchangepassword');
 
-Route::post('instructorchangepassword/{id}',[FrontendController::class,'instructorchangepassword'])->name('instructorchangepassword');
+    Route::get('changepassword/{id}',[FrontendController::class,'changepassword'])->name('changepassword');
+    Route::post('updatepassword/{id}',[FrontendController::class,'updatepassword'])->name('updatepassword');
+});
 
-Route::get('changepassword/{id}',[FrontendController::class,'changepassword'])->name('changepassword');
-Route::post('updatepassword/{id}',[FrontendController::class,'updatepassword'])->name('updatepassword');
+Route::get('accountchangepassword/{id}',[FrontendController::class,'accountchangepassword'])->name('accountchangepassword');
+
 // //ALS
 // Route::get('coursecount','CoursecountController@coursecount')->name('coursecount');
 Route::get('coursecount',[CoursecountController::class, 'coursecount'])->name('coursecount');
