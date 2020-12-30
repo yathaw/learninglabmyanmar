@@ -446,12 +446,13 @@
 								</ul>
 								<div class="tab-content mt-3" id="myTabContent">
 									<div class="tab-pane fade show active" id="oldPhotoTab" role="tabpanel" aria-labelledby="oldPhoto-tab">
-										<video class="js-player lesson_video_play vidoe-js" width="220" height="140" controls crossorigin preload="auto" playsinline id="content_file">
-											<source src=" " type="video/mp4" >
+										<input type="hidden" name="hidden_file" id="hidden_file">
+										<video class="js-player lesson_video_play video-js" width="220" height="140" controls crossorigin preload="auto" playsinline >
+											<source src=" " type="video/mp4" id="content_file">
 											</video>
 
 											{{-- <img src=" " class="img-fluid w-25" id="content_file"> --}}
-											<input type="hidden" name="hidden_file" id="hidden_file">
+											
 										</div>
 
 										<div class="tab-pane fade" id="newPhotoTab" role="tabpanel" aria-labelledby="newPhoto-tab">
@@ -475,8 +476,10 @@
 									</ul>
 									<div class="tab-content mt-3" id="myTabContent">
 										<div class="tab-pane fade show active" id="oldPhotoTab1" role="tabpanel" aria-labelledby="oldPhoto-tab">
-											<img src="" class="img-fluid w-105" id="content_uploadfile">
-											<div id="showpdf"></div>
+											{{-- <iframe src="" id="content_uploadfile"></iframe>
+											 --}} 
+											 <a href="" id="content_uploadfile">PDF File</a>
+											{{-- <div id="showpdf"></div> --}}
 											<input type="hidden" name="hidden_uploadfile" id="hidden_uploadfile">
 										</div>
 
@@ -731,15 +734,15 @@ $('.lessoneditbtn').click(function(){
 			//console.log(v.file_upload);
 			$('#hidden_file').val(v.file);
 			var videoFile = v.file;
-			$('#content_file').attr('src', videoFile);
+           // $('#content_file').attr('src', videoFile);
 
-			$("#editcontentModal").on("shown.bs.modal", function(e) {
-				console.log("modal opened" + $videoFile);
-				$("#video").attr(
-					"src",
-					$videoFile + "?autoplay=1&showinfo=0&modestbranding=1&rel=0&mute=1"
-					);
-			});
+            $("#editcontentModal").on("shown.bs.modal", function(e) {
+                console.log("modal opened" + $videoFile);
+                $("#content_file").attr(
+                    "src",
+                    $videoFile + "?autoplay=1&showinfo=0&modestbranding=1&rel=0&mute=1"
+                );
+            });
 
             // stop playing the youtube video when I close the modal
             // $("#editcontentModal").on("hide.bs.modal", function(e) {
@@ -747,10 +750,10 @@ $('.lessoneditbtn').click(function(){
             //     $("#content_file").attr("src", $videoFile);
             // });
             $('#hidden_uploadfile').val(v.file_upload);
-            $('#viewport').text(v.file_upload);
+            //$('#content_uploadfile').text(v.file_upload);
 
-            var videoFileupload = v.file_upload;
-            $('#content_uploadfile').attr('src', videoFileupload);
+            var pdfFileupload = v.file_upload;
+            $('#content_uploadfile').attr('href', pdfFileupload);
 
             
         })
