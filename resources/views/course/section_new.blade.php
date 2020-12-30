@@ -3,7 +3,7 @@
 		<div class="col-auto d-none d-sm-block">
 			<h3><strong> {{ $course->title }} </strong> </h3>
 		</div>
-		@if($sections->isEmpty())
+		@if(!$sections->isEmpty())
 		<div class="col-auto ml-auto text-right mt-n1">
 			<a href="javascript:void(0)" class="btn custom_primary_btnColor float-right new" data-toggle="modal" data-target="#newsectionModal" data-id="{{$course->id}}"><i class="align-middle fas fa-plus"></i> Add New Section </a>
 		</div>
@@ -28,7 +28,7 @@
 						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-10 col-10">
 							<h3 class="mt-5"> No Video Lecture in this course. </h3>
 							<p class="my-4 text-muted"> Before you create a video, you must configure at least one sections. </p>
-							<a href="javascript:void(0)" class="btn custom_primary_btnColor emptystateBtn" data-id="{{$course->id}}"><i class="align-middle fas fa-plus"></i> Add New Content </a>
+							<a href="javascript:void(0)" class="btn custom_primary_btnColor emptystateBtn" data-id="{{$course->id}}"><i class="align-middle fas fa-plus"></i> Add New Section </a>
 						</div>
 					</div>
 				</div>
@@ -556,7 +556,7 @@
 				$('.emptystateBtn').click(function(){
 					var id = $(this).data('id');
 					$('#sectionid').val(id);
-					$('#newcontentModal').modal('show');
+					$('#newsectionModal').modal('show');
 
 				})
 

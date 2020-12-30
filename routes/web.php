@@ -120,7 +120,7 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
     Route::get('approve/{id}',[CourseController::class,'approve'])->name('course.approve');
-    Route::post('courses_search',[CourseController::class, 'courses_search'])->name('courses_search');
+    Route::post('course_search',[CourseController::class, 'course_search'])->name('course_search');
 
 
 //NYL 

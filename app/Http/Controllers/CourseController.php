@@ -400,18 +400,19 @@ class CourseController extends Controller
         return redirect()->route('backside.course.index');
     }
 
-    public function courses_search(Request $request)
+    public function course_search(Request $request)
     {
-       $data = $request->data;
+       $data = $request->search_data;
 
+       if($data != null){
+           $search_data = Course::where('title','like','%'.$data.'%')->with(array('instructors' => function($query)
+           {
+            $query->with('user','user.company')->join('users','users.id','=','instructors.user_id')->where('users.id',Auth::id());
+           }))->with('contents','user','contents.lessons')->where('courses.user_id',Auth::id())->get();
 
-       $search_data = Course::where('title','like','%'.$data.'%')->with(array('instructors' => function($query)
-       {
-        $query->with('user');
-       }))->get();
+           return response(json_decode($search_data));
+       }else{
 
-
-       // dd($search_data);
-       return response(json_decode($search_data));
+       }
     }
 }
