@@ -152,7 +152,7 @@
                             
                             <li><a href="#"> Cart History </a></li>
 
-                            <li><a href="#"> Change Password</a></li>
+                            <li><a href="{{route('accountchangepassword',Auth::id())}}"> Change Password</a></li>
                             
 
                             <li><hr class="dropdown-divider"></li>

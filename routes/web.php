@@ -310,6 +310,9 @@ Route::post('getscore_byresponseid',[AccountController::class, 'getscore'])->nam
 Route::group(['middleware' => 'role:Student'], function(){
     Route::get('profile/{id}',[FrontendController::class,'profile'])->name('profile');
     Route::post('profileupdate',[FrontendController::class,'profileupdate'])->name('profileupdate');
+    Route::get('accountchangepassword/{id}',[FrontendController::class,'accountchangepassword'])->name('accountchangepassword');
+    Route::post('accountupdatepassword',[FrontendController::class,'accountupdatepassword'])->name('accountupdatepassword');
+
 });
 
 Route::group(['middleware' => 'role:Instructor'], function(){
@@ -323,7 +326,6 @@ Route::group(['middleware' => 'role:Instructor'], function(){
     Route::post('updatepassword/{id}',[FrontendController::class,'updatepassword'])->name('updatepassword');
 });
 
-Route::get('accountchangepassword/{id}',[FrontendController::class,'accountchangepassword'])->name('accountchangepassword');
 
 // //ALS
 // Route::get('coursecount','CoursecountController@coursecount')->name('coursecount');

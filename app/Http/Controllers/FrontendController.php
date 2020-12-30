@@ -412,7 +412,7 @@ class FrontendController extends Controller
             $path = '';
         }
 
-      $user = User::find($userid);
+      $user = User::find($request->userid);
       $user->name = request('name');
       $user->email = request('email');
       $user->phone = request('phone');
@@ -527,6 +527,45 @@ class FrontendController extends Controller
         And New Password Change');
         
     }else{
+     $user->password = Hash::make($changepassword);
+      $user->email = $email;
+      $user->save();
+
+      return redirect()->route('login')->with('success','Successfully change Password!');
+      
+    }
+
+  }
+
+  public function accountchangepassword($id)
+    {
+      $user = User::find($id);
+      return view('frontend.changepassword',compact('user'));
+    }
+
+    public function accountupdatepassword(Request $request)
+  {
+    
+    $request->validate([
+      'email' => 'required',
+      'changepassword' => 'required|confirmed|min:5',
+      'changepassword_confirmation' => 'required',
+      'userid' => 'required'
+    ]);
+    $email = $request->email;
+    $changepassword = $request->changepassword;
+    $confirmpassword = $request->changepassword_confirmation;
+    $currentpassword = $request->currentpassword;
+
+    $user = User::find($request->userid);
+
+    if(Hash::check($changepassword,$user->password)){
+       
+      return back()->with('msg','You current password are same match in our record.
+        And New Password Change');
+        
+    }else{
+      
      $user->password = Hash::make($changepassword);
       $user->email = $email;
       $user->save();
