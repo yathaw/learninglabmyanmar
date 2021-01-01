@@ -22,6 +22,10 @@ use App\Notifications\CheckoutNotification;
 use Illuminate\Support\Facades\Hash;
 class FrontendController extends Controller
 {
+ /* public function __construct(){
+        $this->middleware(['role:Instructor'])->except('index','courses','coursebyCategory','coursebySubcategory','coursedetail','addtocart','courses_search','instructors','instructordetail','searchcourse_bysubcategoryid','wishlist_save','wishlist_search','course_sale','searchmystudying','removewishlist','business_info','business_store','instructor_info','instructor_store','profile','profileupdate');
+    }*/
+
     public function index(){
         $limitcategories = Category::all()->random(3);
         $newest_courses = Course::orderBy('created_at', 'DESC')->take(6)->get();
@@ -388,13 +392,14 @@ class FrontendController extends Controller
       return view('frontend.profileupdate',compact('user'));
     }
 
-    public function profileupdate(Request $request,$id)
+    public function profileupdate(Request $request)
     {
       $request->validate([
             'name' => 'required',
             'phone' => 'required',
             'email' => 'required',
-            'photo' => 'sometimes|mimes:jpeg,jpg,png,gif|max:100000'
+            'photo' => 'sometimes|mimes:jpeg,jpg,png,gif|max:100000',
+            'userid' => 'required'
         ]);
 
       if($request->hasfile('photo')){
@@ -407,7 +412,7 @@ class FrontendController extends Controller
             $path = '';
         }
 
-      $user = User::find($id);
+      $user = User::find($request->userid);
       $user->name = request('name');
       $user->email = request('email');
       $user->phone = request('phone');
@@ -522,6 +527,45 @@ class FrontendController extends Controller
         And New Password Change');
         
     }else{
+     $user->password = Hash::make($changepassword);
+      $user->email = $email;
+      $user->save();
+
+      return redirect()->route('login')->with('success','Successfully change Password!');
+      
+    }
+
+  }
+
+  public function accountchangepassword($id)
+    {
+      $user = User::find($id);
+      return view('frontend.changepassword',compact('user'));
+    }
+
+    public function accountupdatepassword(Request $request)
+  {
+    
+    $request->validate([
+      'email' => 'required',
+      'changepassword' => 'required|confirmed|min:5',
+      'changepassword_confirmation' => 'required',
+      'userid' => 'required'
+    ]);
+    $email = $request->email;
+    $changepassword = $request->changepassword;
+    $confirmpassword = $request->changepassword_confirmation;
+    $currentpassword = $request->currentpassword;
+
+    $user = User::find($request->userid);
+
+    if(Hash::check($changepassword,$user->password)){
+       
+      return back()->with('msg','You current password are same match in our record.
+        And New Password Change');
+        
+    }else{
+      
      $user->password = Hash::make($changepassword);
       $user->email = $email;
       $user->save();
