@@ -402,6 +402,7 @@
         $('.searchInput').keyup(function(){
      
             var search_data = $(this).val();
+
             var user_id = $(this).val();
             var instructor_data = $(this).data(instructor);
       
@@ -409,14 +410,38 @@
             var instructor="";
             var subtitle;
       
-            $.post("{{route('courses_search')}}",{data:search_data},function(result){
-                
+            $.post("{{route('backside.course_search')}}",{search_data:search_data},function(result){
+              
                 if (result.length>0) {
                     $.each(result,function(i,v){
       
                         var subtitle = v.subtitle.slice(0,60);
-                        console.log(subtitle);
+                       
+                        var course = v.id;
+                        
+                        let url = '/backside/course/'+v.id+'/section';
+                        var detailurl = "/backside/course/"+v.id;
+                        var editurl = "/backside/course/"+v.id+'/edit';
+                        var instructors = v.instructors;
                         <?php $userRole = Auth::user()->getRoleNames(); ?>
+
+                        var totalDuration = 0;
+                        var countVideo = 0;
+                        var countlesson = 0;
+                        $.each(v.contents,function(con,content){
+                           if(content.contenttype_id == 1)
+                           {
+                              $.each(content.lessons,function(les,lesson){
+                                 var duration = lesson['duration'];
+                                 var type = lesson['type'];
+                                 countVideo++;
+                                 totalDuration += duration++;
+                              }) 
+                              
+                           }
+                        }) 
+                        
+                        
                         html+=`<div class="col-12 col-md-6 col-lg-3 ">
                                 <div class="card h-100">
                                     <div class="card-header px-4 pt-4">
@@ -426,44 +451,46 @@
                                             <i class="align-middle" data-feather="more-horizontal"></i>
                                             </a>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            @if($userRole[0] == 'Admin')
-                                            <a class="dropdown-item text-success fw-bolder" href="{{ route('backside.sectionlist',$course->id) }}" data-toggle="tooltip" data-placement="top" title="Course မှာပါမည့် Lesson တွေထည့်သိမ်းရန်"> 
-                                            <i class="align-middle mr-2" data-feather="file-plus"></i> 
+                                            @if($userRole[0] == 'Admin')`;
+                                            html+='<a class="dropdown-item text-success fw-bolder" href="'+url+'" data-toggle="tooltip" data-placement="top" title="Course မှာပါမည့် Lesson တွေထည့်သိမ်းရန်">'; 
+                                            html+=`<i class="align-middle mr-2" data-feather="file-plus"></i> 
                                                 Add Course Content 
                                             </a>
-                                            @elseif(!in_array($userRole[0], array('Admin','Developer'), true ))
+                                            @elseif(!in_array($userRole[0], array('Admin','Developer'), true ))`;
                                             
-                                            <a class="dropdown-item text-success fw-bolder" href="" data-toggle="tooltip" data-placement="top" title="Course မှာပါမည့် Lesson တွေထည့်သိမ်းရန်"> 
-                                            <i class="align-middle mr-2" data-feather="file-plus"></i> 
+                                            html+='<a class="dropdown-item text-success fw-bolder" href="'+url+'" data-toggle="tooltip" data-placement="top" title="Course မှာပါမည့် Lesson တွေထည့်သိမ်းရန်">'; 
+                                            html+=`<i class="align-middle mr-2" data-feather="file-plus"></i> 
                                             Add Course Content 
                                             </a>
                                            
                                             @endif
                           
                             
-                                @if(in_array($role[0], array('Admin','Developer'), true ) && $userRole[0] != 'Admin')
-                                    <a class="dropdown-item text-success fw-bolder" href="{{ route('backside.sectionlist') }}" data-toggle="tooltip" data-placement="top" title="Course ကို Public ချပြရန် ခွင့်ပြုပါမည်"> 
+                                @if(in_array($userRole[0], array('Admin','Developer'), true ) && $userRole[0] != 'Admin')`;
+
+                                    html+=`<a class="dropdown-item text-success fw-bolder" href="" data-toggle="tooltip" data-placement="top" title="Course ကို Public ချပြရန် ခွင့်ပြုပါမည်"> 
                                     <i class="align-middle mr-2" data-feather="check"></i> 
                                     Approve
-                                    </a>
-                                @endif
+                                    </a>`;
+                              
+                                html+=`@endif`;
                             
                           
-                            <a class="dropdown-item text-info fw-bolder" href="{{ route('backside.course.show',1) }}" data-toggle="tooltip" data-placement="top" title="အသေးစိတ်ကြည့်ရန်"> 
-                            <i class="align-middle mr-2" data-feather="info"></i> Detail 
+                            html+='<a class="dropdown-item text-info fw-bolder" href="'+detailurl+'" data-toggle="tooltip" data-placement="top" title="အသေးစိတ်ကြည့်ရန်">'; 
+                            html+=`<i class="align-middle mr-2" data-feather="info"></i> Detail 
                             </a>
-                            @if($userRole[0] == 'Admin')
-                                <a class="dropdown-item text-warning fw-bolder" href="{{ route('backside.course.edit',1) }}" data-toggle="tooltip" data-placement="top" title="ပြန်လည်ပြင်ဆင်မည်"> 
-                                    <i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
+                            @if($userRole[0] == 'Admin')`;
+                              html+='<a class="dropdown-item text-warning fw-bolder" href="'+editurl+'" data-toggle="tooltip" data-placement="top" title="ပြန်လည်ပြင်ဆင်မည်">';
+                              html+=`<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
                                 </a>
-                            @elseif(!in_array($role[0], array('Admin','Developer'), true ))
-                                <a class="dropdown-item text-warning fw-bolder" href="{{ route('backside.course.edit',1) }}" data-toggle="tooltip" data-placement="top" title="ပြန်လည်ပြင်ဆင်မည်"> 
-                                    <i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
+                            @elseif(!in_array($userRole[0], array('Admin','Developer'), true ))`;
+                              html+='<a class="dropdown-item text-warning fw-bolder" href="'+editurl+'" data-toggle="tooltip" data-placement="top" title="ပြန်လည်ပြင်ဆင်မည်">'; 
+                              html+=`<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
                                 </a>
-                            @endif
+                            @endif`;
                           
-                            <form method="post" action="{{ route('backside.course.destroy',1) }}" class="" onsubmit="return confirm('Are you Sure want to Delete?')">
-                                @csrf
+                           html+='<form method="post" action="'+detailurl+'" class="" onsubmit="return confirm(\'Are you Sure want to Delete?\')">';
+                           html+=`@csrf
                                 @method('DELETE')
       
                                 <button class="btn btn-light text-danger btn-sm dropdown-item text-left" data-toggle="tooltip" data-placement="top" title="ဖျက်စီးမည်" type="submit"> 
@@ -474,107 +501,109 @@
                     </div>
                 </div>
                <h5 class="card-title mb-0 fontbold"> ${v.title} </h5>`;
-         <?php $countVideo = 0; $certificate = "off"; $status=0;?>
-             html+=`   @if($countVideo <= 0 )
-                    <div class="badge bg-danger my-2">On Hold</div>
-                @elseif($course->status > 0)
-                    <div class="badge bg-success my-2">Published</div>
-                @else
-                    <div class="badge bg-info my-2">In Progress</div>
-                @endif
+         
+             if(countVideo <= 0 ){
+                  html+=`<div class="badge bg-danger my-2">On Hold</div>`;
+
+            }else if(v.stauts > 0){
+                  html+=`<div class="badge bg-success my-2">Published</div>`;
+            }else{
+                  html+=`<div class="badge bg-info my-2">In Progress</div>`;
+               }
       
-            </div>
+            html+=`</div>
             <div class="card-body px-4 pt-2">
                 <p> This Course Includes : </p>
                 <p> 
                     <i class="align-middle mr-2" data-feather="play-circle"></i>
-                    <small class="pl-3"> {{ $countVideo }}  Videos </small>
-                </p>
-                @if($certificate == "on")
-                <p> 
+                    <small class="pl-3"> ${countVideo }  Videos </small>
+                </p>`;
+                if(v.certificate == "on"){
+                html+=`<p> 
                     <i class="align-middle mr-2" data-feather="award"></i> 
                     <small class="pl-3"> Certificate of completion </small>
-                </p>
-                @endif
-                <p> 
+                </p>`;
+                }
+                html+=`<p> 
                     <i class="align-middle mr-2" data-feather="dollar-sign"></i> 
-                    <small class="pl-3"> 1000 Ks </small>
-                </p>
+                    <small class="pl-3"> ${v.price} Ks </small>
+                </p>`;
       
-                @php
-                    $instructors = 0;
-                @endphp
-      
-                @if($instructors > 1 )
-                    <p> 
-                        <i class="align-middle mr-2" data-feather="users"></i> 
-                        @foreach($instructors as $instructor)
-                            {{ $loop->first ? '' : ', ' }}
-                            <small class="pl-3"> bb</small>
-                        @endforeach 
+                  if(instructors.length > 1 ){
+                    html+=`<p> 
+                        <i class="align-middle mr-2" data-feather="users"></i>`;
+
+                            var output= [];
+                            for(var k=0; k<instructors.length; k++){
+                                output.push(instructors[k].user.name);
+                            }
+
+                            html+=`<small class="pl-3"> ${output.join(' , ')}</small>
+                            
+                        
                     </p>
       
                     <p> 
                         <i class="align-middle mr-2" data-feather="briefcase"></i> 
                         
-                        <small class="pl-3"> jjk </small>
-                    </p>
-                @else
-                <p> 
+                        <small class="pl-3"> ${ instructors[0].user.company.name } </small>
+                    </p>`;
+               } else{
+                html+=`<p> 
                     <i class="align-middle mr-2" data-feather="user"></i> 
-                    <small class="pl-3"> jkkj </small>
-                </p>
+                    <small class="pl-3"> ${instructors[0].user.name } </small>
+                </p>`;
       
-                @endif
+               }
       
-                <hr>
+                html+=`<hr>
       
                 <p class="text-muted mt-2 font-italic"> 
-                    Created By : ss
+                    Created By : ${v.user.name}
                 </p>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item px-4 pb-4">
+                <li class="list-group-item px-4 pb-4">`;
+                  
+                    if(countVideo <= 0 ){
       
-                    @if($countVideo <= 0 )
-      
-                    <p class="mb-2 font-weight-bold">Progress <span class="float-right">0%</span></p>
+                    html+=`<p class="mb-2 font-weight-bold">Progress <span class="float-right">0%</span></p>
                     <div class="progress progress-sm">
                         <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"
                             style="width: 0%;">
                         </div>
-                    </div>
+                    </div>`;
       
-                    @elseif($countVideo == 7 )
+                    }else if(countVideo == 7 ){
       
-                    <p class="mb-2 font-weight-bold">Progress <span class="float-right">20%</span></p>
+                    html+=`<p class="mb-2 font-weight-bold">Progress <span class="float-right">20%</span></p>
                     <div class="progress progress-sm">
                         <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"
                             style="width: 20%;">
                         </div>
-                    </div>
+                    </div>`;
       
-                    @elseif($status > 0)
+                    }else if(v.status > 0){
       
-                    <p class="mb-2 font-weight-bold">Progress <span class="float-right">100%</span></p>
+                    html+=`<p class="mb-2 font-weight-bold">Progress <span class="float-right">100%</span></p>
                     <div class="progress progress-sm">
                         <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
                         style="width: 100%;">
                         </div>
-                    </div>
+                    </div>`;
       
-                    @else
+                    }else{
       
-                    <p class="mb-2 font-weight-bold">Progress <span class="float-right">75%</span></p>
+                    html+=`<p class="mb-2 font-weight-bold">Progress <span class="float-right">75%</span></p>
                     <div class="progress progress-sm">
                         <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"
                             style="width: 75%;">
                         </div>
-                    </div>
+                    </div>`;
       
-                    @endif
+                    }
       
-                </li>
+                html+=`</li>
             </ul>
         </div>`;
       
@@ -583,14 +612,18 @@
       
       
                     $('.searchcourseshow').html(html);
+                    $('.searchcourseshow').show();
+                    feather.replace();
                     $('.paginate').hide();
                     $('.courseshow').hide();
                 }else{
                     
-                    html+=`<div class="text-center">
-                                <img src="{{asset('/externalphoto/empty_result.gif')}}" class="img-fluid" width="40%" height="60%">
+                    html+=`<div class="offset-md-3 my-5 text-center">
+                                <img src="{{asset('externalphoto/empty_result.gif')}}" class="img-fluid" width="60%" height="60%">
                             </div>`;
+                            
                     $('.searchcourseshow').html(html);
+                    $('.searchcourseshow').show();
                     $('.paginate').hide();
                     $('.courseshow').hide();
                 }

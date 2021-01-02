@@ -74,7 +74,8 @@ class QuestionController extends Controller
         }
 
         }
-        if($questions != NULL && $courses != NULL){
+        if(count($questions)>0 && count($courses) > 0){
+            
             return view('question.list',compact('questions','courses'));
         }else{
             return redirect()->back();

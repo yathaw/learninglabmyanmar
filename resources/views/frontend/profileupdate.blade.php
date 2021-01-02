@@ -30,9 +30,9 @@
                     @endif
 
                     
-                    <form action="{{ route('profileupdate',$user->id) }}" method="post" role="form" class="registerForm" enctype="multipart/form-data">
+                    <form action="{{ route('profileupdate') }}" method="post" role="form" class="registerForm" enctype="multipart/form-data">
                         @csrf
-
+                        <input type="hidden" name="userid" value="{{$user->id}}">
                         <div class="row form-group mt-4">
                             <div class="form-floating mb-3 col-md-6">
                                 <input type="text" class="form-control form-control-sm" id="name" placeholder="Your Name" name="name" value="{{ $user->name }}" required autofocus autocomplete="name">
