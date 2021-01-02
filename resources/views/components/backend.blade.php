@@ -498,6 +498,14 @@
 									<i class="align-middle mr-1" data-feather="lock"></i> Change Password 
 								</a>
 								@endrole
+
+								@role('Business')
+								<a class="dropdown-item" href="{{route('companyprofile',Auth::id())}}"><i class="align-middle mr-1" data-feather="user"></i> Profile </a>
+
+								<a class="dropdown-item" href="{{route('companychangepassword',Auth::id())}}">
+									<i class="align-middle mr-1" data-feather="lock"></i> Change Password 
+								</a>
+								@endrole
 								
 
 								<!-- HH -->

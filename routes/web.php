@@ -18,6 +18,7 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\JobtitleController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\CompanyProfileController;
 
 
 //KYW
@@ -326,7 +327,14 @@ Route::group(['middleware' => 'role:Instructor'], function(){
     Route::post('updatepassword/{id}',[FrontendController::class,'updatepassword'])->name('updatepassword');
 });
 
-
+Route::group(['middleware' => 'role:Business'], function(){
+    Route::get('companyprofile/{id}',[CompanyProfileController::class,'companyprofile'])->name('companyprofile');
+    Route::get('companyprofileedit/{id}',[CompanyProfileController::class,'companyprofileedit'])->name('companyprofileedit');
+    Route::post('companyprofileupdate/{id}',[CompanyProfileController::class,'companyprofileupdate'])->name('companyprofileupdate');
+    Route::post('companyprofilechangepassword/{id}',[CompanyProfileController::class,'companyprofilechangepassword'])->name('companyprofilechangepassword');
+    Route::get('companychangepassword/{id}',[CompanyProfileController::class,'companychangepassword'])->name('companychangepassword');
+    Route::post('companyupdatepassword/{id}',[CompanyProfileController::class,'companyupdatepassword'])->name('companyupdatepassword');
+});
 // //ALS
 // Route::get('coursecount','CoursecountController@coursecount')->name('coursecount');
 Route::get('coursecount',[CoursecountController::class, 'coursecount'])->name('coursecount');
