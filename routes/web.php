@@ -121,7 +121,7 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
     Route::get('approve/{id}',[CourseController::class,'approve'])->name('course.approve');
-    Route::post('course_search',[CourseController::class, 'course_search'])->name('course_search');
+    Route::get('course_search',[CourseController::class, 'course_search'])->name('course_search');
 
 
 //NYL 
@@ -170,9 +170,9 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     //ALS
     Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
 
-    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
+    Route::get('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
 
-    Route::post('/coursefilter',[SaleController::class,'coursefilter'])->name('coursefilter');
+    Route::get('/coursefilter',[SaleController::class,'coursefilter'])->name('coursefilter');
 
 });
 //KKS
@@ -193,7 +193,7 @@ Route::group(['middleware' => 'role:Admin|Developer', 'prefix' => 'backside', 'a
     
 Route::group(['middleware' => 'role:Admin', 'prefix' => 'backside', 'as' => 'backside.'], function(){
     Route::get('/signupnoti',[AccountController::class,'signupnoti'])->name('signupnoti');
-    Route::post('/removesignupnoti',[AccountController::class,'removesignupnoti'])->name('removesignupnoti');
+    Route::get('/removesignupnoti',[AccountController::class,'removesignupnoti'])->name('removesignupnoti');
 });
 
 //HH

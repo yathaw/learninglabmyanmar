@@ -649,7 +649,7 @@ function showNoti(){
           	var dataid = v.data.userid;
                     $.ajax({
             url: "/backside/removesignupnoti",
-            type: "POST",
+            type: "GET",
             data: {id:dataid},
             dataType: 'json',  
             success: function (result) {

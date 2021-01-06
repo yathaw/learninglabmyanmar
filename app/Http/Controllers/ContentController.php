@@ -206,7 +206,6 @@ class ContentController extends Controller
     }
 
     public function getcontentid(Request $request){
-        
         $id = $request->id;
         $content =Content::find($id);
         return $content;

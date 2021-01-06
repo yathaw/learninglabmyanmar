@@ -201,7 +201,7 @@
 
 		    		$.ajax({
               url: "/backside/enrollmentsearch",
-              method: 'post',
+              method: 'get',
               data: {
                  startdate: startdate,
                  enddate: enddate
@@ -285,7 +285,7 @@
 		    		var id = $(this).find(':selected').data('id');
 		    		$.ajax({
               url: "/backside/coursefilter",
-              method: 'post',
+              method: 'get',
               data: {
                  id: id
               },

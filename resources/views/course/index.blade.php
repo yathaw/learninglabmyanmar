@@ -410,7 +410,7 @@
             var instructor="";
             var subtitle;
       
-            $.post("{{route('backside.course_search')}}",{search_data:search_data},function(result){
+            $.get("{{route('backside.course_search')}}",{search_data:search_data},function(result){
               
                 if (result.length>0) {
                     $.each(result,function(i,v){
