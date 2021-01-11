@@ -9,7 +9,7 @@ use App\Models\Test;
 use App\Models\Section;
 use App\Models\Check;
 
-
+use App\Models\User;
 
 use Auth;
 

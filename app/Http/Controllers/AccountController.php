@@ -36,6 +36,10 @@ use App\Models\Responsedetail;
 
 class AccountController extends Controller
 {
+    public function __construct(){
+        $this->middleware(['role:Admin|Instructor|Business'])->only('panel');
+        $this->middleware(['role:Instructor'])->only('questionreply');
+    }
 
     public function mystudyings(){
         $tabs = 0;
