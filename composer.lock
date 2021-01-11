@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c8a88abd74762883085214e0ac8f7c1",
+    "content-hash": "d31cd3166b13801e4cccaf5b1f06d4d7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1123,6 +1123,44 @@
                 }
             ],
             "time": "2020-10-22T13:57:20+00:00"
+        },
+        {
+            "name": "goodnesskay/laravelpdfviewer",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/goodnesskay/LARAVEL-PDF-VIEWER.git",
+                "reference": "f0808b98aab3c3dc080847e22ee7cc614bb6ed19"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/goodnesskay/LARAVEL-PDF-VIEWER/zipball/f0808b98aab3c3dc080847e22ee7cc614bb6ed19",
+                "reference": "f0808b98aab3c3dc080847e22ee7cc614bb6ed19",
+                "shasum": ""
+            },
+            "type": "laravel-package",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Goodness Toluwanimi Kayode",
+                    "email": "gtkbrain@gmail.com"
+                }
+            ],
+            "description": "A Laravel Package for viewing PDF files or documents on Web App",
+            "keywords": [
+                "ViewerJS",
+                "laravel",
+                "laravel-viewerJS",
+                "pdf-viewer"
+            ],
+            "support": {
+                "issues": "https://github.com/goodnesskay/LARAVEL-PDF-VIEWER/issues",
+                "source": "https://github.com/goodnesskay/LARAVEL-PDF-VIEWER/tree/master"
+            },
+            "time": "2017-05-23T07:24:26+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -6689,7 +6727,6 @@
         },
         {
             "name": "facade/ignition",
-
             "version": "2.5.8",
             "source": {
                 "type": "git",
@@ -6763,9 +6800,7 @@
                 "issues": "https://github.com/facade/ignition/issues",
                 "source": "https://github.com/facade/ignition"
             },
-
             "time": "2020-12-29T09:12:55+00:00"
-
         },
         {
             "name": "facade/ignition-contracts",
