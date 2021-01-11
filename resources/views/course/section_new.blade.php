@@ -5,8 +5,82 @@
 		</div>
 		@if(!$sections->isEmpty())
 		<div class="col-auto ml-auto text-right mt-n1">
-			<a href="javascript:void(0)" class="btn custom_primary_btnColor float-right new" data-toggle="modal" data-target="#newsectionModal" data-id="{{$course->id}}"><i class="align-middle fas fa-plus"></i> Add New Section </a>
+			<a href="javascript:void(0)" class="btn custom_primary_btnColor float-right new" data-id="{{$course->id}}"><i class="align-middle fas fa-plus"></i> Add New Section </a>
 		</div>
+		<div class="modal fade" id="newdatasectionModal" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered  modal-lg" role="document">
+					<div class="modal-content ">
+						<div class="modal-header">
+							<h5 class="modal-title"> New Section </h5>
+							<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<form method="post" action="{{route('backside.section.store')}}" enctype="multipart/form-data">
+							<input type="hidden" name="courseid" value="{{ $course->id }}" id="sectionid">
+							@csrf
+							<div class="modal-body m-3">
+								<div class="row mb-3">
+									<label for="titleId" class="col-sm-2 col-form-label"> Title </label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="titleId" placeholder="Enter Title" name="title">
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label for="objectiveId" class="col-sm-2 col-form-label"> Objective </label>
+									<div class="col-sm-10">
+										<textarea class="form-control" id="objectiveId" name="objective"></textarea>
+										<small> What will students be able to do at the end of this section? </small>
+									</div>
+								</div>
+
+								<div class="row mb-3">
+									<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
+									<div class="col-sm-10">
+										<select class="form-control select2" name="contenttype">
+											@foreach($contenttypes as $contenttype)
+											<option value="{{$contenttype->id}}">{{$contenttype->name}}</option>
+											@endforeach
+										</select>
+									</div>
+								</div>
+
+
+								@php
+								$authuser=Auth::user();
+								$role = $authuser->getRoleNames();
+	                       $instructor_companyid=$authuser->company_id;   //null
+	                       //var_dump($instructor);
+	                       //die();
+	                       @endphp
+	                       @if($instructor_companyid != Null || $role[0]=='Admin')
+
+	                       <div class="row mb-3">
+	                       	<label for="objectiveId" class="col-sm-2 col-form-label"> Instructor </label>
+	                       	<div class="col-sm-10">
+	                       		<select class="form-control select2" name=instructor>
+	                       			@foreach($instructors as $instructor)
+	                       			@foreach($instructor->courses as $instructor_course)
+	                       			@if($instructor_course->pivot->course_id == $course->id)
+	                       			<option value="{{$instructor->id}}">{{$instructor->user->name}}</option>
+	                       			@endif
+	                       			@endforeach
+	                       			@endforeach
+	                       		</select>
+	                       	</div>
+	                       </div>
+
+	                       @endif
+
+	                   </div>
+
+	                   <div class="modal-footer">
+	                   	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	                   	<button type="submit" class="btn btn-primary">Save changes</button>
+	                   </div>
+	               </form>
+	           </div>
+	       </div>
+	   </div>
 		@endif
 	</div>
 
@@ -43,7 +117,7 @@
 							<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<form method="post" action="{{route('backside.section.store')}}" enctype="multipart/form-data">
-							<input type="hidden" name="courseid" value="{{ $course->id }}">
+							<input type="hidden" name="courseid" value="{{ $course->id }}" id="sectionid">
 							@csrf
 							<div class="modal-body m-3">
 								<div class="row mb-3">
@@ -136,12 +210,12 @@
 										</div>
 										<div class="col-3 d-flex align-items-center justify-content-center">
 											<span  data-toggle="tooltip" data-placement="top" title="Create New Lecture Lesson in that section">
-												<a href="#" class="btn btn-light btn-sm text-success contentbtn" data-toggle="modal" data-id={{$section->id}}>
+												<a href="#" class="btn btn-light btn-sm text-success contentbtn" data-id={{$section->id}}>
 													<i class="align-middle fas fa-plus"></i> Content 
 												</a>
 											</span>
 
-											<a href="#" class="btn btn-light custom_primary_Color btn-sm editbtn" data-placement="top" title="Edit this section" data-toggle="modal" data-target="#editsectionModal" data-id={{$section->id}}>  
+											<a href="#" class="btn btn-light custom_primary_Color btn-sm editbtn" data-placement="top" title="Edit this section"  data-id={{$section->id}}>  
 												<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
 											</a>
 
@@ -250,8 +324,10 @@
    				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
    			</div>
    			<form method="post" action="{{route('backside.content.store')}}" enctype="multipart/form-data">
-   				<input type="hidden" name="sectionid" id="sectionid">
+   				
    				@csrf
+   				<input type="hidden" name="sectionid" id="sectionid">
+   				<input type="hidden" name="courseid" id="courseid" value="{{$course->id}}">
    				<div class="modal-body m-3">
    					<div class="row mb-3">
    						<label for="titleId" class="col-sm-2 col-form-label"> Title </label>
@@ -479,9 +555,10 @@
 									</ul>
 									<div class="tab-content mt-3" id="myTabContent">
 										<div class="tab-pane fade show active" id="oldPhotoTab1" role="tabpanel" aria-labelledby="oldPhoto-tab">
-											{{-- <iframe src="" id="content_uploadfile"></iframe>
-											 --}} 
-											 <a href="" id="content_uploadfile">PDF File</a>
+											 <iframe src="" id="content_uploadfile"></iframe>
+											 
+
+											 <!-- <a href="" id="content_uploadfile">PDF File</a> -->
 											{{-- <div id="showpdf"></div> --}}
 											<input type="hidden" name="hidden_uploadfile" id="hidden_uploadfile">
 										</div>
@@ -515,7 +592,13 @@
 		<script type="text/javascript">
 
 			$(document).ready(function() {
+				$('.new').click(function(){
+					
+					var id = $(this).data('id');
+					$('#sectionid').val(id);
+					$('#newdatasectionModal').modal('show');
 
+				})
 				const player = Plyr.setup('.js-player',{
                 // invertTime: false,
                 i18n: {
@@ -552,7 +635,7 @@
                 clickToPlay: true,
             });
 
-
+console.log(player);
 				$.ajaxSetup({
 					headers: {
 						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -565,6 +648,8 @@
 					$('#newsectionModal').modal('show');
 
 				})
+
+
 
 				$(".section_sortable").sortable({
 					containerSelector: "ul.section_sortable",
@@ -711,10 +796,10 @@ $('.contentbtn').click(function(){
 	//console.log(id);
 	$.post('/backside/section/getsectionid',{id:id},function(response){
 		//console.log(response.id);
-		$('#sectionid').val(response.id);
-
+		$('#newcontentModal #sectionid').val(response.id).show();
+		$('#newcontentModal').modal('show');
 	})
-	$('#newcontentModal').modal('show');
+	
 
 });
 
@@ -756,18 +841,19 @@ $('.lessoneditbtn').click(function(){
 			//console.log(res);
 			var html = "";
 			$.each(res,function (i,v) {
-			//console.log(v.file);
+			
 			//console.log(v.file_upload);
 
 			$('#hidden_file').val(v.file);
 			var videoFile = v.file;
+			console.log(videoFile+"?autoplay=1&showinfo=0&modestbranding=1&rel=0&mute=1");
            // $('#content_file').attr('src', videoFile);
 
             $("#editcontentModal").on("shown.bs.modal", function(e) {
-                console.log("modal opened" + $videoFile);
+                console.log("modal opened" + videoFile);
                 $("#content_file").attr(
                     "src",
-                    $videoFile + "?autoplay=1&showinfo=0&modestbranding=1&rel=0&mute=1"
+                    videoFile + "?autoplay=1&showinfo=0&modestbranding=1&rel=0&mute=1"
                 );
             });
 
@@ -780,7 +866,7 @@ $('.lessoneditbtn').click(function(){
             //$('#content_uploadfile').text(v.file_upload);
 
             var pdfFileupload = v.file_upload;
-            $('#content_uploadfile').attr('href', pdfFileupload);
+            $('#content_uploadfile').attr('src', pdfFileupload);
 
             
         })
