@@ -6763,11 +6763,9 @@
                 "issues": "https://github.com/facade/ignition/issues",
                 "source": "https://github.com/facade/ignition"
             },
-<<<<<<< HEAD
+
             "time": "2020-12-29T09:12:55+00:00"
-=======
-            "time": "2020-12-28T23:56:45+00:00"
->>>>>>> 172b692aab9b822c70c3b80a89fc0fe515c5b844
+
         },
         {
             "name": "facade/ignition-contracts",
