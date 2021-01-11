@@ -1,0 +1,6 @@
+Certificates => id, verifycode, date userid, courseid 
+codeno grenerate
+img certificate
+
+
+1. Student Name, 2. Course Name, Company Logo, signature, chairman 
