@@ -472,7 +472,7 @@
 					<h5 class="modal-title">Edit Content </h5>
 					<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 				</div>
-				<form id="editcontentform">
+				<form id="editcontentform" enctype="multipart/form-data">
 
 
 					<input type="hidden" name="contentid" id="updatecontentid">
@@ -564,7 +564,7 @@
 										</div>
 
 										<div class="tab-pane fade" id="newPhotoTab1" role="tabpanel" aria-labelledby="newPhoto-tab">
-											<input type="file" id="file_upload" name="file_upload">
+											<input type="file" id="file_upload" name="file_upload" >
 										</div>
 									</div>
 								</div>
@@ -892,7 +892,7 @@ $('#editsectionform').on('submit',function(event){
 	var title=$('#titleEdit').val();
 	var objective=$('#objectiveEdit').val();
 	var contenttypeid=$('#contenttypeEdit').val();
-	console.log(contenttypeid);
+	
 	$.ajax({
 		url:'/backside/sectionupdate/'+sectionid,
 		type:"POST",
@@ -902,6 +902,7 @@ $('#editsectionform').on('submit',function(event){
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		},
 		success:function(response){
+			console.log(response);
 			$('#editsectionform').trigger("reset");
 			$('#editsectionModal').modal('hide');
 			window.location.reload(true);
@@ -932,26 +933,50 @@ $('.deletebtn').click(function(){
 }
 	
 })
-
+$('#file_upload').change(function() {
+  // submit the form 
+      $('#editcontentform').submit();
+  });
 $('#editcontentform').on('submit',function(event){
 	//alert('hi');
+
 	event.preventDefault();
+	
+	//var fileupload=$('#file_upload')[0].files[0];
+	        var files = $('#file_upload')[0].files;
+/*
+	var formData={'contentid':$('#updatecontentid').val(),'sectionid':$('#content_sectionid').val(),'title': $('#content_title').val(),'objective':$('#content_description').val(),'contenttypeid': $('#edit_contenttype').val(),'videofile': $('#file').val(),'fileupload':files[0]};
+	console.log(formData);*/
+	var formData = new FormData();
+	formData.append('sectionid', $('#content_sectionid').val());
+	formData.append('title', $('#content_title').val());
+	formData.append('objective', $('#content_description').val());
+	formData.append('contenttypeid', $('#edit_contenttype').val());
+	formData.append('videofile', $('#file')[0].files[0]);
+	formData.append('fileupload', $('#file_upload')[0].files[0]);
+	formData.append('hidden_file',$('#hidden_file').val());
+	formData.append('hidden_uploadfile',$('#hidden_uploadfile').val());
+	formData.append('contentid',$('#updatecontentid').val());
+
 	var contentid=$('#updatecontentid').val();
-	console.log(contentid);
 	var sectionid=$('#content_sectionid').val();
 	var title=$('#content_title').val();
 	var objective=$('#content_description').val();
 	var contenttypeid=$('#edit_contenttype').val();
 
 	var videofile=$('#file').val();
-	var fileupload=$('#file_upload').val();
-
+	
+	/*var fileupload=$('#file_upload')[0].files[0];*/
+//console.log(fileupload);
 
 	$.ajax({
 		url:'/backside/contentupdate/'+contentid,
 		type:"POST",
-		data:$('#editcontentform').serialize(),	
+		data: formData,	
 		dataType:'json',
+		enctype:'multipart/form-data',
+		processData: false,
+   contentType: false,
 		headers:{
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 		},
