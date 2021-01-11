@@ -134,10 +134,7 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::post('/getinstructor',[SectionController::class,'getinstructor'])->name('getinstructor');
     Route::post('/sectionupdate/{id}',[BackendController::class,'sectionupdate'])->name('sectionupdate');
 
-
-
     Route::resource('/instructors', InstructorController::class);
-   
 
     Route::get('/course/{id}/section',[SectionController::class, 'index'])->name('sectionlist');
     
@@ -145,6 +142,10 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::post('/section/getsectionid',[ContentController::class,'getsectionid'])->name('getsectionid');
     Route::post('/content/getcontentid',[ContentController::class,'getcontentid'])->name('getcontentid');
     Route::post('/content/getlesson',[ContentController::class,'getlesson'])->name('getlesson');
+    Route::post('/content/getcontenttype',[ContentController::class,'getcontenttype'])->name('getcontenttype');
+    Route::delete('/contentdelete/{id}',[BackendController::class,'contentdelete'])->name('contentdelete');
+    Route::post('/contentupdate/{id}',[BackendController::class,'contentupdate'])->name('contentupdate');
+
 
     Route::resource('/lesson', LessonController::class);
     Route::resource('/assignment', AssignmentController::class);

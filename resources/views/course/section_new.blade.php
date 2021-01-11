@@ -195,18 +195,18 @@
 																				<i class="align-middle mr-2" data-feather="edit-2"></i> Edit 
 																			</a>
 
-																			<form method="post" action="{{ route('backside.content.destroy',$content->id) }}" class="d-inline-block" onsubmit="return confirm('Are you Sure want to Delete?')">
+																			{{-- <form method="post" action="{{ route('backside.content.destroy',$content->id) }}" class="d-inline-block" onsubmit="return confirm('Are you Sure want to Delete?')">
 																				@csrf
 																				@method('DELETE')
 
 																				<button class="btn btn-light text-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Remove this section" type="submit"> 
 																					<i class="align-middle mr-2" data-feather="x"></i>  Remove 
 																				</button>
-																			</form>
+																			</form> --}}
 
-																			{{-- <a href="" class="btn btn-light text-danger">  
+																			<a href="" class="btn btn-light text-danger deletebtn" data-id={{$content->id}}>  
 																				<i class="align-middle mr-2" data-feather="x"></i>  Remove 
-																			</a> --}}
+																			</a>
 																		</div>
 
 																	</div>
@@ -398,6 +398,10 @@
 				</div>
 				<form id="editcontentform">
 
+
+					<input type="hidden" name="contentid" id="updatecontentid">
+					<input type="hidden" name="content_sectionid" id="content_sectionid">
+
 					<div class="modal-body m-3">
 						<div class="row mb-3">
 							<label for="content_title" class="col-sm-2 col-form-label"> Title </label>
@@ -414,16 +418,15 @@
 							</div>
 						</div>
 
-						{{-- <div class="row mb-3">
+
+						<div class="row mb-3">
 							<label for="objectiveId" class="col-sm-2 col-form-label"> Content Type </label>
 							<div class="col-sm-10">
-								<select class="form-control select2" name="contenttypeid" id="content_contenttype">
-									@foreach($contenttypes as $contenttype)
-									<option value="{{$contenttype->id}}">{{$contenttype->name}}</option>
-									@endforeach
+								<select class="form-control select2" name="contenttypeid" id="edit_contenttype">
+									
 								</select>
 							</div>
-						</div> --}}
+						</div>
 
 						{{-- <div class="row mb-3">
 							<label for="objectiveId" class="col-sm-2 col-form-label"> Upload File </label>
@@ -720,11 +723,34 @@ $('.contentbtn').click(function(){
 $('.lessoneditbtn').click(function(){
 	//alert('hi');
 	var id=$(this).data('id');
+	
 	//console.log(id);
 	$.post('/backside/content/getcontentid',{id:id},function(response){
 		//console.log(response.id);
+		$('#updatecontentid').val(response.id);
+		$('#content_sectionid').val(response.section_id);
+        
 		$('#content_title').val(response.title);
 		$('#content_description').val(response.description);
+		var contenttypeid=response.contenttype_id;
+		console.log(contenttypeid);
+
+		$.post('/backside/content/getcontenttype',{contenttypeid:contenttypeid},function(res){
+          	  		//console.log(res);
+          	  		var html = "";
+          	  		$.each(res,function (i,v) {
+          	  			html +=`<option value="${v.id}"`;
+
+          	  			if(v.id==contenttypeid)
+          	  				html+=`selected`;
+
+          	  			html+=`>${v.name}</option>`;
+
+          	  		})
+
+          	  		$('#edit_contenttype').html(html);
+          	  	})
+
 		var contentid=response.id;
 		$.post('/backside/content/getlesson',{contentid:contentid},function(res){
 			//console.log(res);
@@ -732,6 +758,7 @@ $('.lessoneditbtn').click(function(){
 			$.each(res,function (i,v) {
 			//console.log(v.file);
 			//console.log(v.file_upload);
+
 			$('#hidden_file').val(v.file);
 			var videoFile = v.file;
            // $('#content_file').attr('src', videoFile);
@@ -796,6 +823,63 @@ $('#editsectionform').on('submit',function(event){
 
 	})
 });
+
+$('.deletebtn').click(function(){
+	//alert('hi');
+	var ans=confirm('Are you Sure want to Delete?');
+	// event.preventDefault();
+	if(ans){
+		var id=$(this).data('id');
+	//console.log(id);
+	$.ajax({
+		url:'/backside/contentdelete/'+id,
+		type:"DELETE",
+		headers:{
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		},
+		success:function(response){
+			//console.log(response);
+			//window.location.reload(true);
+			location.reload();
+		}
+	})
+}
+	
+})
+
+$('#editcontentform').on('submit',function(event){
+	//alert('hi');
+	event.preventDefault();
+	var contentid=$('#updatecontentid').val();
+	console.log(contentid);
+	var sectionid=$('#content_sectionid').val();
+	var title=$('#content_title').val();
+	var objective=$('#content_description').val();
+	var contenttypeid=$('#edit_contenttype').val();
+
+	var videofile=$('#file').val();
+	var fileupload=$('#file_upload').val();
+
+
+	$.ajax({
+		url:'/backside/contentupdate/'+contentid,
+		type:"POST",
+		data:$('#editcontentform').serialize(),	
+		dataType:'json',
+		headers:{
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		},
+		success:function(response){
+			$('#editcontentform').trigger("reset");
+			$('#editcontentModal').modal('hide');
+			window.location.reload(true);
+		}
+
+	})
+});
+
+
+
 
 });
 

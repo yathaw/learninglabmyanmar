@@ -6689,7 +6689,7 @@
         },
         {
             "name": "facade/ignition",
-<<<<<<< HEAD
+
             "version": "2.5.8",
             "source": {
                 "type": "git",
@@ -6700,18 +6700,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/facade/ignition/zipball/8e907d81244649c5ea746e2ec30c32c5f59df472",
                 "reference": "8e907d81244649c5ea746e2ec30c32c5f59df472",
-=======
-            "version": "2.5.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/facade/ignition.git",
-                "reference": "2b6fd8b7b630e5c6a04440f7ed358e8753229509"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/facade/ignition/zipball/2b6fd8b7b630e5c6a04440f7ed358e8753229509",
-                "reference": "2b6fd8b7b630e5c6a04440f7ed358e8753229509",
->>>>>>> 172b692aab9b822c70c3b80a89fc0fe515c5b844
                 "shasum": ""
             },
             "require": {
