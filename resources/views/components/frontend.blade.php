@@ -41,6 +41,7 @@
     <!-- Quill -->
     <link href="{{ asset('plugin/quill/quill.snow.css') }}" rel="stylesheet">
 
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugin/timeline.css') }}">
 
 </head>
 
@@ -107,16 +108,16 @@
 
 
 
-                    <li class="{{ Request::segment(1) === 'instructors' ? 'active' : '' }}">
+                    {{-- <li class="{{ Request::segment(1) === 'instructors' ? 'active' : '' }}">
                         <a href="{{ route('instructors') }}"> Find Instrutors </a>
-                    </li>
+                    </li> --}}
 
                     <li class="{{ Request::segment(1) === 'steps' ? 'active' : '' }}">
-                        <a href=""> How It Works </a>
+                        <a href="{{ route('timeline') }}"> How It Works </a>
                     </li>
                     
                     <li class="{{ Request::segment(1) === 'pricing' ? 'active' : '' }}">
-                        <a href="">Pricing</a>
+                        <a href="{{ route('pricing') }}">Pricing</a>
                     </li>
                    
                     <li class="pt-2 {{ Request::segment(1) === 'cart' ? 'active' : '' }}">

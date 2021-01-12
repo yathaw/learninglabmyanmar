@@ -86,6 +86,9 @@ Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->
 Route::get('/cours/catégorie/{id}',[FrontendController::class, 'coursebyCategory'])->name('cours/catégorie');
 Route::get('/cours/sous-catégorie/{id}',[FrontendController::class, 'coursebySubcategory'])->name('cours/sous-catégorie');
 
+Route::get('timeline',[FrontendController::class, 'timeline'])->name('timeline');
+Route::get('pricing',[FrontendController::class, 'pricing'])->name('pricing');
+
 
 
 
@@ -121,7 +124,10 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
     Route::get('approve/{id}',[CourseController::class,'approve'])->name('course.approve');
+    Route::get('sendapprove/{id}',[CourseController::class,'sendapprove'])->name('course.sendapprove');
+    Route::get('givefeedback/{id}',[CourseController::class,'givefeedback'])->name('course.givefeedback');
     Route::get('course_search',[CourseController::class, 'course_search'])->name('course_search');
+    Route::post('comment',[CourseController::class,'comment'])->name('course.comment');
 
 
 //NYL 
@@ -353,4 +359,8 @@ Route::get('/clear-cache-all', function() {
 
     dd("Cache Clear All");
 
+});
+
+Route::get('certifikat', function () {
+    return view('certificate');
 });

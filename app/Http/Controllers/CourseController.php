@@ -31,6 +31,7 @@ class CourseController extends Controller
         $authuser = Auth::user();
         $auth_id = Auth::id();
         $role = $authuser->getRoleNames();
+        
 
         if ($role[0] == 'Instructor') {
             $instructor = $authuser->instructor;
@@ -45,6 +46,8 @@ class CourseController extends Controller
             $allcourses = Course::whereHas('instructors', function($q) use ($instructorid)
             { $q->where('instructor_id', '=', $instructorid);})->count();
 
+
+            return view('course.index',compact('courses','categories','subcategories','auth_id','role','allcourses'));
 
         }
         elseif ($role[0] == 'Business') {
@@ -69,14 +72,16 @@ class CourseController extends Controller
         }
         else{
             
-            $courses=Course::orderBy('status')->paginate(8);
+            $requested_courses=Course::where('status',2)->get();
+            $confirmed_courses=Course::where('status',1)->get();
+            $courses = Course::orderBy('status')->paginate(8);
 
             $allcourses = Course::orderBy('status')->count();
             
 
         }
 
-        return view('course.index',compact('courses','categories','subcategories','auth_id','role','allcourses'));
+        return view('course.index',compact('courses','requested_courses','confirmed_courses','categories','subcategories','auth_id','role','allcourses'));
         
          
         
@@ -394,10 +399,45 @@ class CourseController extends Controller
 
     public function approve($id)
     {
+        dd($id);
         $course= Course::find($id);
         $course->status =1;
         $course->save();
         return redirect()->route('backside.course.index');
+    }
+
+    public function sendapprove($id)
+    {
+        $course= Course::find($id);
+        $course->status =2;
+        $course->save();
+        return redirect()->route('backside.course.index');
+    }
+
+    public function givefeedback($id)
+    {
+        $course= Course::find($id);
+        
+        return view('course.feedback',compact('course'));
+    }
+
+    public function comment(Request $request)
+    {
+        //dd($request->id);
+        // $course = Course::find();
+        // $couid = $course->id;
+        // dd($couid);
+        $comment = $request->comment;
+        $courseid = $request->id;
+        $course = Course::find($courseid);
+        $course->approvefeedback = $comment;
+        $course->status = 0;
+        $course->save();
+      
+        
+
+        return response()
+            ->json(['msg' => 'success']);
     }
 
     public function course_search(Request $request)
