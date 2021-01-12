@@ -162,13 +162,16 @@ class SaleController extends Controller
         })->where('sales.status',1)->get();*/
         $role = Auth::user()->getRoleNames();
         $user_id = Auth::id();
-       
+        if($role[0] == 'Admin'){
         $enrolls = Sale::whereHas('courses',function($q){
             $q->where('course_sale.status',1);
         })->where('sales.status',1)->orderBy('created_at','desc')->limit(8)->get();
 
         $courses = Course::all();
         return view('account.enrollment',compact('enrolls','courses'));
+        }else{
+            return redirect()->back();
+        }
        
     }
 

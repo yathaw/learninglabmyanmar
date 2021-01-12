@@ -1,9 +1,9 @@
 <x-backend>
-  <h1 class="h3 mb-4 text-gray-800"> Instructor </h1>
+  <h1 class="h3 mb-4 text-gray-800"> Company Profile </h1>
 
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h5 class="m-0 font-weight-bold text-primary"> Instructor Info
+            <h5 class="m-0 font-weight-bold text-primary"> Company Profile Info
                 
             </h5>
         </div>
@@ -18,12 +18,16 @@
 
             <div class="row">
                 <div class="col-md-4 offset-1 d-flex">
+                    @if($user->profile_photo_path != NULL && $user->profile_photo_path != "on")
                     <img src="{{asset($user->profile_photo_path)}}" class="img-fluid my-auto" width="250px" height="300px">
+                    @else
+                    <img src="{{asset('backend/img/avatars/default.jpeg')}}" class="img-fluid my-auto" width="250px" height="200px">
+                    @endif
                 
                     @if(Auth::user() && $user->id==Auth::user()->id)
                         <div class="row mt-4">
                             <div class="col-md-12">
-                                <a href="{{route('instructorprofileedit',$user->id)}}" class="btn btn-outline-warning btn-block">Edit Profile</a>
+                                <a href="{{route('companyprofileedit',$user->id)}}" class="btn btn-outline-warning btn-block">Edit Profile</a>
                                 <button class="btn btn-outline-secondary btn-block" data-target="#changepassword" data-toggle="modal">Change Password</button>
                         
                             </div>
@@ -42,7 +46,7 @@
                     <div class="row">
                         <label class="col-sm-4">Role:</label>
                         <div class="col-md-8">
-                            Instructor
+                            Business
                         </div>
                     </div>
 
@@ -61,97 +65,31 @@
                     </div>
 
                     <div class="row mt-2">
-                        <label class="col-sm-4">Headline:</label>
+                        <label class="col-sm-4">Company Name:</label>
                         <div class="col-md-8">
-                            {{$user->instructor->headline}}
+                            {{$user->company->name}}
                         </div>
                     </div>
 
                     <div class="row mt-2">
-                        <label class="col-sm-4">Bio:</label>
+                        <label class="col-sm-4">Company Logo:</label>
                         <div class="col-md-8">
-                            {!! $user->instructor->bio !!}
+                            <img src="{{$user->company->logo}}" width="150px" height="150px">
                         </div>
                     </div>
 
                     <div class="row mt-2">
-                        <label class="col-sm-4">Website:</label>
+                        <label class="col-sm-4">Company Address:</label>
                         <div class="col-md-8">
-                            {{$user->instructor->website}}
+                            {{$user->company->address}}
                         </div>
                     </div>
                     <div class="row mt-2">
-                            <label class="col-sm-4">Education:</label>
+                            <label class="col-sm-4">Company Description:</label>
                             <div class="col-md-8">
-                                @php 
-                               
-                                $education1=trim($user->instructor->education,'/\(([^()]*+|(?R))*\)\s*/"');
-                                $education = explode(',',$education1);
-                                
-                                @endphp
-                                {{$education[0].'-'.trim($education[1],'"').' ('.trim($education[2],'"').')'}}
+                                {!! $user->company->description !!}
                             </div>
                         </div>
-                </div>
-
-                <div class="col-10 offset-1 mt-4">
-                    
-                    <div class="row mt-2">
-                        <label class="col-sm-4">Twitter:</label>
-                        <div class="col-md-8">
-                          @if($user->instructor->twitter)
-                            {{$user->instructor->twitter}}
-                          @else
-                           ---
-                          @endif
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <label class="col-sm-4">Facebook:</label>
-                        <div class="col-md-8">
-                          @if($user->instructor->facebook)
-                            {{$user->instructor->facebook}}
-                            @else
-                            ---
-                            @endif
-                        </div>
-                    </div>
-
-                        <div class="row mt-2">
-                            <label class="col-sm-4">LinkedIn:</label>
-                            <div class="col-md-8">
-                              @if($user->instructor->linkedin)
-                                {{$user->instructor->linkedin}}
-                                @else
-                                ---
-                                @endif
-                            </div>
-                        </div>
-                        <div class="row mt-2">
-                            <label class="col-sm-4">Youtube:</label>
-                            <div class="col-md-8">
-                              @if($user->instructor->youtube)
-                                {{$user->instructor->youtube}}
-                                @else
-                                ---
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="row mt-2">
-                            <label class="col-sm-4">Instragram:</label>
-                            <div class="col-md-8">
-                              @if($user->instructor->instagram)
-                                {{$user->instructor->instagram}}
-                                @else
-                                ---
-                                @endif
-                            </div>
-                        </div>
-                
-
-
                 </div>
 
             </div>
@@ -174,7 +112,7 @@
                  <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
             </div>
 
-            <form action="{{route('instructorchangepassword',Auth::id())}}" method="post">
+            <form action="{{route('companyprofilechangepassword',Auth::id())}}" method="post">
                 @csrf
                 
                 <div class="modal-body m-3">

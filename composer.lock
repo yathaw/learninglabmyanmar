@@ -6689,6 +6689,10 @@
         },
         {
             "name": "facade/ignition",
+<<<<<<< HEAD
+=======
+
+>>>>>>> 04484ba7bd484ecbeef773547c71a23b1786a122
             "version": "2.5.8",
             "source": {
                 "type": "git",
@@ -6762,7 +6766,15 @@
                 "issues": "https://github.com/facade/ignition/issues",
                 "source": "https://github.com/facade/ignition"
             },
+<<<<<<< HEAD
             "time": "2020-12-29T09:12:55+00:00"
+=======
+<<<<<<< HEAD
+            "time": "2020-12-29T09:12:55+00:00"
+=======
+            "time": "2020-12-28T23:56:45+00:00"
+>>>>>>> 172b692aab9b822c70c3b80a89fc0fe515c5b844
+>>>>>>> 04484ba7bd484ecbeef773547c71a23b1786a122
         },
         {
             "name": "facade/ignition-contracts",

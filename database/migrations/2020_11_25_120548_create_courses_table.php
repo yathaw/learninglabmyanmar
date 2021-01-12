@@ -34,7 +34,9 @@ class CreateCoursesTable extends Migration
                     ->references('id')
                     ->on('subcategories')
                     ->onDelete('cascade');
-            
+            $table->text('signature')->nullable();
+            $table->text('chairman')->nullable();
+            $table->text('approvefeedback')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

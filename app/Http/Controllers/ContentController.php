@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Section;
 use App\Models\Lesson;
 use App\Models\Assignment;
+use App\Models\Contenttype;
 
 use Owenoj\LaravelGetId3\GetId3;
 
@@ -76,6 +77,7 @@ class ContentController extends Controller
         $content->save();
 
         $courseid = request('sectionid');
+        
         if($content->contenttype_id == 1 || $content->contenttype_id == 3){
         if($request->hasfile('file')){
 
@@ -193,8 +195,11 @@ class ContentController extends Controller
     public function destroy(Content $content)
     {
         $content->delete();
+        
+        //$courseid=Course::find(courseid);
 
-        return redirect()->route('backside.section.index');
+       return redirect()->route('backside.section.index');
+        //return redirect()->route('backside.sectionshow',$courseid);
     }
 
     public function getsectionid(Request $request){
@@ -206,7 +211,6 @@ class ContentController extends Controller
     }
 
     public function getcontentid(Request $request){
-        
         $id = $request->id;
         $content =Content::find($id);
         return $content;
@@ -219,6 +223,14 @@ class ContentController extends Controller
         $lesson =Lesson::where('content_id',$contentid)->get();
         return $lesson;
 
+    }
+
+    public function getcontenttype(Request $request)
+    {
+        $id = $request->contenttypeid;
+        //dd($id);
+        $content_array=Contenttype::all();
+        return $content_array;
     }
 
 
