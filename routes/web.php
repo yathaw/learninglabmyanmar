@@ -86,6 +86,9 @@ Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->
 Route::get('/cours/catégorie/{id}',[FrontendController::class, 'coursebyCategory'])->name('cours/catégorie');
 Route::get('/cours/sous-catégorie/{id}',[FrontendController::class, 'coursebySubcategory'])->name('cours/sous-catégorie');
 
+Route::get('timeline',[FrontendController::class, 'timeline'])->name('timeline');
+Route::get('pricing',[FrontendController::class, 'pricing'])->name('pricing');
+
 
 
 
@@ -352,4 +355,8 @@ Route::get('/clear-cache-all', function() {
 
     dd("Cache Clear All");
 
+});
+
+Route::get('certifikat', function () {
+    return view('certificate');
 });
