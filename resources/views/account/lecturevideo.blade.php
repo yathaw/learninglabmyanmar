@@ -110,6 +110,10 @@
                         Take Notes
                         <a class="btn btn-light btn-sm float-right" id="notedownloadBtn" download> <i class='bx bx-download'></i> Download </a>
                     </div>
+
+                    <div>
+                        <a class="btn btn-info" id="notedownloadBtn"> <i class='bx bx-download'></i> Generate Certificate </a>
+                    </div>
                 </div>
 
                 <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">

@@ -15,6 +15,17 @@ class CreateCertificatesTable extends Migration
     {
         Schema::create('certificates', function (Blueprint $table) {
             $table->id();
+            $table->string('verifycode');
+            $table->date('date');
+            $table->foreignId('user_id')
+                    ->references('id')
+                    ->on('users')
+                    ->onDelete('cascade');
+            $table->foreignId('course_id')
+                    ->references('id')
+                    ->on('courses')
+                    ->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
