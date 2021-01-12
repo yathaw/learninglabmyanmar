@@ -178,7 +178,7 @@ return [
         App\Providers\JetstreamServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Owenoj\LaravelGetId3\GetId3ServiceProvider::class,
-        Goodnesskay\LaravelPdfViewer\LaravelPdfViewerServiceProvider::class,
+        
 
     ],
 
