@@ -50,11 +50,14 @@ class BackendController extends Controller
 
         $lesson=Lesson::where('content_id',$content)->get();
 
+        $courseid=$content->section->course;
+
         $content->delete();
 
         $lesson->delete();
 
-        return $content;
+        //return $content;
+        return redirect()->route('backside.sectionshow',$courseid);
     }
 
     public function contentupdate(Request $request,$id){

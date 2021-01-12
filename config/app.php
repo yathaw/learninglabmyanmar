@@ -179,7 +179,6 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Owenoj\LaravelGetId3\GetId3ServiceProvider::class,
         
-
     ],
 
     /*
