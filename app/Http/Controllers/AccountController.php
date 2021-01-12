@@ -629,7 +629,7 @@ class AccountController extends Controller
         $percentagemarks = (($usermarks/$totalmark)*100);
 
         //quizz percentage
-        //$totalpercentage = round($percentagemarks);
+        $totalpercentage = round($percentagemarks);
         
         $lessons = Lesson::whereHas('content',function($content) use ($courseid){
             $content->whereHas('section',function($section) use ($courseid){
@@ -663,9 +663,9 @@ class AccountController extends Controller
         $percentagevideo = (($userlessondurations/$alllessondurations)*100);
 
         //video play percentage
-        //$totalvideopercentage = round($percentagevideo);
-        $totalpercentage = 80;
-        $totalvideopercentage = 90;
+        $totalvideopercentage = round($percentagevideo);
+        /*$totalpercentage = 80;
+        $totalvideopercentage = 90;*/
         if($totalpercentage >= 70 && $totalvideopercentage >= 30){
             $certificates = Certificate::where('course_id',$courseid)->where('user_id',Auth::id())->get();
 
@@ -678,8 +678,22 @@ class AccountController extends Controller
                 $certificate->user_id = Auth::id();
                 $certificate->course_id = $courseid;
                 $certificate->save();
-                $printpdf = PDF::loadView('account.certificatelist');
-                return $printpdf->stream();
+                header('content-type:image/jpeg');
+                $font =  realpath('BRUSHSCI.ttf');
+
+                $images = storage_path('app/public/maxresdefault.jpg');
+                
+                 $image = imagecreatefromjpeg($images);
+
+                 $color = imagecolorallocate($image, 19, 21, 22);
+                 $name = "Al";
+                 imagettftext($image, 40, 0, 700, 400, $color, $font, $name);
+                 $file = time().'_'.'1';
+                
+                 imagejpeg($image,storage_path('app/public/certificate/'.$file.'.jpg'));
+                
+                 
+                  return response()->download(storage_path('app/public/certificate/'.$file.'.jpg'));
             }else{
 
 
@@ -705,7 +719,7 @@ class AccountController extends Controller
             }
         }else{
          
-            return redirect()->back()->with('message', '$username!! Quizz is greater than 70% and lesson video play is greater than 30%');
+            return redirect()->back()->with('message', $username.'!! Quizz is greater than 70% and lesson video play is greater than 30%');
 
         }
     }

@@ -110,7 +110,7 @@
                     <p class="" id="msg"></p>
                   </div> -->
                     @if(session()->has('message'))
-                        <div class="alert alert-success my-3">
+                        <div class="alert alert-success my-3 msg">
                             <p>{{ session()->get('message') }}</p>
                         </div>
                     @endif
@@ -1526,6 +1526,9 @@
                     $('#alertmsg').show();*/
                 })
             })
+
+
+            $('.msg').hide(1000000);
 
         });
 
