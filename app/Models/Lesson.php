@@ -18,7 +18,7 @@ class Lesson extends Model
 		return $this->belongsTo('App\Models\Content');
   	}
 
-  	public function usesrs()
+  	public function users()
   	{
 		return $this->belongsToMany('App\Models\User')->withPivot('status','timeline')->withTimestamps();
   	}

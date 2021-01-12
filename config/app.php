@@ -178,6 +178,7 @@ return [
         App\Providers\JetstreamServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         Owenoj\LaravelGetId3\GetId3ServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 /*        Goodnesskay\LaravelPdfViewer\LaravelPdfViewerServiceProvider::class,
 */
     ],
@@ -231,6 +232,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

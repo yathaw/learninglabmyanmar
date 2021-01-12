@@ -106,13 +106,22 @@
 
 
 
+                  <!-- <div class="alert alert-success my-3" id="alertmsg">
+                    <p class="" id="msg"></p>
+                  </div> -->
+                    @if(session()->has('message'))
+                        <div class="alert alert-success my-3">
+                            <p>{{ session()->get('message') }}</p>
+                        </div>
+                    @endif
+                            
                     <div class="alert alert-warning my-3" role="alert" id="notedownloadDiv">
                         Take Notes
                         <a class="btn btn-light btn-sm float-right" id="notedownloadBtn" download> <i class='bx bx-download'></i> Download </a>
                     </div>
 
-                    <div>
-                        <a class="btn btn-info" id="notedownloadBtn"> <i class='bx bx-download'></i> Generate Certificate </a>
+                    <div id="certificatedownloadDiv" class="my-3">
+                        <a href="{{route('certificate',$course->id)}}" target="__blank" class="btn btn-info" id="certificatedownload1" data-courseid="{{$course->id}}"> <i class='bx bx-download'></i> Generate Certificate </a>
                     </div>
                 </div>
 
@@ -984,10 +993,10 @@
                 var user_id = currentplayVideo.userid;
 
                 var current_time = this.currentTime;
-                // alert(current_time);
                 // startInterval();
             })
             $('.lesson_video_play').on('pause',function(){
+
                 var lesson_id = currentplayVideo.fileid;
                 var duration = currentplayVideo.duration;
                 var user_id = currentplayVideo.userid;
@@ -995,12 +1004,14 @@
                 var current_time = this.currentTime;
 
 
+
                 // clearInterval(plyrtime);
                 // plyrtime = current_time;
 
-                var pause_time = current_time.toFixed(2)
+                var pause_time = current_time.toFixed(2);
+             
                 // if(duration == pause_time){
-                $.post('/lesson_user',{lesson_id:lesson_id, duration:pause_time,user_id:user_id},function(res){
+                $.post('/lesson_user',{lesson_id:lesson_id, duration:duration,user_id:user_id},function(res){
                     // console.log(res);
                 });
                 // }
@@ -1505,6 +1516,16 @@
 
             });
 
+            $('#alertmsg').hide();
+
+            $('#certificatedownload').click(function(){
+                var courseid = $(this).data('courseid');
+                $.get('/certificate/'+courseid,function(response){
+                    console.log(response);
+                    /*$('#msg').html(response);
+                    $('#alertmsg').show();*/
+                })
+            })
 
         });
 
