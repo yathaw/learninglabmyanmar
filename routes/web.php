@@ -124,7 +124,10 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     Route::resource('/subcategory',SubcategoryController::class);
     Route::resource('/sale', SaleController::class);
     Route::get('approve/{id}',[CourseController::class,'approve'])->name('course.approve');
+    Route::get('sendapprove/{id}',[CourseController::class,'sendapprove'])->name('course.sendapprove');
+    Route::get('givefeedback/{id}',[CourseController::class,'givefeedback'])->name('course.givefeedback');
     Route::get('course_search',[CourseController::class, 'course_search'])->name('course_search');
+    Route::post('comment',[CourseController::class,'comment'])->name('course.comment');
 
 
 //NYL 

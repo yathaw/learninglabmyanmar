@@ -32,7 +32,8 @@ class CoursesTableSeeder extends Seeder
 				'0', 
 				120000, 
 				4, 
-				1),
+				1,
+                $faker->randomDigitNotNull()),
     		
     		array($faker->sentence(3), 
     			$faker->sentences(3, true), 

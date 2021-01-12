@@ -24,7 +24,10 @@ class Course extends Model
 						'price',
 						'level_id',
 						'subcategory_id',
-						'user_id'
+						'user_id',
+						'signature',
+						'chairman',
+						'approvefeedback'
 						];
 
 	// NYL
