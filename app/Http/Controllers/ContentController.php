@@ -76,7 +76,7 @@ class ContentController extends Controller
         $content->contenttype_id=$request->contenttypeid;
         $content->save();
 
-        $courseid = request('sectionid');
+        $courseid = request('courseid');
         
         if($content->contenttype_id == 1 || $content->contenttype_id == 3){
         if($request->hasfile('file')){

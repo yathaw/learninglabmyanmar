@@ -304,8 +304,6 @@ class AccountController extends Controller
 
         return response()->json($sales);
 
-        
-        return response()->json($sales);
     }
 
 

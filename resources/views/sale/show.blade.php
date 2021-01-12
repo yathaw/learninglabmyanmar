@@ -69,13 +69,7 @@
             // assignment
           @endphp
         @endforeach
-
-        @foreach ($content->assignments as $assignment) 
-            @php
-              $countassignment++;
-            @endphp
-        @endforeach
-              
+        <!--  -->
       @endforeach
 
       @if($total_duration)
@@ -116,10 +110,10 @@
                   <i class="align-middle mr-2" data-feather="file"></i>
                   <small class="pl-3"> {{$article}} Articles </small>
                </p>
-               <p> 
+               <!-- <p> 
                   <i class="align-middle mr-2" data-feather="check-square"></i>
                   <small class="pl-3"> {{$countassignment}} Assignments </small>
-               </p>
+               </p> -->
                @if($course->certificate == "on")
                <p> 
                   <i class="align-middle mr-2" data-feather="award"></i> 

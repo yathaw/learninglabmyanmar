@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Section;
 use App\Models\Content;
 use App\Models\Lesson;
+use Owenoj\LaravelGetId3\GetId3;
 
 class BackendController extends Controller
 {
@@ -49,29 +50,33 @@ class BackendController extends Controller
 
         $lesson=Lesson::where('content_id',$content)->get();
 
+        $courseid=$content->section->course;
+
         $content->delete();
 
         $lesson->delete();
 
-        return $content;
+        //return $content;
+        return redirect()->route('backside.sectionshow',$courseid);
     }
 
     public function contentupdate(Request $request,$id){
-        dd($request);
+        //dd($request->fileupload);
         $contentid = $request->contentid; 
         $sectionid = $request->content_sectionid;
         
         $content=Content::find($id);
-        $content->title=$request->content_title;
-        $content->description=$request->content_description;
+        $content->title=$request->title;
+        $content->description=$request->objective;
         $content->contenttype_id=$request->contenttypeid;
         $content->sorting=1;
         $content->save();
 
+        if($content->contenttype_id == 1 || $content->contenttype_id == 3){
+        if($request->videofile != 'undefined'){
 
-        if($request->hasfile('file')){
+        $track = new GetId3(request()->file('videofile'));
 
-        $track = new GetId3(request()->file('file'));
         //get all info
         $track->extractInfo();
         //get title
@@ -80,9 +85,9 @@ class BackendController extends Controller
         $duration_time=$track->getPlaytime();
         $duration_sec=$track->getPlaytimeSeconds();
         //dd($duration_sec);
-        $file = $request->file;
-            $fileName=time().'_'.$request->file->getClientOriginalName();
-            $path = $request->file('file')->storeAs('lesson', $fileName, 'public');
+        $file = $request->file('videofile');
+            $fileName=time().'_'.$request->file('videofile')->getClientOriginalName();
+            $path = $request->file('videofile')->storeAs('lesson', $fileName, 'public');
             $filepath='/storage/'.$path;
             $fileExtension =$file->extension();
 
@@ -96,28 +101,29 @@ class BackendController extends Controller
 
             }
 
-            if($request->hasfile('file_upload')){
-            $fileName1=time().'_'.$request->file_upload->getClientOriginalName();
-            $path1 = $request->file('file_upload')->storeAs('lessonfile', $fileName1, 'public');
+            if($request->fileupload != 'undefined'){
+              //  dd($request->file('fileupload')->getClientOriginalName());
+            $fileName1=time().'_'.$request->file('fileupload')->getClientOriginalName();
+            $path1 = $request->file('fileupload')->storeAs('lessonfile', $fileName1, 'public');
             $filepath1='/storage/'.$path1;
             }else{
-                $filepath1=$request->file_upload;
+                $filepath1=$request->hidden_uploadfile;
             }
 
-            $lesson=Lesson::find($id);
+            $lesson=Lesson::where('content_id',$id)->get();
             
-            $lesson->content_id=$request->contentid;
+            $lesson[0]->content_id=$request->contentid;
 
-            $lesson->file=$filepath;
+            $lesson[0]->file=$filepath;
             $file = $request->file;
             $fileExtension =$fileExtension;
             //dd($fileExtension);
-            $lesson->type=$fileExtension;
-            $lesson->duration= $duration_sec;
+            $lesson[0]->type=$fileExtension;
+            $lesson[0]->duration= $duration_sec;
 
-            $lesson->file_upload=$filepath1;
-            $lesson->save();
-
+            $lesson[0]->file_upload=$filepath1;
+            $lesson[0]->save();
+        }
       return $content;
   }
 

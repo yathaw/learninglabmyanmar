@@ -524,9 +524,9 @@
 									</li>
 								</ul>
 								<div class="tab-content mt-3" id="myTabContent">
-									<div class="tab-pane fade show active video-player" id="oldPhotoTab" role="tabpanel" aria-labelledby="oldPhoto-tab">
+									<div class="tab-pane fade show active" id="oldPhotoTab" role="tabpanel" aria-labelledby="oldPhoto-tab">
 										<input type="hidden" name="hidden_file" id="hidden_file">
-										<video class="js-player video-js" width="220" height="140" preload="auto" controls crossorigin preload="auto" playsinline >
+										<video class="js-player lesson_video_play video-js" width="220" height="140" controls crossorigin preload="auto" playsinline >
 											<source src=" " type="video/mp4" id="content_file">
 										</video>
 
@@ -592,16 +592,22 @@
 		<script type="text/javascript">
 
 			$(document).ready(function() {
+				$('.new').click(function(){
+					
+					var id = $(this).data('id');
+					$('#sectionid').val(id);
+					$('#newdatasectionModal').modal('show');
 
+				})
 				const player = Plyr.setup('.js-player',{
                 // invertTime: false,
                 i18n: {
-                    rewind: 'Rewind 15s',
-                    fastForward: 'Forward 15s',
-                    seek: "Seek",
-                    start: "Start",
-                    end: "End",
-                    seekTime : 10
+                	rewind: 'Rewind 15s',
+                	fastForward: 'Forward 15s',
+                	seek: "Seek",
+                	start: "Start",
+                	end: "End",
+                	seekTime : 10
                 },
                 controls: [
                     'play-large', // The large play button in the center
@@ -617,10 +623,10 @@
                     'settings', // Settings menu
                     'fullscreen', // Toggle fullscreen
                     'airplay'
-                ],
-                events: ["ended", "progress", "stalled", "playing", "waiting", "canplay", "canplaythrough", "loadstart", "loadeddata", "loadedmetadata", "timeupdate", "volumechange", "play", "pause", "error", "seeking", "seeked", "emptied", "ratechange", "cuechange", "download", "enterfullscreen", "exitfullscreen", "captionsenabled", "captionsdisabled", "languagechange", "controlshidden", "controlsshown", "ready", "statechange", "qualitychange", "adsloaded", "adscontentpause", "adscontentresume", "adstarted", "adsmidpoint", "adscomplete", "adsallcomplete", "adsimpression", "adsclick"],
-                listeners: {
-                    seek: function (e) {
+                    ],
+                    events: ["ended", "progress", "stalled", "playing", "waiting", "canplay", "canplaythrough", "loadstart", "loadeddata", "loadedmetadata", "timeupdate", "volumechange", "play", "pause", "error", "seeking", "seeked", "emptied", "ratechange", "cuechange", "download", "enterfullscreen", "exitfullscreen", "captionsenabled", "captionsdisabled", "languagechange", "controlshidden", "controlsshown", "ready", "statechange", "qualitychange", "adsloaded", "adscontentpause", "adscontentresume", "adstarted", "adsmidpoint", "adscomplete", "adsallcomplete", "adsimpression", "adsclick"],
+                    listeners: {
+                    	seek: function (e) {
                         // return false;    // required on v3
                     },
                     fastForward: 100
@@ -629,15 +635,7 @@
                 clickToPlay: true,
             });
 
-				$('.new').click(function(){
-					
-					var id = $(this).data('id');
-					$('#sectionid').val(id);
-					$('#newdatasectionModal').modal('show');
-
-				})
-				
-//console.log(player);
+console.log(player);
 				$.ajaxSetup({
 					headers: {
 						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -839,7 +837,6 @@ $('.lessoneditbtn').click(function(){
           	  	})
 
 		var contentid=response.id;
-		console.log(contentid);
 		$.post('/backside/content/getlesson',{contentid:contentid},function(res){
 			//console.log(res);
 			var html = "";
@@ -849,11 +846,11 @@ $('.lessoneditbtn').click(function(){
 
 			$('#hidden_file').val(v.file);
 			var videoFile = v.file;
-			//console.log(videoFile+"?autoplay=1&showinfo=0&modestbranding=1&rel=0&mute=1");
-           //$('#content_file').attr('src', videoFile);
+			console.log(videoFile+"?autoplay=1&showinfo=0&modestbranding=1&rel=0&mute=1");
+           // $('#content_file').attr('src', videoFile);
 
             $("#editcontentModal").on("shown.bs.modal", function(e) {
-               // console.log("modal opened" + videoFile);
+                console.log("modal opened" + videoFile);
                 $("#content_file").attr(
                     "src",
                     videoFile + "?autoplay=1&showinfo=0&modestbranding=1&rel=0&mute=1"
@@ -861,10 +858,10 @@ $('.lessoneditbtn').click(function(){
             });
 
             // stop playing the youtube video when I close the modal
-           /* $("#editcontentModal").on("hide.bs.modal", function(e) {
-                // a poor man's stop video
-                $("#content_file").attr("src", $videoFile);
-            });*/
+            // $("#editcontentModal").on("hide.bs.modal", function(e) {
+            //     // a poor man's stop video
+            //     $("#content_file").attr("src", $videoFile);
+            // });
             $('#hidden_uploadfile').val(v.file_upload);
             //$('#content_uploadfile').text(v.file_upload);
 
