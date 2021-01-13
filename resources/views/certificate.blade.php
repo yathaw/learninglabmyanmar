@@ -181,13 +181,13 @@
 		</div>
 
 		<div class="nameDiv">
-			<h1 class="sans text-center padding-0 "> Ya Thaw Myat Noe </h1>
+			<h1 class="sans text-center padding-0 "> <!-- Ya Thaw Myat Noe --> {{$username}}</h1>
 		</div>
 
 		<div class="descriptionDiv text-center">
 			<p class="cursive"> has successfully completed </p>
 
-			<h3 class="sans coursename"> PHP Developer Bootcamp </h3> 
+			<h3 class="sans coursename"> {{$course->title}} </h3> 
 		</div>
 
 		<div class="footerDiv">
@@ -200,8 +200,8 @@
 				<img src="{{ asset('certificate/logo.jpg') }}" class="companylogo">
 			</div>
 			<div class="footer_end gray">
-				<p> <b> Verified At : </b> learninglabmyanmar.com/verify/000000 </p>
-				<p> <b> Issue Date : </b> January 3, 2021 </p>
+				<p> <b> Verified At : </b> learninglabmyanmar.com/verify/{{$certificate[0]->verifycode}} </p>
+				<p> <b> Issue Date : </b> {{date('M-d-Y', strtotime($certificate[0]->date))}}<!-- January 3, 2021 --> </p>
 			</div>
 
 		</div>
@@ -223,9 +223,24 @@
 
 
 
+<script type="text/javascript" src="{{asset('plugin/jquery.js')}}"></script>
+  <script type="text/javascript" src="{{asset('plugin/html2canvas.min.js')}}"></script>
+  <script src="{{asset('plugin/canvasimage.js')}}"></script>
 
-
-
+<script type="text/javascript">
+	var elm = $('#certificate_box').get(0);
+    var levar = '600';
+    var tinggi = '400';
+    var type='jpeg';
+    var filename = new Date().getTime()+'_'+'1';
+    html2canvas(elm).then(function(canvas){
+      var canWidth = canvas.width;
+      var canHeight = canvas.height;
+      var img = Canvas2Image.convertToImage(canvas,canWidth,canHeight);
+      //$('#preview').after(img);
+      Canvas2Image.saveAsImage(canvas,levar,tinggi,type,filename);
+    })
+</script>
 
 
 

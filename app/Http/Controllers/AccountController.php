@@ -590,7 +590,19 @@ class AccountController extends Controller
     public function certificatelist($id)
     {
         $courseid = $id;
-        
+        $variable=0;
+        $sale = Sale::whereHas('courses',function($q) use($courseid){
+                        $q->where('course_sale.status',1)->where('course_sale.course_id',$courseid);
+                    })->where('sales.status',1)->where('sales.user_id',Auth::id())->get();
+        foreach($sale as $sale_course){
+            foreach ($sale_course->courses as $course) {
+                if($course->id == $courseid){
+                    $variable =1;
+                }
+            }
+            
+        }
+        if($variable == 1){
         $tests = Check::whereHas('quiz',function($quiz) use ($courseid){
             $quiz->whereHas('test',function($test) use ($courseid){
                 $test->whereHas('section',function($q) use ($courseid) {
@@ -667,18 +679,23 @@ class AccountController extends Controller
         /*$totalpercentage = 80;
         $totalvideopercentage = 90;*/
         if($totalpercentage >= 70 && $totalvideopercentage >= 30){
-            $certificates = Certificate::where('course_id',$courseid)->where('user_id',Auth::id())->get();
-
-            if($certificates->isEmpty()){
+            $certificate = Certificate::where('course_id',$courseid)->where('user_id',Auth::id())->get();
+            $course = Course::find($courseid);
+            if($certificate->isEmpty()){
                 $verifycode = sha1(time()).Auth::id();
-                
+                $min = 000000;
+                $max = 999999;
+
+                $new_code = rand($min,$max);
                 $certificate = new Certificate();
-                $certificate->verifycode = $verifycode;
+                $certificate->verifycode = $new_code;
                 $certificate->date = date('Y-m-d');
                 $certificate->user_id = Auth::id();
                 $certificate->course_id = $courseid;
                 $certificate->save();
-                header('content-type:image/jpeg');
+
+                return view('certificate',compact('username','course','certificate'));
+                /*header('content-type:image/jpeg');
                 $font =  realpath('BRUSHSCI.ttf');
 
                 $images = storage_path('app/public/maxresdefault.jpg');
@@ -693,11 +710,11 @@ class AccountController extends Controller
                  imagejpeg($image,storage_path('app/public/certificate/'.$file.'.jpg'));
                 
                  
-                  return response()->download(storage_path('app/public/certificate/'.$file.'.jpg'));
+                  return response()->download(storage_path('app/public/certificate/'.$file.'.jpg'));*/
             }else{
 
 
-                header('content-type:image/jpeg');
+                /*header('content-type:image/jpeg');
                 $font =  realpath('BRUSHSCI.ttf');
 
                 $images = storage_path('app/public/maxresdefault.jpg');
@@ -712,9 +729,9 @@ class AccountController extends Controller
                  imagejpeg($image,storage_path('app/public/certificate/'.$file.'.jpg'));
                 
                  
-                  return response()->download(storage_path('app/public/certificate/'.$file.'.jpg'));
+                  return response()->download(storage_path('app/public/certificate/'.$file.'.jpg'));*/
  
- 
+                return view('certificate',compact('username','course','certificate'));
                 
             }
         }else{
@@ -722,6 +739,9 @@ class AccountController extends Controller
             return redirect()->back()->with('message', $username.'!! Quizz is greater than 70% and lesson video play is greater than 30%');
 
         }
+    }else{
+        return redirect()->back();
+    }
     }
 
     public function lesson_state(Request $request){
