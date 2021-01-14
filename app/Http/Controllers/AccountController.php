@@ -31,8 +31,9 @@ use App\Models\Quiz;
 use App\Models\Response;
 use App\Models\Responsedetail;
 
-
-
+use App\Models\Check;
+use Barryvdh\DomPDF\Facade as PDF;
+use App\Models\Certificate;
 
 class AccountController extends Controller
 {
@@ -471,60 +472,74 @@ class AccountController extends Controller
 
     public function lecture($courseid){
         $user_id = Auth::id();
-
-        $course = Course::find($courseid);
-
-        $unorderedsections=Section::where('course_id', $courseid)->get();
-        
-        $sections = $unorderedsections->sortBy('sorting');
-        // dd($sections);
-        $user = User::find($user_id);
-
-        $completeLessons = array();
-
-        $user_lesson = User::with(['lessons' => function($q) use($user_id)    {
-                $q->where('lesson_user.user_id', $user_id);
-                $q->where('lesson_user.status',1);
-            }]) 
-            ->find($user_id);
-
-
-        $instructors = User::whereHas('instructor', function($q) use ($courseid)
-            {
-                $q->whereHas('courses', function($q1) use ($courseid)
-                {
-                    $q1->where('course_instructor.course_id', '=', $courseid);
-                });
-            })
-            ->role('Instructor')
-            ->get();
-
-        foreach ($user_lesson->lessons as $user_lesson) {
-            $pivot_lesson_id = $user_lesson->pivot->lesson_id;
-            $pivot_status = $user_lesson->pivot->status;
-            $pivot_timeline = $user_lesson->pivot->timeline;
-
-            $learninglesson = array(
-                'lesssonid'    =>  $pivot_lesson_id,
-                'status'    =>  $pivot_status,
-                'timeline'    =>  $pivot_timeline
-            );
-
-            array_push($completeLessons, $learninglesson);
+        $sale = Sale::whereHas('courses',function($q) use($courseid){
+                        $q->where('course_sale.status',1)->where('course_sale.course_id',$courseid);
+                    })->where('sales.status',1)->where('sales.user_id',Auth::id())->get();
+        $variable=0;
+        foreach($sale as $sale_course){
+            foreach ($sale_course->courses as $course) {
+                if($course->id == $courseid){
+                    $variable =1;
+                }
+            }
             
         }
-        // dd($completeLessons);
-        // $contents=Content::all();
-        // $lesson=Lesson::find($id);
+        if($variable == 1){
+            $course = Course::find($courseid);
+            $unorderedsections=Section::where('course_id', $courseid)->get();
+            
+            $sections = $unorderedsections->sortBy('sorting');
+            // dd($sections);
+            $user = User::find($user_id);
 
-        $questions = Question::with(['user','answers','course'])
-            ->where('course_id', $course->id)
-            ->orderBy('created_at', 'DESC')
-            ->get();
+            $completeLessons = array();
 
-        $answers = Answer::all();
+            $user_lesson = User::with(['lessons' => function($q) use($user_id)    {
+                    $q->where('lesson_user.user_id', $user_id);
+                    $q->where('lesson_user.status',1);
+                }]) 
+                ->find($user_id);
 
-        return view('account.lecturevideo',compact('questions','answers', 'course', 'sections','user_id','completeLessons','instructors'));
+
+            $instructors = User::whereHas('instructor', function($q) use ($courseid)
+                {
+                    $q->whereHas('courses', function($q1) use ($courseid)
+                    {
+                        $q1->where('course_instructor.course_id', '=', $courseid);
+                    });
+                })
+                ->role('Instructor')
+                ->get();
+
+            foreach ($user_lesson->lessons as $user_lesson) {
+                $pivot_lesson_id = $user_lesson->pivot->lesson_id;
+                $pivot_status = $user_lesson->pivot->status;
+                $pivot_timeline = $user_lesson->pivot->timeline;
+
+                $learninglesson = array(
+                    'lesssonid'    =>  $pivot_lesson_id,
+                    'status'    =>  $pivot_status,
+                    'timeline'    =>  $pivot_timeline
+                );
+
+                array_push($completeLessons, $learninglesson);
+                
+            }
+            // dd($completeLessons);
+            // $contents=Content::all();
+            // $lesson=Lesson::find($id);
+
+            $questions = Question::with(['user','answers','course'])
+                ->where('course_id', $course->id)
+                ->orderBy('created_at', 'DESC')
+                ->get();
+
+            $answers = Answer::all();
+
+            return view('account.lecturevideo',compact('questions','answers', 'course', 'sections','user_id','completeLessons','instructors'));
+        }else{
+            return redirect()->back();
+        }
 
     }
 
@@ -570,6 +585,163 @@ class AccountController extends Controller
             }
         }
 
+    }
+
+    public function certificatelist($id)
+    {
+        $courseid = $id;
+        $variable=0;
+        $sale = Sale::whereHas('courses',function($q) use($courseid){
+                        $q->where('course_sale.status',1)->where('course_sale.course_id',$courseid);
+                    })->where('sales.status',1)->where('sales.user_id',Auth::id())->get();
+        foreach($sale as $sale_course){
+            foreach ($sale_course->courses as $course) {
+                if($course->id == $courseid){
+                    $variable =1;
+                }
+            }
+            
+        }
+        if($variable == 1){
+        $tests = Check::whereHas('quiz',function($quiz) use ($courseid){
+            $quiz->whereHas('test',function($test) use ($courseid){
+                $test->whereHas('section',function($q) use ($courseid) {
+    
+               /* $q->where('tests.section_id','=','sections.id')->join('courses','courses.id','=','sections.course_id')->where('courses.id',$courseid);*/
+               $q->whereHas('course',function($query) use ($courseid) {
+                    $query->where('courses.id',$courseid);
+               });
+            });
+        });
+           
+            
+        })->get();
+        
+        $totalmark = 0;
+        foreach ($tests as $value) {
+            $totalmark+= $value->mark++;
+        }
+
+        $userid = Auth::id();
+
+        $userresponses = Response::whereHas('user',function($user) use ($userid,$courseid){
+            
+            $user->whereHas('sales',function($sale) use ($courseid) {
+                $sale->whereHas('courses',function($course) use ($courseid){
+                    $course->where('course_sale.course_id',$courseid);
+                });
+            })->where('user_id',$userid);
+        })->get();
+
+        $usermarks = 0;
+        foreach ($userresponses as $user) {
+            $usermarks+=$user->score++;
+        }
+
+        $percentagemarks = (($usermarks/$totalmark)*100);
+
+        //quizz percentage
+        $totalpercentage = round($percentagemarks);
+        
+        $lessons = Lesson::whereHas('content',function($content) use ($courseid){
+            $content->whereHas('section',function($section) use ($courseid){
+                $section->whereHas('course',function($course) use ($courseid){
+                    $course->where('courses.id',$courseid);
+                });
+            });
+        })->get();
+
+        $alllessondurations = 0;
+        foreach ($lessons as $lessonduration) {
+            $alllessondurations += $lessonduration->duration++;
+        }
+
+        $userlessons = Lesson::whereHas('users',function($user) use ($userid){
+            $user->where('lesson_user.status',1)->where('lesson_user.user_id',$userid);
+        })->whereHas('content',function($content) use ($courseid){
+            $content->whereHas('section',function($section) use ($courseid){
+                $section->whereHas('course',function($course) use ($courseid){
+                    $course->where('courses.id',$courseid);
+                });
+            });
+        })->get();
+
+        $username = Auth::user()->name;
+        $userlessondurations = 0;
+        foreach ($userlessons as $userlesson) {
+            $userlessondurations += $userlesson->duration++;
+        }
+
+        $percentagevideo = (($userlessondurations/$alllessondurations)*100);
+
+        //video play percentage
+        $totalvideopercentage = round($percentagevideo);
+        /*$totalpercentage = 80;
+        $totalvideopercentage = 90;*/
+        if($totalpercentage >= 70 && $totalvideopercentage >= 30){
+            $certificate = Certificate::where('course_id',$courseid)->where('user_id',Auth::id())->get();
+            $course = Course::find($courseid);
+            if($certificate->isEmpty()){
+                $verifycode = sha1(time()).Auth::id();
+                $min = 000000;
+                $max = 999999;
+
+                $new_code = rand($min,$max);
+                $certificate = new Certificate();
+                $certificate->verifycode = $new_code;
+                $certificate->date = date('Y-m-d');
+                $certificate->user_id = Auth::id();
+                $certificate->course_id = $courseid;
+                $certificate->save();
+
+                return view('certificate',compact('username','course','certificate'));
+                /*header('content-type:image/jpeg');
+                $font =  realpath('BRUSHSCI.ttf');
+
+                $images = storage_path('app/public/maxresdefault.jpg');
+                
+                 $image = imagecreatefromjpeg($images);
+
+                 $color = imagecolorallocate($image, 19, 21, 22);
+                 $name = "Al";
+                 imagettftext($image, 40, 0, 700, 400, $color, $font, $name);
+                 $file = time().'_'.'1';
+                
+                 imagejpeg($image,storage_path('app/public/certificate/'.$file.'.jpg'));
+                
+                 
+                  return response()->download(storage_path('app/public/certificate/'.$file.'.jpg'));*/
+            }else{
+
+
+                /*header('content-type:image/jpeg');
+                $font =  realpath('BRUSHSCI.ttf');
+
+                $images = storage_path('app/public/maxresdefault.jpg');
+                
+                 $image = imagecreatefromjpeg($images);
+
+                 $color = imagecolorallocate($image, 19, 21, 22);
+                 $name = "Al";
+                 imagettftext($image, 40, 0, 700, 400, $color, $font, $name);
+                 $file = time().'_'.'1';
+                
+                 imagejpeg($image,storage_path('app/public/certificate/'.$file.'.jpg'));
+                
+                 
+                  return response()->download(storage_path('app/public/certificate/'.$file.'.jpg'));*/
+ 
+                return view('certificate',compact('username','course','certificate'));
+                
+            }
+        }else{
+         
+            return redirect()->back()->with('message', $username.'!! Quizz is greater than 70% and lesson video play is greater than 30%');
+
+        }
+    }else{
+        return redirect()->back();
+    }
     }
 
     public function lesson_state(Request $request){

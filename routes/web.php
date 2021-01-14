@@ -86,6 +86,9 @@ Route::get('/instructor/{id}',[FrontendController::class, 'instructordetail'])->
 Route::get('/cours/catégorie/{id}',[FrontendController::class, 'coursebyCategory'])->name('cours/catégorie');
 Route::get('/cours/sous-catégorie/{id}',[FrontendController::class, 'coursebySubcategory'])->name('cours/sous-catégorie');
 
+Route::get('timeline',[FrontendController::class, 'timeline'])->name('timeline');
+Route::get('pricing',[FrontendController::class, 'pricing'])->name('pricing');
+
 
 
 
@@ -174,9 +177,9 @@ Route::group(['middleware' => 'role:Admin|Developer|Business|Instructor', 'prefi
     //ALS
     Route::get('/enrollment',[SaleController::class,'enrollment'])->name('enrollment');
 
-    Route::get('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
+    Route::post('/enrollmentsearch',[SaleController::class,'enrollmentsearch'])->name('enrollmentsearch');
 
-    Route::get('/coursefilter',[SaleController::class,'coursefilter'])->name('coursefilter');
+    Route::post('/coursefilter',[SaleController::class,'coursefilter'])->name('coursefilter');
 
 });
 //KKS
@@ -246,6 +249,7 @@ Route::get('/lecture/{id}',[AccountController::class, 'lecture'])->name('lecture
 Route::post('lesson_user',[AccountController::class, 'lesson_user'])->name('lesson_user');
 Route::post('lesson_state',[AccountController::class, 'lesson_state'])->name('lesson_state');
 
+Route::get('certificate/{id}',[AccountController::class,'certificatelist'])->name('certificate');
 
 Route::post('/questionstore',[AccountController::class, 'questionstore'])->name('questionstore');
 Route::get('/questionnoti',[AccountController::class,'questionnoti'])->name('questionnoti');
@@ -355,4 +359,8 @@ Route::get('/clear-cache-all', function() {
 
     dd("Cache Clear All");
 
+});
+
+Route::get('certifikat', function () {
+    return view('certificate');
 });

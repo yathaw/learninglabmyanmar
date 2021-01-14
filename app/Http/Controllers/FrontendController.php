@@ -37,6 +37,15 @@ class FrontendController extends Controller
     	return view('frontend.index',compact('limitcategories','newest_courses', 'top_courses', 'wishlists'));
     }
 
+    public function timeline(){
+        return view('frontend.timeline');
+    }
+
+    public function pricing(){
+        return view('frontend.pricing');
+    }
+    
+
     public function courses(){
 
         $wishlists = Wishlist::all();
