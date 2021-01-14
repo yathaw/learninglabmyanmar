@@ -258,7 +258,7 @@
                         @if($course->status == 2)
                         
                         {{-- <button class="dropdown-item text-success fw-bolder" data-toggle="tooltip" data-placement="top" title="Course ကို Public ချပြရန် ခွင့်ပြုပါမည်" id="btnapprove" > --}}
-                        <a class="dropdown-item text-success fw-bolder " href="#" data-toggle="tooltip" data-placement="top" title="အတည်ပြုရန်" id="btnapprove">
+                        <a class="dropdown-item text-success fw-bolder " href="#" data-toggle="tooltip" data-placement="top" title="အတည်ပြုရန်" id="btnapprove" data-id={{$course->id}}>
                               <i class="align-middle mr-2" data-feather="check"></i> 
                               Approve
                         </a> 
@@ -372,6 +372,41 @@
             </ul>
          </div>
       </div>
+
+      <div class="modal" tabindex="-1" id="modalconfirm">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">To approve/ To send feedback</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>If the course is incomplete, send feedback.</p>
+        <p>If the course is complete, approve it.</p>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a href="{{ route('backside.course.givefeedback',$course->id) }}" class="btn btn-primary">Send Feedback</a>
+
+        {{-- <form method="post" action="{{ route('backside.course.comment',$course->id) }}" class="d-inline-block">
+          @csrf
+          <button class="btn btn-info" type="submit">Send feedback</button>
+        </form> --}}
+
+        <a href="{{ route('backside.course.approve',$course->id) }}'" class="btn btn-success">Approve</a>
+        {{-- <form method="post" action="{{ route('backside.course.approve',$course->id) }}" class="d-inline-block">
+          @csrf
+          <button class="btn btn-success" type="submit">Approve</button>
+        </form> --}}
+        
+      </div>
+    </div>
+  </div>
+</div>
+
       @endforeach
    </div>
    <h2 class="py-5"> Confirmed Courses </h2>
@@ -759,38 +794,7 @@
    @endif
 
 
-<div class="modal" tabindex="-1" id="modalconfirm">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">To approve/ To send feedback</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>If the course is incomplete, send feedback.</p>
-        <p>If the course is complete, approve it.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <a href="{{ route('backside.course.givefeedback',$course->id) }}" class="btn btn-primary">Send Feedback</a>
 
-        {{-- <form method="post" action="{{ route('backside.course.comment',$course->id) }}" class="d-inline-block">
-          @csrf
-          <button class="btn btn-info" type="submit">Send feedback</button>
-        </form> --}}
-
-        <a href="{{ route('backside.course.approve',$course->id) }}'" class="btn btn-success">Approve</a>
-        {{-- <form method="post" action="{{ route('backside.course.approve',$course->id) }}" class="d-inline-block">
-          @csrf
-          <button class="btn btn-success" type="submit">Approve</button>
-        </form> --}}
-        
-      </div>
-    </div>
-  </div>
-</div>
 
 
    @section('script_content')
@@ -1041,6 +1045,7 @@
      $( "#btnapprove" ).click(function() {
       //alert('ok');
       $('#modalconfirm').modal('show');
+    
 
    })
       

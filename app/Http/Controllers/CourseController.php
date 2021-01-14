@@ -399,7 +399,7 @@ class CourseController extends Controller
 
     public function approve($id)
     {
-        dd($id);
+        //dd($id);
         $course= Course::find($id);
         $course->status =1;
         $course->save();
@@ -416,6 +416,7 @@ class CourseController extends Controller
 
     public function givefeedback($id)
     {
+        //dd($id);
         $course= Course::find($id);
         
         return view('course.feedback',compact('course'));
@@ -424,9 +425,7 @@ class CourseController extends Controller
     public function comment(Request $request)
     {
         //dd($request->id);
-        // $course = Course::find();
-        // $couid = $course->id;
-        // dd($couid);
+       
         $comment = $request->comment;
         $courseid = $request->id;
         $course = Course::find($courseid);

@@ -46,7 +46,7 @@
 	  		  //console.log(courseid);
 	          $.post("/backside/comment",{comment:comment,id:courseid},function (response) {
 	            console.log(response.msg);
-	             location.href = "/backside/course";
+	            location.href = "/backside/course";
 	          })
 	        })   
 	         
