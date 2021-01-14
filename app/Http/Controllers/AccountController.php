@@ -749,6 +749,21 @@ class AccountController extends Controller
     }
     }
 
+    public function verify($id){
+        $certificate = Certificate::where('verifycode',$id)->get();
+        if($certificate->isEmpty()){
+            return view('verify',compact('certificate'));
+        }else{
+            $username = $certificate[0]->user->name;
+            $course = Course::find($certificate[0]->course_id);
+            foreach ($course->instructors as $courseinstructor) {
+                $company = $courseinstructor->user->company;
+
+            }
+            return view('verify',compact('certificate','username','course','company'));
+        }
+    }
+
     public function lesson_state(Request $request){
         $lesson_id = $request->lesson_id;
         $user_id = $request->user_id;
@@ -776,6 +791,8 @@ class AccountController extends Controller
         }
         return $learninglesson;
     }
+
+
 
     public function panel(){
         $role = Auth::user()->getRoleNames();

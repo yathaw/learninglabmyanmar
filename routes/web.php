@@ -64,7 +64,7 @@ Route::get('courses',[FrontendController::class, 'courses'])->name('courses');
 Route::post('courses_search',[FrontendController::class, 'courses_search'])->name('courses_search');
 Route::post('searchcourse_bysubcategoryid',[FrontendController::class, 'searchcourse_bysubcategoryid'])->name('searchcourse_bysubcategoryid');
 
-
+Route::get('verify/{id}',[AccountController::class,'verify'])->name('verify');
 Route::post('searchmystudying',[FrontendController::class, 'searchmystudying'])->name('searchmystudying');
 
 Route::post('wishlist_search',[FrontendController::class, 'wishlist_search'])->name('wishlist_search');
