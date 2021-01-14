@@ -192,12 +192,14 @@
 
 		<div class="footerDiv">
 			<div class="footer_start">
-				<img src="{{ asset('certificate/signature.png') }}" class="signature">
+				<img src="{{ asset($course->signature) }}" class="signature">
 				<hr class="hr-1">
 				<p class="text-center"> Signature </p>
 			</div>
 			<div class="footer_middle">
-				<img src="{{ asset('certificate/logo.jpg') }}" class="companylogo">
+				@if($company != null)
+					<img src="{{ asset($company->logo) }}" class="companylogo">
+				@endif
 			</div>
 			<div class="footer_end gray">
 				<p> <b> Verified At : </b> learninglabmyanmar.com/verify/{{$certificate[0]->verifycode}} </p>
