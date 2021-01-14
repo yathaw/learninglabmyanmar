@@ -217,7 +217,11 @@
                $duration = $lesson['duration'];
                $type = $lesson['type'];
                $countVideo++;
-               $totalDuration += $duration++;
+               if($duration != null){
+                  $totalDuration += $duration++;
+               }else{
+               $totalDuration=0;
+               }
             }
          }
       }
@@ -590,9 +594,14 @@
          {
             foreach ($content->lessons as $lesson) {
                $duration = $lesson['duration'];
+               
                $type = $lesson['type'];
                $countVideo++;
-               $totalDuration += $duration++;
+               if($duration == NULL){
+                  $totalDuration += $duration++;
+               }else{
+                  $totalDuration=0;
+               }
             }
          }
       }

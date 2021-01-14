@@ -13,15 +13,24 @@ class CompanyProfileController extends Controller
   public function companyprofile($id)
     {
       $user = User::find($id);
-      
-      return view('companyprofile.companyprofileinfo',compact('user'));
+      $userid = Auth::id();
+      if($id == $userid){
+        return view('companyprofile.companyprofileinfo',compact('user'));
+      }else{
+        return redirect()->back();
+      }
     }
 
   public function companyprofileedit($id)
   {
     $user = User::find($id);
-    $jobtitles = Jobtitle::all();
-    return view('companyprofile.companyprofileupdate',compact('user','jobtitles'));
+    $userid = Auth::id();
+    if($id == $userid){
+      $jobtitles = Jobtitle::all();
+      return view('companyprofile.companyprofileupdate',compact('user','jobtitles'));
+    }else{
+      return redirect()->back();
+    }
   }
 
   public function companyprofileupdate(Request $request,$id)
@@ -90,14 +99,19 @@ class CompanyProfileController extends Controller
     public function companychangepassword($id)
     {
       $user = User::find($id);
-      return view('companyprofile.companychangepassword',compact('user'));
+      $userid = Auth::id();
+      if($id == $userid){
+        return view('companyprofile.companychangepassword',compact('user'));
+      }else{
+        return redirect()->back();
+      }
     }
 
     public function companyupdatepassword(Request $request,$id)
   {
     // dd($request);
     $request->validate([
-      'email' => 'required',
+      'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
       'changepassword' => 'required|confirmed|min:5',
       'changepassword_confirmation' => 'required'
     ]);
