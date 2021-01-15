@@ -133,10 +133,12 @@
 								      			$count_section = $completelesson['count_section'];
 								      			$count_content = $completelesson['count_content'];
 								      			$count_completelesson = count($completelesson['lessons']);
-
-								      			$percentage_decimal = (($count_completelesson/$count_content)*100);
-                            					$percentage = round($percentage_decimal);
-
+                            if($count_completelesson != 0){
+								      			   $percentage_decimal = (($count_completelesson/$count_content)*100);
+                            		$percentage = round($percentage_decimal);
+                              }else{
+                                $percentage = 0;
+                              }
 								      		@endphp
 
 								      		<div class="row">
