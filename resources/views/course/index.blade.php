@@ -649,11 +649,15 @@
                         {{-- @endif --}}
                         @elseif($course->status == 2)
                         {{-- @if(in_array($role[0], array('Admin','Developer'), true ) && $userRole[0] != 'Admin') --}}
-                        <a class="dropdown-item text-success fw-bolder" href="#" data-toggle="tooltip" data-placement="top" title="အသေးစိတ်ကြည့်ရန်"> 
+                        <a class="dropdown-item text-success fw-bolder" href="#" data-toggle="tooltip" data-placement="top" title="အတည်ပြုချက် စောင့်ဆိုင်းရန်"> 
                         <i class="align-middle mr-2" data-feather="info"></i>Pending
                         </a>
                         
                         {{-- @endif --}}
+                        @elseif($course->status == 3)
+                        <a class="dropdown-item text-success fw-bolder" href="#" data-toggle="tooltip" data-placement="top" title="{{$course->approvefeedback}}"> 
+                        <i class="align-middle mr-2" data-feather="info"></i>Send Approve Again
+                        </a>
 
                         @endif
                         <a class="dropdown-item text-info fw-bolder" href="{{ route('backside.course.show',$course->id) }}" data-toggle="tooltip" data-placement="top" title="အသေးစိတ်ကြည့်ရန်"> 
