@@ -397,8 +397,12 @@ class FrontendController extends Controller
     public function profile($id)
     {
       $user = User::find($id);
-
-      return view('frontend.profileupdate',compact('user'));
+      $userid = Auth::id();
+      if($id == $userid){
+        return view('frontend.profileupdate',compact('user'));
+      }else{
+        return redirect()->back();
+      }
     }
 
     public function profileupdate(Request $request)
@@ -435,14 +439,24 @@ class FrontendController extends Controller
     public function instructorprofile($id)
     {
       $user = User::find($id);
-      return view('auth.instructorprofileinfo',compact('user'));
+      $userid = Auth::id();
+      if($id == $userid){
+        return view('auth.instructorprofileinfo',compact('user'));
+      }else{
+        return redirect()->back();
+      }
     }
 
     public function instructorprofileedit($id)
     {
       $user = User::find($id);
-      $jobtitles = Jobtitle::all();
-      return view('auth.instructorprofileupdate',compact('user','jobtitles'));
+      $userid = Auth::id();
+      if($id == $userid){
+        $jobtitles = Jobtitle::all();
+        return view('auth.instructorprofileupdate',compact('user','jobtitles'));
+      }else{
+        return redirect()->back();
+      }
     }
 
     public function instructorprofileupdate(Request $request,$id)
@@ -512,14 +526,19 @@ class FrontendController extends Controller
     public function changepassword($id)
     {
       $user = User::find($id);
-      return view('auth.changepassword',compact('user'));
+      $userid = Auth::id();
+      if($id == $userid){
+        return view('auth.changepassword',compact('user'));
+      }else{
+        return redirect()->back();
+      }
     }
 
     public function updatepassword(Request $request,$id)
   {
     // dd($request);
     $request->validate([
-      'email' => 'required',
+      'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
       'changepassword' => 'required|confirmed|min:5',
       'changepassword_confirmation' => 'required'
     ]);
@@ -549,14 +568,19 @@ class FrontendController extends Controller
   public function accountchangepassword($id)
     {
       $user = User::find($id);
-      return view('frontend.changepassword',compact('user'));
+      $userid = Auth::id();
+      if($id == $userid){
+        return view('frontend.changepassword',compact('user'));
+      }else{
+        return redirect()->back();
+      }
     }
 
     public function accountupdatepassword(Request $request)
   {
     
     $request->validate([
-      'email' => 'required',
+      'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
       'changepassword' => 'required|confirmed|min:5',
       'changepassword_confirmation' => 'required',
       'userid' => 'required'

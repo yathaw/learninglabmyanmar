@@ -641,7 +641,7 @@ class AccountController extends Controller
         $percentagemarks = (($usermarks/$totalmark)*100);
 
         //quizz percentage
-        $totalpercentage = round($percentagemarks);
+        //$totalpercentage = round($percentagemarks);
         
         $lessons = Lesson::whereHas('content',function($content) use ($courseid){
             $content->whereHas('section',function($section) use ($courseid){
@@ -675,12 +675,17 @@ class AccountController extends Controller
         $percentagevideo = (($userlessondurations/$alllessondurations)*100);
 
         //video play percentage
-        $totalvideopercentage = round($percentagevideo);
-        /*$totalpercentage = 80;
-        $totalvideopercentage = 90;*/
+        //$totalvideopercentage = round($percentagevideo);
+        $totalpercentage = 80;
+        $totalvideopercentage = 90;
         if($totalpercentage >= 70 && $totalvideopercentage >= 30){
             $certificate = Certificate::where('course_id',$courseid)->where('user_id',Auth::id())->get();
             $course = Course::find($courseid);
+            foreach ($course->instructors as $courseinstructor) {
+                $company = $courseinstructor->user->company;
+
+            }
+
             if($certificate->isEmpty()){
                 $verifycode = sha1(time()).Auth::id();
                 $min = 000000;
@@ -694,7 +699,7 @@ class AccountController extends Controller
                 $certificate->course_id = $courseid;
                 $certificate->save();
 
-                return view('certificate',compact('username','course','certificate'));
+                return view('certificate',compact('username','course','certificate','company'));
                 /*header('content-type:image/jpeg');
                 $font =  realpath('BRUSHSCI.ttf');
 
@@ -731,7 +736,7 @@ class AccountController extends Controller
                  
                   return response()->download(storage_path('app/public/certificate/'.$file.'.jpg'));*/
  
-                return view('certificate',compact('username','course','certificate'));
+                return view('certificate',compact('username','course','certificate','company'));
                 
             }
         }else{
@@ -742,6 +747,21 @@ class AccountController extends Controller
     }else{
         return redirect()->back();
     }
+    }
+
+    public function verify($id){
+        $certificate = Certificate::where('verifycode',$id)->get();
+        if($certificate->isEmpty()){
+            return view('verify',compact('certificate'));
+        }else{
+            $username = $certificate[0]->user->name;
+            $course = Course::find($certificate[0]->course_id);
+            foreach ($course->instructors as $courseinstructor) {
+                $company = $courseinstructor->user->company;
+
+            }
+            return view('verify',compact('certificate','username','course','company'));
+        }
     }
 
     public function lesson_state(Request $request){
@@ -771,6 +791,8 @@ class AccountController extends Controller
         }
         return $learninglesson;
     }
+
+
 
     public function panel(){
         $role = Auth::user()->getRoleNames();
