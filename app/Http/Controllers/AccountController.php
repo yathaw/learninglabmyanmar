@@ -638,10 +638,14 @@ class AccountController extends Controller
             $usermarks+=$user->score++;
         }
 
-        $percentagemarks = (($usermarks/$totalmark)*100);
+        if($usermarks != 0 && $totalmark != 0){
+            $percentagemarks = (($usermarks/$totalmark)*100);
 
-        //quizz percentage
-        //$totalpercentage = round($percentagemarks);
+            //quizz percentage
+            $totalpercentage = round($percentagemarks);
+        }else{
+            $totalpercentage = 0;
+        }
         
         $lessons = Lesson::whereHas('content',function($content) use ($courseid){
             $content->whereHas('section',function($section) use ($courseid){
@@ -675,9 +679,9 @@ class AccountController extends Controller
         $percentagevideo = (($userlessondurations/$alllessondurations)*100);
 
         //video play percentage
-        //$totalvideopercentage = round($percentagevideo);
-        $totalpercentage = 80;
-        $totalvideopercentage = 90;
+        $totalvideopercentage = round($percentagevideo);
+        /*$totalpercentage = 80;
+        $totalvideopercentage = 90;*/
         if($totalpercentage >= 70 && $totalvideopercentage >= 30){
             $certificate = Certificate::where('course_id',$courseid)->where('user_id',Auth::id())->get();
             $course = Course::find($courseid);
