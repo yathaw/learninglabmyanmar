@@ -39,7 +39,7 @@ class AccountController extends Controller
 {
     public function __construct(){
         $this->middleware(['role:Admin|Instructor|Business'])->only('panel');
-        $this->middleware(['role:Instructor'])->only('questionreply');
+        $this->middleware(['role:Instructor|Student'])->only('questionreply');
     }
 
     public function mystudyings(){
