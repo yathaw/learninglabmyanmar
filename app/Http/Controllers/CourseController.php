@@ -430,7 +430,7 @@ class CourseController extends Controller
         $courseid = $request->id;
         $course = Course::find($courseid);
         $course->approvefeedback = $comment;
-        $course->status = 0;
+        $course->status = 3;
         $course->save();
       
         
