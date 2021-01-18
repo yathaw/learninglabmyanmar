@@ -330,7 +330,7 @@
                                     </div>
 
                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor" id="askquestion"> Ask Question </a>
+                                        <a href="javascript:void(0)" class="btn custom_primary_btnColor" id="askquestion" data-toggle="modal" data-target="#askquestionModal"> Ask Question </a>
                                         
                                     </div>
                                     <hr class="mt-3">
@@ -1405,11 +1405,13 @@
 
             $('.commentdescription').click(function(){
                 var quesid = $(this).data('id');
+                var profile = "{{Auth::user()->profile_photo_path}}";
+
                 $.post('/questionreply',{quesid:quesid},function(response){
                     var question_user = response.question[0].user.profile_photo_path;
 
                     if (question_user) {
-                        var question_profile = '/'+question_user;
+                        var question_profile = question_user;
                     }else{
                         var question_profile = `/profiles/user.png`;
                     }
@@ -1434,7 +1436,11 @@
 
                         if(ans_user){
                             var ans_profile = '/'+ans_user;
-                        }else{
+                            if(ans_profile){
+                                ans_profile = ans_user;
+                            }
+                        }
+                        else{
                             var ans_profile = `/profiles/user.png`;
                         }
                         html+=` <div class="row">
@@ -1449,16 +1455,22 @@
                                     </div>
                                     <hr> `;
                     })
+
                     html+=`<div class="row">
-                                    <div class="col-md-1">
-                                        <img src="{{ asset('frontend/img/testimonials/testimonials-5.jpg') }}" class="rounded-circle" width="70px">
-                                    </div>
+                                    <div class="col-md-1">`;
+                                    if(profile){
+
+                                        html+=`<img src="${profile}" class="rounded-circle" width="70px">`;
+                                    }else{
+                                        html+=`<img src="{{ asset('frontend/img/testimonials/testimonials-5.jpg') }}" class="rounded-circle" width="70px">`;
+                                    }
+                                    html+=`</div>
                                     <div class="col-md-8">
-                                        <textarea placeholder="Add reply" class="form-control" rows="2">
+                                        <textarea placeholder="Add reply" class="form-control" rows="2" name="addreply" id="addreply">
                                         </textarea>
                                     </div>
                                     <div class="col-md-1">
-                                        <button class="btn btn-primary mt-2">
+                                        <button class="btn btn-primary mt-2 replyanswer" data-id="${quesid}">
                                             Reply
                                         </button>
                                     </div>
@@ -1470,6 +1482,15 @@
                 })
                 
 
+            })
+
+            $('.answerreply').on('click','.replyanswer',function(){
+                var questionid = $(this).data('id');
+                var description = $('#addreply').val();
+                $.post('/addreply',{questionid:questionid,description:description},function(response){
+                    console.log(response);
+                    location.href="/";
+                })
             })
 
             $('.allques').click(function(){
@@ -1504,6 +1525,7 @@
             var form = $("#example-form");
 
             $('#askquestionModal').on("click",".sendBtn", function(e){ 
+
                 var about = document.querySelector('textarea[name=comment]');
 
                 var quillData = quill.getContents();

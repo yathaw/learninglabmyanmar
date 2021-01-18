@@ -390,21 +390,20 @@
 								</div>
 							</div>
 						</li>
-								@endif
 						<li class="nav-item dropdown">
-							<a class="nav-icon dropdown-toggle" href="#" id="messagesDropdown" data-toggle="dropdown">
+							<a class="nav-icon dropdown-toggle rquestionsnoti" href="#" id="messagesDropdown" data-toggle="dropdown">
 								<div class="position-relative">
 									<i class="align-middle" data-feather="message-square"></i>
 								</div>
 							</a>
 							<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right py-0" aria-labelledby="messagesDropdown">
-								<div class="dropdown-menu-header">
-									<div class="position-relative">
+								<div class="dropdown-menu-header rnoti">
+									<!-- <div class="position-relative">
 										4 New Messages
-									</div>
+									</div> -->
 								</div>
-								<div class="list-group">
-									<a href="#" class="list-group-item">
+								<div class="list-group" id="rnoti_data">
+									<!-- <a href="#" class="list-group-item">
 										<div class="row g-0 align-items-center">
 											<div class="col-2">
 												<img src="{{ asset('backend/img/avatars/avatar-5.jpg') }}" class="avatar img-fluid rounded-circle" alt="Vanessa Tucker">
@@ -451,13 +450,15 @@
 												<div class="text-muted small mt-1">5h ago</div>
 											</div>
 										</div>
-									</a>
+									</a> -->
 								</div>
 								<div class="dropdown-menu-footer">
-									<a href="#" class="text-muted">Show all messages</a>
+									<a href="{{route('backside.questions.index')}}" class="text-muted">Show all messages</a>
 								</div>
 							</div>
 						</li>
+								@endif
+						
 						@if (Auth::check()) 
 
 						@php
@@ -582,7 +583,7 @@
     <script src="{{ asset('plugin/sortable/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('plugin/pusher.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('backend/js/noti.js')}}"></script>
-    
+    <script type="text/javascript" src="{{asset('backend/js/rnoti.js')}}"></script>
     <script src="{{ asset('plugin/admincheckoutnoti.js') }}"></script>
     <script src="{{ asset('plugin/anime.min.js') }}"></script>
     <script src="{{ asset('plugin/moment.js') }}"></script>

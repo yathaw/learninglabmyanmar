@@ -111,7 +111,7 @@ class CompanyProfileController extends Controller
   {
     // dd($request);
     $request->validate([
-      'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+      'email' => ['unique:users,email,'.$id],
       'changepassword' => 'required|confirmed|min:5',
       'changepassword_confirmation' => 'required'
     ]);
