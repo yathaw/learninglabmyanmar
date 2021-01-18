@@ -657,7 +657,11 @@ class AccountController extends Controller
 
         $alllessondurations = 0;
         foreach ($lessons as $lessonduration) {
-            $alllessondurations += $lessonduration->duration++;
+            if($lessonduration->duration == "NULL"){
+               
+            }else{
+                $alllessondurations += $lessonduration->duration++;
+            }
         }
 
         $userlessons = Lesson::whereHas('users',function($user) use ($userid){
