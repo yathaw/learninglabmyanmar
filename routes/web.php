@@ -253,9 +253,12 @@ Route::get('certificate/{id}',[AccountController::class,'certificatelist'])->nam
 
 Route::post('/questionstore',[AccountController::class, 'questionstore'])->name('questionstore');
 Route::get('/questionnoti',[AccountController::class,'questionnoti'])->name('questionnoti');
+Route::get('/replyquestionnoti',[AccountController::class,'replyquestionnoti'])->name('replyquestionnoti');
 Route::get('/questionshownoti',[AccountController::class,'questionshownoti'])->name('questionshownoti');
 Route::post('/answerquestion',[AccountController::class,'answerquestion'])->name('answerquestion');
+Route::post('/addreply',[AccountController::class,'addreply'])->name('addreply')->middleware('role:Student');
 Route::get('/answernoti',[AccountController::class,'answernoti'])->name('answernoti');
+Route::get('/removereply/{id}',[QuestionController::class,'removereply'])->name('removereply')->middleware('role:Instructor');
 Route::post('/questionreply',[AccountController::class,'questionreply'])->name('questionreply');
 Route::get('/checkoutnoti',[AccountController::class,'checkoutnoti'])->name('checkoutnoti');
 

@@ -20,6 +20,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
+
         $authuser = Auth::user();
         $auth_id = Auth::id();
         $role = $authuser->getRoleNames();
@@ -65,15 +66,19 @@ class QuestionController extends Controller
             $courses_id = array();
 
             foreach ($courses as $course) {
-                array_push($courses_id, $course->id);
+                $courses_id[]= $course->id;
             }
+
             if(count($courses_id) > 0){
-            $questions = Question::whereIn('course_id', [$courses_id])->orderBy('created_at', 'DESC')->get();
+
+            $questions = Question::whereIn('course_id', array_values($courses_id))->orderBy('created_at', 'DESC')->get();
+           
         }else{
             $questions = [];
         }
 
         }
+        
         if(count($questions)>0 && count($courses) > 0){
             
             return view('question.list',compact('questions','courses'));
@@ -113,12 +118,49 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
+     
         $question->unreadNotifications()->delete();
-        
-        $answer = Answer::where('question_id',$question->id)->get();
+        /*$courses = Auth::user()->courses;
+        $courses_id = array();
+        foreach ($courses as $course) {
+            array_push($courses_id, $course->id);
+           
+        }*/
+        $instructor = Auth::user()->instructor;
+            $instructorid = $instructor->id;
+
+            $courses = Course::whereHas('instructors', function($q) use ($instructorid)
+            {
+                $q->where('instructor_id', '=', $instructorid);
+                
+            })->get();
+
+            $courses_id = array();
+
+            foreach ($courses as $course) {
+                $courses_id[]= $course->id;
+            }
+
+       
+        if(count($courses_id)>0){
+            $answer = Answer::where('question_id',$question->id)->whereHas('question',function($q) use($courses_id){
+            $q->whereIn('questions.course_id', array_values($courses_id));
+            })->get();
 
 
-        return view('question.detail',compact('question','answer'));
+        }else{
+            $answer = [];
+        }
+       
+        $questions = Question::where('id',$question->id)->whereHas('course',function($q) use ($courses_id){
+            $q->whereIn('questions.course_id',array_values($courses_id));
+        })->get();
+       
+        if(count($questions)>0 && count($courses) > 0){
+            return view('question.detail',compact('question','answer'));
+        }else{
+            return redirect()->back();
+        }
     }
 
     /**
@@ -220,5 +262,55 @@ class QuestionController extends Controller
 
         return $questions;
 
+    }
+
+    public function removereply($id)
+    {
+        $answers = Answer::find($id);
+        //dd($answer);
+        $answers->unreadNotifications()->delete();
+        /*$courses = Auth::user()->courses;
+        $courses_id = array();
+        foreach ($courses as $course) {
+            array_push($courses_id, $course->id);
+           
+        }*/
+        $instructor = Auth::user()->instructor;
+            $instructorid = $instructor->id;
+
+            $courses = Course::whereHas('instructors', function($q) use ($instructorid)
+            {
+                $q->where('instructor_id', '=', $instructorid);
+                
+            })->get();
+
+            $courses_id = array();
+
+            foreach ($courses as $course) {
+                $courses_id[]= $course->id;
+            }
+
+       
+        if(count($courses_id)>0){
+            $answer = Answer::where('question_id',$answers->question_id)->whereHas('question',function($q) use($courses_id){
+            $q->whereIn('questions.course_id', array_values($courses_id));
+            })->get();
+
+
+        }else{
+            $answer = [];
+        }
+        
+
+        $questions = Question::where('id',$answers->question_id)->whereHas('course',function($q) use ($courses_id){
+            $q->whereIn('questions.course_id',array_values($courses_id));
+        })->get();
+       //dd($questions);
+        $question = Question::find($answers->question_id);
+        if(count($questions)>0 && count($courses) > 0){
+            return view('question.detail',compact('question','answer'));
+        }else{
+            return redirect()->back();
+        }
     }
 }

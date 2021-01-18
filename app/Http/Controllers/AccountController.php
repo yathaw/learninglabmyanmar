@@ -11,8 +11,10 @@ use App\Events\NotiEvent;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\QuestionNotification;
 use App\Notifications\AnswerNotification;
+use App\Notifications\ReplyNotification;
 use App\Models\Answer;
 use App\Events\AnswerEvent;
+use App\Events\ReplyEvent;
 use App\Models\Sale;
 use App\Models\Section;
 use App\Models\User;
@@ -1212,6 +1214,58 @@ class AccountController extends Controller
         return $noti_data;
     }
 
+    public function replyquestionnoti(){
+        $user = User::find(Auth::id());
+        
+        $questions = Question::with('course')->whereHas('course.instructors',function($q){
+            $q->where('instructors.user_id',Auth::id());
+        })->get();
+        
+        $noti_data=array();
+        $bb = array();
+        /*if(Auth::check()){*/
+
+        //$questions =  Question::all();
+           
+            foreach($questions as $quest){
+                foreach($quest->answers as $answer){
+                foreach($answer->unreadNotifications as $notification)
+                    {
+                        //dd($notification->data['rquestion_id']);
+                        /*array_push($noti_data,$notification);*/
+                        foreach ($notification->data as $key => $value) {
+                            if($key == 'ranswer_id'){
+                                array_push($noti_data, $notification);
+                            }else{
+
+                            }
+                        }
+                        /*if($notification->data['ranswer_id']){
+                            
+                            array_push($noti_data, $notification->data['ranswer_id']);
+                        }else{
+                            array_push($noti_data, []);
+                            
+                        }*/
+                        
+                    }
+
+                }
+            }    /*$user  = Auth::user();*/
+ 
+            /*dd($bb);
+            foreach($bb as $bc){
+                $dd = $bc->where('read_at',NULL)->orderBy('created_at','desc')->orderBy('read_at','desc')->get();
+            }
+            dd($dd);*/
+        /*
+       foreach ($data as $value) {
+          array_push($noti_data, $value);
+       }
+       */
+        return $noti_data;
+    }
+
     public function questionshownoti(){
 
         $noti_data=array();
@@ -1239,12 +1293,12 @@ class AccountController extends Controller
         $answer = new Answer();
         $answer->description = request('description');
         $answer->question_id = request('questionid');
-        $answer->user_id = 2;
+        $answer->user_id = Auth::id();
         if($answer->save()){
             $answernoti = [
                 'id' => $answer->id,
                 'description' => request('description'),
-                'user_id' => 2,
+                'user_id' => Auth::id(),
                 'question_id' => request('questionid')
             ];
 
@@ -1254,6 +1308,51 @@ class AccountController extends Controller
         }
         $question = Question::find(request('questionid'));
         $question->unreadNotifications()->update(['read_at' => now()]);
+        return redirect()->back();
+    }
+
+    public function addreply(Request $request)
+    {
+        $request->validate([
+            'questionid' => 'required',
+            'description' => 'required'
+        ]);
+
+        $answer = new Answer();
+        $answer->description = request('description');
+        $answer->question_id = request('questionid');
+        $answer->user_id = Auth::id();
+        if($answer->save()){
+            $replynoti = [
+                'rid' => $answer->id,
+                'rdescription' => request('description'),
+                'ruser_id' => Auth::id(),
+                'rquestion_id' => request('questionid')
+            ];
+
+            Notification::send($answer,new ReplyNotification($replynoti));
+            event(new ReplyEvent($answer));
+
+            $question = Question::find(request('questionid'));
+            $user=User::find(Auth::id());
+            $fromemail = $user->email;
+            $course = Course::find($question->course_id);
+            $coursename = $course->title;
+
+            foreach ($course->instructors as $key => $value) {
+               $to_name  = $value->user->name;
+               $to_email = $value->user->email;
+               $data = array('coursetitle'=>$coursename, "title" => $question->title,"comment"=>request('description'));
+                
+                Mail::send('emails.mail', $data, function($message) use ($to_name, $to_email,$fromemail,$user) {
+                    $message->to($to_email, $to_name)
+                            ->subject('Learning Lab Myanmar Student Question Mail');
+                    $message->from($fromemail,$user->name);
+                });
+            }
+
+        }
+        
         return redirect()->back();
     }
 
@@ -1273,15 +1372,21 @@ class AccountController extends Controller
                 $user = Auth::id();
                 foreach($ans->unreadNotifications as $answer)
                     {
-                        $quest = $answer->data['question_id'];
-                        $questionuser = Question::find($quest);
-                        $userid = $questionuser->user->id;
+                        foreach($answer->data as $key=>$value){
+                        if($key == 'question_id'){
+                            $quest = $answer->data['question_id'];
+                            $questionuser = Question::find($quest);
+                            $userid = $questionuser->user->id;
 
-                        if($answer->data['answer_id'] == $id && $userid == $user){
-                            $data =$answer->where('read_at','=',NULL)->orderBy('created_at','desc')->get();
-        
-                            array_push($cdata, $data);
+                            if($answer->data['answer_id'] == $id && $userid == $user){
+                                $data =$answer->where('read_at','=',NULL)->orderBy('created_at','desc')->get();
+            
+                                array_push($cdata, $data);
 
+                            }
+                        }else{
+
+                        }
                         }
                         
                     }
@@ -1304,14 +1409,20 @@ class AccountController extends Controller
         foreach($answeruserid as $ans){
             foreach($ans->unreadNotifications as $answer)
                     {
-                        $quest = $answer->data['question_id'];
-                        $questionuser = Question::find($questionid);
-                        $user = $questionuser->user->id;
+                        foreach($answer->data as $key=>$value){
+                        if($key == 'question_id'){
+                            $quest = $answer->data['question_id'];
+                            $questionuser = Question::find($questionid);
+                            $user = $questionuser->user->id;
 
-                        if($answer->data['answer_id'] == $ans->id && $userid == $user){
-                            $ans->unreadNotifications()->delete();
-                            echo "success";
+                            if($answer->data['answer_id'] == $ans->id && $userid == $user){
+                                $ans->unreadNotifications()->delete();
+                                echo "success";
+                            }
+                        }else{
+
                         }
+                    }
                     }
         }
 

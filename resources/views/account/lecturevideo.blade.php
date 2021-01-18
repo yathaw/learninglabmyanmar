@@ -1436,7 +1436,11 @@
 
                         if(ans_user){
                             var ans_profile = '/'+ans_user;
-                        }else{
+                            if(ans_profile){
+                                ans_profile = ans_user;
+                            }
+                        }
+                        else{
                             var ans_profile = `/profiles/user.png`;
                         }
                         html+=` <div class="row">
@@ -1462,11 +1466,11 @@
                                     }
                                     html+=`</div>
                                     <div class="col-md-8">
-                                        <textarea placeholder="Add reply" class="form-control" rows="2">
+                                        <textarea placeholder="Add reply" class="form-control" rows="2" name="addreply" id="addreply">
                                         </textarea>
                                     </div>
                                     <div class="col-md-1">
-                                        <button class="btn btn-primary mt-2">
+                                        <button class="btn btn-primary mt-2 replyanswer" data-id="${quesid}">
                                             Reply
                                         </button>
                                     </div>
@@ -1478,6 +1482,15 @@
                 })
                 
 
+            })
+
+            $('.answerreply').on('click','.replyanswer',function(){
+                var questionid = $(this).data('id');
+                var description = $('#addreply').val();
+                $.post('/addreply',{questionid:questionid,description:description},function(response){
+                    console.log(response);
+                    location.href="/";
+                })
             })
 
             $('.allques').click(function(){
