@@ -172,7 +172,7 @@
                                 <div class="tab">
                                     <ul class="nav nav-tabs mb-4 nav-fill" role="tablist">
                                         <li class="nav-item"><a class="nav-link active bg-transparent" href="#tab-1" data-toggle="tab" role="tab"> Old Course Trailer </a></li>
-                                        <li class="nav-item"><a class="nav-link bg-transparent" href="#tab-2" data-toggle="tab" role="tab"> New Coursse Trailer </a></li>
+                                        <li class="nav-item"><a class="nav-link bg-transparent" href="#tab-2" data-toggle="tab" role="tab"> New Course Trailer </a></li>
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="tab-1" role="tabpanel">

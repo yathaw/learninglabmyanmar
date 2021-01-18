@@ -200,8 +200,14 @@
                              
                                 <h6> Pricing </h6>
                                 <section>
+                                    <div class="row form-group my-4-4">
+                                        <div class="col-md-12">
+                                            <label for="chairmanId" class="form-label"> Chairman </label>
+                                            <input type="text" class="form-control form-control-lg" id="chairmanId" placeholder="Chairman name" name="chairman">
+                                        </div>
+                                    </div>
                                     
-                                    <div class="row form-group mb-4">
+                                    <div class="row form-group my-4">
                                         <div class="col-md-12">
                                             <label for="priceId" class="form-label"> Pricing </label>
                                             <input type="number" class="form-control form-control-lg" id="priceId" placeholder="Course Amount" name="pricing">
@@ -214,18 +220,37 @@
 
                                 <h6> Photo / Video </h6>
                                 <section>
-                                    <label>Photo(<small class="text-danger">jpeg|bmp|png</small>)</label>
+                                    <div class="my-3">
+                                       <label>Photo(<small class="text-danger">jpeg|bmp|png</small>)</label>
                                     
                                     {{-- <input type="file" name="photo" class="form-control-file @error('photo') is-invalid @enderror" > --}}
                                     <img id="blah" src="http://placehold.it/180" alt="your image" class="img-fluid d-block" />
 
-                                    <input type='file' name="photo" onchange="readURL(this);" />
+                                    <input type='file' name="photo" onchange="readURL(this);" class="mt-2"/>
 
                                     @error('photo')
                                     <span class="invalid-feedback" role="alert">
                                     <strong>{{$message}}</strong>
                                     </span>
+                                    @enderror 
+                                    </div>
+                                    
+
+                                    <div class="my-3">
+                                        <label>Signature(<small class="text-danger">jpeg|bmp|png</small>)</label>
+                                    
+                                    
+                                    <img id="blahone" src="http://placehold.it/180" alt="your image" class="img-fluid d-block" />
+
+                                    <input type='file' name="sign" onchange="readURL(this);"  class="mt-2" />
+
+                                    @error('sign')
+                                    <span class="invalid-feedback" role="alert">
+                                    <strong>{{$message}}</strong>
+                                    </span>
                                     @enderror
+                                    </div>
+                                    
 
                                     <div class="my-5"> 
                                     <label>Video(<small class="text-danger">mp4</small>)</label>

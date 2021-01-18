@@ -65,8 +65,10 @@
                             		
                             		<td>
                                         <button class="btn btn-primary" id="business_detail" data-user_name="{{$company_user->name}}" data-email="{{$company_user->email}}" data-phone="{{$company_user->phone}}" data-company_name="{{$company->name}}" data-logo="{{$company->logo}}" data-address="{{$company->address}}" data-description="{{$company->description}}"><i class="fas fa-info-circle"></i></button>
-                            			<a href="#" class="btn btn-warning"><i class="align-middle " data-feather="edit-2"></i></a>
-                            			<form action="{{route('backside.companies.destroy',$company->id)}}" method="POST" class="d-inline-block">
+
+                            			{{-- <a href="#" class="btn btn-warning"><i class="align-middle " data-feather="edit-2"></i></a> --}}
+                                        
+                            			<form action="{{route('backside.companies.destroy',$company->id)}}" method="POST" class="d-inline-block" onsubmit="return confirm('Are you Sure want to Delete?')">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger" type="submit"><i class="fas fa-user-times"></i></button>

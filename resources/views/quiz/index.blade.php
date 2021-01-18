@@ -239,9 +239,16 @@
 								<a class="btn btn-outline-warning text-dark btn-sm editquizBtn" href="javascript:void(0)" data-testid="{{ $test->id }}" data-title="{{ $test->title }}" data-sectionid="{{ $test->section_id }}" data-description="{{ $test->description }}" data-courseid="{{ $course->id }}" data-coursetitle={{ $course->title }}>
 									<i class="align-middle" data-feather="edit-2"></i> Edit
 								</a>
-								<a class="btn btn-outline-danger btn-sm" href="#">
-									<i class="align-middle" data-feather="x"></i> Delete
-								</a>
+								{{-- <a class="btn btn-outline-danger btn-sm" href="#">
+									<i class="align-middle" data-feather="x"></i> Delete One
+								</a> --}}
+								<form action="{{ route('backside.quiz.destroy',$test->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Are you Sure want to Delete?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-outline-danger btn-sm" type="submit"><i class="align-middle" data-feather="x"></i>Delete</button>
+                                            
+                                </form>
+
 							</div>
 						</div>
 						@endforeach

@@ -177,7 +177,14 @@ class CourseController extends Controller
         }
         //dd($path);
 
+        if ($request->file()) {
 
+            //78748785858_bella.jpg
+            $fileName2 = time().'_'.$request->sign->getClientOriginalName();
+            //categoryimg/78748785858_bella.jpg
+            $filepath2 =$request->file('sign')->storeAs('signature',$fileName2,'public');
+            $path2 ='/storage/'.$filepath2;
+        }
 
         if ($request->file()) {
 
@@ -187,6 +194,9 @@ class CourseController extends Controller
             $filepath1 =$request->file('video')->storeAs('coursevideo',$fileName1,'public');
             $path1 ='/storage/'.$filepath1;
         }
+
+        
+
 
             $auth_id = Auth::id();
 
@@ -213,8 +223,10 @@ class CourseController extends Controller
             $course->certificate = $certificate;
             $course->share = 0;
             $course->status =0;
+            $course->chairman=$request->chairman;
             $course->price=$request->pricing;
             $course->image=$path;
+            $course->signature=$path2;
             $course->video=$path1;
             $course->user_id = $auth_id;
            
@@ -324,6 +336,16 @@ class CourseController extends Controller
             $path = $request->oldphoto;
         }
         //dd($path);
+        if ($request->file()) {
+
+            //78748785858_bella.jpg
+            $fileName2 = time().'_'.$request->sign->getClientOriginalName();
+            //categoryimg/78748785858_bella.jpg
+            $filepath2 =$request->file('sign')->storeAs('signature',$fileName2,'public');
+            $path2 ='/storage/'.$filepath2;
+        }else{
+            $path2 = $request->oldsignature;
+        }
 
 
 
